@@ -1,0 +1,31 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.bitmark.autonomy">
+
+    <application
+        android:name=".AutonomyApplication"
+        android:icon="${appIcon}"
+        android:label="@string/app_name"
+        android:roundIcon="${appIconRound}"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme" >
+        <activity android:name=".feature.main.MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <meta-data
+            android:name="com.onesignal.NotificationAccentColor.DEFAULT"
+            android:value="@color/colorAccent" />
+
+        <meta-data
+            android:name="com.onesignal.NotificationOpened.DEFAULT"
+            android:value="DISABLE" />
+
+        <meta-data
+            android:name="io.sentry.dsn"
+            android:value="https://99b0fdab83fb432a92791b715267da15@sentry.io/5174225" />
+    </application>
+</manifest>

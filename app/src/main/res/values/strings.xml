@@ -1,0 +1,5 @@
+<resources>
+
+    <!--    string format-->
+    <string name="send_to_format">Send to %1$s</string>
+</resources>

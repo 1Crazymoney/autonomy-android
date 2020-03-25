@@ -1,0 +1,355 @@
+apply plugin: 'com.android.application'
+
+apply plugin: 'kotlin-android'
+
+apply plugin: 'kotlin-android-extensions'
+
+apply plugin: 'kotlin-kapt'
+
+apply from: 'versioning.gradle'
+
+apply from: '../autodimension.gradle'
+
+apply plugin: 'io.sentry.android.gradle'
+
+apply plugin: 'com.onesignal.androidsdk.onesignal-gradle-plugin'
+
+apply plugin: "com.betomorrow.appcenter"
+
+apply plugin: 'jacoco'
+
+android {
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
+
+    defaultConfig {
+        applicationId "com.bitmark.autonomy"
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        versionCode buildVersionCode()
+        versionName buildVersionName()
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        externalNativeBuild {
+            cmake {
+                cppFlags ""
+            }
+        }
+    }
+
+    splits {
+        abi {
+            reset()
+            enable project.hasProperty('splitApks')
+            universalApk false // If true, also generate a universal APK
+            include "armeabi-v7a", "x86", "arm64-v8a", "x86_64"
+        }
+    }
+
+    bundle {
+        density {
+            // Different APKs are generated for devices with different screen densities; true by default.
+            enableSplit false
+        }
+        abi {
+            // Different APKs are generated for devices with different CPU architectures; true by default.
+            enableSplit true
+        }
+        language {
+            // This is disabled so that the App Bundle does NOT split the APK for each language.
+            // We're gonna use the same APK for all languages.
+            enableSplit false
+        }
+    }
+
+    androidExtensions {
+        experimental = true
+    }
+
+    signingConfigs {
+
+        debug {
+            def keystorePropertiesFile = rootProject.file(
+                    "keystores/debug.properties")
+            def keystoreProperties = new Properties()
+            keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+            keyAlias keystoreProperties['key.alias']
+            keyPassword keystoreProperties['key.alias.password']
+            storeFile file('../keystores/debug.keystore')
+            storePassword keystoreProperties['key.store.password']
+        }
+
+        release {
+            def keystorePropertiesFile = rootProject.file(
+                    "keystores/release.properties")
+            def keystoreProperties = new Properties()
+            keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+            keyAlias keystoreProperties['key.alias']
+            keyPassword keystoreProperties['key.alias.password']
+            storeFile file('../keystores/release.keystore')
+            storePassword keystoreProperties['key.store.password']
+        }
+    }
+
+    buildTypes {
+
+        debug {
+            debuggable true
+            minifyEnabled false
+            signingConfig signingConfigs.debug
+        }
+
+        release {
+            minifyEnabled true
+            shrinkResources true
+            signingConfig signingConfigs.release
+            proguardFiles getDefaultProguardFile("proguard-android.txt"),
+                    "proguard-rules.pro"
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility 1.8
+        targetCompatibility 1.8
+    }
+
+    externalNativeBuild {
+        cmake {
+            path "CMakeLists.txt"
+        }
+    }
+
+    flavorDimensions "env"
+
+    productFlavors {
+
+        inhouse {
+            dimension "env"
+            applicationIdSuffix ".inhouse"
+            resValue "string", "app_name", "Autonomy"
+            manifestPlaceholders = [
+                    appIcon                        : "@mipmap/ic_launcher_dev",
+                    appIconRound                   : "@mipmap/ic_launcher_dev_round",
+                    onesignal_app_id               : '74f5ef01-1e4f-407e-a288-fa78fd552556',
+                    // Project number pulled from dashboard, local value is ignored.
+                    onesignal_google_project_number: 'REMOTE'
+            ]
+            buildConfigField "String", "AUTONOMY_API_ENDPOINT",
+                    "\"https://autonomy.test.bitmark.com\""
+        }
+
+        prd {
+            dimension "env"
+            resValue "string", "app_name", "Autonomy"
+            manifestPlaceholders = [
+                    appIcon                        : "@mipmap/ic_launcher",
+                    appIconRound                   : "@mipmap/ic_launcher_round",
+                    onesignal_app_id               : 'cdb901f3-1559-43f4-a3cd-c4017f419195',
+                    // Project number pulled from dashboard, local value is ignored.
+                    onesignal_google_project_number: 'REMOTE'
+            ]
+            buildConfigField "String", "AUTONOMY_API_ENDPOINT",
+                    "\"https://autonomy.bitmark.com\""
+        }
+    }
+
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/license.txt'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/notice.txt'
+        exclude 'META-INF/ASL2.0'
+        exclude 'lib/libsodiumjni.dylib'
+        exclude 'lib/libsodiumjni.so'
+    }
+
+    sentry {
+        // Disables or enables the automatic configuration of proguard
+        // for Sentry.  This injects a default config for proguard so
+        // you don't need to do it manually.
+        autoProguardConfig true
+
+        // Enables or disables the automatic upload of mapping files
+        // during a build.  If you disable this you'll need to manually
+        // upload the mapping files with sentry-cli when you do a release.
+        autoUpload true
+    }
+
+    testOptions {
+        unitTests.all {
+            jacoco {
+                includeNoLocationClasses = true
+            }
+        }
+    }
+
+    sourceSets {
+        androidTest.assets.srcDirs += files("$projectDir/schemas".toString())
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar', '*.aar'])
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+
+    implementation 'androidx.appcompat:appcompat:1.1.0'
+
+    implementation 'androidx.core:core-ktx:1.2.0-beta01'
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    implementation "androidx.recyclerview:recyclerview:1.0.0"
+
+    // Dagger
+    implementation 'com.google.dagger:dagger-android:2.25.2'
+    implementation 'com.google.dagger:dagger-android-support:2.25.2'
+    kapt 'com.google.dagger:dagger-android-processor:2.25.2'
+    kapt 'com.google.dagger:dagger-compiler:2.25.2'
+
+    // Rx2
+    implementation 'io.reactivex.rxjava2:rxjava:2.2.10'
+    implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
+
+    // Retrofit + Okhttp
+    implementation 'com.squareup.retrofit2:retrofit:2.6.2'
+    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.6.2'
+    implementation 'com.squareup.retrofit2:converter-gson:2.6.2'
+    implementation 'com.squareup.okhttp3:okhttp:4.2.2'
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.2.2'
+
+    // Architecture component
+    implementation "android.arch.lifecycle:livedata:2.0.0"
+    implementation "android.arch.lifecycle:runtime:2.0.0"
+    kapt "android.arch.lifecycle:compiler:2.0.0"
+
+    // Sentry
+    implementation 'io.sentry:sentry-android:1.7.28'
+    implementation 'org.slf4j:slf4j-nop:1.7.28'
+
+    // Bitmark SDK
+    implementation 'com.bitmark.sdk:android-sdk:2.1.0'
+    implementation 'com.bitmark.sdk:api-service:2.1.0'
+    implementation 'com.bitmark.sdk:cryptography:1.6.0'
+
+    implementation 'com.onesignal:OneSignal:3.12.7'
+
+    // Testing
+    testImplementation 'junit:junit:4.12'
+    testImplementation("com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0") {
+        exclude group: 'org.mockito', module: 'mockito-core'
+    }
+    testImplementation 'org.mockito:mockito-core:3.2.4'
+    testImplementation "androidx.arch.core:core-testing:2.0.0"
+    testImplementation 'org.mockito:mockito-inline:3.2.4'
+    testImplementation 'org.powermock:powermock-module-junit4:2.0.2'
+    testImplementation 'org.powermock:powermock-api-mockito2:2.0.2'
+
+    androidTestImplementation 'androidx.test:runner:1.2.0'
+    androidTestImplementation 'androidx.test:rules:1.2.0'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+    androidTestImplementation 'androidx.arch.core:core-testing:2.0.0'
+    androidTestImplementation 'androidx.room:room-testing:2.0.0'
+}
+
+task fillSecretKey {
+    doLast {
+        def keyPropertiesFile = rootProject.file('key.properties')
+        def keyProperties = new Properties()
+        keyProperties.load(new FileInputStream(keyPropertiesFile))
+        def apiKeyFile = file('src/main/jni/api-key.cpp')
+        def content = apiKeyFile.getText()
+        content = content.replace('bitmark-api-key-to-be-filled', keyProperties['api.key.bitmark']).replace('intercom-api-key-to-be-filled', keyProperties['api.key.intercom'])
+        apiKeyFile.bytes = []
+        apiKeyFile.text = content
+    }
+}
+
+jacoco {
+    toolVersion = "0.8.4"
+}
+
+tasks.withType(Test) {
+    jacoco.includeNoLocationClasses = true
+}
+
+afterEvaluate {
+
+    (android.hasProperty('applicationVariants')
+            ? android.'applicationVariants'
+            : android.'libraryVariants').all { variant ->
+        def variantName = variant.name
+        def unitTestTask = "test${variantName.capitalize()}UnitTest"
+        def uiTestCoverageTask = "create${variantName.capitalize()}CoverageReport"
+
+        tasks.create(name: "${unitTestTask}Coverage", type: JacocoReport, dependsOn: [
+                "$unitTestTask",
+                "$uiTestCoverageTask"
+        ]) {
+            group = "Reporting"
+            description = "Generate Jacoco coverage reports for the ${variantName.capitalize()} build"
+
+            reports {
+                html.enabled = true
+                xml.enabled = true
+                csv.enabled = false
+            }
+
+            def fileFilter = [
+                    '**/R.class',
+                    '**/R$*.class',
+                    '**/BuildConfig.*',
+                    '**/Manifest*.*',
+                    '**/*Test*.*',
+                    'android/**/*.*',
+                    '**/*_Provide*/**',
+                    '**/*_Factory*/**',
+                    '**/*_MembersInjector.class',
+                    '**/*Dagger*',
+                    '**/*Dao_Impl*',
+                    '**/data/model/*',
+                    '**/di/*',
+                    '**/keymanagement/*',
+                    'com.bumptech.glide'
+            ]
+
+            classDirectories.setFrom(files([
+                    fileTree(dir: "${buildDir}/tmp/kotlin-classes/${variantName}", excludes: fileFilter)
+            ]))
+
+            def coverageSourceDirs = [
+                    "$project.rootDir/app/src/main/java",
+                    "$project.projectDir/src/${variantName}/java"
+            ]
+            additionalSourceDirs.setFrom(files(coverageSourceDirs))
+            sourceDirectories.setFrom(files(coverageSourceDirs))
+
+            def uiTestsData = fileTree(dir: "${buildDir}/outputs/code_coverage/${variantName}AndroidTest/connected/", includes: ["**/*.ec"])
+
+            executionData(files([
+                    "$project.buildDir/jacoco/${unitTestTask}.exec",
+                    uiTestsData
+            ]))
+        }
+    }
+}
+
+appcenter {
+    def keyPropertiesFile = rootProject.file('app-center.properties')
+    def keyProperties = new Properties()
+    keyProperties.load(new FileInputStream(keyPropertiesFile))
+
+    apiToken = keyProperties["api-key"]
+    ownerName = "support-zzd0-28"
+    distributionGroups = ["Bitmark"]
+    releaseNotes = file("../CHANGELOG.md")
+    notifyTesters = true
+    apps {
+        inhouse {
+            dimension = "env"
+            appName = "Autonomy-Android"
+        }
+    }
+}
+
+apply plugin: 'com.google.gms.google-services'
