@@ -6,8 +6,15 @@
  */
 package com.bitmark.autonomy.di
 
+import com.bitmark.autonomy.feature.onboarding.OnboardingFragment
+import com.bitmark.autonomy.feature.onboarding.OnboardingModule
 import dagger.Module
+import dagger.android.ContributesAndroidInjector
 
 @Module
 abstract class FragmentBuilderModule {
+
+    @ContributesAndroidInjector(modules = [OnboardingModule::class])
+    @FragmentScope
+    internal abstract fun bindOnBoardingFragment(): OnboardingFragment
 }

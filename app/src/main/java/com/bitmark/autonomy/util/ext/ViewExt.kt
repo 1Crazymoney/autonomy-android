@@ -9,11 +9,15 @@ package com.bitmark.autonomy.util.ext
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.os.Handler
+import android.util.TypedValue
 import android.view.View
+import android.webkit.WebView
 import android.widget.TextView
 import androidx.annotation.ColorRes
 import androidx.annotation.StringRes
 import androidx.core.content.ContextCompat
+import androidx.core.widget.NestedScrollView
+import com.bitmark.autonomy.logging.Tracer
 
 fun View.gone(withAnim: Boolean = false) {
     if (withAnim) {
@@ -89,4 +93,43 @@ fun TextView.setText(@StringRes id: Int) {
 
 fun TextView.setTextColorRes(@ColorRes id: Int) {
     this.setTextColor(ContextCompat.getColor(context, id))
+}
+
+fun WebView.evaluateJs(script: String?, success: () -> Unit = {}, error: () -> Unit = {}) {
+    evaluateJavascript(script) { result ->
+        if (result.contains("error", true)) {
+            Tracer.ERROR.log("WebView.evaluateJs()", "Script: $script, result:$result")
+            error()
+        } else {
+            success()
+        }
+    }
+}
+
+fun WebView.evaluateVerificationJs(
+    script: String,
+    callback: (Boolean) -> Unit
+) {
+    evaluateJavascript(script) { value ->
+        when {
+            value.isBoolean() -> callback(value?.toBoolean() ?: false)
+            else -> {
+                Tracer.ERROR.log(
+                    "WebView.evaluateVerificationJs()",
+                    "Script: $script, value: $value"
+                )
+                callback(false)
+            }
+        }
+    }
+}
+
+fun NestedScrollView.scrollToTop(smooth: Boolean = true) =
+    if (smooth) smoothScrollTo(0, 0) else scrollTo(0, 0)
+
+fun TextView.setTextSize(sp: Int) {
+    val screenWidth = context.screenWidth
+    val density = context.resources.displayMetrics.density
+    val convertedSp = screenWidth * sp / (density * 360)
+    setTextSize(TypedValue.COMPLEX_UNIT_SP, convertedSp)
 }

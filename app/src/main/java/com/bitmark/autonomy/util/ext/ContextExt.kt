@@ -6,11 +6,16 @@
  */
 package com.bitmark.autonomy.util.ext
 
-import android.app.admin.DevicePolicyManager
+import android.app.KeyguardManager
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
+import android.net.Uri
+import android.provider.OpenableColumns
+import androidx.annotation.ColorRes
 import androidx.annotation.DimenRes
+import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 
 fun Context.copyToClipboard(text: String) {
     val clipboardManager =
@@ -50,13 +55,36 @@ fun Context.getDimension(@DimenRes dimenRes: Int, default: Float = 0f): Float {
     }
 }
 
-fun Context.isStorageEncryptionInactive(): Boolean {
-    return try {
-        val devicePolicyManager =
-            getSystemService(Context.DEVICE_POLICY_SERVICE) as DevicePolicyManager
-        val status = devicePolicyManager.storageEncryptionStatus
-        status == DevicePolicyManager.ENCRYPTION_STATUS_INACTIVE
-    } catch (e: Throwable) {
-        false
-    }
+fun Context.pxToDp(px: Float) = px / resources.displayMetrics.density
+
+fun Context.dpToPx(dp: Int) = dp * resources.displayMetrics.density
+
+fun Context.spToPx(sp: Int) = sp * resources.displayMetrics.scaledDensity
+
+val Context.screenWidth: Int
+    get() = resources.displayMetrics.widthPixels
+
+fun Context.getColorStateList(@ColorRes id: Int) = ContextCompat.getColorStateList(this, id)
+
+fun Context.getFontFamily(id: Int) = ResourcesCompat.getFont(this, id)
+
+fun Context.isDeviceSecure(): Boolean {
+    val keyguardManager = getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager
+    return keyguardManager.isDeviceSecure
+}
+
+fun Context.getFileSize(uri: Uri): Long {
+    return contentResolver.query(uri, null, null, null, null)?.use { cursor ->
+        val sizeIndex = cursor.getColumnIndex(OpenableColumns.SIZE)
+        cursor.moveToFirst()
+        cursor.getLong(sizeIndex)
+    } ?: -1
+}
+
+fun Context.getFileName(uri: Uri): String {
+    return contentResolver.query(uri, null, null, null, null)?.use { cursor ->
+        val sizeIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
+        cursor.moveToFirst()
+        cursor.getString(sizeIndex)
+    } ?: ""
 }

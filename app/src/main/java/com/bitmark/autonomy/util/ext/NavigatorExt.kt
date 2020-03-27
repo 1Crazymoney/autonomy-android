@@ -6,14 +6,21 @@
  */
 package com.bitmark.autonomy.util.ext
 
+import android.app.KeyguardManager
+import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.provider.MediaStore
 import android.provider.Settings
-import com.bitmark.autonomy.R
+import androidx.annotation.StringRes
+import com.bitmark.autonomy.BuildConfig
 import com.bitmark.autonomy.feature.Navigator
 import com.bitmark.autonomy.feature.Navigator.Companion.NONE
+import com.bitmark.autonomy.util.Constants
+import io.intercom.android.sdk.Intercom
+import java.net.URL
+
 
 fun Navigator.gotoSecuritySetting() {
     val intent = Intent(Settings.ACTION_SECURITY_SETTINGS)
@@ -29,6 +36,14 @@ fun Navigator.openBrowser(url: String) {
     }
 }
 
+fun Navigator.Companion.openBrowser(context: Context, url: String) {
+    try {
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+        context.startActivity(intent)
+    } catch (ignore: Throwable) {
+    }
+}
+
 fun Navigator.openAppSetting(context: Context) {
     try {
         val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
@@ -39,7 +54,10 @@ fun Navigator.openAppSetting(context: Context) {
     }
 }
 
-fun Navigator.openMail(context: Context, email: String) {
+fun Navigator.openMail(
+    context: Context,
+    email: String
+) {
     try {
         val intent =
             Intent(Intent.ACTION_SENDTO, Uri.fromParts("mailto", email, null))
@@ -47,14 +65,17 @@ fun Navigator.openMail(context: Context, email: String) {
         startActivity(
             Intent.createChooser(
                 intent,
-                context.getString(R.string.send_to_format).format(email)
+                "send to %s".format(email)
             )
         )
     } catch (ignore: Throwable) {
     }
 }
 
-fun Navigator.browseMedia(mime: String, requestCode: Int) {
+fun Navigator.browseMedia(
+    mime: String,
+    requestCode: Int
+) {
     val intent = Intent(Intent.ACTION_PICK)
     when (mime) {
         "image/*" -> {
@@ -80,3 +101,70 @@ fun Navigator.browseDocument(requestCode: Int) {
     intent.type = "*/*"
     anim(NONE).startActivityForResult(intent, requestCode)
 }
+
+fun Navigator.goToPlayStore() {
+    try {
+        startActivity(
+            Intent(
+                Intent.ACTION_VIEW,
+                Uri.parse("market://details?id=${BuildConfig.APPLICATION_ID}")
+            )
+        )
+    } catch (e: ActivityNotFoundException) {
+        startActivity(
+            Intent(
+                Intent.ACTION_VIEW,
+                Uri.parse("https://play.google.com/store/apps/details?id=${BuildConfig.APPLICATION_ID}")
+            )
+        )
+    }
+
+}
+
+fun Navigator.openVideoPlayer(url: String, error: (Throwable) -> Unit) {
+    try {
+        val intent = Intent(Intent.ACTION_VIEW)
+        val uri = Uri.parse(url)
+        intent.setDataAndType(uri, "video/*")
+        startActivity(intent)
+    } catch (e: Throwable) {
+        error(e)
+    }
+}
+
+fun Navigator.goToUpdateApp(updateUrl: String) {
+    val url = URL(updateUrl)
+    if (url.host == Constants.GOOGLE_PLAY_HOST) {
+        goToPlayStore()
+    } else {
+        openBrowser(updateUrl)
+    }
+}
+
+fun Navigator.openIntercom(exitApp: Boolean = false) {
+    Intercom.client().displayMessenger()
+    if (exitApp) exitApp()
+}
+
+fun Navigator.share(url: String) {
+    val intent = Intent(Intent.ACTION_SEND)
+    intent.type = "text/plain"
+    intent.putExtra(Intent.EXTRA_SUBJECT, url)
+    intent.putExtra(Intent.EXTRA_TEXT, url)
+    startActivity(Intent.createChooser(intent, "Share URL"))
+}
+
+fun Navigator.openKeyGuardConfirmation(
+    context: Context,
+    @StringRes title: Int,
+    @StringRes description: Int,
+    requestCode: Int
+) {
+    val keyguardManager = context.getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager
+    val intent = keyguardManager.createConfirmDeviceCredentialIntent(
+        context.getString(title),
+        context.getString(description)
+    )
+    startActivityForResult(intent, requestCode)
+}
+

@@ -6,4 +6,10 @@
  */
 package com.bitmark.autonomy.data.source.remote
 
-abstract class RemoteDataSource
+import com.bitmark.autonomy.data.source.remote.api.middleware.RxErrorHandlingComposer
+import com.bitmark.autonomy.data.source.remote.api.service.AutonomyApi
+
+abstract class RemoteDataSource(
+    protected val autonomyApi: AutonomyApi,
+    protected val rxErrorHandlingComposer: RxErrorHandlingComposer
+)

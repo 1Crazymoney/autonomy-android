@@ -6,6 +6,7 @@
  */
 package com.bitmark.autonomy.feature
 
+import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.os.Bundle
@@ -21,6 +22,7 @@ class Navigator(host: Any) {
         const val NONE = 0x00
         const val BOTTOM_UP = 0x01
         const val RIGHT_LEFT = 0x02
+        const val FADE_IN = 0x03
     }
 
     private var fragment: Fragment? = null
@@ -83,10 +85,10 @@ class Navigator(host: Any) {
     }
 
     fun popFragment() =
-        activity?.supportFragmentManager?.popBackStackImmediate()
+        activity?.supportFragmentManager?.popBackStackImmediate() ?: false
 
     fun popChildFragment() =
-        fragment?.childFragmentManager?.popBackStackImmediate()
+        fragment?.childFragmentManager?.popBackStackImmediate() ?: false
 
     fun popChildFragmentToRoot(): Boolean {
         val fragmentManager = fragment?.childFragmentManager
@@ -145,6 +147,11 @@ class Navigator(host: Any) {
         startTransactionAnim(activity)
     }
 
+    fun finishActivityForResult(data: Intent? = null, resultCode: Int = Activity.RESULT_OK) {
+        activity?.setResult(resultCode, data)
+        finishActivity()
+    }
+
     fun startActivityAsRoot(clazz: Class<*>, bundle: Bundle? = null) {
         val intent = Intent(activity, clazz)
         intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
@@ -163,6 +170,10 @@ class Navigator(host: Any) {
         finishTransactionAnim(activity)
     }
 
+    fun exitApp() {
+        finishActivity(true)
+    }
+
     private fun startTransactionAnim(activity: FragmentActivity?) {
         when (anim) {
             BOTTOM_UP -> activity?.overridePendingTransition(
@@ -173,6 +184,7 @@ class Navigator(host: Any) {
                 R.anim.slide_right_in,
                 R.anim.slide_left_out
             )
+            FADE_IN -> activity?.overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
         }
     }
 
@@ -186,6 +198,7 @@ class Navigator(host: Any) {
                 R.anim.slide_left_in,
                 R.anim.slide_right_out
             )
+            FADE_IN -> activity?.overridePendingTransition(R.anim.fade_out, R.anim.fade_in)
         }
     }
 
@@ -199,7 +212,14 @@ class Navigator(host: Any) {
             RIGHT_LEFT -> transaction.setCustomAnimations(
                 R.anim.slide_right_in,
                 R.anim.slide_left_out,
-                R.anim.slide_left_in, R.anim.slide_right_out
+                R.anim.slide_left_in,
+                R.anim.slide_right_out
+            )
+            FADE_IN -> transaction.setCustomAnimations(
+                R.anim.fade_in,
+                R.anim.fade_out,
+                R.anim.fade_out,
+                R.anim.fade_in
             )
         }
     }

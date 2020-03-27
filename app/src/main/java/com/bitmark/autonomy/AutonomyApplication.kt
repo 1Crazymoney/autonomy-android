@@ -10,6 +10,7 @@ import com.bitmark.apiservice.configuration.GlobalConfiguration
 import com.bitmark.apiservice.configuration.Network
 import com.bitmark.autonomy.data.source.remote.api.middleware.BitmarkSdkHttpObserver
 import com.bitmark.autonomy.data.source.remote.api.service.ServiceGenerator
+import com.bitmark.autonomy.feature.connectivity.ConnectivityHandler
 import com.bitmark.autonomy.keymanagement.ApiKeyManager.Companion.API_KEY_MANAGER
 import com.bitmark.autonomy.logging.Tracer
 import com.bitmark.sdk.features.BitmarkSDK
@@ -33,6 +34,9 @@ class AutonomyApplication : DaggerApplication() {
     @Inject
     lateinit var bitmarkSdkHttpObserver: BitmarkSdkHttpObserver
 
+    @Inject
+    internal lateinit var connectivityHandler: ConnectivityHandler
+
     private val applicationInjector = DaggerAppComponent.builder()
         .application(this)
         .build()
@@ -51,6 +55,7 @@ class AutonomyApplication : DaggerApplication() {
                 "intercept rx error ${e.javaClass} with message ${e.message} to be sent to thread uncaught exception"
             )
         }
+        connectivityHandler.register()
     }
 
     private fun buildBmSdkConfig(): GlobalConfiguration.Builder {

@@ -8,6 +8,10 @@ package com.bitmark.autonomy
 
 import android.app.Application
 import android.content.Context
+import com.bitmark.autonomy.data.source.AccountRepository
+import com.bitmark.autonomy.feature.connectivity.ConnectivityHandler
+import com.bitmark.autonomy.logging.EventLogger
+import com.bitmark.autonomy.logging.SentryEventLogger
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
@@ -22,5 +26,14 @@ class AppModule {
     @Provides
     @Singleton
     fun provideAppLifecycleHandler() = AppLifecycleHandler()
+
+    @Provides
+    @Singleton
+    fun provideEventLogger(accountRepo: AccountRepository): EventLogger =
+        SentryEventLogger(accountRepo)
+
+    @Provides
+    @Singleton
+    fun provideConnectivityHandler(context: Context) = ConnectivityHandler(context)
 
 }

@@ -1,5 +1,46 @@
 <resources>
 
+    <string name="autonomy">Autonomy</string>
+    <string name="get_better_dot">Get better.</string>
+    <string name="together_dot">Together.</string>
+    <string name="by_continuing_you_agree">By continuing, you agree to our\nEULA and Privacy Policy.</string>
+    <string name="eula">EULA</string>
+    <string name="privacy_policy">Privacy Policy</string>
+    <string name="start">Start</string>
+    <string name="we_will_use_community">We’ll use community data to calculate a health score for your current location.</string>
+    <string name="back">Back</string>
+    <string name="next">Next</string>
+    <string name="we_will_send_u_actionable">We’ll send you actionable, science-based updates from local institutions.</string>
+    <string name="today">Today</string>
+    <string name="work_from_home">Work from home</string>
+    <string name="based_on_your_current_location">Based on your current location, environmental factors, and the latest COVID-19 outbreak data, you shouldwork from home today if possible.</string>
+    <string name="we_will_help_you_and_your_community">We’ll help you and your community better manage resources.</string>
+    <string name="help_deliver_food">Help deliver food</string>
+    <string name="safely_deliver_food">Safely deliver food to others in your area.</string>
+    <string name="permission">Permission</string>
+    <string name="autonomy_can_help_you_most_if">Autonomy can help you most if you turn on the following:</string>
+    <string name="location_data">Location data</string>
+    <string name="we_will_use_your_location">We’ll use your location data to give you the latest COVID-19 outbreak information for your local current area and tell how to help your local community.</string>
+    <string name="done">Done</string>
+    <string name="risk_level">Risk level</string>
+    <string name="are_u_at_higher_risk">Are you at higher risk for severe illness from COVID-19?</string>
+    <string name="yes_im_at_higher_risk">Yes, I’m at higher risk</string>
+    <string name="higher_risk_individuals">Higher risk individuals currently include:\n• People over age 65 And anyone with any of the following pre-existing medical conditions:\n• High blood pressure (hypertension)\n• Cardiovascular disease\n• Diabetes\n• Chronic respiratory disease (such as lung disease or asthma)\n• Cancer</string>
+    <string name="no_im_not_at_higher_risk">No, I’m not at higher risk</string>
+    <string name="error">Error</string>
+    <string name="passcode_pin_required">Device PIN setup is required</string>
+    <string name="fingerprint_required">Biometric authentication setup is required</string>
+    <string name="your_authorization_is_required">Your authorization is required.</string>
+    <string name="unexpected_error">Unexpected error has occurred. Please contact support team</string>
+    <string name="contact_us">Contact us</string>
+    <string name="update_available">Update Available</string>
+    <string name="a_new_version_is_available">The Autonomy app on your device is out of date. Please update Spring to continue using it.</string>
+    <string name="update_now">Update now</string>
+    <string name="no_internet_connection">No Internet Connection</string>
+    <string name="pls_check_your_connection">Please check your connection and try again.</string>
+    <string name="please_authorize_arrow">Please authorize »</string>
+    <string name="could_not_register_account">Could not register account. Please try again later.</string>
+
     <!--    string format-->
     <string name="send_to_format">Send to %1$s</string>
 </resources>

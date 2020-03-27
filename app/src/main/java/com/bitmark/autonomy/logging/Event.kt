@@ -7,4 +7,21 @@
 package com.bitmark.autonomy.logging
 
 enum class Event(val value: String) {
+
+    ACCOUNT_JWT_ERROR("register_jwt_error"),
+
+    ACCOUNT_LOAD_KEY_STORE_ERROR("account_load_keystore_error"),
+
+    ACCOUNT_SAVE_TO_KEY_STORE_ERROR("account_save_keystore_error"),
+
+    ACCOUNT_REGISTER_ERROR("account_register_error"),
+
+    APP_GET_INFO_ERROR("app_get_info_error"),
+
+    SHARE_PREF_ERROR("shared_pref_error"),
+
+    LOCATION_PERMISSION_GRANTED("location_permission_granted"),
+
+    LOCATION_PERMISSION_DENIED("location_permission_denied")
+
 }

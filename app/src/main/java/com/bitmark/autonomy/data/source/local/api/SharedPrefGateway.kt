@@ -9,12 +9,10 @@ package com.bitmark.autonomy.data.source.local.api
 import android.content.Context
 import android.content.SharedPreferences
 import com.bitmark.autonomy.BuildConfig
-import com.google.gson.Gson
+import com.bitmark.autonomy.data.ext.newGsonInstance
 import kotlin.reflect.KClass
 
-class SharedPrefGateway internal constructor(
-    context: Context, private val gson: Gson
-) {
+class SharedPrefGateway internal constructor(context: Context) {
 
     private val sharedPreferences: SharedPreferences =
         context.getSharedPreferences(
@@ -44,7 +42,7 @@ class SharedPrefGateway internal constructor(
                 key,
                 default as? Long ?: 0
             ) as T
-            else -> gson.fromJson(
+            else -> newGsonInstance().fromJson(
                 sharedPreferences.getString(key, ""), type.java
             )
         }
@@ -58,9 +56,15 @@ class SharedPrefGateway internal constructor(
             is Float -> editor.putFloat(key, data as Float)
             is Int -> editor.putInt(key, data as Int)
             is Long -> editor.putLong(key, data as Long)
-            else -> editor.putString(key, gson.toJson(data))
+            else -> editor.putString(key, newGsonInstance().toJson(data))
         }
         editor.apply()
+    }
+
+    fun has(key: String) = sharedPreferences.contains(key)
+
+    fun clear(key: String) {
+        sharedPreferences.edit().remove(key).apply()
     }
 
     fun clear() {

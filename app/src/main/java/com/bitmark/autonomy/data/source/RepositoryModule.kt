@@ -6,7 +6,38 @@
  */
 package com.bitmark.autonomy.data.source
 
+import android.content.Context
+import com.bitmark.autonomy.data.source.local.AccountLocalDataSource
+import com.bitmark.autonomy.data.source.local.AppLocalDataSource
+import com.bitmark.autonomy.data.source.local.api.DatabaseGateway
+import com.bitmark.autonomy.data.source.remote.AccountRemoteDataSource
+import com.bitmark.autonomy.data.source.remote.AppRemoteDataSource
 import dagger.Module
+import dagger.Provides
+import javax.inject.Singleton
 
 @Module
-class RepositoryModule
+class RepositoryModule {
+
+    @Singleton
+    @Provides
+    fun provideAccountRepo(
+        remoteDataSource: AccountRemoteDataSource,
+        localDataSource: AccountLocalDataSource
+    ): AccountRepository {
+        return AccountRepository(remoteDataSource, localDataSource)
+    }
+
+    @Singleton
+    @Provides
+    fun provideAppRepo(
+        remoteDataSource: AppRemoteDataSource,
+        localDataSource: AppLocalDataSource
+    ) = AppRepository(remoteDataSource, localDataSource)
+
+    @Singleton
+    @Provides
+    fun provideDatabaseGateway(context: Context): DatabaseGateway {
+        return object : DatabaseGateway() {}
+    }
+}

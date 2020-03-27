@@ -7,18 +7,19 @@
 package com.bitmark.autonomy.data.source.local.api
 
 import android.content.Context
-import com.google.gson.Gson
 import io.reactivex.Completable
 import io.reactivex.Single
 import io.reactivex.SingleOnSubscribe
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
-class SharedPrefApi @Inject constructor(
-    context: Context, gson: Gson
-) {
+class SharedPrefApi @Inject constructor(context: Context) {
 
-    private val sharePrefGateway = SharedPrefGateway(context, gson)
+    private val sharePrefGateway = SharedPrefGateway(context)
+
+    companion object {
+        const val ACCOUNT_DATA = "account_data"
+    }
 
     fun <T> rxSingle(action: (SharedPrefGateway) -> T): Single<T> {
         return Single.create(SingleOnSubscribe<T> { e ->
