@@ -172,7 +172,7 @@ class SplashActivity : BaseAppCompatActivity() {
             when {
                 res.isSuccess() -> {
                     navigator.anim(FADE_IN)
-                        .startActivity(MainActivity::class.java)
+                        .startActivityAsRoot(MainActivity::class.java)
                 }
 
                 res.isError() -> {

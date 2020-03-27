@@ -102,7 +102,7 @@ class RiskLevelActivity : BaseAppCompatActivity() {
                 res.isSuccess() -> {
                     progressBar.gone()
                     // TODO change later
-                    navigator.anim(FADE_IN).startActivity(MainActivity::class.java)
+                    navigator.anim(FADE_IN).startActivityAsRoot(MainActivity::class.java)
                     blocked = false
                 }
 
