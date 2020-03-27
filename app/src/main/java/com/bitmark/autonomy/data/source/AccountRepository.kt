@@ -23,12 +23,13 @@ class AccountRepository(
         timestamp: String,
         signature: String,
         requester: String,
-        encPubKey: String
+        encPubKey: String,
+        metadata: Map<String, String>
     ) = registerServerJwt(
         timestamp,
         signature,
         requester
-    ).andThen(remoteDataSource.registerServerAccount(encPubKey))
+    ).andThen(remoteDataSource.registerServerAccount(encPubKey, metadata))
 
     fun registerServerJwt(
         timestamp: String,

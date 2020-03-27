@@ -1,6 +1,7 @@
 <resources>
 
     <string name="autonomy">Autonomy</string>
+    <string name="notification_channel_name">@string/app_name</string>
     <string name="get_better_dot">Get better.</string>
     <string name="together_dot">Together.</string>
     <string name="by_continuing_you_agree">By continuing, you agree to our\nEULA and Privacy Policy.</string>

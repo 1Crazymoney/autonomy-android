@@ -75,7 +75,7 @@ data class State(
 
     @Expose
     @SerializedName("location")
-    val location: Location
+    val location: Location?
 ) : Data
 
 data class Location(

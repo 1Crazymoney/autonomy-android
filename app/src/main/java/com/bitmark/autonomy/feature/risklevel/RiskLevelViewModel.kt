@@ -64,19 +64,18 @@ class RiskLevelViewModel(
                 val timestamp = t.second
                 val signature = t.third
                 val encPubKey = Hex.HEX.encode(account.encKeyPair.publicKey().toBytes())
+                val metadata = mapOf("risk" to riskLevel)
                 accountRepo.registerServerAccount(
                     timestamp,
                     signature,
                     requester,
-                    encPubKey
+                    encPubKey,
+                    metadata
                 ).flatMap { accountData ->
                     accountData.authRequired = false
                     accountData.keyAlias = alias
-                    accountRepo.saveAccountData(accountData).andThen(
-                        accountRepo.updateMetadata(
-                            mapOf("risk" to riskLevel)
-                        )
-                    ).map { accountData.accountNumber }
+                    accountRepo.saveAccountData(accountData)
+                        .andThen(Single.just(accountData.accountNumber))
                 }
             }
 

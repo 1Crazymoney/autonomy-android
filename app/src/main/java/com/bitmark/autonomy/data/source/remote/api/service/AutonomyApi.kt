@@ -9,6 +9,7 @@ package com.bitmark.autonomy.data.source.remote.api.service
 import com.bitmark.autonomy.data.model.AccountData
 import com.bitmark.autonomy.data.model.AppInfoData
 import com.bitmark.autonomy.data.model.JwtData
+import com.bitmark.autonomy.data.source.remote.api.request.RegisterAccountRequest
 import com.bitmark.autonomy.data.source.remote.api.request.RegisterJwtRequest
 import io.reactivex.Single
 import okhttp3.RequestBody
@@ -21,7 +22,7 @@ import retrofit2.http.POST
 interface AutonomyApi {
 
     @POST("api/accounts")
-    fun registerAccount(@Body body: Map<String, String>): Single<Map<String, AccountData>>
+    fun registerAccount(@Body request: RegisterAccountRequest): Single<Map<String, AccountData>>
 
     @POST("api/auth")
     fun registerJwt(@Body request: RegisterJwtRequest): Single<JwtData>

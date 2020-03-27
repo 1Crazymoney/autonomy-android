@@ -11,11 +11,15 @@ import com.bitmark.apiservice.configuration.Network
 import com.bitmark.autonomy.data.source.remote.api.middleware.BitmarkSdkHttpObserver
 import com.bitmark.autonomy.data.source.remote.api.service.ServiceGenerator
 import com.bitmark.autonomy.feature.connectivity.ConnectivityHandler
+import com.bitmark.autonomy.feature.notification.NotificationOpenedHandler
+import com.bitmark.autonomy.feature.notification.NotificationReceivedHandler
 import com.bitmark.autonomy.keymanagement.ApiKeyManager.Companion.API_KEY_MANAGER
 import com.bitmark.autonomy.logging.Tracer
 import com.bitmark.sdk.features.BitmarkSDK
+import com.onesignal.OneSignal
 import dagger.android.AndroidInjector
 import dagger.android.support.DaggerApplication
+import io.intercom.android.sdk.Intercom
 import io.reactivex.plugins.RxJavaPlugins
 import io.sentry.Sentry
 import io.sentry.android.AndroidSentryClientFactory
@@ -37,6 +41,12 @@ class AutonomyApplication : DaggerApplication() {
     @Inject
     internal lateinit var connectivityHandler: ConnectivityHandler
 
+    @Inject
+    internal lateinit var notificationOpenedHandler: NotificationOpenedHandler
+
+    @Inject
+    internal lateinit var notificationReceivedHandler: NotificationReceivedHandler
+
     private val applicationInjector = DaggerAppComponent.builder()
         .application(this)
         .build()
@@ -56,6 +66,13 @@ class AutonomyApplication : DaggerApplication() {
             )
         }
         connectivityHandler.register()
+        Intercom.initialize(this, API_KEY_MANAGER.intercomApiKey, "ejkeunzw")
+        OneSignal.startInit(this)
+            .inFocusDisplaying(OneSignal.OSInFocusDisplayOption.Notification)
+            .unsubscribeWhenNotificationsAreDisabled(true)
+            .setNotificationOpenedHandler(notificationOpenedHandler)
+            .setNotificationReceivedHandler(notificationReceivedHandler)
+            .init()
     }
 
     private fun buildBmSdkConfig(): GlobalConfiguration.Builder {

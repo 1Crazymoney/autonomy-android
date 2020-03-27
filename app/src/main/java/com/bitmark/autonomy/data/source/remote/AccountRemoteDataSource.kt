@@ -10,6 +10,7 @@ import com.bitmark.autonomy.data.ext.newGsonInstance
 import com.bitmark.autonomy.data.model.AccountData
 import com.bitmark.autonomy.data.source.local.Jwt
 import com.bitmark.autonomy.data.source.remote.api.middleware.RxErrorHandlingComposer
+import com.bitmark.autonomy.data.source.remote.api.request.RegisterAccountRequest
 import com.bitmark.autonomy.data.source.remote.api.request.RegisterJwtRequest
 import com.bitmark.autonomy.data.source.remote.api.service.AutonomyApi
 import io.reactivex.Completable
@@ -43,8 +44,11 @@ class AccountRemoteDataSource @Inject constructor(
         }.ignoreElement().subscribeOn(Schedulers.io())
     }
 
-    fun registerServerAccount(encPubKey: String): Single<AccountData> {
-        return autonomyApi.registerAccount(mapOf("enc_pub_key" to encPubKey))
+    fun registerServerAccount(
+        encPubKey: String,
+        metadata: Map<String, String>
+    ): Single<AccountData> {
+        return autonomyApi.registerAccount(RegisterAccountRequest(encPubKey, metadata))
             .map { res -> res["result"] ?: error("invalid response") }
             .subscribeOn(Schedulers.io())
     }
