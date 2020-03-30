@@ -10,6 +10,7 @@ import android.os.Bundle
 import com.bitmark.autonomy.R
 import com.bitmark.autonomy.feature.BaseAppCompatActivity
 import com.bitmark.autonomy.feature.BaseViewModel
+import com.bitmark.autonomy.feature.BehaviorComponent
 import com.bitmark.autonomy.feature.Navigator
 import com.bitmark.autonomy.feature.Navigator.Companion.NONE
 import javax.inject.Inject
@@ -29,5 +30,13 @@ class OnboardingContainerActivity : BaseAppCompatActivity() {
 
         navigator.anim(NONE)
             .replaceFragment(R.id.layoutContainer, OnboardingFragment.newInstance(), false)
+    }
+
+    override fun onBackPressed() {
+        val currentFragment = supportFragmentManager.findFragmentById(R.id.layoutContainer)
+        if ((currentFragment as? BehaviorComponent)?.onBackPressed() == false) {
+            navigator.anim(Navigator.RIGHT_LEFT).finishActivity()
+            super.onBackPressed()
+        }
     }
 }

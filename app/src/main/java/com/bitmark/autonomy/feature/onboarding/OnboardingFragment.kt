@@ -96,6 +96,9 @@ class OnboardingFragment : BaseSupportFragment() {
             }
         }
 
+    }
 
+    override fun onBackPressed(): Boolean {
+        return navigator.popFragment()
     }
 }
