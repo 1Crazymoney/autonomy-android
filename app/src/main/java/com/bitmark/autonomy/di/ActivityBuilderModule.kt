@@ -16,6 +16,8 @@ import com.bitmark.autonomy.feature.risklevel.RiskLevelActivity
 import com.bitmark.autonomy.feature.risklevel.RiskLevelModule
 import com.bitmark.autonomy.feature.splash.SplashActivity
 import com.bitmark.autonomy.feature.splash.SplashModule
+import com.bitmark.autonomy.feature.survey.SurveyContainerActivity
+import com.bitmark.autonomy.feature.survey.SurveyContainerModule
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
@@ -41,5 +43,9 @@ abstract class ActivityBuilderModule {
     @ContributesAndroidInjector(modules = [MainModule::class])
     @ActivityScope
     internal abstract fun bindMainActivity(): MainActivity
+
+    @ContributesAndroidInjector(modules = [SurveyContainerModule::class])
+    @ActivityScope
+    internal abstract fun bindSurveyContainerActivity(): SurveyContainerActivity
 
 }

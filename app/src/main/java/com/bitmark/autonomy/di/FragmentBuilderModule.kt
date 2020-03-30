@@ -8,6 +8,10 @@ package com.bitmark.autonomy.di
 
 import com.bitmark.autonomy.feature.onboarding.OnboardingFragment
 import com.bitmark.autonomy.feature.onboarding.OnboardingModule
+import com.bitmark.autonomy.feature.survey.checkin.SurveyCheckin1Fragment
+import com.bitmark.autonomy.feature.survey.checkin.SurveyCheckin1Module
+import com.bitmark.autonomy.feature.survey.checkin.SurveyCheckin2Fragment
+import com.bitmark.autonomy.feature.survey.checkin.SurveyCheckin2Module
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
@@ -17,4 +21,12 @@ abstract class FragmentBuilderModule {
     @ContributesAndroidInjector(modules = [OnboardingModule::class])
     @FragmentScope
     internal abstract fun bindOnBoardingFragment(): OnboardingFragment
+
+    @ContributesAndroidInjector(modules = [SurveyCheckin1Module::class])
+    @FragmentScope
+    internal abstract fun bindSurveyCheckin1Fragment(): SurveyCheckin1Fragment
+
+    @ContributesAndroidInjector(modules = [SurveyCheckin2Module::class])
+    @FragmentScope
+    internal abstract fun bindSurveyCheckin2Fragment(): SurveyCheckin2Fragment
 }

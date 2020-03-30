@@ -41,6 +41,15 @@
     <string name="pls_check_your_connection">Please check your connection and try again.</string>
     <string name="please_authorize_arrow">Please authorize »</string>
     <string name="could_not_register_account">Could not register account. Please try again later.</string>
+    <string name="how_r_u_right_now">How are you right now?</string>
+    <string name="survey">Survey</string>
+    <string name="how_can_we_help">How can we help?</string>
+    <string name="i_have_symptoms">I have symptoms</string>
+    <string name="let_us_if_u_r_currently">Let us if you are currently experiencing any of common COVID-19 symptoms.</string>
+    <string name="i_need_assistance">I need assistance</string>
+    <string name="let_people_in_your_local_community">Let people in your local community know that you need help</string>
+    <string name="symptoms">Symptoms</string>
+    <string name="do_u_have_any_symptoms">Do you have any of the following symptoms?</string>
 
     <!--    string format-->
     <string name="send_to_format">Send to %1$s</string>

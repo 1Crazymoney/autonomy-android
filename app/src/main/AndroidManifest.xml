@@ -37,6 +37,10 @@
             android:name=".feature.risklevel.RiskLevelActivity"
             android:screenOrientation="portrait" />
 
+        <activity
+            android:name=".feature.survey.SurveyContainerActivity"
+            android:screenOrientation="portrait" />
+
         <meta-data
             android:name="com.onesignal.NotificationAccentColor.DEFAULT"
             android:value="@color/colorAccent" />

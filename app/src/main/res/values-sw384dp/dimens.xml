@@ -2,6 +2,7 @@
 <resources>
 	<dimen name="dp_1">1.02dp</dimen>
 	<dimen name="dp_10">10.24dp</dimen>
+	<dimen name="dp_105">107.52dp</dimen>
 	<dimen name="dp_112">114.69dp</dimen>
 	<dimen name="dp_12">12.29dp</dimen>
 	<dimen name="dp_124">126.98dp</dimen>
