@@ -236,6 +236,7 @@ dependencies {
     implementation 'com.onesignal:OneSignal:3.12.7'
     implementation 'io.intercom.android:intercom-sdk:6.0.0'
     implementation 'com.github.tbruyelle:rxpermissions:0.10.2'
+    implementation 'com.google.android.gms:play-services-drive:17.0.0'
 
     // Testing
     testImplementation 'junit:junit:4.12'

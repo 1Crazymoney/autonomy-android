@@ -6,6 +6,8 @@
  */
 package com.bitmark.autonomy.di
 
+import com.bitmark.autonomy.feature.main.MainActivity
+import com.bitmark.autonomy.feature.main.MainModule
 import com.bitmark.autonomy.feature.onboarding.OnboardingContainerActivity
 import com.bitmark.autonomy.feature.onboarding.OnboardingContainerModule
 import com.bitmark.autonomy.feature.permission.PermissionActivity
@@ -35,5 +37,9 @@ abstract class ActivityBuilderModule {
     @ContributesAndroidInjector(modules = [RiskLevelModule::class])
     @ActivityScope
     internal abstract fun bindRiskLevelActivity(): RiskLevelActivity
+
+    @ContributesAndroidInjector(modules = [MainModule::class])
+    @ActivityScope
+    internal abstract fun bindMainActivity(): MainActivity
 
 }

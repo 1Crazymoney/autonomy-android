@@ -22,6 +22,10 @@ enum class Event(val value: String) {
 
     LOCATION_PERMISSION_GRANTED("location_permission_granted"),
 
-    LOCATION_PERMISSION_DENIED("location_permission_denied")
+    LOCATION_PERMISSION_DENIED("location_permission_denied"),
+
+    LOCATION_SETTING_CANNOT_BE_RESOLVED("location_setting_cannot_be_resolved"),
+
+    LOCATION_SETTING_NEED_TO_BE_RESOLVED("location_setting_need_to_be_resolved")
 
 }

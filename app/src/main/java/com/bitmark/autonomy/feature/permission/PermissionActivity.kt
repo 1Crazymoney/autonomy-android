@@ -6,33 +6,30 @@
  */
 package com.bitmark.autonomy.feature.permission
 
-import android.Manifest
 import com.bitmark.autonomy.R
 import com.bitmark.autonomy.feature.BaseAppCompatActivity
 import com.bitmark.autonomy.feature.BaseViewModel
 import com.bitmark.autonomy.feature.Navigator
 import com.bitmark.autonomy.feature.Navigator.Companion.RIGHT_LEFT
+import com.bitmark.autonomy.feature.location.LocationService
 import com.bitmark.autonomy.feature.risklevel.RiskLevelActivity
-import com.bitmark.autonomy.logging.Event
 import com.bitmark.autonomy.logging.EventLogger
 import com.bitmark.autonomy.util.ext.openAppSetting
 import com.bitmark.autonomy.util.ext.setSafetyOnclickListener
-import com.tbruyelle.rxpermissions2.RxPermissions
 import kotlinx.android.synthetic.main.activity_permission.*
 import javax.inject.Inject
 
 
 class PermissionActivity : BaseAppCompatActivity() {
 
-    companion object {
-        const val LOCATION_PERMISSION = Manifest.permission.ACCESS_COARSE_LOCATION
-    }
-
     @Inject
     internal lateinit var navigator: Navigator
 
     @Inject
     internal lateinit var logger: EventLogger
+
+    @Inject
+    internal lateinit var locationService: LocationService
 
     override fun layoutRes(): Int = R.layout.activity_permission
 
@@ -41,20 +38,10 @@ class PermissionActivity : BaseAppCompatActivity() {
     override fun initComponents() {
         super.initComponents()
 
-        val rxPermission = RxPermissions(this)
-
         ivRequestLocation.setSafetyOnclickListener {
-            rxPermission.requestEach(LOCATION_PERMISSION)
-                .subscribe({ permission ->
-                    when {
-                        permission.granted -> logger.logEvent(Event.LOCATION_PERMISSION_GRANTED)
-                        permission.shouldShowRequestPermissionRationale -> logger.logEvent(Event.LOCATION_PERMISSION_DENIED)
-                        else -> {
-                            logger.logEvent(Event.LOCATION_PERMISSION_DENIED)
-                            navigator.openAppSetting(this)
-                        }
-                    }
-                }, {})
+            locationService.requestPermission(this, permanentlyDeniedCallback = {
+                navigator.openAppSetting(this)
+            })
         }
 
         layoutNext.setSafetyOnclickListener {

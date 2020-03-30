@@ -16,10 +16,10 @@ import com.bitmark.autonomy.feature.BaseSupportFragment
 import com.bitmark.autonomy.feature.BaseViewModel
 import com.bitmark.autonomy.feature.Navigator
 import com.bitmark.autonomy.feature.Navigator.Companion.RIGHT_LEFT
+import com.bitmark.autonomy.feature.location.LocationService
 import com.bitmark.autonomy.feature.permission.PermissionActivity
 import com.bitmark.autonomy.feature.risklevel.RiskLevelActivity
 import com.bitmark.autonomy.util.ext.setSafetyOnclickListener
-import com.tbruyelle.rxpermissions2.RxPermissions
 import javax.inject.Inject
 
 
@@ -46,6 +46,9 @@ class OnboardingFragment : BaseSupportFragment() {
 
     @Inject
     internal lateinit var navigator: Navigator
+
+    @Inject
+    internal lateinit var locationService: LocationService
 
     private var layoutId: Int? = null
 
@@ -79,8 +82,7 @@ class OnboardingFragment : BaseSupportFragment() {
             if (index == onboardingLayoutRes.size - 1) {
                 // last item
 
-                val rxPermissions = RxPermissions(this)
-                if (rxPermissions.isGranted(PermissionActivity.LOCATION_PERMISSION)) {
+                if (locationService.isPermissionGranted(activity!!)) {
                     navigator.anim(RIGHT_LEFT).startActivity(RiskLevelActivity::class.java)
                 } else {
                     navigator.anim(RIGHT_LEFT).startActivity(PermissionActivity::class.java)

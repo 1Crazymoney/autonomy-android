@@ -6,14 +6,54 @@
  */
 package com.bitmark.autonomy.feature.main
 
-import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import com.bitmark.autonomy.R
+import com.bitmark.autonomy.data.source.local.Location
+import com.bitmark.autonomy.feature.BaseAppCompatActivity
+import com.bitmark.autonomy.feature.BaseViewModel
+import com.bitmark.autonomy.feature.Navigator
+import com.bitmark.autonomy.feature.location.LocationService
+import kotlinx.android.synthetic.main.activity_main.*
+import javax.inject.Inject
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseAppCompatActivity() {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+    companion object {
+        private const val LOCATION_SETTING_CODE = 0xAE
     }
+
+    @Inject
+    internal lateinit var navigator: Navigator
+
+    @Inject
+    internal lateinit var locationService: LocationService
+
+    private val locationChangedListener = object : LocationService.LocationChangedListener {
+        override fun onLocationChanged(l: Location) {
+            tvLocation.text = l.toString()
+        }
+    }
+
+    override fun layoutRes(): Int = R.layout.activity_main
+
+    override fun viewModel(): BaseViewModel? = null
+
+    override fun onStart() {
+        super.onStart()
+        locationService.requestPermission(this, grantedCallback = {
+            locationService.start(this) { e ->
+                e.startResolutionForResult(this, LOCATION_SETTING_CODE)
+            }
+        }, permanentlyDeniedCallback = {
+            // TODO handle later
+        })
+        locationService.addLocationChangeListener(locationChangedListener)
+    }
+
+    override fun onStop() {
+        locationService.removeLocationChangeListener(locationChangedListener)
+        locationService.stop()
+        super.onStop()
+    }
+
+
 }
