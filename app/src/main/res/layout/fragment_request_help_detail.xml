@@ -99,6 +99,7 @@
                 android:fontFamily="@font/grotesk_light_font_family"
                 android:gravity="top"
                 android:hint="@string/enter_description_if_desired_items"
+                android:maxLength="1000"
                 android:textColor="@color/white"
                 android:textColorHint="@color/concord"
                 android:textCursorDrawable="@null"
