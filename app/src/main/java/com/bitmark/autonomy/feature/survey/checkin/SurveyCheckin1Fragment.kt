@@ -10,7 +10,9 @@ import com.bitmark.autonomy.R
 import com.bitmark.autonomy.feature.BaseSupportFragment
 import com.bitmark.autonomy.feature.BaseViewModel
 import com.bitmark.autonomy.feature.Navigator
+import com.bitmark.autonomy.feature.Navigator.Companion.FADE_IN
 import com.bitmark.autonomy.feature.Navigator.Companion.RIGHT_LEFT
+import com.bitmark.autonomy.feature.main.MainActivity
 import com.bitmark.autonomy.util.ext.setSafetyOnclickListener
 import kotlinx.android.synthetic.main.fragment_survey_checkin_1.*
 import javax.inject.Inject
@@ -37,9 +39,13 @@ class SurveyCheckin1Fragment : BaseSupportFragment() {
                 .replaceFragment(R.id.layoutContainer, SurveyCheckin2Fragment.newInstance(), true)
         }
 
-        ivYellow.setSafetyOnclickListener { }
+        ivYellow.setSafetyOnclickListener {
+            navigator.anim(FADE_IN).startActivityAsRoot(MainActivity::class.java)
+        }
 
-        ivGreen.setSafetyOnclickListener { }
+        ivGreen.setSafetyOnclickListener {
+            navigator.anim(FADE_IN).startActivityAsRoot(MainActivity::class.java)
+        }
     }
 
     override fun onBackPressed(): Boolean {
