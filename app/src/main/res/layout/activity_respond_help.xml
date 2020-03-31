@@ -16,7 +16,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/domaine_sans"
-        android:text="@string/assistance"
+        android:text="@string/request"
         android:textAllCaps="true"
         android:textColor="@color/silver_2"
         android:textSize="@dimen/sp_14"
@@ -50,7 +50,7 @@
         android:scrollbarSize="@dimen/dp_2"
         android:scrollbarThumbVertical="@color/white_aa"
         android:scrollbars="vertical"
-        app:layout_constraintBottom_toTopOf="@id/layoutBack"
+        app:layout_constraintBottom_toTopOf="@id/vDivider6"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvTitle">
@@ -61,43 +61,23 @@
             android:paddingTop="30dp"
             android:paddingBottom="@dimen/dp_28">
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/tvSlogan"
-                android:layout_width="0dp"
-                android:layout_height="130dp"
-                android:layout_marginBottom="24dp"
-                android:fontFamily="@font/grotesk_light_font_family"
-                android:gravity="center"
-                android:includeFontPadding="false"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
-                android:text="@string/please_review_your_request_help"
-                android:textColor="@color/white"
-                app:autoSizeMaxTextSize="36sp"
-                app:autoSizeMinTextSize="18sp"
-                app:autoSizeTextType="uniform"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <View
-                android:id="@+id/vDivider1"
-                android:layout_width="0dp"
-                android:layout_height="1dp"
-                android:layout_marginTop="@dimen/dp_28"
-                android:background="@color/concord"
-                app:layout_constraintEnd_toEndOf="@id/tvSlogan"
-                app:layout_constraintStart_toStartOf="@id/tvSlogan"
-                app:layout_constraintTop_toBottomOf="@id/tvSlogan" />
-
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/ivBadge"
                 android:layout_width="@dimen/dp_90"
                 android:layout_height="@dimen/dp_90"
-                android:layout_marginTop="@dimen/dp_18"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/vDivider1"
+                app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/ic_circle_red" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/ivBadgeCheck"
+                android:layout_width="@dimen/dp_32"
+                android:layout_height="@dimen/dp_22"
+                app:layout_constraintBottom_toBottomOf="@id/ivBadge"
+                app:layout_constraintEnd_toEndOf="@id/ivBadge"
+                app:layout_constraintStart_toStartOf="@id/ivBadge"
+                app:layout_constraintTop_toTopOf="@+id/ivBadge"
+                app:srcCompat="@drawable/ic_check_white" />
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/tvTime"
@@ -106,6 +86,7 @@
                 android:layout_marginStart="@dimen/dp_14"
                 android:fontFamily="@font/domaine_sans"
                 android:includeFontPadding="false"
+                android:textAllCaps="true"
                 android:textColor="@color/silver_chalice"
                 android:textSize="@dimen/sp_14"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -132,8 +113,8 @@
                 android:layout_height="1dp"
                 android:layout_marginTop="@dimen/dp_14"
                 android:background="@color/concord"
-                app:layout_constraintEnd_toEndOf="@id/vDivider1"
-                app:layout_constraintStart_toStartOf="@id/vDivider1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/ivBadge" />
 
             <androidx.appcompat.widget.AppCompatTextView
@@ -157,14 +138,25 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp_14"
+                android:layout_marginEnd="@dimen/dp_12"
                 android:fontFamily="@font/grotesk_light_font_family"
                 android:includeFontPadding="false"
                 android:textColor="@color/white"
                 android:textSize="@dimen/sp_18"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/ivExactNeedCopy"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tvExactNeedTitle"
                 tools:text="I need a 2-week supply of insulin." />
+
+            <com.bitmark.autonomy.util.view.TouchableOpacityAppCompatImageView
+                android:id="@+id/ivExactNeedCopy"
+                android:layout_width="@dimen/dp_24"
+                android:layout_height="@dimen/dp_24"
+                android:padding="@dimen/dp_4"
+                app:layout_constraintBottom_toBottomOf="@id/tvExactNeed"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/tvExactNeed"
+                app:srcCompat="@drawable/ic_copy" />
 
             <View
                 android:id="@+id/vDivider3"
@@ -172,8 +164,8 @@
                 android:layout_height="1dp"
                 android:layout_marginTop="@dimen/dp_28"
                 android:background="@color/concord"
-                app:layout_constraintEnd_toEndOf="@id/vDivider1"
-                app:layout_constraintStart_toStartOf="@id/vDivider1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tvExactNeed" />
 
             <androidx.appcompat.widget.AppCompatTextView
@@ -197,14 +189,24 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp_14"
+                android:layout_marginEnd="@dimen/dp_12"
                 android:fontFamily="@font/grotesk_light_font_family"
                 android:includeFontPadding="false"
                 android:textColor="@color/white"
                 android:textSize="@dimen/sp_18"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/ivLocationDirection"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tvLocationTitle"
                 tools:text="123 Fourth St. , 5th floor, Apt. 6" />
+
+            <com.bitmark.autonomy.util.view.TouchableOpacityAppCompatImageView
+                android:id="@+id/ivLocationDirection"
+                android:layout_width="@dimen/dp_24"
+                android:layout_height="@dimen/dp_24"
+                app:layout_constraintBottom_toBottomOf="@id/tvLocation"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/tvLocation"
+                app:srcCompat="@drawable/ic_share" />
 
             <View
                 android:id="@+id/vDivider4"
@@ -212,8 +214,8 @@
                 android:layout_height="1dp"
                 android:layout_marginTop="@dimen/dp_28"
                 android:background="@color/concord"
-                app:layout_constraintEnd_toEndOf="@id/vDivider1"
-                app:layout_constraintStart_toStartOf="@id/vDivider1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tvLocation" />
 
             <androidx.appcompat.widget.AppCompatTextView
@@ -237,19 +239,71 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp_14"
+                android:layout_marginEnd="@dimen/dp_12"
                 android:fontFamily="@font/grotesk_light_font_family"
                 android:includeFontPadding="false"
                 android:textColor="@color/white"
                 android:textSize="@dimen/sp_18"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/ivContactInfoCopy"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tvContactInfoTitle"
                 tools:text="LINE ID: ottoknowme" />
+
+            <com.bitmark.autonomy.util.view.TouchableOpacityAppCompatImageView
+                android:id="@+id/ivContactInfoCopy"
+                android:layout_width="@dimen/dp_24"
+                android:layout_height="@dimen/dp_24"
+                android:padding="@dimen/dp_4"
+                app:layout_constraintBottom_toBottomOf="@id/tvContactInfo"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/tvContactInfo"
+                app:srcCompat="@drawable/ic_copy" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 
     </ScrollView>
+
+    <View
+        android:id="@+id/vDivider6"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_3"
+        android:layout_marginTop="@dimen/dp_4"
+        android:layout_marginEnd="@dimen/dp_4"
+        android:layout_marginBottom="@dimen/dp_14"
+        android:background="@drawable/ic_double_line"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/tvSignedUp"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:visibility="visible" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvSignedUp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/dp_14"
+        android:fontFamily="@font/grotesk_light_font_family"
+        android:gravity="center"
+        android:includeFontPadding="false"
+        android:text="@string/you_are_currently_signed_up"
+        android:textColor="@color/white"
+        android:textSize="@dimen/sp_18"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/vDivider5"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:visibility="visible" />
+
+    <View
+        android:id="@+id/vDivider5"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_3"
+        android:layout_marginTop="@dimen/dp_4"
+        android:layout_marginEnd="@dimen/dp_4"
+        android:background="@drawable/ic_double_line"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/layoutBack"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:visibility="visible" />
 
 
     <LinearLayout
@@ -283,7 +337,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/layoutSubmit"
+        android:id="@+id/layoutSignUp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/bg_black_gradient"
@@ -296,21 +350,21 @@
         app:layout_constraintEnd_toEndOf="parent">
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tvSubmit"
+            android:id="@+id/tvSignUp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/domaine_sans"
-            android:text="@string/submit"
+            android:text="@string/sign_up"
             android:textAllCaps="true"
             android:textColor="@color/color_white_stateful"
             android:textSize="24sp" />
 
         <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/ivSubmit"
+            android:id="@+id/ivSignUp"
             android:layout_width="44dp"
             android:layout_height="44dp"
             android:layout_marginStart="12dp"
-            app:srcCompat="@drawable/ic_up_stateful" />
+            app:srcCompat="@drawable/ic_checked_stateful" />
 
     </LinearLayout>
 

@@ -7,6 +7,7 @@
 package com.bitmark.autonomy.feature.requesthelp
 
 import android.os.Parcelable
+import com.bitmark.autonomy.R
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
@@ -33,4 +34,20 @@ val Type.value: String
         Type.MEDICINE -> "medicine"
         Type.MEDICAL_CARE -> "medical_care"
         Type.SAFE_LOCATION -> "safe_location"
+    }
+
+fun Type.Companion.fromString(type: String) = when (type) {
+    "food" -> Type.FOOD
+    "medicine" -> Type.MEDICINE
+    "medical_care" -> Type.MEDICAL_CARE
+    "safe_location" -> Type.SAFE_LOCATION
+    else -> error("invalid type: $type")
+}
+
+val Type.resId: Int
+    get() = when (this) {
+        Type.FOOD -> R.string.need_access_food
+        Type.MEDICINE -> R.string.need_access_medicine
+        Type.MEDICAL_CARE -> R.string.need_transport_healthcare
+        Type.SAFE_LOCATION -> R.string.need_traveling_to_safe_location
     }

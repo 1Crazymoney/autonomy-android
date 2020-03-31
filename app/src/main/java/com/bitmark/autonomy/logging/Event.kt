@@ -26,6 +26,10 @@ enum class Event(val value: String) {
 
     LOCATION_SETTING_CANNOT_BE_RESOLVED("location_setting_cannot_be_resolved"),
 
-    LOCATION_SETTING_NEED_TO_BE_RESOLVED("location_setting_need_to_be_resolved")
+    LOCATION_SETTING_NEED_TO_BE_RESOLVED("location_setting_need_to_be_resolved"),
+
+    HELP_REQUEST_LISTING_ERROR("help_request_listing_error"),
+
+    HELP_REQUEST_RESPOND_ERROR("help_request_respond_error")
 
 }

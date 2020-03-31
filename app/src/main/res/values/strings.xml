@@ -79,9 +79,26 @@
     <string name="need_access_food">Need access to food or water</string>
     <string name="need_access_medicine">Need access to medicine</string>
     <string name="need_transport_healthcare">Need transport to healthcare</string>
-    <string name="need_traveling_to_safe_location">Need traveling to a safe location</string>
+    <string name="need_traveling_to_safe_location">Need transport from an unsafe home</string>
     <string name="could_not_broadcast_your_request">Could not broadcast your request. Please try again later.</string>
+    <string name="community_request_for_assistance">Community request for assistance</string>
+    <string name="requests">Requests</string>
+    <string name="request">Request</string>
+    <string name="sign_up">Sign up</string>
+    <string name="you_are_currently_signed_up">You are currently signed up to fulfill this community request. If you are unable to complete it, please contact the community member to let them know.</string>
+    <string name="could_not_sign_up_request">Could not sign up request. Please try again later.</string>
+    <string name="signed_up">Signed up</string>
+    <string name="thank_u_for_signing_up">Thank you for signing up to fulfill this community request</string>
+    <string name="the_community_member_in_need">The community member in need has been notified of your response. Please write down or take a screenshot of the request details now then contact the community member.</string>
+    <string name="copied">Copied</string>
 
     <!--    string format-->
     <string name="send_to_format">Send to %1$s</string>
+    <string name="min_ago_format">%1$s min ago</string>
+    <string name="mins_ago_format">%1$s mins ago</string>
+    <string name="hour_ago_format">%1$s hour ago</string>
+    <string name="hours_ago_format">%1$s hours ago</string>
+    <string name="day_ago_format">%1$s day ago</string>
+    <string name="days_ago_format">%1$s days ago</string>
+
 </resources>

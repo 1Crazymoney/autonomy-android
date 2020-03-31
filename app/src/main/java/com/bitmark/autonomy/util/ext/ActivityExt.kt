@@ -8,7 +8,10 @@ package com.bitmark.autonomy.util.ext
 
 import android.app.Activity
 import android.content.Context.INPUT_METHOD_SERVICE
+import android.view.Gravity
+import android.view.LayoutInflater
 import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
 import com.bitmark.apiservice.utils.callback.Callback0
 import com.bitmark.apiservice.utils.callback.Callback1
 import com.bitmark.autonomy.R
@@ -18,6 +21,7 @@ import com.bitmark.sdk.authentication.Provider
 import com.bitmark.sdk.authentication.error.AuthenticationException
 import com.bitmark.sdk.authentication.error.AuthenticationRequiredException
 import com.bitmark.sdk.features.Account
+import kotlinx.android.synthetic.main.layout_toast.view.*
 
 fun Activity.hideKeyBoard() {
     val view = this.currentFocus
@@ -227,4 +231,15 @@ fun Activity.removeAccount(
         }
 
     })
+}
+
+fun Activity.toast(text: String, duration: Int = Toast.LENGTH_SHORT) {
+    val inflater = LayoutInflater.from(this)
+    val view = inflater.inflate(R.layout.layout_toast, findViewById(R.id.layoutRoot))
+    view.tvContent.text = text
+    val toast = Toast(applicationContext)
+    toast.setGravity(Gravity.FILL_HORIZONTAL or Gravity.BOTTOM, 0, 0)
+    toast.duration = duration
+    toast.view = view
+    toast.show()
 }

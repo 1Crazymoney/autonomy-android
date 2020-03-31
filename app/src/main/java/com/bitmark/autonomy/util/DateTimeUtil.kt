@@ -6,8 +6,11 @@
  */
 package com.bitmark.autonomy.util
 
+import android.content.Context
+import com.bitmark.autonomy.R
 import java.text.SimpleDateFormat
 import java.util.*
+import java.util.concurrent.TimeUnit
 
 class DateTimeUtil {
 
@@ -25,16 +28,10 @@ class DateTimeUtil {
 
         val TIME_FORMAT_1 = "HH:mm"
 
-        fun stringToString(date: String) =
-            stringToString(date, DATE_TIME_FORMAT_1)
-
-        fun stringToString(date: String, newFormat: String) =
-            stringToString(date, ISO8601_FORMAT, newFormat)
-
         fun stringToString(
             date: String,
-            oldFormat: String,
-            newFormat: String,
+            oldFormat: String = ISO8601_FORMAT,
+            newFormat: String = DATE_TIME_FORMAT_1,
             timezone: String = DEFAULT_TIME_ZONE
         ): String {
             return try {
@@ -52,12 +49,11 @@ class DateTimeUtil {
         fun now(format: String, timezone: String = DEFAULT_TIME_ZONE) =
             dateToString(Calendar.getInstance().time, format, timezone)
 
-        fun dateToString(date: Date): String =
-            dateToString(date, ISO8601_FORMAT)
+        fun nowMillis() = Calendar.getInstance().timeInMillis
 
         fun dateToString(
             date: Date,
-            format: String,
+            format: String = ISO8601_FORMAT,
             timezone: String = DEFAULT_TIME_ZONE
         ): String {
             return try {
@@ -69,11 +65,9 @@ class DateTimeUtil {
             }
         }
 
-        fun stringToDate(date: String) = stringToDate(date, ISO8601_FORMAT)
-
         fun stringToDate(
             date: String,
-            format: String,
+            format: String = ISO8601_FORMAT,
             timezone: String = DEFAULT_TIME_ZONE
         ): Date? {
             return try {
@@ -85,10 +79,45 @@ class DateTimeUtil {
             }
         }
 
-        fun dayCountFrom(date: Date): Long {
-            val nowMillis = Date().time
-            val diff = nowMillis - date.time
-            return diff / (1000 * 60 * 60 * 24)
+        fun isToday(dateString: String): Boolean {
+            val thatDate = Calendar.getInstance()
+            thatDate.time = stringToDate(dateString)
+            val today = Calendar.getInstance()
+            return today.get(Calendar.DAY_OF_YEAR) == thatDate.get(Calendar.DAY_OF_YEAR) && today.get(
+                Calendar.YEAR
+            ) == thatDate.get(Calendar.YEAR)
         }
     }
+}
+
+fun DateTimeUtil.Companion.formatAgo(context: Context, dateString: String): String {
+    val now = nowMillis()
+    val dateMillis = stringToDate(dateString)!!.time
+    val gap = now - dateMillis
+    return when {
+        gap > TimeUnit.DAYS.toMillis(1) -> {
+            val days = gap / TimeUnit.DAYS.toMillis(1)
+            String.format(
+                context.getString(if (days > 1) R.string.days_ago_format else R.string.day_ago_format),
+                days
+            )
+        }
+
+        gap > TimeUnit.HOURS.toMillis(1) -> {
+            val hours = gap / TimeUnit.HOURS.toMillis(1)
+            String.format(
+                context.getString(if (hours > 1) R.string.hours_ago_format else R.string.hour_ago_format),
+                hours
+            )
+        }
+
+        else -> {
+            val mins = gap / TimeUnit.MINUTES.toMillis(1)
+            String.format(
+                context.getString(if (mins > 1) R.string.mins_ago_format else R.string.min_ago_format),
+                mins
+            )
+        }
+    }
+
 }

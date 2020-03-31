@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layoutRoot"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:paddingStart="@dimen/dp_18"
+    android:paddingTop="@dimen/dp_8"
+    android:paddingEnd="@dimen/dp_18"
+    android:paddingBottom="@dimen/dp_8"
+    tools:background="@color/black">
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/ivBadge"
+        android:layout_width="@dimen/dp_30"
+        android:layout_height="@dimen/dp_30"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_circle_red" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/ivCheck"
+        android:layout_width="@dimen/dp_14"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
+        app:layout_constraintBottom_toBottomOf="@id/ivBadge"
+        app:layout_constraintEnd_toEndOf="@id/ivBadge"
+        app:layout_constraintStart_toStartOf="@id/ivBadge"
+        app:layout_constraintTop_toTopOf="@id/ivBadge"
+        app:srcCompat="@drawable/ic_check_white" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvTime"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp_10"
+        android:fontFamily="@font/grotesk_light_font_family"
+        android:includeFontPadding="false"
+        android:textColor="@color/silver_chalice"
+        android:textSize="@dimen/sp_12"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/ivBadge"
+        app:layout_constraintTop_toTopOf="@id/ivBadge"
+        tools:text="12 mins ago" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvContent"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/grotesk_light_font_family"
+        android:includeFontPadding="false"
+        android:textColor="@color/color_white_stateful"
+        android:textSize="@dimen/sp_16"
+        app:layout_constraintEnd_toEndOf="@id/tvTime"
+        app:layout_constraintStart_toStartOf="@id/tvTime"
+        app:layout_constraintTop_toBottomOf="@id/tvTime"
+        tools:text="Community request for assistance" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

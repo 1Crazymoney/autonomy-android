@@ -17,4 +17,8 @@ class AssistanceRepository(private val remoteDataSource: AssistanceRemoteDataSou
         meetingLocation: String,
         contactInfo: String
     ) = remoteDataSource.requestHelp(subject, exactNeed, meetingLocation, contactInfo)
+
+    fun listHelpRequest() = remoteDataSource.listHelpRequest()
+
+    fun respondHelpRequest(id: String) = remoteDataSource.respondHelpRequest(id)
 }

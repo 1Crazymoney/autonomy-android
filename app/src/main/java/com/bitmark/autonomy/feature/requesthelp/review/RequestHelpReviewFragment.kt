@@ -19,7 +19,7 @@ import com.bitmark.autonomy.feature.Navigator.Companion.RIGHT_LEFT
 import com.bitmark.autonomy.feature.connectivity.ConnectivityHandler
 import com.bitmark.autonomy.feature.main.MainActivity
 import com.bitmark.autonomy.feature.requesthelp.RequestHelpData
-import com.bitmark.autonomy.feature.requesthelp.Type
+import com.bitmark.autonomy.feature.requesthelp.resId
 import com.bitmark.autonomy.util.DateTimeUtil
 import com.bitmark.autonomy.util.ext.gone
 import com.bitmark.autonomy.util.ext.setSafetyOnclickListener
@@ -80,14 +80,7 @@ class RequestHelpReviewFragment : BaseSupportFragment() {
             DateTimeUtil.now(DateTimeUtil.TIME_FORMAT_1)
         )
 
-        tvType.setText(
-            when (data.type) {
-                Type.FOOD -> R.string.need_access_food
-                Type.MEDICINE -> R.string.need_access_medicine
-                Type.MEDICAL_CARE -> R.string.need_transport_healthcare
-                Type.SAFE_LOCATION -> R.string.need_traveling_to_safe_location
-            }
-        )
+        tvType.setText(data.type.resId)
 
         tvExactNeed.text = data.exactNeed
         tvLocation.text = data.meetingLocation

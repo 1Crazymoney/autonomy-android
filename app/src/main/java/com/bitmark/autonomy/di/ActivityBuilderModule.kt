@@ -14,6 +14,8 @@ import com.bitmark.autonomy.feature.permission.PermissionActivity
 import com.bitmark.autonomy.feature.permission.PermissionModule
 import com.bitmark.autonomy.feature.requesthelp.RequestHelpContainerActivity
 import com.bitmark.autonomy.feature.requesthelp.RequestHelpContainerModule
+import com.bitmark.autonomy.feature.respondhelp.RespondHelpActivity
+import com.bitmark.autonomy.feature.respondhelp.RespondHelpModule
 import com.bitmark.autonomy.feature.risklevel.RiskLevelActivity
 import com.bitmark.autonomy.feature.risklevel.RiskLevelModule
 import com.bitmark.autonomy.feature.splash.SplashActivity
@@ -53,5 +55,9 @@ abstract class ActivityBuilderModule {
     @ContributesAndroidInjector(modules = [RequestHelpContainerModule::class])
     @ActivityScope
     internal abstract fun bindRequestHelpContainerActivity(): RequestHelpContainerActivity
+
+    @ContributesAndroidInjector(modules = [RespondHelpModule::class])
+    @ActivityScope
+    internal abstract fun bindRespondHelpActivity(): RespondHelpActivity
 
 }
