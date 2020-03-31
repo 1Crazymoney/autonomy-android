@@ -66,6 +66,7 @@ class AutonomyApplication : DaggerApplication() {
             )
         }
         connectivityHandler.register()
+        registerActivityLifecycleCallbacks(appLifecycleHandler)
         Intercom.initialize(this, API_KEY_MANAGER.intercomApiKey, "ejkeunzw")
         OneSignal.startInit(this)
             .inFocusDisplaying(OneSignal.OSInFocusDisplayOption.Notification)

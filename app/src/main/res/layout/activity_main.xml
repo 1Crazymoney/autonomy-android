@@ -41,8 +41,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/dp_8"
+            android:ellipsize="end"
             android:fontFamily="@font/grotesk_light_font_family"
             android:includeFontPadding="false"
+            android:maxLines="1"
             android:textColor="@color/silver_2"
             android:textSize="@dimen/sp_18"
             tools:text="Nangang Software Park" />

@@ -6,12 +6,17 @@
  */
 package com.bitmark.autonomy.feature.main
 
+import android.os.Bundle
+import android.os.Handler
+import com.bitmark.autonomy.AppLifecycleHandler
 import com.bitmark.autonomy.R
 import com.bitmark.autonomy.data.source.local.Location
 import com.bitmark.autonomy.feature.BaseAppCompatActivity
 import com.bitmark.autonomy.feature.BaseViewModel
 import com.bitmark.autonomy.feature.Navigator
+import com.bitmark.autonomy.feature.Navigator.Companion.RIGHT_LEFT
 import com.bitmark.autonomy.feature.location.LocationService
+import com.bitmark.autonomy.feature.survey.SurveyContainerActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
 
@@ -27,9 +32,23 @@ class MainActivity : BaseAppCompatActivity() {
     @Inject
     internal lateinit var locationService: LocationService
 
+    @Inject
+    internal lateinit var appLifecycleHandler: AppLifecycleHandler
+
+    private val handler = Handler()
+
     private val locationChangedListener = object : LocationService.LocationChangedListener {
         override fun onLocationChanged(l: Location) {
             tvLocation.text = l.toString()
+        }
+    }
+
+    private val appStateChangedListener = object : AppLifecycleHandler.AppStateChangedListener {
+        override fun onForeground() {
+            super.onForeground()
+            handler.postDelayed({
+                navigator.anim(RIGHT_LEFT).startActivity(SurveyContainerActivity::class.java)
+            }, 200)
         }
     }
 
@@ -53,6 +72,18 @@ class MainActivity : BaseAppCompatActivity() {
         locationService.removeLocationChangeListener(locationChangedListener)
         locationService.stop()
         super.onStop()
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        appLifecycleHandler.addAppStateChangedListener(appStateChangedListener)
+    }
+
+    override fun onDestroy() {
+        handler.removeCallbacksAndMessages(null)
+        appLifecycleHandler.removeAppStateChangedListener(appStateChangedListener)
+        super.onDestroy()
     }
 
 

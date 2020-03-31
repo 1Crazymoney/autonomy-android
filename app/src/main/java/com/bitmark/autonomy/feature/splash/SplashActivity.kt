@@ -27,8 +27,8 @@ import com.bitmark.autonomy.feature.Navigator
 import com.bitmark.autonomy.feature.Navigator.Companion.FADE_IN
 import com.bitmark.autonomy.feature.Navigator.Companion.NONE
 import com.bitmark.autonomy.feature.Navigator.Companion.RIGHT_LEFT
+import com.bitmark.autonomy.feature.main.MainActivity
 import com.bitmark.autonomy.feature.onboarding.OnboardingContainerActivity
-import com.bitmark.autonomy.feature.survey.SurveyContainerActivity
 import com.bitmark.autonomy.logging.Event
 import com.bitmark.autonomy.logging.EventLogger
 import com.bitmark.autonomy.util.ext.*
@@ -171,9 +171,8 @@ class SplashActivity : BaseAppCompatActivity() {
         viewModel.prepareDataLiveData.asLiveData().observe(this, Observer { res ->
             when {
                 res.isSuccess() -> {
-                    // TODO update to main later
                     navigator.anim(FADE_IN)
-                        .startActivityAsRoot(SurveyContainerActivity::class.java)
+                        .startActivityAsRoot(MainActivity::class.java)
                 }
 
                 res.isError() -> {
