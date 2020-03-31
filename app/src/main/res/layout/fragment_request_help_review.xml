@@ -1,0 +1,331 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black"
+    android:orientation="vertical"
+    android:paddingStart="@dimen/dp_18"
+    android:paddingTop="@dimen/dp_14"
+    android:paddingEnd="@dimen/dp_18"
+    android:paddingBottom="@dimen/dp_14">
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/domaine_sans"
+        android:text="@string/assistance"
+        android:textAllCaps="true"
+        android:textColor="@color/silver_2"
+        android:textSize="@dimen/sp_14"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:layout_width="@dimen/dp_124"
+        android:layout_height="@dimen/dp_3"
+        android:layout_marginTop="@dimen/dp_4"
+        android:layout_marginEnd="@dimen/dp_4"
+        android:background="@drawable/ic_double_line"
+        app:layout_constraintBottom_toBottomOf="@id/tvTitle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tvTitle" />
+
+    <View
+        android:layout_width="@dimen/dp_124"
+        android:layout_height="@dimen/dp_3"
+        android:layout_marginStart="@dimen/dp_4"
+        android:layout_marginTop="@dimen/dp_4"
+        android:background="@drawable/ic_double_line"
+        app:layout_constraintBottom_toBottomOf="@id/tvTitle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tvTitle" />
+
+    <ScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:scrollbarSize="@dimen/dp_2"
+        android:scrollbarThumbVertical="@color/white_aa"
+        android:scrollbars="vertical"
+        app:layout_constraintBottom_toTopOf="@id/layoutBack"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvTitle">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="30dp"
+            android:paddingBottom="@dimen/dp_28">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvSlogan"
+                android:layout_width="0dp"
+                android:layout_height="130dp"
+                android:layout_marginBottom="24dp"
+                android:fontFamily="@font/grotesk_light_font_family"
+                android:gravity="center"
+                android:includeFontPadding="false"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:text="@string/please_review_your_request_help"
+                android:textColor="@color/white"
+                app:autoSizeMaxTextSize="36sp"
+                app:autoSizeMinTextSize="18sp"
+                app:autoSizeTextType="uniform"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <View
+                android:id="@+id/vDivider1"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_marginTop="@dimen/dp_28"
+                android:background="@color/concord"
+                app:layout_constraintEnd_toEndOf="@id/tvSlogan"
+                app:layout_constraintStart_toStartOf="@id/tvSlogan"
+                app:layout_constraintTop_toBottomOf="@id/tvSlogan" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/ivBadge"
+                android:layout_width="@dimen/dp_90"
+                android:layout_height="@dimen/dp_90"
+                android:layout_marginTop="@dimen/dp_18"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/vDivider1"
+                app:srcCompat="@drawable/ic_circle_red" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvTime"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dp_14"
+                android:fontFamily="@font/domaine_sans"
+                android:includeFontPadding="false"
+                android:textColor="@color/silver_chalice"
+                android:textSize="@dimen/sp_14"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/ivBadge"
+                app:layout_constraintTop_toTopOf="@id/ivBadge"
+                tools:text="TODAY 13:58" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvType"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/grotesk_light_font_family"
+                android:includeFontPadding="false"
+                android:textColor="@color/white"
+                android:textSize="@dimen/sp_24"
+                app:layout_constraintEnd_toEndOf="@id/tvTime"
+                app:layout_constraintStart_toStartOf="@id/tvTime"
+                app:layout_constraintTop_toBottomOf="@id/tvTime"
+                tools:text="Need access to medicine" />
+
+            <View
+                android:id="@+id/vDivider2"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_marginTop="@dimen/dp_14"
+                android:background="@color/concord"
+                app:layout_constraintEnd_toEndOf="@id/vDivider1"
+                app:layout_constraintStart_toStartOf="@id/vDivider1"
+                app:layout_constraintTop_toBottomOf="@id/ivBadge" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvExactNeedTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dp_14"
+                android:layout_marginTop="@dimen/dp_14"
+                android:fontFamily="@font/domaine_sans"
+                android:includeFontPadding="false"
+                android:text="@string/exact_needs"
+                android:textAllCaps="true"
+                android:textColor="@color/silver_chalice"
+                android:textSize="@dimen/sp_14"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/vDivider2" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvExactNeed"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_14"
+                android:fontFamily="@font/grotesk_light_font_family"
+                android:includeFontPadding="false"
+                android:textColor="@color/white"
+                android:textSize="@dimen/sp_18"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvExactNeedTitle"
+                tools:text="I need a 2-week supply of insulin." />
+
+            <View
+                android:id="@+id/vDivider3"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_marginTop="@dimen/dp_28"
+                android:background="@color/concord"
+                app:layout_constraintEnd_toEndOf="@id/vDivider1"
+                app:layout_constraintStart_toStartOf="@id/vDivider1"
+                app:layout_constraintTop_toBottomOf="@id/tvExactNeed" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvLocationTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dp_14"
+                android:layout_marginTop="@dimen/dp_14"
+                android:fontFamily="@font/domaine_sans"
+                android:includeFontPadding="false"
+                android:text="@string/meeting_location"
+                android:textAllCaps="true"
+                android:textColor="@color/silver_chalice"
+                android:textSize="@dimen/sp_14"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/vDivider3" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvLocation"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_14"
+                android:fontFamily="@font/grotesk_light_font_family"
+                android:includeFontPadding="false"
+                android:textColor="@color/white"
+                android:textSize="@dimen/sp_18"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvLocationTitle"
+                tools:text="123 Fourth St. , 5th floor, Apt. 6" />
+
+            <View
+                android:id="@+id/vDivider4"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_marginTop="@dimen/dp_28"
+                android:background="@color/concord"
+                app:layout_constraintEnd_toEndOf="@id/vDivider1"
+                app:layout_constraintStart_toStartOf="@id/vDivider1"
+                app:layout_constraintTop_toBottomOf="@id/tvLocation" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvContactInfoTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dp_14"
+                android:layout_marginTop="@dimen/dp_14"
+                android:fontFamily="@font/domaine_sans"
+                android:includeFontPadding="false"
+                android:text="@string/contact_info"
+                android:textAllCaps="true"
+                android:textColor="@color/silver_chalice"
+                android:textSize="@dimen/sp_14"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/vDivider4" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvContactInfo"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_14"
+                android:fontFamily="@font/grotesk_light_font_family"
+                android:includeFontPadding="false"
+                android:textColor="@color/white"
+                android:textSize="@dimen/sp_18"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvContactInfoTitle"
+                tools:text="LINE ID: ottoknowme" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </ScrollView>
+
+
+    <LinearLayout
+        android:id="@+id/layoutBack"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_black_gradient"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingTop="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            app:srcCompat="@drawable/ic_back_stateful" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:fontFamily="@font/domaine_sans"
+            android:text="@string/back"
+            android:textAllCaps="true"
+            android:textColor="@color/white"
+            android:textSize="24sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layoutSubmit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_black_gradient"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingTop="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvSubmit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/domaine_sans"
+            android:text="@string/submit"
+            android:textAllCaps="true"
+            android:textColor="@color/color_white_stateful"
+            android:textSize="24sp" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/ivSubmit"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:layout_marginStart="12dp"
+            app:srcCompat="@drawable/ic_up_stateful" />
+
+    </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:indeterminateTint="@color/white"
+        android:indeterminateTintMode="src_in"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="visible" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

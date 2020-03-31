@@ -11,6 +11,8 @@ import com.bitmark.autonomy.data.model.AppInfoData
 import com.bitmark.autonomy.data.model.JwtData
 import com.bitmark.autonomy.data.source.remote.api.request.RegisterAccountRequest
 import com.bitmark.autonomy.data.source.remote.api.request.RegisterJwtRequest
+import com.bitmark.autonomy.data.source.remote.api.request.RequestHelpRequest
+import io.reactivex.Completable
 import io.reactivex.Single
 import okhttp3.RequestBody
 import retrofit2.http.Body
@@ -35,5 +37,8 @@ interface AutonomyApi {
 
     @PATCH("api/accounts/me")
     fun updateMetadata(@Body body: RequestBody): Single<Map<String, AccountData>>
+
+    @POST("api/helps")
+    fun requestHelp(@Body body: RequestHelpRequest): Completable
 
 }

@@ -8,6 +8,12 @@ package com.bitmark.autonomy.di
 
 import com.bitmark.autonomy.feature.onboarding.OnboardingFragment
 import com.bitmark.autonomy.feature.onboarding.OnboardingModule
+import com.bitmark.autonomy.feature.requesthelp.detail.RequestHelpDetailFragment
+import com.bitmark.autonomy.feature.requesthelp.detail.RequestHelpDetailModule
+import com.bitmark.autonomy.feature.requesthelp.list.RequestHelpListFragment
+import com.bitmark.autonomy.feature.requesthelp.list.RequestHelpListModule
+import com.bitmark.autonomy.feature.requesthelp.review.RequestHelpReviewFragment
+import com.bitmark.autonomy.feature.requesthelp.review.RequestHelpReviewModule
 import com.bitmark.autonomy.feature.survey.checkin.SurveyCheckin1Fragment
 import com.bitmark.autonomy.feature.survey.checkin.SurveyCheckin1Module
 import com.bitmark.autonomy.feature.survey.checkin.SurveyCheckin2Fragment
@@ -29,4 +35,16 @@ abstract class FragmentBuilderModule {
     @ContributesAndroidInjector(modules = [SurveyCheckin2Module::class])
     @FragmentScope
     internal abstract fun bindSurveyCheckin2Fragment(): SurveyCheckin2Fragment
+
+    @ContributesAndroidInjector(modules = [RequestHelpListModule::class])
+    @FragmentScope
+    internal abstract fun bindRequestHelpListFragment(): RequestHelpListFragment
+
+    @ContributesAndroidInjector(modules = [RequestHelpDetailModule::class])
+    @FragmentScope
+    internal abstract fun bindRequestHelpDetailFragment(): RequestHelpDetailFragment
+
+    @ContributesAndroidInjector(modules = [RequestHelpReviewModule::class])
+    @FragmentScope
+    internal abstract fun bindRequestHelpReviewFragment(): RequestHelpReviewFragment
 }

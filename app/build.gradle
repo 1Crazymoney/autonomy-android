@@ -114,6 +114,10 @@ android {
         targetCompatibility 1.8
     }
 
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
+    }
+
     externalNativeBuild {
         cmake {
             path "CMakeLists.txt"
@@ -233,10 +237,17 @@ dependencies {
     implementation 'com.bitmark.sdk:api-service:2.1.0'
     implementation 'com.bitmark.sdk:cryptography:1.6.0'
 
-    implementation 'com.onesignal:OneSignal:3.12.7'
+    implementation ('com.onesignal:OneSignal:3.12.7') {
+        exclude group:'com.google.android.gms', module:'play-services-location'
+        exclude group:'com.google.android.gms', module:'play-services-places-placereport'
+        exclude group:'com.google.android.gms', module:'play-services-basement'
+        exclude group:'com.google.firebase', module:'firebase-messaging'
+        exclude group:'com.google.android.gms', module:'play-services-base'
+        exclude group:'com.google.firebase', module:'firebase-messaging'
+    }
     implementation 'io.intercom.android:intercom-sdk:6.0.0'
     implementation 'com.github.tbruyelle:rxpermissions:0.10.2'
-    implementation 'com.google.android.gms:play-services-drive:17.0.0'
+    implementation 'com.google.android.gms:play-services-location:17.0.0'
 
     // Testing
     testImplementation 'junit:junit:4.12'

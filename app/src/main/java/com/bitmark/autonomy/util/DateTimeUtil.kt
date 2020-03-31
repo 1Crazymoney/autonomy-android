@@ -13,16 +13,20 @@ class DateTimeUtil {
 
     companion object {
 
+        val DEFAULT_TIME_ZONE = TimeZone.getDefault().id
+
         val ISO8601_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSSSSS'Z'"
 
         val ISO8601_SIMPLE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss'Z'"
 
-        val OFFICIAL_DATE_TIME_FORMAT = "yyyy MMM dd HH:mm:ss"
+        val DATE_TIME_FORMAT_1 = "yyyy MMM dd HH:mm:ss"
 
-        val OFFICIAL_DATE_FORMAT = "yyyy MMM dd"
+        val DATE_FORMAT_1 = "yyyy MMM dd"
+
+        val TIME_FORMAT_1 = "HH:mm"
 
         fun stringToString(date: String) =
-            stringToString(date, OFFICIAL_DATE_TIME_FORMAT)
+            stringToString(date, DATE_TIME_FORMAT_1)
 
         fun stringToString(date: String, newFormat: String) =
             stringToString(date, ISO8601_FORMAT, newFormat)
@@ -31,7 +35,7 @@ class DateTimeUtil {
             date: String,
             oldFormat: String,
             newFormat: String,
-            timezone: String = "UTC"
+            timezone: String = DEFAULT_TIME_ZONE
         ): String {
             return try {
                 var formatter = SimpleDateFormat(oldFormat, Locale.getDefault())
@@ -45,13 +49,16 @@ class DateTimeUtil {
 
         }
 
+        fun now(format: String, timezone: String = DEFAULT_TIME_ZONE) =
+            dateToString(Calendar.getInstance().time, format, timezone)
+
         fun dateToString(date: Date): String =
             dateToString(date, ISO8601_FORMAT)
 
         fun dateToString(
             date: Date,
             format: String,
-            timezone: String = "UTC"
+            timezone: String = DEFAULT_TIME_ZONE
         ): String {
             return try {
                 val formatter = SimpleDateFormat(format, Locale.getDefault())
@@ -67,7 +74,7 @@ class DateTimeUtil {
         fun stringToDate(
             date: String,
             format: String,
-            timezone: String = "UTC"
+            timezone: String = DEFAULT_TIME_ZONE
         ): Date? {
             return try {
                 val formatter = SimpleDateFormat(format, Locale.getDefault())
