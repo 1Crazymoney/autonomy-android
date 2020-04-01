@@ -92,6 +92,8 @@
     <string name="the_community_member_in_need">The community member in need has been notified of your response. Please write down or take a screenshot of the request details now then contact the community member.</string>
     <string name="copied">Copied</string>
     <string name="could_not_report_symptoms">Could not report your symptoms. Please try again later.</string>
+    <string name="some_one_has_signed_up_requester">Someone has signed up to fulfill your community request. Please wait for time to contact you.</string>
+    <string name="some_one_has_signed_up_visitor">Someone has already signed up to fulfill this community request.</string>
 
     <!--    string format-->
     <string name="send_to_format">Send to %1$s</string>

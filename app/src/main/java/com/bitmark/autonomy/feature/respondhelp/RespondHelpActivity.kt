@@ -34,6 +34,8 @@ class RespondHelpActivity : BaseAppCompatActivity() {
     companion object {
         private const val HELP_REQUEST = "help_request"
 
+        private const val TAG = "RespondHelpActivity"
+
         fun getBundle(helpRequest: HelpRequestModelView) =
             Bundle().apply { putParcelable(HELP_REQUEST, helpRequest) }
     }
@@ -61,34 +63,16 @@ class RespondHelpActivity : BaseAppCompatActivity() {
 
     override fun viewModel(): BaseViewModel? = viewModel
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        viewModel.getAccountNumber()
+    }
+
     override fun initComponents() {
         super.initComponents()
 
         helpRequest =
             intent?.extras?.getParcelable(HELP_REQUEST) ?: error("missing required help request")
-
-        if (helpRequest.isResponded()) {
-            showRespondedState()
-        } else {
-            showPendingState()
-        }
-
-        tvTime.text = if (DateTimeUtil.isToday(helpRequest.createdAt)) {
-            "%s - %s".format(
-                getString(R.string.today),
-                DateTimeUtil.stringToString(
-                    helpRequest.createdAt,
-                    newFormat = DateTimeUtil.TIME_FORMAT_1
-                )
-            )
-        } else {
-            DateTimeUtil.stringToString(helpRequest.createdAt)
-        }
-
-        tvType.setText(Type.fromString(helpRequest.subject).resId)
-        tvExactNeed.text = helpRequest.exactNeeds
-        tvLocation.text = helpRequest.meetingLocation
-        tvContactInfo.text = helpRequest.contactInfo
 
         ivExactNeedCopy.setSafetyOnclickListener {
             copyToClipboard(helpRequest.exactNeeds)
@@ -153,23 +137,87 @@ class RespondHelpActivity : BaseAppCompatActivity() {
                 }
             }
         })
+
+        viewModel.getAccountNumberLiveData.asLiveData().observe(this, Observer { res ->
+            when {
+                res.isSuccess() -> {
+                    showDetailInfo(helpRequest, res.data()!!)
+                }
+
+                res.isError() -> {
+                    logger.logSharedPrefError(res.throwable(), "$TAG: get account number error")
+                    dialogController.unexpectedAlert { navigator.openIntercom(true) }
+                }
+            }
+        })
     }
 
-    private fun showRespondedState() {
-        ivBadgeCheck.visible()
-        vDivider5.visible()
-        vDivider6.visible()
-        tvSignedUp.visible()
-        layoutSignUp.gone()
+    private fun showDetailInfo(helpRequest: HelpRequestModelView, accountNumber: String) {
+
+        if (helpRequest.isResponded()) {
+            ivBadgeCheck.visible()
+            vDivider5.visible()
+            vDivider6.visible()
+            tvMsg.visible()
+            layoutSignUp.gone()
+
+            when (accountNumber) {
+                helpRequest.requester -> {
+                    tvMsg.setText(R.string.some_one_has_signed_up_requester)
+                }
+
+                helpRequest.helper -> {
+                    tvMsg.setText(R.string.you_are_currently_signed_up)
+                }
+
+                else -> {
+                    tvMsg.setText(R.string.some_one_has_signed_up_visitor)
+                    vDivider2.gone()
+                    vDivider3.gone()
+                    vDivider4.gone()
+                    tvExactNeedTitle.gone()
+                    tvExactNeed.gone()
+                    ivExactNeedCopy.gone()
+                    tvLocationTitle.gone()
+                    tvLocation.gone()
+                    ivLocationDirection.gone()
+                    tvContactInfoTitle.gone()
+                    tvContactInfo.gone()
+                    ivContactInfoCopy.gone()
+                }
+            }
+        } else {
+            ivBadgeCheck.gone()
+            vDivider5.gone()
+            vDivider6.gone()
+            tvMsg.gone()
+            if (accountNumber == helpRequest.requester) {
+                layoutSignUp.gone()
+            } else {
+                layoutSignUp.visible()
+            }
+        }
+
+
+        tvTime.text = if (DateTimeUtil.isToday(helpRequest.createdAt)) {
+            "%s - %s".format(
+                getString(R.string.today),
+                DateTimeUtil.stringToString(
+                    helpRequest.createdAt,
+                    newFormat = DateTimeUtil.TIME_FORMAT_1,
+                    newTimezone = DateTimeUtil.DEFAULT_TIME_ZONE
+                )
+            )
+        } else {
+            DateTimeUtil.stringToString(helpRequest.createdAt)
+        }
+
+        tvType.setText(Type.fromString(helpRequest.subject).resId)
+        tvExactNeed.text = helpRequest.exactNeeds
+        tvLocation.text = helpRequest.meetingLocation
+        tvContactInfo.text = helpRequest.contactInfo
     }
 
-    private fun showPendingState() {
-        ivBadgeCheck.gone()
-        vDivider5.gone()
-        vDivider6.gone()
-        tvSignedUp.gone()
-        layoutSignUp.visible()
-    }
 
     override fun onBackPressed() {
         navigator.anim(RIGHT_LEFT).finishActivity()

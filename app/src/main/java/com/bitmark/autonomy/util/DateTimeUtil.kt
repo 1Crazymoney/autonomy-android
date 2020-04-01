@@ -32,13 +32,15 @@ class DateTimeUtil {
             date: String,
             oldFormat: String = ISO8601_FORMAT,
             newFormat: String = DATE_TIME_FORMAT_1,
-            timezone: String = DEFAULT_TIME_ZONE
+            oldTimezone: String = "UTC",
+            newTimezone: String = "UTC"
         ): String {
             return try {
                 var formatter = SimpleDateFormat(oldFormat, Locale.getDefault())
-                formatter.timeZone = TimeZone.getTimeZone(timezone)
+                formatter.timeZone = TimeZone.getTimeZone(oldTimezone)
                 val d = formatter.parse(date)
                 formatter = SimpleDateFormat(newFormat, Locale.getDefault())
+                formatter.timeZone = TimeZone.getTimeZone(newTimezone)
                 formatter.format(d)
             } catch (e: Throwable) {
                 ""
@@ -46,7 +48,7 @@ class DateTimeUtil {
 
         }
 
-        fun now(format: String, timezone: String = DEFAULT_TIME_ZONE) =
+        fun now(format: String, timezone: String = "UTC") =
             dateToString(Calendar.getInstance().time, format, timezone)
 
         fun nowMillis() = Calendar.getInstance().timeInMillis
@@ -54,7 +56,7 @@ class DateTimeUtil {
         fun dateToString(
             date: Date,
             format: String = ISO8601_FORMAT,
-            timezone: String = DEFAULT_TIME_ZONE
+            timezone: String = "UTC"
         ): String {
             return try {
                 val formatter = SimpleDateFormat(format, Locale.getDefault())
@@ -68,7 +70,7 @@ class DateTimeUtil {
         fun stringToDate(
             date: String,
             format: String = ISO8601_FORMAT,
-            timezone: String = DEFAULT_TIME_ZONE
+            timezone: String = "UTC"
         ): Date? {
             return try {
                 val formatter = SimpleDateFormat(format, Locale.getDefault())
@@ -79,9 +81,9 @@ class DateTimeUtil {
             }
         }
 
-        fun isToday(dateString: String): Boolean {
+        fun isToday(dateString: String, timezone: String = "UTC"): Boolean {
             val thatDate = Calendar.getInstance()
-            thatDate.time = stringToDate(dateString)
+            thatDate.time = stringToDate(dateString, timezone = timezone)
             val today = Calendar.getInstance()
             return today.get(Calendar.DAY_OF_YEAR) == thatDate.get(Calendar.DAY_OF_YEAR) && today.get(
                 Calendar.YEAR

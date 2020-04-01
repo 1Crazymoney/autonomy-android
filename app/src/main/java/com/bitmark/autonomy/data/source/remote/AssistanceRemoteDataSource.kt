@@ -33,9 +33,7 @@ class AssistanceRemoteDataSource @Inject constructor(
     ).subscribeOn(Schedulers.io())
 
     fun listHelpRequest() = autonomyApi.listHelpRequest().map { res ->
-        // TODO change later
-        val req = res["result"] ?: error("invalid response format")
-        listOf(req, req, req, req, req, req, req, req, req, req, req, req)
+        res["result"] ?: error("invalid response format")
     }.subscribeOn(Schedulers.io())
 
     fun respondHelpRequest(id: String) =

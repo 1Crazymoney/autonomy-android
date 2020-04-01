@@ -34,7 +34,7 @@ class AutonomyApiInterceptor : Interceptor() {
 
         val location = Location.getInstance()
         if (location.isAvailable()) {
-            builder.addHeader("Geo-Position", "${location.lat},${location.lng}")
+            builder.addHeader("Geo-Position", "${location.lat};${location.lng}")
         }
 
         return chain.proceed(builder.build())

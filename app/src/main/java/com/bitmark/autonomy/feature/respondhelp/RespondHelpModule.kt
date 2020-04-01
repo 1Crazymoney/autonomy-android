@@ -6,6 +6,7 @@
  */
 package com.bitmark.autonomy.feature.respondhelp
 
+import com.bitmark.autonomy.data.source.AccountRepository
 import com.bitmark.autonomy.data.source.AssistanceRepository
 import com.bitmark.autonomy.di.ActivityScope
 import com.bitmark.autonomy.feature.DialogController
@@ -26,8 +27,9 @@ class RespondHelpModule {
     fun provideVM(
         activity: RespondHelpActivity,
         assistanceRepo: AssistanceRepository,
+        accountRepo: AccountRepository,
         rxLiveDataTransformer: RxLiveDataTransformer
-    ) = RespondHelpViewModel(activity.lifecycle, assistanceRepo, rxLiveDataTransformer)
+    ) = RespondHelpViewModel(activity.lifecycle, assistanceRepo, accountRepo, rxLiveDataTransformer)
 
     @Provides
     @ActivityScope

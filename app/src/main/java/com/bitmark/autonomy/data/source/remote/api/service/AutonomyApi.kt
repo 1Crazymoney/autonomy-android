@@ -36,8 +36,8 @@ interface AutonomyApi {
     @POST("api/helps")
     fun requestHelp(@Body body: RequestHelpRequest): Completable
 
-    @GET("api/helps/38d1086f-7e2a-4c4c-ab79-d478711f9953")
-    fun listHelpRequest(): Single<Map<String, HelpRequestData>>
+    @GET("api/helps")
+    fun listHelpRequest(): Single<Map<String, List<HelpRequestData>>>
 
     @PATCH("api/helps/{id}")
     fun respondHelpRequest(@Path("id") id: String): Completable

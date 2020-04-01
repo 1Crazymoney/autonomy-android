@@ -25,7 +25,11 @@ data class HelpRequestModelView(
 
     val state: HelpState,
 
-    val createdAt: String
+    val createdAt: String,
+
+    val helper: String,
+
+    val requester: String
 ) : ModelView, Parcelable {
     companion object {
         fun newInstance(helpData: HelpRequestData) = HelpRequestModelView(
@@ -35,7 +39,9 @@ data class HelpRequestModelView(
             helpData.meetingLocation,
             helpData.contactInfo,
             helpData.state,
-            helpData.createdAt
+            helpData.createdAt,
+            helpData.helper,
+            helpData.requester
         )
     }
 }
