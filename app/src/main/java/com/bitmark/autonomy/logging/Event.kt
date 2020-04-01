@@ -30,6 +30,10 @@ enum class Event(val value: String) {
 
     HELP_REQUEST_LISTING_ERROR("help_request_listing_error"),
 
-    HELP_REQUEST_RESPOND_ERROR("help_request_respond_error")
+    HELP_REQUEST_RESPOND_ERROR("help_request_respond_error"),
+
+    SYMPTOM_LISTING_ERROR("symptom_listing_error"),
+
+    SYMPTOM_REPORT_ERROR("symptom_report_error")
 
 }

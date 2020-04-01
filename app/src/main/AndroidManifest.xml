@@ -51,6 +51,10 @@
             android:name=".feature.respondhelp.RespondHelpActivity"
             android:screenOrientation="portrait" />
 
+        <activity
+            android:name=".feature.symptoms.SymptomReportActivity"
+            android:screenOrientation="portrait" />
+
         <meta-data
             android:name="com.onesignal.NotificationAccentColor.DEFAULT"
             android:value="@color/colorAccent" />

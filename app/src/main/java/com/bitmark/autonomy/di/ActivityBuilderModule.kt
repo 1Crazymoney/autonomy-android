@@ -22,6 +22,8 @@ import com.bitmark.autonomy.feature.splash.SplashActivity
 import com.bitmark.autonomy.feature.splash.SplashModule
 import com.bitmark.autonomy.feature.survey.SurveyContainerActivity
 import com.bitmark.autonomy.feature.survey.SurveyContainerModule
+import com.bitmark.autonomy.feature.symptoms.SymptomReportActivity
+import com.bitmark.autonomy.feature.symptoms.SymptomReportModule
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
@@ -59,5 +61,9 @@ abstract class ActivityBuilderModule {
     @ContributesAndroidInjector(modules = [RespondHelpModule::class])
     @ActivityScope
     internal abstract fun bindRespondHelpActivity(): RespondHelpActivity
+
+    @ContributesAndroidInjector(modules = [SymptomReportModule::class])
+    @ActivityScope
+    internal abstract fun bindSymptomReportActivity(): SymptomReportActivity
 
 }

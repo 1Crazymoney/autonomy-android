@@ -13,6 +13,7 @@ import com.bitmark.autonomy.data.source.local.api.DatabaseGateway
 import com.bitmark.autonomy.data.source.remote.AccountRemoteDataSource
 import com.bitmark.autonomy.data.source.remote.AppRemoteDataSource
 import com.bitmark.autonomy.data.source.remote.AssistanceRemoteDataSource
+import com.bitmark.autonomy.data.source.remote.SymptomRemoteDataSource
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
@@ -41,6 +42,12 @@ class RepositoryModule {
     fun provideAssistanceRepo(
         remoteDataSource: AssistanceRemoteDataSource
     ) = AssistanceRepository(remoteDataSource)
+
+    @Singleton
+    @Provides
+    fun provideSymptomRepo(
+        remoteDataSource: SymptomRemoteDataSource
+    ) = SymptomRepository(remoteDataSource)
 
     @Singleton
     @Provides

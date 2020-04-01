@@ -6,10 +6,7 @@
  */
 package com.bitmark.autonomy.data.source.remote.api.service
 
-import com.bitmark.autonomy.data.model.AccountData
-import com.bitmark.autonomy.data.model.AppInfoData
-import com.bitmark.autonomy.data.model.HelpRequestData
-import com.bitmark.autonomy.data.model.JwtData
+import com.bitmark.autonomy.data.model.*
 import com.bitmark.autonomy.data.source.remote.api.request.RegisterAccountRequest
 import com.bitmark.autonomy.data.source.remote.api.request.RegisterJwtRequest
 import com.bitmark.autonomy.data.source.remote.api.request.RequestHelpRequest
@@ -44,5 +41,11 @@ interface AutonomyApi {
 
     @PATCH("api/helps/{id}")
     fun respondHelpRequest(@Path("id") id: String): Completable
+
+    @GET("api/symptoms")
+    fun listSymptom(): Single<Map<String, List<SymptomData>>>
+
+    @POST("api/symptoms")
+    fun reportSymptoms(@Body body: RequestBody): Completable
 
 }

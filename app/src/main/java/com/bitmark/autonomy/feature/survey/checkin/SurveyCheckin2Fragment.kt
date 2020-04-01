@@ -13,6 +13,7 @@ import com.bitmark.autonomy.feature.Navigator
 import com.bitmark.autonomy.feature.Navigator.Companion.NONE
 import com.bitmark.autonomy.feature.Navigator.Companion.RIGHT_LEFT
 import com.bitmark.autonomy.feature.requesthelp.RequestHelpContainerActivity
+import com.bitmark.autonomy.feature.symptoms.SymptomReportActivity
 import com.bitmark.autonomy.util.ext.setSafetyOnclickListener
 import kotlinx.android.synthetic.main.fragment_survey_checkin_2.*
 import javax.inject.Inject
@@ -33,7 +34,10 @@ class SurveyCheckin2Fragment : BaseSupportFragment() {
     override fun initComponents() {
         super.initComponents()
 
-        ivSymptom.setSafetyOnclickListener { }
+        ivSymptom.setSafetyOnclickListener {
+            navigator.anim(RIGHT_LEFT).startActivity(SymptomReportActivity::class.java)
+            navigator.anim(NONE).finishActivity()
+        }
 
         ivAssistance.setSafetyOnclickListener {
             navigator.anim(RIGHT_LEFT).startActivity(RequestHelpContainerActivity::class.java)
