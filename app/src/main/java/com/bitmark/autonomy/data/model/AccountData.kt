@@ -11,13 +11,14 @@ import com.google.gson.annotations.SerializedName
 
 
 data class AccountData(
+
+    @Expose
+    @SerializedName("id")
+    val id: String,
+
     @Expose
     @SerializedName("account_number")
     val accountNumber: String,
-
-    @Expose
-    @SerializedName("enc_pub_key")
-    val encPubKey: String,
 
     @Expose
     @SerializedName("created_at")
@@ -28,8 +29,12 @@ data class AccountData(
     val updatedAt: String,
 
     @Expose
-    @SerializedName("profile")
-    val profile: Profile?,
+    @SerializedName("metadata")
+    val metadata: Map<String, String>?,
+
+    @Expose
+    @SerializedName("state")
+    val state: State?,
 
     @Expose
     @SerializedName("auth_required")
@@ -41,32 +46,6 @@ data class AccountData(
 ) : Data {
     companion object
 }
-
-data class Profile(
-    @Expose
-    @SerializedName("id")
-    val id: String,
-
-    @Expose
-    @SerializedName("account_number")
-    val accountNumber: String,
-
-    @Expose
-    @SerializedName("state")
-    val state: State,
-
-    @Expose
-    @SerializedName("metadata")
-    val metadata: Map<String, String>,
-
-    @Expose
-    @SerializedName("created_at")
-    val createdAt: String,
-
-    @Expose
-    @SerializedName("updated_at")
-    val updatedAt: String
-) : Data
 
 data class State(
     @Expose
@@ -80,15 +59,16 @@ data class State(
 
 data class Location(
     @Expose
-    @SerializedName("lat")
+    @SerializedName("latitude")
     val lat: Double,
 
     @Expose
-    @SerializedName("lng")
+    @SerializedName("longitude")
     val lng: Double
 ) : Data
 
-fun AccountData.Companion.newInstance(): AccountData = AccountData("", "", "", "", null, false, "")
+fun AccountData.Companion.newInstance(): AccountData =
+    AccountData("", "", "", "", null, null, false, "")
 
 fun AccountData.isRegistered(): Boolean = accountNumber != ""
 
