@@ -8,6 +8,7 @@ package com.bitmark.autonomy.feature.main
 
 import com.bitmark.autonomy.data.source.AssistanceRepository
 import com.bitmark.autonomy.di.ActivityScope
+import com.bitmark.autonomy.feature.DialogController
 import com.bitmark.autonomy.feature.Navigator
 import com.bitmark.autonomy.util.livedata.RxLiveDataTransformer
 import dagger.Module
@@ -19,6 +20,10 @@ class MainModule {
     @Provides
     @ActivityScope
     fun provideNav(activity: MainActivity) = Navigator(activity)
+
+    @Provides
+    @ActivityScope
+    fun provideDialogController(activity: MainActivity) = DialogController(activity)
 
     @Provides
     @ActivityScope

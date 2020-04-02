@@ -27,6 +27,8 @@
         android:layout_marginTop="@dimen/dp_18"
         android:gravity="center"
         android:orientation="horizontal"
+        android:paddingStart="@dimen/dp_18"
+        android:paddingEnd="@dimen/dp_18"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/ivPolygon">

@@ -14,6 +14,9 @@ internal class ApiKeyManager {
     val intercomApiKey: String
         external get
 
+    val googleApiKey: String
+        external get
+
     companion object {
 
         val API_KEY_MANAGER = ApiKeyManager()

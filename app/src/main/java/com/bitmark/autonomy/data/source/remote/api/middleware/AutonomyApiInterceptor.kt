@@ -9,7 +9,7 @@ package com.bitmark.autonomy.data.source.remote.api.middleware
 import android.text.TextUtils
 import com.bitmark.autonomy.BuildConfig
 import com.bitmark.autonomy.data.source.local.Jwt
-import com.bitmark.autonomy.data.source.local.Location
+import com.bitmark.autonomy.data.source.local.LocationCache
 import okhttp3.CacheControl
 import okhttp3.Response
 import java.util.concurrent.TimeUnit
@@ -32,7 +32,7 @@ class AutonomyApiInterceptor : Interceptor() {
                 "Bearer " + Jwt.getInstance().token
             )
 
-        val location = Location.getInstance()
+        val location = LocationCache.getInstance()
         if (location.isAvailable()) {
             builder.addHeader("Geo-Position", "${location.lat};${location.lng}")
         }

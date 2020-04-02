@@ -92,6 +92,9 @@
     <string name="the_community_member_in_need">The community member in need has been notified of your response. Please write down or take a screenshot of the request details now then contact the community member.</string>
     <string name="copied">Copied</string>
     <string name="could_not_report_symptoms">Could not report your symptoms. Please try again later.</string>
+    <string name="access_to_location_required">Access to Location Required</string>
+    <string name="autonomy_requires_access_to_your_location">Autonomy requires access to your location to use the app. We will only use this data in calculating statistics for a general location and will never reveal any personally identifiable information about you.</string>
+    <string name="searching">Searching…</string>
     <string name="some_one_has_signed_up_requester">Someone has signed up to fulfill your community request. Please wait for time to contact you.</string>
     <string name="some_one_has_signed_up_visitor">Someone has already signed up to fulfill this community request.</string>
 

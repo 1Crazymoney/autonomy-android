@@ -6,18 +6,20 @@
  */
 package com.bitmark.autonomy.data.source.local
 
+import android.location.Location
 
-class Location private constructor() {
+
+class LocationCache private constructor() {
 
     companion object {
         @Volatile
-        private var INSTANCE: Location? = null
+        private var INSTANCE: LocationCache? = null
 
-        fun getInstance(): Location {
+        fun getInstance(): LocationCache {
             if (INSTANCE == null) {
-                synchronized(Location::class) {
+                synchronized(LocationCache::class) {
                     if (INSTANCE == null) {
-                        INSTANCE = Location()
+                        INSTANCE = LocationCache()
                     }
                 }
             }
@@ -37,8 +39,7 @@ class Location private constructor() {
     }
 }
 
-fun Location.apply(l: android.location.Location): Location {
+fun LocationCache.apply(l: Location) {
     lat = l.latitude
     lng = l.longitude
-    return this
 }

@@ -10,17 +10,25 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.IntentSender
+import android.location.Location
+import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import androidx.fragment.app.FragmentActivity
-import com.bitmark.autonomy.data.source.local.Location
+import com.bitmark.autonomy.BuildConfig
+import com.bitmark.autonomy.data.source.local.LocationCache
 import com.bitmark.autonomy.data.source.local.apply
+import com.bitmark.autonomy.keymanagement.ApiKeyManager.Companion.API_KEY_MANAGER
 import com.bitmark.autonomy.logging.Event
 import com.bitmark.autonomy.logging.EventLogger
 import com.bitmark.autonomy.logging.Tracer
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.*
+import com.google.maps.GeoApiContext
+import com.google.maps.GeocodingApi
+import com.google.maps.model.LatLng
 import com.tbruyelle.rxpermissions2.RxPermissions
+import java.util.concurrent.Executors
 
 
 class LocationService(private val context: Context, private val logger: EventLogger) {
@@ -33,14 +41,32 @@ class LocationService(private val context: Context, private val logger: EventLog
 
     private val fusedLocationClient = LocationServices.getFusedLocationProviderClient(context)
 
+    private val geoApiContext = GeoApiContext.Builder().apiKey(API_KEY_MANAGER.googleApiKey).build()
+
+    private val executor = Executors.newSingleThreadExecutor()
+
+    private val handler = Handler()
+
+    private var lastReversedLocation: Location? = null
+
     private val locationUpdateCallback = object : LocationCallback() {
         override fun onLocationResult(result: LocationResult?) {
             super.onLocationResult(result)
             result ?: return
-            for (l in result.locations) {
-                val location = Location.getInstance().apply(l)
-                Log.d(TAG, "Location changed: $location")
-                locationChangeListeners.forEach { listener -> listener.onLocationChanged(location) }
+            for (location in result.locations) {
+                LocationCache.getInstance().apply(location)
+                Log.d(TAG, "Location changed: (${location.latitude}, ${location.longitude})")
+                notifyLocationChanged(location)
+                if (lastReversedLocation == null || lastReversedLocation!!.distanceTo(location) >= BuildConfig.MIN_REFRESH_DISTANCE) {
+                    val reverseFunc = fun(l: Location) {
+                        reverseGeoCoding(l) { place ->
+                            Log.d(TAG, "place changed: $place")
+                            notifyPlaceChanged(place)
+                            lastReversedLocation = l
+                        }
+                    }
+                    reverseFunc(location)
+                }
             }
         }
     }
@@ -50,11 +76,35 @@ class LocationService(private val context: Context, private val logger: EventLog
     fun addLocationChangeListener(listener: LocationChangedListener) {
         if (locationChangeListeners.contains(listener)) return
         locationChangeListeners.add(listener)
-        getLastKnownLocation { l -> listener.onLocationChanged(l) }
+        getLastKnownLocation { l ->
+            if (l == null) return@getLastKnownLocation
+            listener.onLocationChanged(l)
+        }
     }
 
     fun removeLocationChangeListener(listener: LocationChangedListener) {
         locationChangeListeners.remove(listener)
+    }
+
+    private fun reverseGeoCoding(l: Location, callback: (String) -> Unit) {
+        executor.execute {
+            try {
+                val latLng = LatLng(l.latitude, l.longitude)
+                val results = GeocodingApi.newRequest(geoApiContext).latlng(latLng).await()
+                val place = results[0].formattedAddress
+                callback(place)
+            } catch (e: Throwable) {
+                Tracer.ERROR.log(TAG, "failed to do geocoding reverse: ${e.message}")
+            }
+        }
+    }
+
+    private fun notifyLocationChanged(l: Location) {
+        handler.post { locationChangeListeners.forEach { listener -> listener.onLocationChanged(l) } }
+    }
+
+    private fun notifyPlaceChanged(place: String) {
+        handler.post { locationChangeListeners.forEach { listener -> listener.onPlaceChanged(place) } }
     }
 
     @SuppressLint("CheckResult")
@@ -87,9 +137,12 @@ class LocationService(private val context: Context, private val logger: EventLog
     fun isPermissionGranted(activity: FragmentActivity) =
         RxPermissions(activity).isGranted(LOCATION_PERMISSION)
 
-    private fun getLastKnownLocation(callback: (Location) -> Unit) {
+    private fun getLastKnownLocation(callback: (Location?) -> Unit) {
         fusedLocationClient.lastLocation.addOnSuccessListener { l ->
-            callback(Location.getInstance().apply(l))
+            if (l != null) {
+                LocationCache.getInstance().apply(l)
+            }
+            callback(l)
         }.addOnFailureListener { e ->
             Tracer.ERROR.log(TAG, "could not get last known location: ${e.message}")
         }
@@ -110,6 +163,7 @@ class LocationService(private val context: Context, private val logger: EventLog
     }
 
     fun stop() {
+        handler.removeCallbacksAndMessages(null)
         fusedLocationClient.removeLocationUpdates(locationUpdateCallback)
     }
 
@@ -147,6 +201,9 @@ class LocationService(private val context: Context, private val logger: EventLog
     }
 
     interface LocationChangedListener {
+
         fun onLocationChanged(l: Location)
+
+        fun onPlaceChanged(place: String)
     }
 }

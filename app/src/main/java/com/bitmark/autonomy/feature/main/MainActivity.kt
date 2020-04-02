@@ -6,16 +6,20 @@
  */
 package com.bitmark.autonomy.feature.main
 
+import android.app.Activity
+import android.content.Intent
+import android.location.Location
 import android.os.Bundle
 import android.os.Handler
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bitmark.autonomy.AppLifecycleHandler
+import com.bitmark.autonomy.BuildConfig
 import com.bitmark.autonomy.R
-import com.bitmark.autonomy.data.source.local.Location
 import com.bitmark.autonomy.feature.BaseAppCompatActivity
 import com.bitmark.autonomy.feature.BaseViewModel
+import com.bitmark.autonomy.feature.DialogController
 import com.bitmark.autonomy.feature.Navigator
 import com.bitmark.autonomy.feature.Navigator.Companion.RIGHT_LEFT
 import com.bitmark.autonomy.feature.location.LocationService
@@ -24,6 +28,7 @@ import com.bitmark.autonomy.feature.survey.SurveyContainerActivity
 import com.bitmark.autonomy.logging.Event
 import com.bitmark.autonomy.logging.EventLogger
 import com.bitmark.autonomy.util.ext.gone
+import com.bitmark.autonomy.util.ext.openAppSetting
 import com.bitmark.autonomy.util.ext.visible
 import com.bitmark.autonomy.util.modelview.HelpRequestModelView
 import kotlinx.android.synthetic.main.activity_main.*
@@ -50,19 +55,33 @@ class MainActivity : BaseAppCompatActivity() {
     @Inject
     internal lateinit var logger: EventLogger
 
+    @Inject
+    internal lateinit var dialogController: DialogController
+
     private val handler = Handler()
 
     private val adapter = HelpCollectionRecyclerViewAdapter()
 
+    private var lastKnownLocation: Location? = null
+
     private val locationChangedListener = object : LocationService.LocationChangedListener {
+
+        override fun onPlaceChanged(place: String) {
+            tvLocation.text = place
+        }
+
         override fun onLocationChanged(l: Location) {
-            tvLocation.text = l.toString()
+            if (lastKnownLocation == null || lastKnownLocation!!.distanceTo(l) >= BuildConfig.MIN_REFRESH_DISTANCE) {
+                viewModel.listHelpRequest()
+            }
+            lastKnownLocation = l
         }
     }
 
     private val appStateChangedListener = object : AppLifecycleHandler.AppStateChangedListener {
         override fun onForeground() {
             super.onForeground()
+            if (!locationService.isPermissionGranted(this@MainActivity)) return
             handler.postDelayed({
                 navigator.anim(RIGHT_LEFT).startActivity(SurveyContainerActivity::class.java)
             }, 200)
@@ -75,6 +94,8 @@ class MainActivity : BaseAppCompatActivity() {
 
     override fun initComponents() {
         super.initComponents()
+
+        tvLocation.setText(R.string.searching)
 
         adapter.setItemClickListener(object : HelpCollectionRecyclerViewAdapter.ItemClickListener {
             override fun onItemClicked(item: HelpRequestModelView) {
@@ -114,14 +135,23 @@ class MainActivity : BaseAppCompatActivity() {
     override fun onStart() {
         super.onStart()
         locationService.requestPermission(this, grantedCallback = {
-            locationService.start(this) { e ->
-                e.startResolutionForResult(this, LOCATION_SETTING_CODE)
-            }
+            startLocationService()
         }, permanentlyDeniedCallback = {
-            // TODO handle later
+            dialogController.alert(
+                R.string.access_to_location_required,
+                R.string.autonomy_requires_access_to_your_location
+            ) {
+                navigator.openAppSetting(this)
+            }
         })
         locationService.addLocationChangeListener(locationChangedListener)
-        viewModel.listHelpRequest()
+        if (lastKnownLocation != null) viewModel.listHelpRequest()
+    }
+
+    private fun startLocationService() {
+        locationService.start(this) { e ->
+            e.startResolutionForResult(this, LOCATION_SETTING_CODE)
+        }
     }
 
     override fun onStop() {
@@ -140,6 +170,13 @@ class MainActivity : BaseAppCompatActivity() {
         handler.removeCallbacksAndMessages(null)
         appLifecycleHandler.removeAppStateChangedListener(appStateChangedListener)
         super.onDestroy()
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == Activity.RESULT_OK && requestCode == LOCATION_SETTING_CODE) {
+            startLocationService()
+        }
     }
 
 

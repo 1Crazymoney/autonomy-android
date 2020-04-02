@@ -141,6 +141,7 @@ android {
             ]
             buildConfigField "String", "AUTONOMY_API_ENDPOINT",
                     "\"https://autonomy.test.bitmark.com\""
+            buildConfigField "Float", "MIN_REFRESH_DISTANCE", "10f"
         }
 
         prd {
@@ -155,6 +156,7 @@ android {
             ]
             buildConfigField "String", "AUTONOMY_API_ENDPOINT",
                     "\"https://autonomy.bitmark.com\""
+            buildConfigField "Float", "MIN_REFRESH_DISTANCE", "50f"
         }
     }
 
@@ -237,17 +239,21 @@ dependencies {
     implementation 'com.bitmark.sdk:api-service:2.1.0'
     implementation 'com.bitmark.sdk:cryptography:1.6.0'
 
-    implementation ('com.onesignal:OneSignal:3.12.7') {
-        exclude group:'com.google.android.gms', module:'play-services-location'
-        exclude group:'com.google.android.gms', module:'play-services-places-placereport'
-        exclude group:'com.google.android.gms', module:'play-services-basement'
-        exclude group:'com.google.firebase', module:'firebase-messaging'
-        exclude group:'com.google.android.gms', module:'play-services-base'
-        exclude group:'com.google.firebase', module:'firebase-messaging'
+    implementation('com.onesignal:OneSignal:3.12.7') {
+        exclude group: 'com.google.android.gms', module: 'play-services-location'
+        exclude group: 'com.google.android.gms', module: 'play-services-places-placereport'
+        exclude group: 'com.google.android.gms', module: 'play-services-basement'
+        exclude group: 'com.google.firebase', module: 'firebase-messaging'
+        exclude group: 'com.google.android.gms', module: 'play-services-base'
+        exclude group: 'com.google.firebase', module: 'firebase-messaging'
     }
     implementation 'io.intercom.android:intercom-sdk:6.0.0'
     implementation 'com.github.tbruyelle:rxpermissions:0.10.2'
     implementation 'com.google.android.gms:play-services-location:17.0.0'
+
+    // Geocoding
+    implementation 'com.google.maps:google-maps-services:0.11.0'
+    implementation group: 'com.github.seratch', name: 'java-time-backport', version: '1.0.0'
 
     // Testing
     testImplementation 'junit:junit:4.12'
@@ -274,7 +280,9 @@ task fillSecretKey {
         keyProperties.load(new FileInputStream(keyPropertiesFile))
         def apiKeyFile = file('src/main/jni/api-key.cpp')
         def content = apiKeyFile.getText()
-        content = content.replace('bitmark-api-key-to-be-filled', keyProperties['api.key.bitmark']).replace('intercom-api-key-to-be-filled', keyProperties['api.key.intercom'])
+        content = content.replace('bitmark-api-key-to-be-filled', keyProperties['api.key.bitmark'])
+                .replace('intercom-api-key-to-be-filled', keyProperties['api.key.intercom'])
+                .replace('google-api-key-to-be-filled', keyProperties['api.key.google'])
         apiKeyFile.bytes = []
         apiKeyFile.text = content
     }
