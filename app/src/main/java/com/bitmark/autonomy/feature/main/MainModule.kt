@@ -7,6 +7,7 @@
 package com.bitmark.autonomy.feature.main
 
 import com.bitmark.autonomy.data.source.AssistanceRepository
+import com.bitmark.autonomy.data.source.UserRepository
 import com.bitmark.autonomy.di.ActivityScope
 import com.bitmark.autonomy.feature.DialogController
 import com.bitmark.autonomy.feature.Navigator
@@ -30,6 +31,7 @@ class MainModule {
     fun provideVM(
         activity: MainActivity,
         assistanceRepo: AssistanceRepository,
+        userRepo: UserRepository,
         rxLiveDataTransformer: RxLiveDataTransformer
-    ) = MainViewModel(activity.lifecycle, assistanceRepo, rxLiveDataTransformer)
+    ) = MainViewModel(activity.lifecycle, assistanceRepo, userRepo, rxLiveDataTransformer)
 }

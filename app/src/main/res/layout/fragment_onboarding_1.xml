@@ -76,7 +76,7 @@
         app:srcCompat="@drawable/bg_phone" />
 
     <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/ivPolygon"
+        android:id="@+id/ivScore"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:adjustViewBounds="true"

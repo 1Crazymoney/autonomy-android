@@ -10,10 +10,7 @@ import android.content.Context
 import com.bitmark.autonomy.data.source.local.AccountLocalDataSource
 import com.bitmark.autonomy.data.source.local.AppLocalDataSource
 import com.bitmark.autonomy.data.source.local.api.DatabaseGateway
-import com.bitmark.autonomy.data.source.remote.AccountRemoteDataSource
-import com.bitmark.autonomy.data.source.remote.AppRemoteDataSource
-import com.bitmark.autonomy.data.source.remote.AssistanceRemoteDataSource
-import com.bitmark.autonomy.data.source.remote.SymptomRemoteDataSource
+import com.bitmark.autonomy.data.source.remote.*
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
@@ -48,6 +45,12 @@ class RepositoryModule {
     fun provideSymptomRepo(
         remoteDataSource: SymptomRemoteDataSource
     ) = SymptomRepository(remoteDataSource)
+
+    @Singleton
+    @Provides
+    fun provideUserRepo(
+        remoteDataSource: UserRemoteDataSource
+    ) = UserRepository(remoteDataSource)
 
     @Singleton
     @Provides

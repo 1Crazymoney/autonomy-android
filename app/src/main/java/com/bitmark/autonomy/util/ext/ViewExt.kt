@@ -12,6 +12,7 @@ import android.os.Handler
 import android.util.TypedValue
 import android.view.View
 import android.webkit.WebView
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.ColorRes
 import androidx.annotation.StringRes
@@ -132,4 +133,9 @@ fun TextView.setTextSize(sp: Int) {
     val density = context.resources.displayMetrics.density
     val convertedSp = screenWidth * sp / (density * 360)
     setTextSize(TypedValue.COMPLEX_UNIT_SP, convertedSp)
+}
+
+fun ImageView.setImageResource(resName: String) {
+    val resId = context.resources.getIdentifier(resName, "drawable", context.packageName)
+    setImageResource(resId)
 }

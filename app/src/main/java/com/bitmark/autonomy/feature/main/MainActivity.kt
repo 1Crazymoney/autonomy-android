@@ -29,6 +29,7 @@ import com.bitmark.autonomy.logging.Event
 import com.bitmark.autonomy.logging.EventLogger
 import com.bitmark.autonomy.util.ext.gone
 import com.bitmark.autonomy.util.ext.openAppSetting
+import com.bitmark.autonomy.util.ext.setImageResource
 import com.bitmark.autonomy.util.ext.visible
 import com.bitmark.autonomy.util.modelview.HelpRequestModelView
 import kotlinx.android.synthetic.main.activity_main.*
@@ -60,7 +61,7 @@ class MainActivity : BaseAppCompatActivity() {
 
     private val handler = Handler()
 
-    private val adapter = HelpCollectionRecyclerViewAdapter()
+    private val helpRequestAdapter = HelpCollectionRecyclerViewAdapter()
 
     private var lastKnownLocation: Location? = null
 
@@ -72,7 +73,7 @@ class MainActivity : BaseAppCompatActivity() {
 
         override fun onLocationChanged(l: Location) {
             if (lastKnownLocation == null || lastKnownLocation!!.distanceTo(l) >= BuildConfig.MIN_REFRESH_DISTANCE) {
-                viewModel.listHelpRequest()
+                viewModel.getData()
             }
             lastKnownLocation = l
         }
@@ -97,7 +98,8 @@ class MainActivity : BaseAppCompatActivity() {
 
         tvLocation.setText(R.string.searching)
 
-        adapter.setItemClickListener(object : HelpCollectionRecyclerViewAdapter.ItemClickListener {
+        helpRequestAdapter.setItemClickListener(object :
+            HelpCollectionRecyclerViewAdapter.ItemClickListener {
             override fun onItemClicked(item: HelpRequestModelView) {
                 val bundle = RespondHelpActivity.getBundle(item)
                 navigator.anim(RIGHT_LEFT).startActivity(RespondHelpActivity::class.java, bundle)
@@ -106,18 +108,22 @@ class MainActivity : BaseAppCompatActivity() {
 
         val layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
         rvHelp.layoutManager = layoutManager
-        rvHelp.adapter = adapter
+        rvHelp.adapter = helpRequestAdapter
     }
 
     override fun observe() {
         super.observe()
 
-        viewModel.listHelpRequestLiveData.asLiveData().observe(this, Observer { res ->
+        viewModel.getDataLiveData.asLiveData().observe(this, Observer { res ->
             when {
                 res.isSuccess() -> {
                     progressBar.gone()
                     val data = res.data()!!
-                    adapter.set(data)
+                    val score = data.first.toInt()
+                    val helpRequests = data.second
+                    helpRequestAdapter.set(helpRequests)
+                    tvScore.text = score.toString()
+                    ivScore.setImageResource("triangle_%03d".format(score))
                 }
 
                 res.isError() -> {
@@ -145,7 +151,7 @@ class MainActivity : BaseAppCompatActivity() {
             }
         })
         locationService.addLocationChangeListener(locationChangedListener)
-        if (lastKnownLocation != null) viewModel.listHelpRequest()
+        if (lastKnownLocation != null) viewModel.getData()
     }
 
     private fun startLocationService() {
