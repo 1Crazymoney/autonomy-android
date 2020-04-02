@@ -97,6 +97,7 @@
     <string name="searching">Searching…</string>
     <string name="some_one_has_signed_up_requester">Someone has signed up to fulfill your community request. Please wait for time to contact you.</string>
     <string name="some_one_has_signed_up_visitor">Someone has already signed up to fulfill this community request.</string>
+    <string name="could_not_open_google_map">Could not open Google maps</string>
 
     <!--    string format-->
     <string name="send_to_format">Send to %1$s</string>

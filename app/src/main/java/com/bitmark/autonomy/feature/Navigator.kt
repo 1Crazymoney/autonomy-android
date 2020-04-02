@@ -7,7 +7,6 @@
 package com.bitmark.autonomy.feature
 
 import android.app.Activity
-import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.os.Bundle
 import androidx.annotation.IdRes
@@ -103,11 +102,8 @@ class Navigator(host: Any) {
     }
 
     fun startActivity(intent: Intent) {
-        try {
-            activity?.startActivity(intent)
-            startTransactionAnim(activity)
-        } catch (ignore: ActivityNotFoundException) {
-        }
+        activity?.startActivity(intent)
+        startTransactionAnim(activity)
     }
 
     fun startActivityAsRoot(intent: Intent) {

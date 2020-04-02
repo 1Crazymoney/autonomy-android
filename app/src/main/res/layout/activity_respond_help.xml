@@ -47,6 +47,7 @@
     <ScrollView
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginBottom="@dimen/dp_8"
         android:scrollbarSize="@dimen/dp_2"
         android:scrollbarThumbVertical="@color/white_aa"
         android:scrollbars="vertical"

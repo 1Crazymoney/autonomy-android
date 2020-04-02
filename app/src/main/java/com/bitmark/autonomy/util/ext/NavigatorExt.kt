@@ -168,3 +168,18 @@ fun Navigator.openKeyGuardConfirmation(
     startActivityForResult(intent, requestCode)
 }
 
+fun Navigator.openGoogleMap(context: Context, place: String, error: (Throwable) -> Unit = {}) {
+    try {
+        val uri = Uri.parse(Uri.encode(place))
+        val intent = Intent(Intent.ACTION_VIEW, uri)
+        intent.setPackage("com.google.android.apps.maps")
+        if (intent.resolveActivity(context.packageManager) != null) {
+            startActivity(intent)
+        } else {
+            throw ActivityNotFoundException("google map app cannot be found")
+        }
+    } catch (e: Throwable) {
+        error(e)
+    }
+}
+

@@ -80,7 +80,9 @@ class RespondHelpActivity : BaseAppCompatActivity() {
         }
 
         ivLocationDirection.setSafetyOnclickListener {
-
+            navigator.openGoogleMap(this, helpRequest.meetingLocation) {
+                toast(getString(R.string.could_not_open_google_map).toUpperCase())
+            }
         }
 
         ivContactInfoCopy.setSafetyOnclickListener {

@@ -44,15 +44,18 @@
 
         <activity
             android:name=".feature.requesthelp.RequestHelpContainerActivity"
+            android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize" />
 
         <activity
             android:name=".feature.respondhelp.RespondHelpActivity"
+            android:launchMode="singleTop"
             android:screenOrientation="portrait" />
 
         <activity
             android:name=".feature.symptoms.SymptomReportActivity"
+            android:launchMode="singleTop"
             android:screenOrientation="portrait" />
 
         <meta-data

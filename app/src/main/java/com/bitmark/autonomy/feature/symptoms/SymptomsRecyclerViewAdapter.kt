@@ -70,6 +70,10 @@ class SymptomsRecyclerViewAdapter : RecyclerView.Adapter<SymptomsRecyclerViewAda
                     item.checked = isChecked
                     onCheckedChangeListener.onCheckedChanged(view, isChecked)
                 }
+
+                layoutRoot.setOnClickListener {
+                    cbSymptom.isChecked = !cbSymptom.isChecked
+                }
             }
         }
 
