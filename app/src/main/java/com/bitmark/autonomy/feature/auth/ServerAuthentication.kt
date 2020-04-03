@@ -84,7 +84,7 @@ class ServerAuthentication @Inject constructor(
             if (e == null && accountData.isRegistered()) {
                 loadAccount(
                     activity,
-                    accountData.id,
+                    accountData.accountNumber,
                     accountData.keyAlias,
                     dialogController!!,
                     { account ->
@@ -119,7 +119,7 @@ class ServerAuthentication @Inject constructor(
 
     private fun loadAccount(
         activity: Activity,
-        accountId: String,
+        accountNumber: String,
         keyAlias: String,
         dialogController: DialogController,
         successAction: (Account) -> Unit,
@@ -131,7 +131,7 @@ class ServerAuthentication @Inject constructor(
                 .setKeyAlias(keyAlias).build()
         val navigator = Navigator(activity)
         activity.loadAccount(
-            accountId,
+            accountNumber,
             spec,
             dialogController,
             successAction = successAction,
@@ -141,7 +141,7 @@ class ServerAuthentication @Inject constructor(
                 dialogController.showAuthRequired {
                     loadAccount(
                         activity,
-                        accountId,
+                        accountNumber,
                         keyAlias,
                         dialogController,
                         successAction,

@@ -35,19 +35,19 @@ class RequestHelpListFragment : BaseSupportFragment() {
     override fun initComponents() {
         super.initComponents()
 
-        ivFood.setSafetyOnclickListener {
+        layoutFood.setSafetyOnclickListener {
             goToDetail(Type.FOOD)
         }
 
-        ivMedicine.setSafetyOnclickListener {
+        layoutMedicine.setSafetyOnclickListener {
             goToDetail(Type.MEDICINE)
         }
 
-        ivMedicalCare.setSafetyOnclickListener {
+        layoutMedicalCare.setSafetyOnclickListener {
             goToDetail(Type.MEDICAL_CARE)
         }
 
-        ivTravelSafeLocation.setSafetyOnclickListener {
+        layoutSafeLocation.setSafetyOnclickListener {
             goToDetail(Type.SAFE_LOCATION)
         }
     }

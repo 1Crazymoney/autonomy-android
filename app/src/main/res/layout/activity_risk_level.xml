@@ -86,44 +86,54 @@
                 app:layout_constraintStart_toStartOf="@id/tvSlogan"
                 app:layout_constraintTop_toBottomOf="@id/tvSlogan" />
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/tvRisk"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/layoutRisk"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="18dp"
-                android:fontFamily="@font/domaine_sans"
-                android:text="@string/yes_im_at_higher_risk"
-                android:textColor="@color/white"
-                android:textSize="24sp"
-                app:layout_constraintBottom_toBottomOf="@id/cbRisk"
-                app:layout_constraintEnd_toEndOf="@id/vDivider1"
-                app:layout_constraintStart_toEndOf="@id/cbRisk"
-                app:layout_constraintTop_toTopOf="@id/cbRisk" />
-
-
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/tvRiskDes"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-                android:fontFamily="@font/grotesk_light_font_family"
-                android:text="@string/higher_risk_individuals"
-                android:textColor="@color/silver_chalice"
-                android:textSize="14sp"
-                app:layout_constraintEnd_toEndOf="@id/tvRisk"
-                app:layout_constraintStart_toStartOf="@id/tvRisk"
-                app:layout_constraintTop_toBottomOf="@id/tvRisk" />
-
-            <androidx.appcompat.widget.AppCompatCheckBox
-                android:id="@+id/cbRisk"
-                android:layout_width="44dp"
-                android:layout_height="44dp"
                 android:layout_marginTop="30dp"
-                android:background="@drawable/bg_checkbox"
-                android:button="@null"
+                app:layout_constraintEnd_toEndOf="@id/vDivider1"
                 app:layout_constraintStart_toStartOf="@id/vDivider1"
-                app:layout_constraintTop_toBottomOf="@id/vDivider1"
-                tools:checked="true" />
+                app:layout_constraintTop_toBottomOf="@id/vDivider1">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvRisk"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="18dp"
+                    android:fontFamily="@font/domaine_sans"
+                    android:text="@string/yes_im_at_higher_risk"
+                    android:textColor="@color/color_white_stateful"
+                    android:textSize="24sp"
+                    app:layout_constraintBottom_toBottomOf="@id/cbRisk"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/cbRisk"
+                    app:layout_constraintTop_toTopOf="@id/cbRisk" />
+
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvRiskDes"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:fontFamily="@font/grotesk_light_font_family"
+                    android:text="@string/higher_risk_individuals"
+                    android:textColor="@color/color_silver_chalice_stateful"
+                    android:textSize="14sp"
+                    app:layout_constraintEnd_toEndOf="@id/tvRisk"
+                    app:layout_constraintStart_toStartOf="@id/tvRisk"
+                    app:layout_constraintTop_toBottomOf="@id/tvRisk" />
+
+                <androidx.appcompat.widget.AppCompatCheckBox
+                    android:id="@+id/cbRisk"
+                    android:layout_width="44dp"
+                    android:layout_height="44dp"
+                    android:background="@drawable/bg_checkbox"
+                    android:button="@null"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:checked="true" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <View
                 android:id="@+id/vDivider2"
@@ -131,34 +141,44 @@
                 android:layout_height="1dp"
                 android:layout_marginTop="30dp"
                 android:background="@color/concord"
-                app:layout_constraintEnd_toEndOf="@id/tvRiskDes"
-                app:layout_constraintStart_toStartOf="@id/cbRisk"
-                app:layout_constraintTop_toBottomOf="@id/tvRiskDes" />
+                app:layout_constraintEnd_toEndOf="@id/layoutRisk"
+                app:layout_constraintStart_toStartOf="@id/layoutRisk"
+                app:layout_constraintTop_toBottomOf="@id/layoutRisk" />
 
-            <androidx.appcompat.widget.AppCompatCheckBox
-                android:id="@+id/cbNoRisk"
-                android:layout_width="44dp"
-                android:layout_height="44dp"
-                android:layout_marginTop="30dp"
-                android:background="@drawable/bg_checkbox"
-                android:button="@null"
-                app:layout_constraintStart_toStartOf="@id/vDivider2"
-                app:layout_constraintTop_toBottomOf="@id/vDivider2"
-                tools:checked="false" />
-
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/tvNoRisk"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/layoutNoRisk"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="18dp"
-                android:fontFamily="@font/domaine_sans"
-                android:text="@string/no_im_not_at_higher_risk"
-                android:textColor="@color/white"
-                android:textSize="24sp"
-                app:layout_constraintBottom_toBottomOf="@id/cbNoRisk"
+                android:layout_marginTop="30dp"
                 app:layout_constraintEnd_toEndOf="@id/vDivider2"
-                app:layout_constraintStart_toEndOf="@id/cbNoRisk"
-                app:layout_constraintTop_toTopOf="@id/cbNoRisk" />
+                app:layout_constraintStart_toStartOf="@id/vDivider2"
+                app:layout_constraintTop_toBottomOf="@id/vDivider2">
+
+                <androidx.appcompat.widget.AppCompatCheckBox
+                    android:id="@+id/cbNoRisk"
+                    android:layout_width="44dp"
+                    android:layout_height="44dp"
+                    android:background="@drawable/bg_checkbox"
+                    android:button="@null"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:checked="false" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvNoRisk"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="18dp"
+                    android:fontFamily="@font/domaine_sans"
+                    android:text="@string/no_im_not_at_higher_risk"
+                    android:textColor="@color/color_white_stateful"
+                    android:textSize="24sp"
+                    app:layout_constraintBottom_toBottomOf="@id/cbNoRisk"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/cbNoRisk"
+                    app:layout_constraintTop_toTopOf="@id/cbNoRisk" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

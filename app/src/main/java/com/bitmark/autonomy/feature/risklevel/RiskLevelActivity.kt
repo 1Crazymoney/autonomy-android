@@ -92,6 +92,14 @@ class RiskLevelActivity : BaseAppCompatActivity() {
             }
         }
 
+        layoutRisk.setOnClickListener {
+            cbRisk.isChecked = !cbRisk.isChecked
+        }
+
+        layoutNoRisk.setOnClickListener {
+            cbNoRisk.isChecked = !cbNoRisk.isChecked
+        }
+
         layoutBack.setSafetyOnclickListener {
             if (blocked) return@setSafetyOnclickListener
             navigator.anim(RIGHT_LEFT).finishActivity()

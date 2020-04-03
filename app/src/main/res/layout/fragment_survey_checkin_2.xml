@@ -74,43 +74,51 @@
         app:layout_constraintStart_toStartOf="@id/tvSlogan"
         app:layout_constraintTop_toBottomOf="@id/tvSlogan" />
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/tvSymptom"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layoutSymptom"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
-        android:fontFamily="@font/domaine_sans"
-        android:text="@string/i_have_symptoms"
-        android:textColor="@color/white"
-        android:textSize="24sp"
-        app:layout_constraintEnd_toStartOf="@id/ivSymptom"
-        app:layout_constraintStart_toStartOf="@id/vDivider1"
-        app:layout_constraintTop_toBottomOf="@id/vDivider1" />
-
-
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/tvSymptomDes"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="2dp"
-        android:fontFamily="@font/grotesk_light_font_family"
-        android:text="@string/let_us_if_u_r_currently"
-        android:textColor="@color/silver_chalice"
-        android:textSize="14sp"
-        app:layout_constraintEnd_toEndOf="@id/tvSymptom"
-        app:layout_constraintStart_toStartOf="@id/tvSymptom"
-        app:layout_constraintTop_toBottomOf="@id/tvSymptom" />
-
-    <com.bitmark.autonomy.util.view.TouchableOpacityAppCompatImageView
-        android:id="@+id/ivSymptom"
-        android:layout_width="44dp"
-        android:layout_height="44dp"
-        android:clickable="true"
-        android:focusable="true"
-        app:layout_constraintBottom_toBottomOf="@id/tvSymptom"
         app:layout_constraintEnd_toEndOf="@id/vDivider1"
-        app:layout_constraintTop_toTopOf="@id/tvSymptom"
-        app:srcCompat="@drawable/ic_next_stateful" />
+        app:layout_constraintStart_toStartOf="@id/vDivider1"
+        app:layout_constraintTop_toBottomOf="@id/vDivider1">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvSymptom"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/domaine_sans"
+            android:text="@string/i_have_symptoms"
+            android:textColor="@color/color_white_stateful"
+            android:textSize="24sp"
+            app:layout_constraintBottom_toBottomOf="@id/ivSymptom"
+            app:layout_constraintEnd_toStartOf="@id/ivSymptom"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/ivSymptom" />
+
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvSymptomDes"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:fontFamily="@font/grotesk_light_font_family"
+            android:text="@string/let_us_if_u_r_currently"
+            android:textColor="@color/color_silver_chalice_stateful"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="@id/tvSymptom"
+            app:layout_constraintStart_toStartOf="@id/tvSymptom"
+            app:layout_constraintTop_toBottomOf="@id/tvSymptom" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/ivSymptom"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_next_stateful" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <View
         android:id="@+id/vDivider2"
@@ -118,47 +126,55 @@
         android:layout_height="1dp"
         android:layout_marginTop="15dp"
         android:background="@color/concord"
-        app:layout_constraintEnd_toEndOf="@id/ivSymptom"
-        app:layout_constraintStart_toStartOf="@id/tvSymptomDes"
-        app:layout_constraintTop_toBottomOf="@id/tvSymptomDes" />
+        app:layout_constraintEnd_toEndOf="@id/layoutSymptom"
+        app:layout_constraintStart_toStartOf="@id/layoutSymptom"
+        app:layout_constraintTop_toBottomOf="@id/layoutSymptom" />
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/tvAssistance"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layoutAssistance"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
-        android:fontFamily="@font/domaine_sans"
-        android:text="@string/i_need_assistance"
-        android:textColor="@color/white"
-        android:textSize="24sp"
-        app:layout_constraintEnd_toStartOf="@id/ivSymptom"
+        app:layout_constraintEnd_toEndOf="@id/vDivider2"
         app:layout_constraintStart_toStartOf="@id/vDivider2"
-        app:layout_constraintTop_toBottomOf="@id/vDivider2" />
+        app:layout_constraintTop_toBottomOf="@id/vDivider2">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvAssistance"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/domaine_sans"
+            android:text="@string/i_need_assistance"
+            android:textColor="@color/color_white_stateful"
+            android:textSize="24sp"
+            app:layout_constraintBottom_toBottomOf="@id/ivAssistance"
+            app:layout_constraintEnd_toStartOf="@id/ivAssistance"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/ivAssistance" />
 
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/tvAssistanceDes"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="2dp"
-        android:fontFamily="@font/grotesk_light_font_family"
-        android:text="@string/let_people_in_your_local_community"
-        android:textColor="@color/silver_chalice"
-        android:textSize="14sp"
-        app:layout_constraintEnd_toEndOf="@id/tvAssistance"
-        app:layout_constraintStart_toStartOf="@id/tvAssistance"
-        app:layout_constraintTop_toBottomOf="@id/tvAssistance" />
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvAssistanceDes"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:fontFamily="@font/grotesk_light_font_family"
+            android:text="@string/let_people_in_your_local_community"
+            android:textColor="@color/color_silver_chalice_stateful"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="@id/tvAssistance"
+            app:layout_constraintStart_toStartOf="@id/tvAssistance"
+            app:layout_constraintTop_toBottomOf="@id/tvAssistance" />
 
-    <com.bitmark.autonomy.util.view.TouchableOpacityAppCompatImageView
-        android:id="@+id/ivAssistance"
-        android:layout_width="44dp"
-        android:layout_height="44dp"
-        android:clickable="true"
-        android:focusable="true"
-        app:layout_constraintBottom_toBottomOf="@id/tvAssistance"
-        app:layout_constraintEnd_toEndOf="@id/vDivider1"
-        app:layout_constraintTop_toTopOf="@id/tvAssistance"
-        app:srcCompat="@drawable/ic_next_stateful" />
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/ivAssistance"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_next_stateful" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

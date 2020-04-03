@@ -34,12 +34,12 @@ class SurveyCheckin2Fragment : BaseSupportFragment() {
     override fun initComponents() {
         super.initComponents()
 
-        ivSymptom.setSafetyOnclickListener {
+        layoutSymptom.setSafetyOnclickListener {
             navigator.anim(RIGHT_LEFT).startActivity(SymptomReportActivity::class.java)
             navigator.anim(NONE).finishActivity()
         }
 
-        ivAssistance.setSafetyOnclickListener {
+        layoutAssistance.setSafetyOnclickListener {
             navigator.anim(RIGHT_LEFT).startActivity(RequestHelpContainerActivity::class.java)
             navigator.anim(NONE).finishActivity()
         }

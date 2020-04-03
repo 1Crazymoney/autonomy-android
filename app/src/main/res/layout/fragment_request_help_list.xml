@@ -74,160 +74,192 @@
         app:layout_constraintStart_toStartOf="@id/tvSlogan"
         app:layout_constraintTop_toBottomOf="@id/tvSlogan" />
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/tvFood"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layoutFood"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
-        android:layout_marginEnd="@dimen/dp_8"
-        android:fontFamily="@font/domaine_sans"
-        android:text="@string/access_to_food_and_water"
-        android:textColor="@color/white"
-        android:textSize="24sp"
-        app:layout_constraintEnd_toStartOf="@id/ivFood"
-        app:layout_constraintStart_toStartOf="@id/vDivider1"
-        app:layout_constraintTop_toBottomOf="@id/vDivider1" />
-
-
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/tvFoodDes"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="2dp"
-        android:fontFamily="@font/grotesk_light_font_family"
-        android:text="@string/i_need_help_getting_food"
-        android:textColor="@color/silver_chalice"
-        android:textSize="14sp"
-        app:layout_constraintEnd_toEndOf="@id/tvFood"
-        app:layout_constraintStart_toStartOf="@id/tvFood"
-        app:layout_constraintTop_toBottomOf="@id/tvFood" />
-
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/ivFood"
-        android:layout_width="44dp"
-        android:layout_height="44dp"
-        android:clickable="true"
-        android:focusable="true"
-        app:layout_constraintBottom_toBottomOf="@id/tvFoodDes"
         app:layout_constraintEnd_toEndOf="@id/vDivider1"
-        app:layout_constraintTop_toTopOf="@id/tvFood"
-        app:srcCompat="@drawable/ic_next_stateful" />
+        app:layout_constraintStart_toStartOf="@id/vDivider1"
+        app:layout_constraintTop_toBottomOf="@id/vDivider1">
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/tvMedicine"
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvFood"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/dp_8"
+            android:fontFamily="@font/domaine_sans"
+            android:text="@string/access_to_food_and_water"
+            android:textColor="@color/color_white_stateful"
+            android:textSize="24sp"
+            app:layout_constraintEnd_toStartOf="@id/ivFood"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvFoodDes"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:fontFamily="@font/grotesk_light_font_family"
+            android:text="@string/i_need_help_getting_food"
+            android:textColor="@color/color_silver_chalice_stateful"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="@id/tvFood"
+            app:layout_constraintStart_toStartOf="@id/tvFood"
+            app:layout_constraintTop_toBottomOf="@id/tvFood" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/ivFood"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            app:layout_constraintBottom_toBottomOf="@id/tvFoodDes"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tvFood"
+            app:srcCompat="@drawable/ic_next_stateful" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layoutMedicine"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp_6"
-        android:layout_marginEnd="@dimen/dp_8"
-        android:fontFamily="@font/domaine_sans"
-        android:text="@string/access_to_medicine"
-        android:textColor="@color/white"
-        android:textSize="24sp"
-        app:layout_constraintEnd_toStartOf="@id/ivMedicine"
-        app:layout_constraintStart_toStartOf="@id/vDivider1"
-        app:layout_constraintTop_toBottomOf="@id/tvFoodDes" />
+        app:layout_constraintEnd_toEndOf="@id/layoutFood"
+        app:layout_constraintStart_toStartOf="@id/layoutFood"
+        app:layout_constraintTop_toBottomOf="@id/layoutFood">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvMedicine"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/dp_8"
+            android:fontFamily="@font/domaine_sans"
+            android:text="@string/access_to_medicine"
+            android:textColor="@color/color_white_stateful"
+            android:textSize="24sp"
+            app:layout_constraintEnd_toStartOf="@id/ivMedicine"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/tvMedicineDes"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="2dp"
-        android:fontFamily="@font/grotesk_light_font_family"
-        android:text="@string/i_need_help_getting_medications"
-        android:textColor="@color/silver_chalice"
-        android:textSize="14sp"
-        app:layout_constraintEnd_toEndOf="@id/tvMedicine"
-        app:layout_constraintStart_toStartOf="@id/tvMedicine"
-        app:layout_constraintTop_toBottomOf="@id/tvMedicine" />
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvMedicineDes"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:fontFamily="@font/grotesk_light_font_family"
+            android:text="@string/i_need_help_getting_medications"
+            android:textColor="@color/color_silver_chalice_stateful"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="@id/tvMedicine"
+            app:layout_constraintStart_toStartOf="@id/tvMedicine"
+            app:layout_constraintTop_toBottomOf="@id/tvMedicine" />
 
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/ivMedicine"
-        android:layout_width="44dp"
-        android:layout_height="44dp"
-        android:clickable="true"
-        android:focusable="true"
-        app:layout_constraintBottom_toBottomOf="@id/tvMedicineDes"
-        app:layout_constraintEnd_toEndOf="@id/vDivider1"
-        app:layout_constraintTop_toTopOf="@id/tvMedicine"
-        app:srcCompat="@drawable/ic_next_stateful" />
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/ivMedicine"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            app:layout_constraintBottom_toBottomOf="@id/tvMedicineDes"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tvMedicine"
+            app:srcCompat="@drawable/ic_next_stateful" />
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/tvMedicalCare"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dp_6"
-        android:layout_marginEnd="@dimen/dp_8"
-        android:fontFamily="@font/domaine_sans"
-        android:text="@string/transport_to_healthcare"
-        android:textColor="@color/white"
-        android:textSize="24sp"
-        app:layout_constraintEnd_toStartOf="@id/ivMedicalCare"
-        app:layout_constraintStart_toStartOf="@id/vDivider1"
-        app:layout_constraintTop_toBottomOf="@id/tvMedicineDes" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/tvMedicalCareDes"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="2dp"
-        android:fontFamily="@font/grotesk_light_font_family"
-        android:text="@string/i_need_help_traveling_medical_care"
-        android:textColor="@color/silver_chalice"
-        android:textSize="14sp"
-        app:layout_constraintEnd_toEndOf="@id/tvMedicalCare"
-        app:layout_constraintStart_toStartOf="@id/tvMedicalCare"
-        app:layout_constraintTop_toBottomOf="@id/tvMedicalCare" />
-
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/ivMedicalCare"
-        android:layout_width="44dp"
-        android:layout_height="44dp"
-        android:clickable="true"
-        android:focusable="true"
-        app:layout_constraintBottom_toBottomOf="@id/tvMedicalCareDes"
-        app:layout_constraintEnd_toEndOf="@id/vDivider1"
-        app:layout_constraintTop_toTopOf="@id/tvMedicalCare"
-        app:srcCompat="@drawable/ic_next_stateful" />
-
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/tvTravelSafeLocation"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layoutMedicalCare"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp_6"
-        android:layout_marginEnd="@dimen/dp_8"
-        android:fontFamily="@font/domaine_sans"
-        android:text="@string/my_home_is_unsafe"
-        android:textColor="@color/white"
-        android:textSize="24sp"
-        app:layout_constraintEnd_toStartOf="@id/ivMedicalCare"
-        app:layout_constraintStart_toStartOf="@id/vDivider1"
-        app:layout_constraintTop_toBottomOf="@id/tvMedicalCareDes" />
+        app:layout_constraintEnd_toEndOf="@id/layoutMedicine"
+        app:layout_constraintStart_toStartOf="@id/layoutMedicine"
+        app:layout_constraintTop_toBottomOf="@id/layoutMedicine">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvMedicalCare"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/dp_8"
+            android:fontFamily="@font/domaine_sans"
+            android:text="@string/transport_to_healthcare"
+            android:textColor="@color/color_white_stateful"
+            android:textSize="24sp"
+            app:layout_constraintEnd_toStartOf="@id/ivMedicalCare"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/tvTravelSafeLocationDes"
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvMedicalCareDes"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:fontFamily="@font/grotesk_light_font_family"
+            android:text="@string/i_need_help_traveling_medical_care"
+            android:textColor="@color/color_silver_chalice_stateful"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="@id/tvMedicalCare"
+            app:layout_constraintStart_toStartOf="@id/tvMedicalCare"
+            app:layout_constraintTop_toBottomOf="@id/tvMedicalCare" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/ivMedicalCare"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            app:layout_constraintBottom_toBottomOf="@id/tvMedicalCareDes"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tvMedicalCare"
+            app:srcCompat="@drawable/ic_next_stateful" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layoutSafeLocation"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="2dp"
-        android:fontFamily="@font/grotesk_light_font_family"
-        android:text="@string/i_need_help_traveling_safe_location"
-        android:textColor="@color/silver_chalice"
-        android:textSize="14sp"
-        app:layout_constraintEnd_toEndOf="@id/tvTravelSafeLocation"
-        app:layout_constraintStart_toStartOf="@id/tvTravelSafeLocation"
-        app:layout_constraintTop_toBottomOf="@id/tvTravelSafeLocation" />
+        android:layout_marginTop="@dimen/dp_6"
+        app:layout_constraintEnd_toEndOf="@id/layoutMedicalCare"
+        app:layout_constraintStart_toStartOf="@id/layoutMedicalCare"
+        app:layout_constraintTop_toBottomOf="@id/layoutMedicalCare">
 
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/ivTravelSafeLocation"
-        android:layout_width="44dp"
-        android:layout_height="44dp"
-        android:clickable="true"
-        android:focusable="true"
-        app:layout_constraintBottom_toBottomOf="@id/tvTravelSafeLocationDes"
-        app:layout_constraintEnd_toEndOf="@id/vDivider1"
-        app:layout_constraintTop_toTopOf="@id/tvTravelSafeLocation"
-        app:srcCompat="@drawable/ic_next_stateful" />
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvTravelSafeLocation"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/dp_8"
+            android:fontFamily="@font/domaine_sans"
+            android:text="@string/my_home_is_unsafe"
+            android:textColor="@color/color_white_stateful"
+            android:textSize="24sp"
+            app:layout_constraintEnd_toStartOf="@id/ivTravelSafeLocation"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvTravelSafeLocationDes"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:fontFamily="@font/grotesk_light_font_family"
+            android:text="@string/i_need_help_traveling_safe_location"
+            android:textColor="@color/color_silver_chalice_stateful"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="@id/tvTravelSafeLocation"
+            app:layout_constraintStart_toStartOf="@id/tvTravelSafeLocation"
+            app:layout_constraintTop_toBottomOf="@id/tvTravelSafeLocation" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/ivTravelSafeLocation"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            app:layout_constraintBottom_toBottomOf="@id/tvTravelSafeLocationDes"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tvTravelSafeLocation"
+            app:srcCompat="@drawable/ic_next_stateful" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
