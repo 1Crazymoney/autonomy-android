@@ -163,6 +163,7 @@ class LocationService(private val context: Context, private val logger: EventLog
     }
 
     fun stop() {
+        lastReversedLocation = null
         handler.removeCallbacksAndMessages(null)
         fusedLocationClient.removeLocationUpdates(locationUpdateCallback)
     }
