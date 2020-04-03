@@ -99,6 +99,8 @@
     <string name="some_one_has_signed_up_visitor">Someone has already signed up to fulfill this community request.</string>
     <string name="could_not_open_google_map">Could not open Google maps</string>
     <string name="just_now">Just now</string>
+    <string name="check_in_survey">Check-in survey</string>
+    <string name="how_r_u_right_now_tap_to_check_in">How are you right now? Tap to check in.</string>
 
     <!--    string format-->
     <string name="send_to_format">Send to %1$s</string>

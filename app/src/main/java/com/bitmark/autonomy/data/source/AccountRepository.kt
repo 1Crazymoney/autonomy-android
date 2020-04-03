@@ -62,4 +62,6 @@ class AccountRepository(
         }).flatMap { accountData ->
         saveAccountData(accountData).andThen(Single.just(accountData))
     }
+
+    fun checkJwtExpired() = localDataSource.checkJwtExpired()
 }

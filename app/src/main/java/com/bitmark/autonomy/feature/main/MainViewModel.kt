@@ -10,6 +10,7 @@ import androidx.lifecycle.Lifecycle
 import com.bitmark.autonomy.data.source.AssistanceRepository
 import com.bitmark.autonomy.data.source.UserRepository
 import com.bitmark.autonomy.feature.BaseViewModel
+import com.bitmark.autonomy.feature.auth.ServerAuthentication
 import com.bitmark.autonomy.util.livedata.CompositeLiveData
 import com.bitmark.autonomy.util.livedata.RxLiveDataTransformer
 import com.bitmark.autonomy.util.modelview.HelpRequestModelView
@@ -21,7 +22,8 @@ class MainViewModel(
     lifecycle: Lifecycle,
     private val assistanceRepo: AssistanceRepository,
     private val userRepo: UserRepository,
-    private val rxLiveDataTransformer: RxLiveDataTransformer
+    private val rxLiveDataTransformer: RxLiveDataTransformer,
+    private val serverAuth: ServerAuthentication
 ) : BaseViewModel(lifecycle) {
 
     internal val getDataLiveData = CompositeLiveData<Pair<Float, List<HelpRequestModelView>>>()
@@ -41,5 +43,13 @@ class MainViewModel(
                     BiFunction { helpRequests, score -> Pair(score, helpRequests) })
             )
         )
+    }
+
+    fun startServerAuth() {
+        serverAuth.start()
+    }
+
+    fun stopServerAuth() {
+        serverAuth.stop()
     }
 }

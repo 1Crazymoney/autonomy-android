@@ -40,6 +40,17 @@ import javax.inject.Inject
 
 class SplashActivity : BaseAppCompatActivity() {
 
+    companion object {
+        private const val NOTIFICATION_BUNDLE = "notification_bundle"
+
+        fun getBundle(notificationBundle: Bundle? = null) = Bundle().apply {
+            if (notificationBundle != null) putBundle(
+                NOTIFICATION_BUNDLE,
+                notificationBundle
+            )
+        }
+    }
+
     @Inject
     internal lateinit var viewModel: SplashViewModel
 
@@ -171,8 +182,11 @@ class SplashActivity : BaseAppCompatActivity() {
         viewModel.prepareDataLiveData.asLiveData().observe(this, Observer { res ->
             when {
                 res.isSuccess() -> {
+                    val notificationBundle = intent?.extras?.getBundle(NOTIFICATION_BUNDLE)
+                    val notificationId = notificationBundle?.getInt("notification_id") ?: -1
+                    val bundle = MainActivity.getBundle(notificationId)
                     navigator.anim(FADE_IN)
-                        .startActivityAsRoot(MainActivity::class.java)
+                        .startActivityAsRoot(MainActivity::class.java, bundle)
                 }
 
                 res.isError() -> {

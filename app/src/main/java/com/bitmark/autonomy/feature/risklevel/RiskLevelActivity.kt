@@ -16,8 +16,12 @@ import com.bitmark.autonomy.feature.Navigator.Companion.FADE_IN
 import com.bitmark.autonomy.feature.Navigator.Companion.RIGHT_LEFT
 import com.bitmark.autonomy.feature.connectivity.ConnectivityHandler
 import com.bitmark.autonomy.feature.main.MainActivity
+import com.bitmark.autonomy.feature.notification.buildSimpleNotificationBundle
+import com.bitmark.autonomy.feature.notification.pushHalfDayRepeatingNotification
 import com.bitmark.autonomy.logging.Event
 import com.bitmark.autonomy.logging.EventLogger
+import com.bitmark.autonomy.util.Constants.SURVEY_NOTIFICATION_ID
+import com.bitmark.autonomy.util.DateTimeUtil
 import com.bitmark.autonomy.util.ext.*
 import com.bitmark.sdk.authentication.KeyAuthenticationSpec
 import com.bitmark.sdk.features.Account
@@ -101,7 +105,7 @@ class RiskLevelActivity : BaseAppCompatActivity() {
             when {
                 res.isSuccess() -> {
                     progressBar.gone()
-                    // TODO change later
+                    scheduleNotification()
                     navigator.anim(FADE_IN).startActivityAsRoot(MainActivity::class.java)
                     blocked = false
                 }
@@ -126,6 +130,21 @@ class RiskLevelActivity : BaseAppCompatActivity() {
                 }
             }
         })
+    }
+
+    private fun scheduleNotification() {
+        val currentHour = DateTimeUtil.getCurrentHour()
+        val gap = DateTimeUtil.calculateGapMillisTo(if (currentHour in 9..21) 21 else 9)
+        val bundle = buildSimpleNotificationBundle(
+            this,
+            R.string.check_in_survey,
+            R.string.how_r_u_right_now_tap_to_check_in,
+            R.color.colorAccent,
+            SURVEY_NOTIFICATION_ID,
+            MainActivity::class.java
+        )
+        val triggerAt = System.currentTimeMillis() + gap
+        pushHalfDayRepeatingNotification(this, bundle, triggerAt)
     }
 
     private fun enableDone() {

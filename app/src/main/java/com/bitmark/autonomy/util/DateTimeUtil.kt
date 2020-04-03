@@ -89,6 +89,23 @@ class DateTimeUtil {
                 Calendar.YEAR
             ) == thatDate.get(Calendar.YEAR)
         }
+
+        fun calculateGapMillisTo(hour: Int): Long {
+            if (hour < 0 || hour > 23) error("invalid hour value")
+            val calendar = Calendar.getInstance()
+            val now = calendar.timeInMillis
+            val currentHour = calendar.get(Calendar.HOUR_OF_DAY)
+            if (hour < currentHour) {
+                calendar.add(Calendar.DATE, 1)
+            }
+            calendar.set(Calendar.HOUR_OF_DAY, hour)
+            calendar.set(Calendar.MINUTE, 0)
+            calendar.set(Calendar.SECOND, 0)
+            calendar.set(Calendar.MILLISECOND, 0)
+            return calendar.timeInMillis - now
+        }
+
+        fun getCurrentHour() = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
     }
 }
 

@@ -13,6 +13,7 @@ import com.bitmark.autonomy.data.source.local.api.DatabaseApi
 import com.bitmark.autonomy.data.source.local.api.FileStorageApi
 import com.bitmark.autonomy.data.source.local.api.SharedPrefApi
 import io.reactivex.Single
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 
@@ -37,5 +38,9 @@ class AccountLocalDataSource @Inject constructor(
 
     fun clearAccountData() = sharedPrefApi.rxCompletable { sharedPrefGateway ->
         sharedPrefGateway.clear(SharedPrefApi.ACCOUNT_DATA)
+    }
+
+    fun checkJwtExpired() = Single.fromCallable {
+        System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(5) > Jwt.getInstance().expiredAt
     }
 }

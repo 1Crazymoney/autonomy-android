@@ -6,17 +6,14 @@
  */
 package com.bitmark.autonomy.feature.notification
 
-import android.app.Notification
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.app.PendingIntent
+import android.app.*
 import android.content.Context
 import android.content.Intent
-import android.graphics.BitmapFactory
-import android.graphics.Color
 import android.media.RingtoneManager
 import android.os.Build
 import android.os.Bundle
+import androidx.annotation.ColorInt
+import androidx.annotation.ColorRes
 import androidx.annotation.StringRes
 import androidx.core.app.NotificationCompat
 import com.bitmark.autonomy.R
@@ -24,13 +21,17 @@ import com.bitmark.autonomy.feature.splash.SplashActivity
 import com.bitmark.autonomy.util.ext.getResIdentifier
 
 fun buildSimpleNotificationBundle(
-    context: Context, @StringRes title: Int, @StringRes message: Int,
+    context: Context,
+    @StringRes title: Int,
+    @StringRes message: Int,
+    @ColorRes color: Int = R.color.colorAccent,
     notificationId: Int = 0,
     receiver: Class<*> = SplashActivity::class.java
 ): Bundle {
     return buildSimpleNotificationBundle(
         context.getString(title),
         context.getString(message),
+        context.getColor(color),
         notificationId,
         receiver
     )
@@ -39,6 +40,7 @@ fun buildSimpleNotificationBundle(
 fun buildSimpleNotificationBundle(
     title: String,
     message: String,
+    @ColorInt color: Int,
     notificationId: Int = 0,
     receiver: Class<*> = SplashActivity::class.java
 ): Bundle {
@@ -46,6 +48,7 @@ fun buildSimpleNotificationBundle(
     bundle.putString("title", title)
     bundle.putString("message", message)
     bundle.putString("receiver", receiver.name)
+    bundle.putInt("color", color)
     bundle.putInt("notification_id", notificationId)
     return bundle
 }
@@ -53,12 +56,13 @@ fun buildSimpleNotificationBundle(
 fun buildProgressNotificationBundle(
     title: String,
     message: String,
+    @ColorInt color: Int,
     notificationId: Int,
     receiver: Class<*> = SplashActivity::class.java,
     maxProgress: Int = -1,
     currentProgress: Int = -1
 ): Bundle {
-    val bundle = buildSimpleNotificationBundle(title, message, notificationId, receiver)
+    val bundle = buildSimpleNotificationBundle(title, message, color, notificationId, receiver)
     bundle.putBoolean("progress", true)
     bundle.putInt("max_progress", maxProgress)
     bundle.putInt("current_progress", currentProgress)
@@ -105,16 +109,10 @@ fun buildNotification(context: Context, bundle: Bundle): Notification {
 
     val icon =
         context.getResIdentifier(bundle.getString("icon", ""), "drawable")
-    notificationBuilder.setSmallIcon(if (icon != null && icon > 0) icon else R.drawable.ic_stat_onesignal_default)
-    notificationBuilder.setLargeIcon(
-        BitmapFactory.decodeResource(
-            context.resources,
-            if (icon != null && icon > 0) icon else R.drawable.ic_onesignal_large_icon_default
-        )
-    )
+    notificationBuilder.setSmallIcon(if (icon != null && icon > 0) icon else R.mipmap.ic_stat_onesignal_default)
 
     val color = try {
-        Color.parseColor(bundle.getString("color", ""))
+        bundle.getInt("color", context.getColor(R.color.colorAccent))
     } catch (e: Throwable) {
         null
     }
@@ -149,4 +147,24 @@ fun cancelNotification(context: Context, id: Int) {
     val notificationManager =
         context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
     notificationManager.cancel(id)
+}
+
+fun pushHalfDayRepeatingNotification(
+    context: Context,
+    bundle: Bundle,
+    triggerAtMillis: Long = System.currentTimeMillis() + AlarmManager.INTERVAL_HALF_DAY,
+    requestCode: Int = 0x00
+) {
+    val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+    val intent = Intent(context, ScheduledNotificationReceiver::class.java)
+    intent.putExtras(bundle)
+    val pendingIntent =
+        PendingIntent.getBroadcast(context, requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+    alarmManager.setRepeating(
+        AlarmManager.RTC_WAKEUP,
+        triggerAtMillis,
+        AlarmManager.INTERVAL_HALF_DAY,
+        pendingIntent
+    )
+
 }

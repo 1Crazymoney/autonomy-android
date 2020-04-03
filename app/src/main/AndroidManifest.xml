@@ -69,5 +69,8 @@
         <meta-data
             android:name="io.sentry.dsn"
             android:value="https://99b0fdab83fb432a92791b715267da15@sentry.io/5174225" />
+
+        <receiver android:name=".feature.notification.ScheduledNotificationReceiver" />
+
     </application>
 </manifest>

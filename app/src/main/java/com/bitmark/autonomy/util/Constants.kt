@@ -9,4 +9,6 @@ package com.bitmark.autonomy.util
 object Constants {
 
     const val GOOGLE_PLAY_HOST = "play.google.com"
+
+    const val SURVEY_NOTIFICATION_ID = 0x1A
 }
