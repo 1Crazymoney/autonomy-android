@@ -113,12 +113,16 @@ fun DateTimeUtil.Companion.formatAgo(context: Context, dateString: String): Stri
             )
         }
 
-        else -> {
+        gap > TimeUnit.MINUTES.toMillis(1) -> {
             val mins = gap / TimeUnit.MINUTES.toMillis(1)
             String.format(
                 context.getString(if (mins > 1) R.string.mins_ago_format else R.string.min_ago_format),
                 mins
             )
+        }
+
+        else -> {
+            context.getString(R.string.just_now)
         }
     }
 

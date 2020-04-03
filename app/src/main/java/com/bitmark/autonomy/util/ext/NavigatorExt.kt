@@ -168,9 +168,9 @@ fun Navigator.openKeyGuardConfirmation(
     startActivityForResult(intent, requestCode)
 }
 
-fun Navigator.openGoogleMap(context: Context, place: String, error: (Throwable) -> Unit = {}) {
+fun Navigator.openGoogleMapDirection(context: Context, place: String, error: (Throwable) -> Unit = {}) {
     try {
-        val uri = Uri.parse(Uri.encode(place))
+        val uri = Uri.parse("google.navigation:q=" + Uri.encode(place))
         val intent = Intent(Intent.ACTION_VIEW, uri)
         intent.setPackage("com.google.android.apps.maps")
         if (intent.resolveActivity(context.packageManager) != null) {
