@@ -49,6 +49,8 @@ class LocationService(private val context: Context, private val logger: EventLog
 
     private var lastReversedLocation: Location? = null
 
+    private var lastKnownPlace = ""
+
     private val locationUpdateCallback = object : LocationCallback() {
         override fun onLocationResult(result: LocationResult?) {
             super.onLocationResult(result)
@@ -61,6 +63,7 @@ class LocationService(private val context: Context, private val logger: EventLog
                     val reverseFunc = fun(l: Location) {
                         reverseGeoCoding(l) { place ->
                             Log.d(TAG, "place changed: $place")
+                            lastKnownPlace = place
                             notifyPlaceChanged(place)
                             lastReversedLocation = l
                         }
@@ -79,6 +82,7 @@ class LocationService(private val context: Context, private val logger: EventLog
         getLastKnownLocation { l ->
             if (l == null) return@getLastKnownLocation
             listener.onLocationChanged(l)
+            listener.onPlaceChanged(lastKnownPlace)
         }
     }
 
