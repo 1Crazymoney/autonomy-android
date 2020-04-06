@@ -15,7 +15,6 @@ import com.bitmark.autonomy.feature.BaseAppCompatActivity
 import com.bitmark.autonomy.feature.BaseViewModel
 import com.bitmark.autonomy.feature.DialogController
 import com.bitmark.autonomy.feature.Navigator
-import com.bitmark.autonomy.feature.Navigator.Companion.FADE_IN
 import com.bitmark.autonomy.feature.Navigator.Companion.RIGHT_LEFT
 import com.bitmark.autonomy.feature.connectivity.ConnectivityHandler
 import com.bitmark.autonomy.logging.Event
@@ -119,7 +118,7 @@ class SymptomReportActivity : BaseAppCompatActivity() {
             when {
                 res.isSuccess() -> {
                     progressBar.gone()
-                    navigator.anim(FADE_IN).finishActivity()
+                    navigator.anim(RIGHT_LEFT).finishActivity()
                     blocked = false
                 }
 
