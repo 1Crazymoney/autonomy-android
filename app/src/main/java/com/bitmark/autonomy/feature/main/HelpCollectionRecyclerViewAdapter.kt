@@ -42,6 +42,8 @@ class HelpCollectionRecyclerViewAdapter :
 
     fun isEmpty() = items.isEmpty()
 
+    fun finItemById(id: String) = items.find { i -> i.id == id }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
             LayoutInflater.from(parent.context).inflate(

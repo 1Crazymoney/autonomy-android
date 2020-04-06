@@ -28,6 +28,8 @@ import com.bitmark.autonomy.feature.Navigator.Companion.FADE_IN
 import com.bitmark.autonomy.feature.Navigator.Companion.NONE
 import com.bitmark.autonomy.feature.Navigator.Companion.RIGHT_LEFT
 import com.bitmark.autonomy.feature.main.MainActivity
+import com.bitmark.autonomy.feature.notification.NotificationId
+import com.bitmark.autonomy.feature.notification.NotificationPayloadType
 import com.bitmark.autonomy.feature.onboarding.OnboardingContainerActivity
 import com.bitmark.autonomy.logging.Event
 import com.bitmark.autonomy.logging.EventLogger
@@ -39,17 +41,6 @@ import javax.inject.Inject
 
 
 class SplashActivity : BaseAppCompatActivity() {
-
-    companion object {
-        private const val NOTIFICATION_BUNDLE = "notification_bundle"
-
-        fun getBundle(notificationBundle: Bundle? = null) = Bundle().apply {
-            if (notificationBundle != null) putBundle(
-                NOTIFICATION_BUNDLE,
-                notificationBundle
-            )
-        }
-    }
 
     @Inject
     internal lateinit var viewModel: SplashViewModel
@@ -182,9 +173,28 @@ class SplashActivity : BaseAppCompatActivity() {
         viewModel.prepareDataLiveData.asLiveData().observe(this, Observer { res ->
             when {
                 res.isSuccess() -> {
-                    val notificationBundle = intent?.extras?.getBundle(NOTIFICATION_BUNDLE)
-                    val notificationId = notificationBundle?.getInt("notification_id") ?: -1
-                    val bundle = MainActivity.getBundle(notificationId)
+                    val notificationBundle = intent?.extras?.getBundle("notification")
+                    if (notificationBundle != null) {
+                        var notificationId = notificationBundle.getInt("notification_id")
+                        notificationId = if (notificationId == 0) {
+                            when (val notificationType =
+                                notificationBundle.get(NotificationPayloadType.NOTIFICATION_TYPE)) {
+                                "BROADCAST_NEW_HELP" -> NotificationId.NEW_HELP_REQUEST
+                                "NOTIFY_HELP_ACCEPTED" -> NotificationId.ACCEPTED_HELP_REQUEST
+                                else -> {
+                                    logger.logError(
+                                        Event.NOTIFICATION_HANDLING_ERROR,
+                                        "invalid notification type: $notificationType"
+                                    )
+                                    0
+                                }
+                            }
+                        } else {
+                            notificationId
+                        }
+                        notificationBundle.putInt("notification_id", notificationId)
+                    }
+                    val bundle = MainActivity.getBundle(notificationBundle)
                     navigator.anim(FADE_IN)
                         .startActivityAsRoot(MainActivity::class.java, bundle)
                 }

@@ -39,6 +39,9 @@ interface AutonomyApi {
     @GET("api/helps")
     fun listHelpRequest(): Single<Map<String, List<HelpRequestData>>>
 
+    @GET("api/helps/{id}")
+    fun getHelpRequest(@Path("id") id: String): Single<Map<String, HelpRequestData>>
+
     @PATCH("api/helps/{id}")
     fun respondHelpRequest(@Path("id") id: String): Completable
 
@@ -49,6 +52,6 @@ interface AutonomyApi {
     fun reportSymptoms(@Body body: RequestBody): Completable
 
     @GET("api/score")
-    fun getHealthScore() : Single<Map<String, Float>>
+    fun getHealthScore(): Single<Map<String, Float>>
 
 }

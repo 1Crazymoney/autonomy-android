@@ -109,7 +109,7 @@ fun buildNotification(context: Context, bundle: Bundle): Notification {
 
     val icon =
         context.getResIdentifier(bundle.getString("icon", ""), "drawable")
-    notificationBuilder.setSmallIcon(if (icon != null && icon > 0) icon else R.mipmap.ic_stat_onesignal_default)
+    notificationBuilder.setSmallIcon(if (icon != null && icon > 0) icon else R.drawable.ic_stat_onesignal_default)
 
     val color = try {
         bundle.getInt("color", context.getColor(R.color.colorAccent))

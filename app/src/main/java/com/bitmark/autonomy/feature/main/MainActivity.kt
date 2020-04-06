@@ -21,15 +21,14 @@ import com.bitmark.autonomy.feature.BaseAppCompatActivity
 import com.bitmark.autonomy.feature.BaseViewModel
 import com.bitmark.autonomy.feature.DialogController
 import com.bitmark.autonomy.feature.Navigator
-import com.bitmark.autonomy.feature.Navigator.Companion.FADE_IN
 import com.bitmark.autonomy.feature.Navigator.Companion.RIGHT_LEFT
 import com.bitmark.autonomy.feature.location.LocationService
+import com.bitmark.autonomy.feature.notification.NotificationId
+import com.bitmark.autonomy.feature.notification.NotificationPayloadType
 import com.bitmark.autonomy.feature.respondhelp.RespondHelpActivity
-import com.bitmark.autonomy.feature.splash.SplashActivity
 import com.bitmark.autonomy.feature.survey.SurveyContainerActivity
 import com.bitmark.autonomy.logging.Event
 import com.bitmark.autonomy.logging.EventLogger
-import com.bitmark.autonomy.util.Constants
 import com.bitmark.autonomy.util.ext.gone
 import com.bitmark.autonomy.util.ext.openAppSetting
 import com.bitmark.autonomy.util.ext.setImageResource
@@ -47,10 +46,15 @@ class MainActivity : BaseAppCompatActivity() {
 
         private val SURVEY_INTERVAL = TimeUnit.MINUTES.toMillis(10)
 
-        private const val NOTIFICATION_ID = "notification_id"
+        private const val NOTIFICATION_BUNDLE = "notification_bundle"
 
-        fun getBundle(notificationId: Int? = null) =
-            Bundle().apply { if (notificationId != null) putInt(NOTIFICATION_ID, notificationId) }
+        fun getBundle(notificationBundle: Bundle? = null) =
+            Bundle().apply {
+                if (notificationBundle != null) putBundle(
+                    NOTIFICATION_BUNDLE,
+                    notificationBundle
+                )
+            }
     }
 
     @Inject
@@ -102,7 +106,6 @@ class MainActivity : BaseAppCompatActivity() {
 
     private fun goToSurveyIfSatisfied() {
         if (!locationService.isPermissionGranted(this)
-            || getNotificationBundle() != null
             || (lastSurveyTimestamp != -1L && System.currentTimeMillis() - lastSurveyTimestamp < SURVEY_INTERVAL)
         ) return
         handler.postDelayed({
@@ -123,35 +126,19 @@ class MainActivity : BaseAppCompatActivity() {
         helpRequestAdapter.setItemClickListener(object :
             HelpCollectionRecyclerViewAdapter.ItemClickListener {
             override fun onItemClicked(item: HelpRequestModelView) {
-                val bundle = RespondHelpActivity.getBundle(item)
-                navigator.anim(RIGHT_LEFT).startActivity(RespondHelpActivity::class.java, bundle)
+                goToRespondHelp(item)
             }
         })
 
         val layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
         rvHelp.layoutManager = layoutManager
         rvHelp.adapter = helpRequestAdapter
-
-        val notificationId = intent?.extras?.getInt(NOTIFICATION_ID)
-        if (notificationId == Constants.SURVEY_NOTIFICATION_ID) {
-            goToSurveyIfSatisfied()
-        }
     }
 
-    override fun onNewIntent(intent: Intent?) {
-        super.onNewIntent(intent)
-        val notificationBundle = getNotificationBundle()
-        if (notificationBundle != null) {
-            handleNotification(notificationBundle)
-        }
+    private fun goToRespondHelp(item: HelpRequestModelView) {
+        val bundle = RespondHelpActivity.getBundle(item)
+        navigator.anim(RIGHT_LEFT).startActivity(RespondHelpActivity::class.java, bundle)
     }
-
-    private fun handleNotification(notificationBundle: Bundle) {
-        val bundle = SplashActivity.getBundle(notificationBundle)
-        navigator.anim(FADE_IN).startActivityAsRoot(SplashActivity::class.java, bundle)
-    }
-
-    private fun getNotificationBundle() = intent?.extras?.getBundle("notification")
 
     override fun observe() {
         super.observe()
@@ -178,25 +165,40 @@ class MainActivity : BaseAppCompatActivity() {
                 }
             }
         })
+
+        viewModel.getHelpRequestLiveData.asLiveData().observe(this, Observer { res ->
+            when {
+                res.isSuccess() -> {
+                    progressBar.gone()
+                    goToRespondHelp(res.data()!!)
+                }
+
+                res.isError() -> {
+                    logger.logError(Event.HELP_REQUEST_GETTING_ERROR, res.throwable())
+                    progressBar.gone()
+                }
+
+                res.isLoading() -> {
+                    progressBar.visible()
+                }
+            }
+        })
     }
 
     override fun onStart() {
         super.onStart()
-        val notificationBundle = getNotificationBundle()
-        if (notificationBundle == null) {
-            locationService.requestPermission(this, grantedCallback = {
-                startLocationService()
-            }, permanentlyDeniedCallback = {
-                dialogController.alert(
-                    R.string.access_to_location_required,
-                    R.string.autonomy_requires_access_to_your_location
-                ) {
-                    navigator.openAppSetting(this)
-                }
-            })
-            locationService.addLocationChangeListener(locationChangedListener)
-            if (lastKnownLocation != null) viewModel.getData()
-        }
+        locationService.requestPermission(this, grantedCallback = {
+            startLocationService()
+        }, permanentlyDeniedCallback = {
+            dialogController.alert(
+                R.string.access_to_location_required,
+                R.string.autonomy_requires_access_to_your_location
+            ) {
+                navigator.openAppSetting(this)
+            }
+        })
+        locationService.addLocationChangeListener(locationChangedListener)
+        if (lastKnownLocation != null) viewModel.getData()
     }
 
     private fun startLocationService() {
@@ -214,14 +216,26 @@ class MainActivity : BaseAppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val notificationBundle = getNotificationBundle()
+        val notificationBundle = intent?.extras?.getBundle(NOTIFICATION_BUNDLE)
         if (notificationBundle != null) {
-            handleNotification(notificationBundle)
+            when (notificationBundle.getInt("notification_id")) {
+                NotificationId.SURVEY -> goToSurveyIfSatisfied()
+                NotificationId.NEW_HELP_REQUEST, NotificationId.ACCEPTED_HELP_REQUEST -> {
+                    val helpId =
+                        notificationBundle.getString(NotificationPayloadType.HELP_ID) ?: return
+                    val item = helpRequestAdapter.finItemById(helpId)
+                    if (item != null) {
+                        goToRespondHelp(item)
+                    } else {
+                        viewModel.getHelpRequest(helpId)
+                    }
+                }
+            }
         } else {
-            appLifecycleHandler.addAppStateChangedListener(appStateChangedListener)
-            viewModel.startServerAuth()
             goToSurveyIfSatisfied()
         }
+        appLifecycleHandler.addAppStateChangedListener(appStateChangedListener)
+        viewModel.startServerAuth()
     }
 
     override fun onDestroy() {
@@ -237,6 +251,5 @@ class MainActivity : BaseAppCompatActivity() {
             startLocationService()
         }
     }
-
 
 }

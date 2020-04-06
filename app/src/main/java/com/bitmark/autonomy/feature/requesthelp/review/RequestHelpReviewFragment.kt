@@ -14,10 +14,8 @@ import com.bitmark.autonomy.feature.BaseSupportFragment
 import com.bitmark.autonomy.feature.BaseViewModel
 import com.bitmark.autonomy.feature.DialogController
 import com.bitmark.autonomy.feature.Navigator
-import com.bitmark.autonomy.feature.Navigator.Companion.FADE_IN
 import com.bitmark.autonomy.feature.Navigator.Companion.RIGHT_LEFT
 import com.bitmark.autonomy.feature.connectivity.ConnectivityHandler
-import com.bitmark.autonomy.feature.main.MainActivity
 import com.bitmark.autonomy.feature.requesthelp.RequestHelpData
 import com.bitmark.autonomy.feature.requesthelp.resId
 import com.bitmark.autonomy.util.DateTimeUtil
@@ -111,7 +109,7 @@ class RequestHelpReviewFragment : BaseSupportFragment() {
                         R.string.got_it
                     )
                     dialog.setOnDismissListener {
-                        navigator.anim(FADE_IN).startActivityAsRoot(MainActivity::class.java)
+                        navigator.anim(RIGHT_LEFT).finishActivity()
                     }
                     dialog.show()
                     blocked = false

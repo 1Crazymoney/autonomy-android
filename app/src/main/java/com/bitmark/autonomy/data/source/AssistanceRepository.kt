@@ -20,5 +20,7 @@ class AssistanceRepository(private val remoteDataSource: AssistanceRemoteDataSou
 
     fun listHelpRequest() = remoteDataSource.listHelpRequest()
 
+    fun getHelpRequest(id: String) = remoteDataSource.getHelpRequest(id)
+
     fun respondHelpRequest(id: String) = remoteDataSource.respondHelpRequest(id)
 }

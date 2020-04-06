@@ -28,6 +28,8 @@ class MainViewModel(
 
     internal val getDataLiveData = CompositeLiveData<Pair<Float, List<HelpRequestModelView>>>()
 
+    internal val getHelpRequestLiveData = CompositeLiveData<HelpRequestModelView>()
+
     fun getData() {
 
         val listHelpStream = assistanceRepo.listHelpRequest()
@@ -42,6 +44,13 @@ class MainViewModel(
                     getScoreStream,
                     BiFunction { helpRequests, score -> Pair(score, helpRequests) })
             )
+        )
+    }
+
+    fun getHelpRequest(id: String) {
+        getHelpRequestLiveData.add(
+            rxLiveDataTransformer.single(assistanceRepo.getHelpRequest(id)
+                .map { h -> HelpRequestModelView.newInstance(h) })
         )
     }
 

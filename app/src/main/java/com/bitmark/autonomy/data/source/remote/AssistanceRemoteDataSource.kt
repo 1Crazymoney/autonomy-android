@@ -36,6 +36,10 @@ class AssistanceRemoteDataSource @Inject constructor(
         res["result"] ?: error("invalid response format")
     }.subscribeOn(Schedulers.io())
 
+    fun getHelpRequest(id: String) = autonomyApi.getHelpRequest(id).map { res ->
+        res["result"] ?: error("invalid response format")
+    }.subscribeOn(Schedulers.io())
+
     fun respondHelpRequest(id: String) =
         autonomyApi.respondHelpRequest(id).subscribeOn(Schedulers.io())
 
