@@ -36,12 +36,16 @@ import com.bitmark.autonomy.util.ext.setImageResource
 import com.bitmark.autonomy.util.ext.visible
 import com.bitmark.autonomy.util.modelview.HelpRequestModelView
 import kotlinx.android.synthetic.main.activity_main.*
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class MainActivity : BaseAppCompatActivity() {
 
     companion object {
+
         private const val LOCATION_SETTING_CODE = 0xAE
+
+        private val SURVEY_INTERVAL = TimeUnit.MINUTES.toMillis(10)
 
         private const val NOTIFICATION_ID = "notification_id"
 
@@ -73,6 +77,8 @@ class MainActivity : BaseAppCompatActivity() {
 
     private var lastKnownLocation: Location? = null
 
+    private var lastSurveyTimestamp = -1L
+
     private val locationChangedListener = object : LocationService.LocationChangedListener {
 
         override fun onPlaceChanged(place: String) {
@@ -95,9 +101,13 @@ class MainActivity : BaseAppCompatActivity() {
     }
 
     private fun goToSurveyIfSatisfied() {
-        if (!locationService.isPermissionGranted(this) || getNotificationBundle() != null) return
+        if (!locationService.isPermissionGranted(this)
+            || getNotificationBundle() != null
+            || (lastSurveyTimestamp != -1L && System.currentTimeMillis() - lastSurveyTimestamp < SURVEY_INTERVAL)
+        ) return
         handler.postDelayed({
             navigator.anim(RIGHT_LEFT).startActivity(SurveyContainerActivity::class.java)
+            lastSurveyTimestamp = System.currentTimeMillis()
         }, 200)
     }
 
@@ -210,6 +220,7 @@ class MainActivity : BaseAppCompatActivity() {
         } else {
             appLifecycleHandler.addAppStateChangedListener(appStateChangedListener)
             viewModel.startServerAuth()
+            goToSurveyIfSatisfied()
         }
     }
 
