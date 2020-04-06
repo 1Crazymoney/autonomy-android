@@ -25,24 +25,32 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <View
-        android:layout_width="@dimen/dp_124"
+        android:id="@+id/vToolbar1"
+        android:layout_width="0dp"
         android:layout_height="@dimen/dp_3"
         android:layout_marginTop="@dimen/dp_4"
         android:layout_marginEnd="@dimen/dp_4"
         android:background="@drawable/ic_double_line"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="@id/tvTitle"
+        app:layout_constraintEnd_toStartOf="@id/tvTitle"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/tvTitle" />
+        app:layout_constraintTop_toTopOf="@id/tvTitle"
+        tools:visibility="visible" />
 
     <View
-        android:layout_width="@dimen/dp_124"
+        android:id="@+id/vToolbar2"
+        android:layout_width="0dp"
         android:layout_height="@dimen/dp_3"
         android:layout_marginStart="@dimen/dp_4"
         android:layout_marginTop="@dimen/dp_4"
         android:background="@drawable/ic_double_line"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="@id/tvTitle"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/tvTitle" />
+        app:layout_constraintStart_toEndOf="@id/tvTitle"
+        app:layout_constraintTop_toTopOf="@id/tvTitle"
+        tools:visibility="visible" />
 
 
     <ScrollView

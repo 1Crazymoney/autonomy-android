@@ -24,24 +24,26 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        tools:text="Super long title"
         tools:visibility="visible" />
 
     <View
         android:id="@+id/vToolbar1"
-        android:layout_width="@dimen/dp_124"
+        android:layout_width="0dp"
         android:layout_height="@dimen/dp_3"
         android:layout_marginTop="@dimen/dp_4"
         android:layout_marginEnd="@dimen/dp_4"
         android:background="@drawable/ic_double_line"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="@id/tvTitle"
+        app:layout_constraintEnd_toStartOf="@id/tvTitle"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/tvTitle"
         tools:visibility="visible" />
 
     <View
         android:id="@+id/vToolbar2"
-        android:layout_width="@dimen/dp_124"
+        android:layout_width="0dp"
         android:layout_height="@dimen/dp_3"
         android:layout_marginStart="@dimen/dp_4"
         android:layout_marginTop="@dimen/dp_4"
@@ -49,35 +51,22 @@
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="@id/tvTitle"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/tvTitle"
         app:layout_constraintTop_toTopOf="@id/tvTitle"
         tools:visibility="visible" />
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/tvSlogan1"
-        android:layout_width="wrap_content"
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/ivSlogan"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dp_62"
-        android:fontFamily="@font/grotesk_light_font_family"
-        android:includeFontPadding="false"
-        android:text="@string/get_better_dot"
-        android:textColor="@color/white"
-        android:textSize="@dimen/sp_64"
+        android:layout_marginStart="@dimen/dp_14"
+        android:layout_marginTop="62dp"
+        android:layout_marginEnd="@dimen/dp_14"
+        android:adjustViewBounds="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvTitle" />
-
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/tvSlogan2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/grotesk_light_font_family"
-        android:includeFontPadding="false"
-        android:text="@string/together_dot"
-        android:textColor="@color/white"
-        android:textSize="@dimen/sp_64"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvSlogan1" />
+        app:layout_constraintTop_toBottomOf="@id/tvTitle"
+        app:srcCompat="@drawable/ic_slogan" />
 
     <androidx.appcompat.widget.AppCompatImageView
         android:layout_width="wrap_content"
@@ -87,7 +76,7 @@
         app:layout_constraintBottom_toTopOf="@id/tvPP"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvSlogan2"
+        app:layout_constraintTop_toBottomOf="@id/ivSlogan"
         app:srcCompat="@drawable/ic_polygon_green" />
 
     <androidx.appcompat.widget.AppCompatTextView
