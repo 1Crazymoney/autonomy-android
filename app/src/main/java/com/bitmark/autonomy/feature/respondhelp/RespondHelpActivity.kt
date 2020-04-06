@@ -9,6 +9,8 @@ package com.bitmark.autonomy.feature.respondhelp
 import android.os.Bundle
 import androidx.lifecycle.Observer
 import com.bitmark.autonomy.R
+import com.bitmark.autonomy.data.source.remote.api.error.HttpException
+import com.bitmark.autonomy.data.source.remote.api.error.errorCode
 import com.bitmark.autonomy.feature.BaseAppCompatActivity
 import com.bitmark.autonomy.feature.BaseViewModel
 import com.bitmark.autonomy.feature.DialogController
@@ -126,7 +128,19 @@ class RespondHelpActivity : BaseAppCompatActivity() {
                     progressBar.gone()
                     logger.logError(Event.HELP_REQUEST_RESPOND_ERROR, res.throwable())
                     if (connectivityHandler.isConnected()) {
-                        dialogController.alert(R.string.error, R.string.could_not_sign_up_request)
+                        if ((res.throwable() as? HttpException)?.errorCode == 1100) {
+                            dialogController.alert(
+                                R.string.someone_just_signed_up,
+                                R.string.thanks_so_much_for_your_eagerness
+                            ) {
+                                navigator.anim(RIGHT_LEFT).finishActivity()
+                            }
+                        } else {
+                            dialogController.alert(
+                                R.string.error,
+                                R.string.could_not_sign_up_request
+                            )
+                        }
                     } else {
                         dialogController.showNoInternetConnection()
                     }

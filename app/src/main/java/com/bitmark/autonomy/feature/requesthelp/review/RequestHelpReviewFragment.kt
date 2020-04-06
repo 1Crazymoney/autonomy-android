@@ -10,6 +10,8 @@ import android.content.Context
 import android.os.Bundle
 import androidx.lifecycle.Observer
 import com.bitmark.autonomy.R
+import com.bitmark.autonomy.data.source.remote.api.error.HttpException
+import com.bitmark.autonomy.data.source.remote.api.error.errorCode
 import com.bitmark.autonomy.feature.BaseSupportFragment
 import com.bitmark.autonomy.feature.BaseViewModel
 import com.bitmark.autonomy.feature.DialogController
@@ -121,10 +123,19 @@ class RequestHelpReviewFragment : BaseSupportFragment() {
                     if (!connectivityHandler.isConnected()) {
                         dialogController.showNoInternetConnection()
                     } else {
-                        dialogController.alert(
-                            R.string.error,
-                            R.string.could_not_broadcast_your_request
-                        )
+                        if ((res.throwable() as? HttpException)?.errorCode == 1201) {
+                            dialogController.alert(
+                                R.string.only_one_help_request_allowed,
+                                R.string.sorry_u_already_have_a_outstanding_help_request
+                            ) {
+                                navigator.anim(RIGHT_LEFT).finishActivity()
+                            }
+                        } else {
+                            dialogController.alert(
+                                R.string.error,
+                                R.string.could_not_broadcast_your_request
+                            )
+                        }
                     }
                     blocked = false
                 }

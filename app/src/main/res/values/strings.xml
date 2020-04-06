@@ -101,6 +101,10 @@
     <string name="just_now">Just now</string>
     <string name="check_in_survey">Check-in survey</string>
     <string name="how_r_u_right_now_tap_to_check_in">How are you right now? Tap to check in.</string>
+    <string name="only_one_help_request_allowed">Only One Help Request Allowed</string>
+    <string name="sorry_u_already_have_a_outstanding_help_request">Sorry, but you already have an outstanding help request to your community. Currently, our system only supports one request at a time for each community member.</string>
+    <string name="someone_just_signed_up">Someone Just Signed Up</string>
+    <string name="thanks_so_much_for_your_eagerness">Thanks so much for your eagerness to help out, but another community member just signed up for this request.</string>
 
     <!--    string format-->
     <string name="send_to_format">Send to %1$s</string>
