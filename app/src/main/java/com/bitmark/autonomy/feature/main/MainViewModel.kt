@@ -42,11 +42,10 @@ class MainViewModel(
         listHelpRequestLiveData.add(
             rxLiveDataTransformer.single(assistanceRepo.listHelpRequest()
                 .map { helpRequests ->
-                    helpRequests.map { h ->
-                        HelpRequestModelView.newInstance(
-                            h
-                        )
-                    }
+                    helpRequests.sortedByDescending { h -> h.createdAt }
+                        .map { h ->
+                            HelpRequestModelView.newInstance(h)
+                        }
                 })
         )
     }
