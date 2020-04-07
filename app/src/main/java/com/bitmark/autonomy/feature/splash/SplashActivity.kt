@@ -7,13 +7,11 @@
 package com.bitmark.autonomy.feature.splash
 
 import android.graphics.Color
-import android.graphics.Typeface
 import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
-import android.text.style.StyleSpan
 import android.view.View
 import androidx.lifecycle.Observer
 import com.bitmark.autonomy.BuildConfig
@@ -87,12 +85,6 @@ class SplashActivity : BaseAppCompatActivity() {
             endIndex,
             Spannable.SPAN_INCLUSIVE_EXCLUSIVE
         )
-        spannableString.setSpan(
-            StyleSpan(Typeface.ITALIC),
-            startIndex,
-            endIndex,
-            Spannable.SPAN_INCLUSIVE_EXCLUSIVE
-        )
 
         startIndex = tosAndPpString.indexOf(ppString)
         endIndex = startIndex + ppString.length
@@ -104,12 +96,6 @@ class SplashActivity : BaseAppCompatActivity() {
                 }
 
             }, startIndex,
-            endIndex,
-            Spannable.SPAN_INCLUSIVE_EXCLUSIVE
-        )
-        spannableString.setSpan(
-            StyleSpan(Typeface.ITALIC),
-            startIndex,
             endIndex,
             Spannable.SPAN_INCLUSIVE_EXCLUSIVE
         )

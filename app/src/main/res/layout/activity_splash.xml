@@ -13,9 +13,11 @@
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tvTitle"
-        android:layout_width="wrap_content"
+        android:layout_width="@dimen/dp_105"
         android:layout_height="wrap_content"
         android:fontFamily="@font/domaine_sans"
+        android:gravity="center"
+        android:maxLines="1"
         android:text="@string/autonomy"
         android:textAllCaps="true"
         android:textColor="@color/silver_2"
@@ -24,7 +26,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="Super long title"
         tools:visibility="visible" />
 
     <View
@@ -55,18 +56,22 @@
         app:layout_constraintTop_toTopOf="@id/tvTitle"
         tools:visibility="visible" />
 
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/ivSlogan"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/dp_14"
-        android:layout_marginTop="62dp"
-        android:layout_marginEnd="@dimen/dp_14"
-        android:adjustViewBounds="true"
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvSlogan"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_166"
+        android:layout_marginTop="@dimen/dp_52"
+        android:fontFamily="@font/grotesk_light_font_family"
+        android:gravity="center"
+        android:includeFontPadding="false"
+        android:text="@string/get_better_dot"
+        android:textColor="@color/white"
+        app:autoSizeMaxTextSize="@dimen/sp_64"
+        app:autoSizeMinTextSize="@dimen/sp_48"
+        app:autoSizeTextType="uniform"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvTitle"
-        app:srcCompat="@drawable/ic_slogan" />
+        app:layout_constraintTop_toBottomOf="@id/tvTitle" />
 
     <androidx.appcompat.widget.AppCompatImageView
         android:layout_width="wrap_content"
@@ -76,7 +81,7 @@
         app:layout_constraintBottom_toTopOf="@id/tvPP"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/ivSlogan"
+        app:layout_constraintTop_toBottomOf="@id/tvSlogan"
         app:srcCompat="@drawable/ic_polygon_green" />
 
     <androidx.appcompat.widget.AppCompatTextView

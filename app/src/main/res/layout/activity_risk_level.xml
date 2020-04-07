@@ -13,9 +13,10 @@
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tvTitle"
-        android:layout_width="wrap_content"
+        android:layout_width="@dimen/dp_105"
         android:layout_height="wrap_content"
         android:fontFamily="@font/domaine_sans"
+        android:gravity="center"
         android:text="@string/risk_level"
         android:textAllCaps="true"
         android:textColor="@color/silver_2"
@@ -54,7 +55,7 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="@dimen/dp_24"
         android:scrollbars="vertical"
         app:layout_constraintBottom_toTopOf="@id/layoutBack"
         app:layout_constraintTop_toBottomOf="@id/tvTitle">
@@ -66,17 +67,17 @@
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/tvSlogan"
                 android:layout_width="wrap_content"
-                android:layout_height="130dp"
-                android:layout_marginBottom="24dp"
+                android:layout_height="@dimen/dp_130"
+                android:layout_marginBottom="@dimen/dp_24"
                 android:fontFamily="@font/grotesk_light_font_family"
                 android:gravity="center"
                 android:includeFontPadding="false"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
+                android:paddingStart="@dimen/dp_16"
+                android:paddingEnd="@dimen/dp_16"
                 android:text="@string/are_u_at_higher_risk"
                 android:textColor="@color/white"
-                app:autoSizeMaxTextSize="36sp"
-                app:autoSizeMinTextSize="18sp"
+                app:autoSizeMaxTextSize="@dimen/sp_36"
+                app:autoSizeMinTextSize="@dimen/sp_18"
                 app:autoSizeTextType="uniform"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -86,7 +87,7 @@
                 android:id="@+id/vDivider1"
                 android:layout_width="0dp"
                 android:layout_height="1dp"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="@dimen/dp_30"
                 android:background="@color/concord"
                 app:layout_constraintEnd_toEndOf="@id/tvSlogan"
                 app:layout_constraintStart_toStartOf="@id/tvSlogan"
@@ -96,7 +97,7 @@
                 android:id="@+id/layoutRisk"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="@dimen/dp_30"
                 app:layout_constraintEnd_toEndOf="@id/vDivider1"
                 app:layout_constraintStart_toStartOf="@id/vDivider1"
                 app:layout_constraintTop_toBottomOf="@id/vDivider1">
@@ -105,11 +106,11 @@
                     android:id="@+id/tvRisk"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="18dp"
+                    android:layout_marginStart="@dimen/dp_18"
                     android:fontFamily="@font/domaine_sans"
                     android:text="@string/yes_im_at_higher_risk"
                     android:textColor="@color/color_white_stateful"
-                    android:textSize="24sp"
+                    android:textSize="@dimen/sp_24"
                     app:layout_constraintBottom_toBottomOf="@id/cbRisk"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@id/cbRisk"
@@ -124,15 +125,15 @@
                     android:fontFamily="@font/grotesk_light_font_family"
                     android:text="@string/higher_risk_individuals"
                     android:textColor="@color/color_silver_chalice_stateful"
-                    android:textSize="14sp"
+                    android:textSize="@dimen/sp_14"
                     app:layout_constraintEnd_toEndOf="@id/tvRisk"
                     app:layout_constraintStart_toStartOf="@id/tvRisk"
                     app:layout_constraintTop_toBottomOf="@id/tvRisk" />
 
                 <androidx.appcompat.widget.AppCompatCheckBox
                     android:id="@+id/cbRisk"
-                    android:layout_width="44dp"
-                    android:layout_height="44dp"
+                    android:layout_width="@dimen/dp_44"
+                    android:layout_height="@dimen/dp_44"
                     android:background="@drawable/bg_checkbox"
                     android:button="@null"
                     app:layout_constraintStart_toStartOf="parent"
@@ -145,7 +146,7 @@
                 android:id="@+id/vDivider2"
                 android:layout_width="0dp"
                 android:layout_height="1dp"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="@dimen/dp_30"
                 android:background="@color/concord"
                 app:layout_constraintEnd_toEndOf="@id/layoutRisk"
                 app:layout_constraintStart_toStartOf="@id/layoutRisk"
@@ -155,15 +156,15 @@
                 android:id="@+id/layoutNoRisk"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="@dimen/dp_30"
                 app:layout_constraintEnd_toEndOf="@id/vDivider2"
                 app:layout_constraintStart_toStartOf="@id/vDivider2"
                 app:layout_constraintTop_toBottomOf="@id/vDivider2">
 
                 <androidx.appcompat.widget.AppCompatCheckBox
                     android:id="@+id/cbNoRisk"
-                    android:layout_width="44dp"
-                    android:layout_height="44dp"
+                    android:layout_width="@dimen/dp_44"
+                    android:layout_height="@dimen/dp_44"
                     android:background="@drawable/bg_checkbox"
                     android:button="@null"
                     app:layout_constraintStart_toStartOf="parent"
@@ -174,11 +175,11 @@
                     android:id="@+id/tvNoRisk"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="18dp"
+                    android:layout_marginStart="@dimen/dp_18"
                     android:fontFamily="@font/domaine_sans"
                     android:text="@string/no_im_not_at_higher_risk"
                     android:textColor="@color/color_white_stateful"
-                    android:textSize="24sp"
+                    android:textSize="@dimen/sp_24"
                     app:layout_constraintBottom_toBottomOf="@id/cbNoRisk"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@id/cbNoRisk"
@@ -204,19 +205,19 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <androidx.appcompat.widget.AppCompatImageView
-            android:layout_width="44dp"
-            android:layout_height="44dp"
+            android:layout_width="@dimen/dp_44"
+            android:layout_height="@dimen/dp_44"
             app:srcCompat="@drawable/ic_back_stateful" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
+            android:layout_marginStart="@dimen/dp_12"
             android:fontFamily="@font/domaine_sans"
             android:text="@string/back"
             android:textAllCaps="true"
             android:textColor="@color/white"
-            android:textSize="24sp" />
+            android:textSize="@dimen/sp_24" />
 
     </LinearLayout>
 
@@ -241,13 +242,13 @@
             android:text="@string/done"
             android:textAllCaps="true"
             android:textColor="@color/color_white_stateful"
-            android:textSize="24sp" />
+            android:textSize="@dimen/sp_24" />
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/ivDone"
-            android:layout_width="44dp"
-            android:layout_height="44dp"
-            android:layout_marginStart="12dp"
+            android:layout_width="@dimen/dp_44"
+            android:layout_height="@dimen/dp_44"
+            android:layout_marginStart="@dimen/dp_12"
             app:srcCompat="@drawable/ic_down_stateful" />
 
     </LinearLayout>

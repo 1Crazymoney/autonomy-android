@@ -6,10 +6,12 @@
 	<dimen name="dp_112">122.75dp</dimen>
 	<dimen name="dp_12">13.15dp</dimen>
 	<dimen name="dp_124">135.90dp</dimen>
+	<dimen name="dp_130">142.48dp</dimen>
 	<dimen name="dp_14">15.34dp</dimen>
 	<dimen name="dp_144">157.82dp</dimen>
 	<dimen name="dp_150">164.40dp</dimen>
 	<dimen name="dp_16">17.54dp</dimen>
+	<dimen name="dp_166">181.94dp</dimen>
 	<dimen name="dp_18">19.73dp</dimen>
 	<dimen name="dp_180">197.28dp</dimen>
 	<dimen name="dp_2">2.19dp</dimen>

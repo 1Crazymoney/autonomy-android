@@ -10,9 +10,10 @@
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tvTitle"
-        android:layout_width="wrap_content"
+        android:layout_width="@dimen/dp_105"
         android:layout_height="wrap_content"
         android:fontFamily="@font/domaine_sans"
+        android:gravity="center"
         android:textAllCaps="true"
         android:textColor="@color/silver_2"
         android:textSize="@dimen/sp_14"

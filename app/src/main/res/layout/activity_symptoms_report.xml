@@ -11,8 +11,9 @@
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tvTitle"
-        android:layout_width="wrap_content"
+        android:layout_width="@dimen/dp_105"
         android:layout_height="wrap_content"
+        android:gravity="center"
         android:fontFamily="@font/domaine_sans"
         android:text="@string/symptoms"
         android:textAllCaps="true"
@@ -51,20 +52,20 @@
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tvSlogan"
         android:layout_width="0dp"
-        android:layout_height="130dp"
+        android:layout_height="@dimen/dp_130"
         android:layout_marginStart="@dimen/dp_18"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="@dimen/dp_24"
         android:layout_marginEnd="@dimen/dp_18"
         android:layout_marginBottom="24dp"
         android:fontFamily="@font/grotesk_light_font_family"
         android:gravity="center"
         android:includeFontPadding="false"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp"
+        android:paddingStart="@dimen/dp_16"
+        android:paddingEnd="@dimen/dp_16"
         android:text="@string/do_u_have_any_symptoms"
         android:textColor="@color/white"
-        app:autoSizeMaxTextSize="36sp"
-        app:autoSizeMinTextSize="18sp"
+        app:autoSizeMaxTextSize="@dimen/sp_36"
+        app:autoSizeMinTextSize="@dimen/sp_18"
         app:autoSizeTextType="uniform"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -74,7 +75,7 @@
         android:id="@+id/vDivider1"
         android:layout_width="0dp"
         android:layout_height="1dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="@dimen/dp_30"
         android:background="@color/concord"
         app:layout_constraintEnd_toEndOf="@id/tvSlogan"
         app:layout_constraintStart_toStartOf="@id/tvSlogan"
@@ -104,7 +105,7 @@
         android:focusable="true"
         android:gravity="center"
         android:orientation="horizontal"
-        android:paddingTop="8dp"
+        android:paddingTop="@dimen/dp_8"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
@@ -116,13 +117,13 @@
             android:text="@string/done"
             android:textAllCaps="true"
             android:textColor="@color/color_white_stateful"
-            android:textSize="24sp" />
+            android:textSize="@dimen/sp_24" />
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/ivDone"
-            android:layout_width="44dp"
-            android:layout_height="44dp"
-            android:layout_marginStart="12dp"
+            android:layout_width="@dimen/dp_44"
+            android:layout_height="@dimen/dp_44"
+            android:layout_marginStart="@dimen/dp_12"
             app:srcCompat="@drawable/ic_down_stateful" />
 
     </LinearLayout>

@@ -13,9 +13,10 @@
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tvTitle"
-        android:layout_width="wrap_content"
+        android:layout_width="@dimen/dp_105"
         android:layout_height="wrap_content"
         android:fontFamily="@font/domaine_sans"
+        android:gravity="center"
         android:text="@string/request"
         android:textAllCaps="true"
         android:textColor="@color/silver_2"
@@ -322,24 +323,24 @@
         android:focusable="true"
         android:gravity="center"
         android:orientation="horizontal"
-        android:paddingTop="8dp"
+        android:paddingTop="@dimen/dp_8"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
         <androidx.appcompat.widget.AppCompatImageView
-            android:layout_width="44dp"
-            android:layout_height="44dp"
+            android:layout_width="@dimen/dp_44"
+            android:layout_height="@dimen/dp_44"
             app:srcCompat="@drawable/ic_back_stateful" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
+            android:layout_marginStart="@dimen/dp_12"
             android:fontFamily="@font/domaine_sans"
             android:text="@string/back"
             android:textAllCaps="true"
             android:textColor="@color/white"
-            android:textSize="24sp" />
+            android:textSize="@dimen/sp_24" />
 
     </LinearLayout>
 
@@ -352,7 +353,7 @@
         android:focusable="true"
         android:gravity="center"
         android:orientation="horizontal"
-        android:paddingTop="8dp"
+        android:paddingTop="@dimen/dp_8"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
@@ -364,13 +365,13 @@
             android:text="@string/sign_up"
             android:textAllCaps="true"
             android:textColor="@color/color_white_stateful"
-            android:textSize="24sp" />
+            android:textSize="@dimen/sp_24" />
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/ivSignUp"
-            android:layout_width="44dp"
-            android:layout_height="44dp"
-            android:layout_marginStart="12dp"
+            android:layout_width="@dimen/dp_44"
+            android:layout_height="@dimen/dp_44"
+            android:layout_marginStart="@dimen/dp_12"
             app:srcCompat="@drawable/ic_checked_stateful" />
 
     </LinearLayout>
