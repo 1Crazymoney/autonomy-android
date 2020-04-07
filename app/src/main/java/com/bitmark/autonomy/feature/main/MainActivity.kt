@@ -92,6 +92,7 @@ class MainActivity : BaseAppCompatActivity() {
     private val locationChangedListener = object : LocationService.LocationChangedListener {
 
         override fun onPlaceChanged(place: String) {
+            if (place.isEmpty()) return
             tvLocation.text = place
         }
 
