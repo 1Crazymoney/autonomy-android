@@ -14,3 +14,12 @@ object NotificationId {
 
     const val ACCEPTED_HELP_REQUEST = 0x03
 }
+
+object NotificationType {
+
+    const val NEW_HELP_REQUEST = "BROADCAST_NEW_HELP"
+
+    const val ACCEPTED_HELP_REQUEST = "NOTIFY_HELP_ACCEPTED"
+
+    const val HELP_REQUEST_EXPIRED = "NOTIFY_HELP_EXPIRED"
+}

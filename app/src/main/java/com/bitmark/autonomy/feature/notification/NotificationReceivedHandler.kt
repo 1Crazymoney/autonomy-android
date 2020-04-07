@@ -8,12 +8,27 @@ package com.bitmark.autonomy.feature.notification
 
 import com.onesignal.OSNotification
 import com.onesignal.OneSignal
-import javax.inject.Inject
+import org.json.JSONObject
 
 
-class NotificationReceivedHandler @Inject constructor() :
-    OneSignal.NotificationReceivedHandler {
+class NotificationReceivedHandler : OneSignal.NotificationReceivedHandler {
+
+    private val notificationReceiveListeners = mutableListOf<NotificationReceiveListener>()
+
+    fun addNotificationReceiveListener(listener: NotificationReceiveListener) {
+        if (notificationReceiveListeners.contains(listener)) return
+        notificationReceiveListeners.add(listener)
+    }
+
+    fun removeNotificationReceiveListener(listener: NotificationReceiveListener) {
+        notificationReceiveListeners.remove(listener)
+    }
+
     override fun notificationReceived(notification: OSNotification?) {
+        notificationReceiveListeners.forEach { l -> l.onReceived(notification?.payload?.additionalData) }
+    }
 
+    interface NotificationReceiveListener {
+        fun onReceived(data: JSONObject?)
     }
 }

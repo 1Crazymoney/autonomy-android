@@ -11,6 +11,7 @@ import android.content.Context
 import com.bitmark.autonomy.data.source.AccountRepository
 import com.bitmark.autonomy.feature.connectivity.ConnectivityHandler
 import com.bitmark.autonomy.feature.location.LocationService
+import com.bitmark.autonomy.feature.notification.NotificationReceivedHandler
 import com.bitmark.autonomy.logging.EventLogger
 import com.bitmark.autonomy.logging.SentryEventLogger
 import dagger.Module
@@ -41,5 +42,9 @@ class AppModule {
     @Singleton
     fun provideLocationService(context: Context, logger: EventLogger) =
         LocationService(context, logger)
+
+    @Provides
+    @Singleton
+    fun provideNotificationReceivedHandler() = NotificationReceivedHandler()
 
 }

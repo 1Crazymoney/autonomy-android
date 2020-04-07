@@ -30,6 +30,7 @@ import com.bitmark.autonomy.feature.Navigator.Companion.RIGHT_LEFT
 import com.bitmark.autonomy.feature.main.MainActivity
 import com.bitmark.autonomy.feature.notification.NotificationId
 import com.bitmark.autonomy.feature.notification.NotificationPayloadType
+import com.bitmark.autonomy.feature.notification.NotificationType
 import com.bitmark.autonomy.feature.onboarding.OnboardingContainerActivity
 import com.bitmark.autonomy.logging.Event
 import com.bitmark.autonomy.logging.EventLogger
@@ -179,8 +180,8 @@ class SplashActivity : BaseAppCompatActivity() {
                         notificationId = if (notificationId == 0) {
                             when (val notificationType =
                                 notificationBundle.get(NotificationPayloadType.NOTIFICATION_TYPE)) {
-                                "BROADCAST_NEW_HELP" -> NotificationId.NEW_HELP_REQUEST
-                                "NOTIFY_HELP_ACCEPTED" -> NotificationId.ACCEPTED_HELP_REQUEST
+                                NotificationType.NEW_HELP_REQUEST -> NotificationId.NEW_HELP_REQUEST
+                                NotificationType.ACCEPTED_HELP_REQUEST -> NotificationId.ACCEPTED_HELP_REQUEST
                                 else -> {
                                     logger.logError(
                                         Event.NOTIFICATION_HANDLING_ERROR,

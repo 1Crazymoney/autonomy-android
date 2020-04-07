@@ -25,6 +25,8 @@ import com.bitmark.autonomy.feature.Navigator.Companion.RIGHT_LEFT
 import com.bitmark.autonomy.feature.location.LocationService
 import com.bitmark.autonomy.feature.notification.NotificationId
 import com.bitmark.autonomy.feature.notification.NotificationPayloadType
+import com.bitmark.autonomy.feature.notification.NotificationReceivedHandler
+import com.bitmark.autonomy.feature.notification.NotificationType
 import com.bitmark.autonomy.feature.respondhelp.RespondHelpActivity
 import com.bitmark.autonomy.feature.survey.SurveyContainerActivity
 import com.bitmark.autonomy.logging.Event
@@ -35,6 +37,7 @@ import com.bitmark.autonomy.util.ext.setImageResource
 import com.bitmark.autonomy.util.ext.visible
 import com.bitmark.autonomy.util.modelview.HelpRequestModelView
 import kotlinx.android.synthetic.main.activity_main.*
+import org.json.JSONObject
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -75,6 +78,9 @@ class MainActivity : BaseAppCompatActivity() {
     @Inject
     internal lateinit var dialogController: DialogController
 
+    @Inject
+    internal lateinit var notificationReceivedHandler: NotificationReceivedHandler
+
     private val handler = Handler()
 
     private val helpRequestAdapter = HelpCollectionRecyclerViewAdapter()
@@ -91,7 +97,7 @@ class MainActivity : BaseAppCompatActivity() {
 
         override fun onLocationChanged(l: Location) {
             if (lastKnownLocation == null || lastKnownLocation!!.distanceTo(l) >= BuildConfig.MIN_REFRESH_DISTANCE) {
-                viewModel.getData()
+                viewModel.listHelpRequest()
             }
             lastKnownLocation = l
         }
@@ -103,6 +109,20 @@ class MainActivity : BaseAppCompatActivity() {
             goToSurveyIfSatisfied()
         }
     }
+
+    private val notificationReceiveListener =
+        object : NotificationReceivedHandler.NotificationReceiveListener {
+            override fun onReceived(data: JSONObject?) {
+                when (data?.optString(NotificationPayloadType.NOTIFICATION_TYPE) ?: return) {
+                    NotificationType.ACCEPTED_HELP_REQUEST, NotificationType.HELP_REQUEST_EXPIRED, NotificationType.NEW_HELP_REQUEST -> {
+                        viewModel.listHelpRequest()
+                    }
+                    else -> {
+                        // do nothing
+                    }
+                }
+            }
+        }
 
     private fun goToSurveyIfSatisfied() {
         if (!locationService.isPermissionGranted(this)
@@ -143,21 +163,30 @@ class MainActivity : BaseAppCompatActivity() {
     override fun observe() {
         super.observe()
 
-        viewModel.getDataLiveData.asLiveData().observe(this, Observer { res ->
+        viewModel.getHealthScoreLiveData.asLiveData().observe(this, Observer { res ->
             when {
                 res.isSuccess() -> {
-                    progressBar.gone()
-                    val data = res.data()!!
-                    val score = data.first.toInt()
-                    val helpRequests = data.second
-                    helpRequestAdapter.set(helpRequests)
+                    val score = res.data()!!.toInt()
                     tvScore.text = score.toString()
                     ivScore.setImageResource("triangle_%03d".format(score))
                 }
 
                 res.isError() -> {
-                    logger.logError(Event.HELP_REQUEST_LISTING_ERROR, res.throwable())
+                    logger.logError(Event.HEALTH_SCORE_GETTING_ERROR, res.throwable())
+                }
+            }
+        })
+
+        viewModel.listHelpRequestLiveData.asLiveData().observe(this, Observer { res ->
+            when {
+                res.isSuccess() -> {
                     progressBar.gone()
+                    helpRequestAdapter.set(res.data()!!)
+                }
+
+                res.isError() -> {
+                    progressBar.gone()
+                    logger.logError(Event.HELP_REQUEST_LISTING_ERROR, res.throwable())
                 }
 
                 res.isLoading() -> {
@@ -198,7 +227,10 @@ class MainActivity : BaseAppCompatActivity() {
             }
         })
         locationService.addLocationChangeListener(locationChangedListener)
-        if (lastKnownLocation != null) viewModel.getData()
+        if (lastKnownLocation != null) {
+            viewModel.getHealthScore()
+            viewModel.listHelpRequest()
+        }
     }
 
     private fun startLocationService() {
@@ -235,12 +267,14 @@ class MainActivity : BaseAppCompatActivity() {
             goToSurveyIfSatisfied()
         }
         appLifecycleHandler.addAppStateChangedListener(appStateChangedListener)
+        notificationReceivedHandler.addNotificationReceiveListener(notificationReceiveListener)
         viewModel.startServerAuth()
     }
 
     override fun onDestroy() {
-        viewModel.stopServerAuth()
         handler.removeCallbacksAndMessages(null)
+        viewModel.stopServerAuth()
+        notificationReceivedHandler.removeNotificationReceiveListener(notificationReceiveListener)
         appLifecycleHandler.removeAppStateChangedListener(appStateChangedListener)
         super.onDestroy()
     }

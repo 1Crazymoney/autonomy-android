@@ -83,6 +83,7 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/layoutRequest"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="@dimen/dp_14"
@@ -123,10 +124,10 @@
         android:indeterminateTint="@color/white"
         android:indeterminateTintMode="src_in"
         android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/layoutRequest"
+        app:layout_constraintEnd_toEndOf="@id/layoutRequest"
+        app:layout_constraintStart_toStartOf="@id/layoutRequest"
+        app:layout_constraintTop_toTopOf="@id/layoutRequest"
         tools:visibility="visible" />
 
 

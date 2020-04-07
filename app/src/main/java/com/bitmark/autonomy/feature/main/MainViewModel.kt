@@ -14,8 +14,6 @@ import com.bitmark.autonomy.feature.auth.ServerAuthentication
 import com.bitmark.autonomy.util.livedata.CompositeLiveData
 import com.bitmark.autonomy.util.livedata.RxLiveDataTransformer
 import com.bitmark.autonomy.util.modelview.HelpRequestModelView
-import io.reactivex.Single
-import io.reactivex.functions.BiFunction
 
 
 class MainViewModel(
@@ -26,24 +24,30 @@ class MainViewModel(
     private val serverAuth: ServerAuthentication
 ) : BaseViewModel(lifecycle) {
 
-    internal val getDataLiveData = CompositeLiveData<Pair<Float, List<HelpRequestModelView>>>()
+    internal val getHealthScoreLiveData = CompositeLiveData<Float>()
+
+    internal val listHelpRequestLiveData = CompositeLiveData<List<HelpRequestModelView>>()
 
     internal val getHelpRequestLiveData = CompositeLiveData<HelpRequestModelView>()
 
-    fun getData() {
-
-        val listHelpStream = assistanceRepo.listHelpRequest()
-            .map { helpRequests -> helpRequests.map { h -> HelpRequestModelView.newInstance(h) } }
-
-        val getScoreStream = userRepo.getHealthScore()
-
-        getDataLiveData.add(
+    fun getHealthScore() {
+        getHealthScoreLiveData.add(
             rxLiveDataTransformer.single(
-                Single.zip(
-                    listHelpStream,
-                    getScoreStream,
-                    BiFunction { helpRequests, score -> Pair(score, helpRequests) })
+                userRepo.getHealthScore()
             )
+        )
+    }
+
+    fun listHelpRequest() {
+        listHelpRequestLiveData.add(
+            rxLiveDataTransformer.single(assistanceRepo.listHelpRequest()
+                .map { helpRequests ->
+                    helpRequests.map { h ->
+                        HelpRequestModelView.newInstance(
+                            h
+                        )
+                    }
+                })
         )
     }
 
