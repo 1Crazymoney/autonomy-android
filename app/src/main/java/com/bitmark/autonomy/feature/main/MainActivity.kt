@@ -89,6 +89,8 @@ class MainActivity : BaseAppCompatActivity() {
 
     private var lastSurveyTimestamp = -1L
 
+    private var score = -1
+
     private val locationChangedListener = object : LocationService.LocationChangedListener {
 
         override fun onPlaceChanged(place: String) {
@@ -99,6 +101,9 @@ class MainActivity : BaseAppCompatActivity() {
         override fun onLocationChanged(l: Location) {
             if (lastKnownLocation == null || lastKnownLocation!!.distanceTo(l) >= BuildConfig.MIN_REFRESH_DISTANCE) {
                 viewModel.listHelpRequest()
+            }
+            if (score == -1) {
+                viewModel.getHealthScore()
             }
             lastKnownLocation = l
         }
@@ -167,7 +172,7 @@ class MainActivity : BaseAppCompatActivity() {
         viewModel.getHealthScoreLiveData.asLiveData().observe(this, Observer { res ->
             when {
                 res.isSuccess() -> {
-                    val score = res.data()!!.toInt()
+                    score = res.data()!!.toInt()
                     tvScore.text = score.toString()
                     ivScore.setImageResource("triangle_%03d".format(score))
                 }
