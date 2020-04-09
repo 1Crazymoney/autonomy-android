@@ -86,7 +86,7 @@ class MainActivity : BaseAppCompatActivity() {
         handler.postDelayed({
             navigator.anim(RIGHT_LEFT).startActivity(SurveyContainerActivity::class.java)
             lastSurveyTimestamp = System.currentTimeMillis()
-        }, 200)
+        }, 500)
     }
 
     override fun layoutRes(): Int = R.layout.activity_main

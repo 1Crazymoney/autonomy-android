@@ -6,15 +6,14 @@
     android:layout_height="match_parent"
     android:background="@color/cod_gray"
     android:orientation="vertical"
-    android:paddingTop="@dimen/dp_14"
-    android:paddingBottom="@dimen/dp_14">
+    android:padding="@dimen/dp_16">
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tvTitle"
         android:layout_width="@dimen/dp_105"
         android:layout_height="wrap_content"
-        android:gravity="center"
         android:fontFamily="@font/domaine_sans"
+        android:gravity="center"
         android:text="@string/symptoms"
         android:textAllCaps="true"
         android:textColor="@color/silver_2"
@@ -77,8 +76,8 @@
         android:layout_height="1dp"
         android:layout_marginTop="@dimen/dp_30"
         android:background="@color/concord"
-        app:layout_constraintEnd_toEndOf="@id/tvSlogan"
-        app:layout_constraintStart_toStartOf="@id/tvSlogan"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvSlogan" />
 
     <androidx.recyclerview.widget.RecyclerView
@@ -90,16 +89,45 @@
         android:scrollbarSize="@dimen/dp_2"
         android:scrollbarThumbVertical="@color/white_aa"
         android:scrollbars="vertical"
-        app:layout_constraintBottom_toTopOf="@id/layoutDone"
+        app:layout_constraintBottom_toTopOf="@id/layoutBack"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/vDivider1" />
 
     <LinearLayout
-        android:id="@+id/layoutDone"
+        android:id="@+id/layoutBack"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/dp_18"
+        android:background="@drawable/bg_black_gradient"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingTop="@dimen/dp_8"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="@dimen/dp_44"
+            android:layout_height="@dimen/dp_44"
+            app:srcCompat="@drawable/ic_back_stateful" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_12"
+            android:fontFamily="@font/domaine_sans"
+            android:text="@string/back"
+            android:textAllCaps="true"
+            android:textColor="@color/color_white_stateful"
+            android:textSize="@dimen/sp_24" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layoutSubmit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:background="@drawable/bg_black_gradient"
         android:clickable="true"
         android:focusable="true"
@@ -110,21 +138,21 @@
         app:layout_constraintEnd_toEndOf="parent">
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tvDone"
+            android:id="@+id/tvSubmit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/domaine_sans"
-            android:text="@string/done"
+            android:text="@string/submit"
             android:textAllCaps="true"
             android:textColor="@color/color_white_stateful"
             android:textSize="@dimen/sp_24" />
 
         <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/ivDone"
+            android:id="@+id/ivSubmit"
             android:layout_width="@dimen/dp_44"
             android:layout_height="@dimen/dp_44"
             android:layout_marginStart="@dimen/dp_12"
-            app:srcCompat="@drawable/ic_down_stateful" />
+            app:srcCompat="@drawable/ic_up_stateful" />
 
     </LinearLayout>
 

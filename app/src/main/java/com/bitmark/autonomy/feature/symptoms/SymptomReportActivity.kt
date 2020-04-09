@@ -20,6 +20,7 @@ import com.bitmark.autonomy.feature.connectivity.ConnectivityHandler
 import com.bitmark.autonomy.logging.Event
 import com.bitmark.autonomy.logging.EventLogger
 import com.bitmark.autonomy.util.ext.*
+import com.bitmark.autonomy.util.view.BottomAlertDialog
 import kotlinx.android.synthetic.main.activity_symptoms_report.*
 import javax.inject.Inject
 
@@ -43,7 +44,7 @@ class SymptomReportActivity : BaseAppCompatActivity() {
 
     private var blocked = false
 
-    private val adapter = SymptomsRecyclerViewAdapter()
+    private val adapter = SymptomRecyclerViewAdapter()
 
     override fun layoutRes(): Int = R.layout.activity_symptoms_report
 
@@ -58,16 +59,16 @@ class SymptomReportActivity : BaseAppCompatActivity() {
     override fun initComponents() {
         super.initComponents()
 
-        disableDone()
+        disableSubmit()
 
         adapter.setItemsCheckedChangeListener(object :
-            SymptomsRecyclerViewAdapter.ItemsCheckedChangeListener {
+            SymptomRecyclerViewAdapter.ItemsCheckedChangeListener {
             override fun onChecked() {
-                enableDone()
+                enableSubmit()
             }
 
             override fun onUnChecked() {
-                disableDone()
+                disableSubmit()
             }
         })
 
@@ -75,22 +76,26 @@ class SymptomReportActivity : BaseAppCompatActivity() {
         rvSymptoms.layoutManager = layoutManager
         rvSymptoms.adapter = adapter
 
-        layoutDone.setSafetyOnclickListener {
+        layoutSubmit.setSafetyOnclickListener {
             if (blocked) return@setSafetyOnclickListener
             viewModel.reportSymptoms(adapter.getCheckedSymptoms().map { it.id })
         }
+
+        layoutBack.setOnClickListener {
+            navigator.anim(RIGHT_LEFT).finishActivity()
+        }
     }
 
-    private fun enableDone() {
-        layoutDone.enable()
-        tvDone.enable()
-        ivDone.enable()
+    private fun enableSubmit() {
+        layoutSubmit.enable()
+        tvSubmit.enable()
+        ivSubmit.enable()
     }
 
-    private fun disableDone() {
-        layoutDone.disable()
-        tvDone.disable()
-        ivDone.disable()
+    private fun disableSubmit() {
+        layoutSubmit.disable()
+        tvSubmit.disable()
+        ivSubmit.disable()
     }
 
     override fun observe() {
@@ -118,7 +123,17 @@ class SymptomReportActivity : BaseAppCompatActivity() {
             when {
                 res.isSuccess() -> {
                     progressBar.gone()
-                    navigator.anim(RIGHT_LEFT).finishActivity()
+                    val dialog = BottomAlertDialog(
+                        this,
+                        R.string.submitted,
+                        R.string.your_symptoms_have_been_reported,
+                        R.string.thanks_for_taking_the_time,
+                        R.string.ok
+                    )
+                    dialog.setOnDismissListener {
+                        navigator.anim(RIGHT_LEFT).finishActivity()
+                    }
+                    dialog.show()
                     blocked = false
                 }
 

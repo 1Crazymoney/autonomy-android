@@ -16,7 +16,7 @@ import com.bitmark.autonomy.util.modelview.SymptomModelView
 import kotlinx.android.synthetic.main.item_symptom.view.*
 
 
-class SymptomsRecyclerViewAdapter : RecyclerView.Adapter<SymptomsRecyclerViewAdapter.ViewHolder>() {
+class SymptomRecyclerViewAdapter : RecyclerView.Adapter<SymptomRecyclerViewAdapter.ViewHolder>() {
 
     private val items = mutableListOf<Item>()
 

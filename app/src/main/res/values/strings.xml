@@ -113,6 +113,8 @@
     <string name="low_risk">Low risk</string>
     <string name="moderate_risk">Moderate risk</string>
     <string name="high_risk">High risk</string>
+    <string name="your_symptoms_have_been_reported">Your symptoms have been successfully reported to your community</string>
+    <string name="thanks_for_taking_the_time">Thanks for taking the time to make your community a healthier and happier place. Please continue to report your symptoms if they continue.</string>
 
     <!--    string format-->
     <string name="send_to_format">Send to %1$s</string>
