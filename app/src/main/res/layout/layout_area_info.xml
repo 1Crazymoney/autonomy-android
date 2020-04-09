@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/dp_210"
+    android:background="@color/concord"
+    android:orientation="vertical"
+    android:padding="@dimen/dp_16">
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/ivFlip"
+        android:layout_width="@dimen/dp_24"
+        android:layout_height="@dimen/dp_24"
+        android:padding="@dimen/dp_2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_flip" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/domaine_sans"
+        android:includeFontPadding="false"
+        android:text="@string/raw_data"
+        android:textAllCaps="true"
+        android:textColor="@color/white"
+        android:textSize="@dimen/sp_18"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvLabelSuffix"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp_8"
+        android:layout_marginEnd="@dimen/dp_8"
+        android:fontFamily="@font/grotesk_light_font_family"
+        android:includeFontPadding="false"
+        android:text="@string/from_last_24_hours"
+        android:textColor="@color/silver_2"
+        android:textSize="@dimen/sp_13"
+        app:layout_constraintEnd_toStartOf="@id/ivFlip"
+        app:layout_constraintStart_toEndOf="@id/tvLabel"
+        app:layout_constraintTop_toTopOf="@id/tvLabel" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/dp_24"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvLabel">
+
+        <LinearLayout
+            android:id="@+id/layout1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:baselineAligned="false"
+            android:orientation="horizontal"
+            android:weightSum="1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvLbConfirmedCases"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/grotesk_light_font_family"
+                    android:includeFontPadding="false"
+                    android:text="@string/confirmed_cases"
+                    android:textAllCaps="true"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/sp_12"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvConfirmedCases"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/ibm_plex_mono_light_font_family"
+                    android:includeFontPadding="false"
+                    android:text="-"
+                    android:textAllCaps="true"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/sp_30"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvLbConfirmedCases"
+                    tools:text="2" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/ivConfirmedCasesChange"
+                    android:layout_width="@dimen/dp_10"
+                    android:layout_height="@dimen/dp_10"
+                    android:layout_marginStart="@dimen/dp_4"
+                    android:layout_marginTop="@dimen/dp_8"
+                    app:layout_constraintStart_toEndOf="@id/tvConfirmedCases"
+                    app:layout_constraintTop_toTopOf="@id/tvConfirmedCases"
+                    tools:srcCompat="@drawable/ic_down_green" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvConfirmedCasesChange"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp_4"
+                    android:layout_marginBottom="@dimen/dp_2"
+                    android:fontFamily="@font/ibm_plex_mono_light_font_family"
+                    android:text="-"
+                    android:textColor="@color/silver_2"
+                    android:textSize="@dimen/sp_14"
+                    app:layout_constraintBottom_toBottomOf="@id/ivConfirmedCasesChange"
+                    app:layout_constraintStart_toEndOf="@id/ivConfirmedCasesChange"
+                    app:layout_constraintTop_toTopOf="@id/ivConfirmedCasesChange"
+                    tools:text="1" />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvLbReportedSymptom"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/grotesk_light_font_family"
+                    android:includeFontPadding="false"
+                    android:text="@string/reported_symptoms"
+                    android:textAllCaps="true"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/sp_12"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvReportedSymptom"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/ibm_plex_mono_light_font_family"
+                    android:includeFontPadding="false"
+                    android:text="-"
+                    android:textAllCaps="true"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/sp_30"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvLbReportedSymptom"
+                    tools:text="2" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/ivReportedSymptomChange"
+                    android:layout_width="@dimen/dp_10"
+                    android:layout_height="@dimen/dp_10"
+                    android:layout_marginStart="@dimen/dp_4"
+                    android:layout_marginTop="@dimen/dp_8"
+                    app:layout_constraintStart_toEndOf="@id/tvReportedSymptom"
+                    app:layout_constraintTop_toTopOf="@id/tvReportedSymptom"
+                    tools:srcCompat="@drawable/ic_down_green" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvReportedSymptomChange"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp_4"
+                    android:layout_marginBottom="@dimen/dp_2"
+                    android:fontFamily="@font/ibm_plex_mono_light_font_family"
+                    android:text="-"
+                    android:textColor="@color/silver_2"
+                    android:textSize="@dimen/sp_14"
+                    app:layout_constraintBottom_toBottomOf="@id/ivReportedSymptomChange"
+                    app:layout_constraintStart_toEndOf="@id/ivReportedSymptomChange"
+                    app:layout_constraintTop_toTopOf="@id/ivReportedSymptomChange"
+                    tools:text="1" />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_12"
+            android:baselineAligned="false"
+            android:orientation="horizontal"
+            android:weightSum="1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvLbHealthyBehavior"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/grotesk_light_font_family"
+                    android:includeFontPadding="false"
+                    android:text="@string/healthy_behaviors"
+                    android:textAllCaps="true"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/sp_12"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvHealthyBehavior"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/ibm_plex_mono_light_font_family"
+                    android:includeFontPadding="false"
+                    android:text="-"
+                    android:textAllCaps="true"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/sp_30"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvLbHealthyBehavior"
+                    tools:text="1222" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/ivHealthyBehaviorChange"
+                    android:layout_width="@dimen/dp_10"
+                    android:layout_height="@dimen/dp_10"
+                    android:layout_marginStart="@dimen/dp_4"
+                    android:layout_marginTop="@dimen/dp_8"
+                    app:layout_constraintStart_toEndOf="@id/tvHealthyBehavior"
+                    app:layout_constraintTop_toTopOf="@id/tvHealthyBehavior"
+                    tools:srcCompat="@drawable/ic_up_red" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvHealthyBehaviorChange"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp_4"
+                    android:layout_marginBottom="@dimen/dp_2"
+                    android:fontFamily="@font/ibm_plex_mono_light_font_family"
+                    android:text="-"
+                    android:textColor="@color/silver_2"
+                    android:textSize="@dimen/sp_14"
+                    app:layout_constraintBottom_toBottomOf="@id/ivHealthyBehaviorChange"
+                    app:layout_constraintStart_toEndOf="@id/ivHealthyBehaviorChange"
+                    app:layout_constraintTop_toTopOf="@id/ivHealthyBehaviorChange"
+                    tools:text="12" />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvLbPopDensity"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/grotesk_light_font_family"
+                    android:includeFontPadding="false"
+                    android:text="@string/population_density"
+                    android:textAllCaps="true"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/sp_12"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvPopDensity"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/ibm_plex_mono_light_font_family"
+                    android:includeFontPadding="false"
+                    android:text="-"
+                    android:textAllCaps="true"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/sp_30"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvLbPopDensity"
+                    tools:text="2" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/ivPopDensityChange"
+                    android:layout_width="@dimen/dp_10"
+                    android:layout_height="@dimen/dp_10"
+                    android:layout_marginStart="@dimen/dp_4"
+                    android:layout_marginTop="@dimen/dp_8"
+                    app:layout_constraintStart_toEndOf="@id/tvPopDensity"
+                    app:layout_constraintTop_toTopOf="@id/tvPopDensity"
+                    tools:srcCompat="@drawable/ic_down_green" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvPopDensityChange"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp_4"
+                    android:layout_marginBottom="@dimen/dp_2"
+                    android:fontFamily="@font/ibm_plex_mono_light_font_family"
+                    android:text="-"
+                    android:textColor="@color/silver_2"
+                    android:textSize="@dimen/sp_14"
+                    app:layout_constraintBottom_toBottomOf="@id/ivPopDensityChange"
+                    app:layout_constraintStart_toEndOf="@id/ivPopDensityChange"
+                    app:layout_constraintTop_toTopOf="@id/ivPopDensityChange"
+                    tools:text="1" />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

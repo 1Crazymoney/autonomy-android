@@ -8,127 +8,31 @@
     android:orientation="vertical">
 
     <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/ivScore"
+        android:id="@+id/ivProfile"
+        android:layout_width="@dimen/dp_30"
+        android:layout_height="@dimen/dp_30"
+        android:layout_marginStart="@dimen/dp_16"
+        android:layout_marginBottom="@dimen/dp_16"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/ic_profile_stateful" />
+
+    <com.bitmark.autonomy.util.view.pagerindicator.IconPageIndicator
+        android:id="@+id/vIndicator"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/dp_24"
-        android:layout_marginTop="@dimen/dp_36"
-        android:layout_marginEnd="@dimen/dp_24"
-        android:adjustViewBounds="true"
+        android:layout_height="@dimen/dp_12"
+        app:icon_margin="@dimen/dp_4"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/triangle_000" />
+        app:layout_constraintTop_toTopOf="@id/ivProfile" />
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/tvScore"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dp_72"
-        android:fontFamily="@font/domaine_sans"
-        android:includeFontPadding="false"
-        android:text="-"
-        android:textColor="@color/white"
-        android:textSize="@dimen/sp_64"
-        app:layout_constraintBottom_toBottomOf="@id/ivScore"
-        app:layout_constraintEnd_toEndOf="@id/ivScore"
-        app:layout_constraintStart_toStartOf="@id/ivScore"
-        app:layout_constraintTop_toTopOf="@id/ivScore" />
-
-    <androidx.appcompat.widget.AppCompatTextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/dp_48"
-        android:fontFamily="@font/domaine_sans"
-        android:includeFontPadding="false"
-        android:text="@string/autonomy"
-        android:textAllCaps="true"
-        android:textColor="@color/white"
-        android:textSize="@dimen/sp_18"
-        app:layout_constraintBottom_toBottomOf="@id/ivScore"
-        app:layout_constraintEnd_toEndOf="@id/tvScore"
-        app:layout_constraintStart_toStartOf="@id/tvScore" />
-
-    <LinearLayout
-        android:id="@+id/layoutLocation"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dp_18"
-        android:gravity="center"
-        android:orientation="horizontal"
-        android:paddingStart="@dimen/dp_18"
-        android:paddingEnd="@dimen/dp_18"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/ivScore">
-
-        <androidx.appcompat.widget.AppCompatImageView
-            android:layout_width="@dimen/dp_16"
-            android:layout_height="@dimen/dp_16"
-            app:srcCompat="@drawable/ic_vector" />
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tvLocation"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/dp_8"
-            android:ellipsize="end"
-            android:fontFamily="@font/grotesk_light_font_family"
-            android:includeFontPadding="false"
-            android:maxLines="1"
-            android:textColor="@color/silver_2"
-            android:textSize="@dimen/sp_18"
-            tools:text="Nangang Software Park" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/layoutRequest"
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/vp"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="@dimen/dp_14"
-        android:background="@color/mine_shaft"
-        android:gravity="center_horizontal"
-        android:orientation="vertical"
-        android:paddingTop="@dimen/dp_14"
-        android:paddingBottom="@dimen/dp_14"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/layoutLocation">
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/domaine_sans"
-            android:text="@string/requests"
-            android:textAllCaps="true"
-            android:textColor="@color/white"
-            android:textSize="@dimen/sp_14" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvHelp"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="@dimen/dp_18"
-            android:scrollbarSize="@dimen/dp_2"
-            android:scrollbarThumbVertical="@color/white_aa"
-            android:scrollbars="vertical" />
-
-    </LinearLayout>
-
-    <ProgressBar
-        android:id="@+id/progressBar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:indeterminateTint="@color/white"
-        android:indeterminateTintMode="src_in"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="@id/layoutRequest"
-        app:layout_constraintEnd_toEndOf="@id/layoutRequest"
-        app:layout_constraintStart_toStartOf="@id/layoutRequest"
-        app:layout_constraintTop_toTopOf="@id/layoutRequest"
-        tools:visibility="visible" />
+        android:layout_marginBottom="@dimen/dp_12"
+        app:layout_constraintBottom_toTopOf="@id/vIndicator"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -6,6 +6,10 @@
  */
 package com.bitmark.autonomy.di
 
+import com.bitmark.autonomy.feature.arealist.AreaListFragment
+import com.bitmark.autonomy.feature.arealist.AreaListModule
+import com.bitmark.autonomy.feature.main.MainFragment
+import com.bitmark.autonomy.feature.main.MainFragmentModule
 import com.bitmark.autonomy.feature.onboarding.OnboardingFragment
 import com.bitmark.autonomy.feature.onboarding.OnboardingModule
 import com.bitmark.autonomy.feature.requesthelp.detail.RequestHelpDetailFragment
@@ -47,4 +51,12 @@ abstract class FragmentBuilderModule {
     @ContributesAndroidInjector(modules = [RequestHelpReviewModule::class])
     @FragmentScope
     internal abstract fun bindRequestHelpReviewFragment(): RequestHelpReviewFragment
+
+    @ContributesAndroidInjector(modules = [MainFragmentModule::class])
+    @FragmentScope
+    internal abstract fun bindMainFragment(): MainFragment
+
+    @ContributesAndroidInjector(modules = [AreaListModule::class])
+    @FragmentScope
+    internal abstract fun bindAreaListFragment(): AreaListFragment
 }

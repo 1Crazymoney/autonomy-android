@@ -11,6 +11,8 @@ import android.animation.AnimatorListenerAdapter
 import android.os.Handler
 import android.util.TypedValue
 import android.view.View
+import android.view.animation.AccelerateInterpolator
+import android.view.animation.DecelerateInterpolator
 import android.webkit.WebView
 import android.widget.ImageView
 import android.widget.TextView
@@ -138,4 +140,27 @@ fun TextView.setTextSize(sp: Int) {
 fun ImageView.setImageResource(resName: String) {
     val resId = context.resources.getIdentifier(resName, "drawable", context.packageName)
     setImageResource(resId)
+}
+
+fun View.flip(other: View, duration: Long = 500) {
+    other.gone()
+    this.visible()
+    val d = duration / 2
+    this.animate().withLayer()
+        .rotationY(90f)
+        .setInterpolator(DecelerateInterpolator())
+        .scaleX(0f)
+        .setDuration(d)
+        .withEndAction {
+            this.gone()
+            other.visible()
+            other.rotationY = 0f
+            other.scaleX = 0f
+            other.animate().withLayer()
+                .rotationY(0f)
+                .scaleX(1f)
+                .setDuration(d)
+                .setInterpolator(AccelerateInterpolator())
+                .start()
+        }.start()
 }

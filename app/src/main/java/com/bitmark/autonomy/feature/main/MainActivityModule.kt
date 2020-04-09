@@ -6,7 +6,6 @@
  */
 package com.bitmark.autonomy.feature.main
 
-import com.bitmark.autonomy.data.source.AssistanceRepository
 import com.bitmark.autonomy.data.source.UserRepository
 import com.bitmark.autonomy.di.ActivityScope
 import com.bitmark.autonomy.feature.DialogController
@@ -17,7 +16,7 @@ import dagger.Module
 import dagger.Provides
 
 @Module
-class MainModule {
+class MainActivityModule {
 
     @Provides
     @ActivityScope
@@ -31,13 +30,11 @@ class MainModule {
     @ActivityScope
     fun provideVM(
         activity: MainActivity,
-        assistanceRepo: AssistanceRepository,
         userRepo: UserRepository,
         rxLiveDataTransformer: RxLiveDataTransformer,
         serverAuth: ServerAuthentication
-    ) = MainViewModel(
+    ) = MainActivityViewModel(
         activity.lifecycle,
-        assistanceRepo,
         userRepo,
         rxLiveDataTransformer,
         serverAuth

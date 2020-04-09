@@ -104,6 +104,15 @@
     <string name="sorry_u_already_have_a_outstanding_help_request">Sorry, but you already have an outstanding help request to your community. Currently, our system only supports one request at a time for each community member.</string>
     <string name="someone_just_signed_up">Someone Just Signed Up</string>
     <string name="thanks_so_much_for_your_eagerness">Thanks so much for your eagerness to help out, but another community member just signed up for this request.</string>
+    <string name="raw_data">Raw Data</string>
+    <string name="from_last_24_hours">from last 24 hours</string>
+    <string name="confirmed_cases">Confirmed cases</string>
+    <string name="reported_symptoms">Reported symptoms</string>
+    <string name="healthy_behaviors">Healthy behaviors</string>
+    <string name="population_density">Population density</string>
+    <string name="low_risk">Low risk</string>
+    <string name="moderate_risk">Moderate risk</string>
+    <string name="high_risk">High risk</string>
 
     <!--    string format-->
     <string name="send_to_format">Send to %1$s</string>

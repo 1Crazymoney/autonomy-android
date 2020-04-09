@@ -8,36 +8,23 @@ package com.bitmark.autonomy.feature.main
 
 import android.app.Activity
 import android.content.Intent
-import android.location.Location
 import android.os.Bundle
 import android.os.Handler
-import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.bitmark.autonomy.AppLifecycleHandler
-import com.bitmark.autonomy.BuildConfig
 import com.bitmark.autonomy.R
 import com.bitmark.autonomy.feature.BaseAppCompatActivity
 import com.bitmark.autonomy.feature.BaseViewModel
 import com.bitmark.autonomy.feature.DialogController
 import com.bitmark.autonomy.feature.Navigator
 import com.bitmark.autonomy.feature.Navigator.Companion.RIGHT_LEFT
+import com.bitmark.autonomy.feature.arealist.AreaListFragment
 import com.bitmark.autonomy.feature.location.LocationService
 import com.bitmark.autonomy.feature.notification.NotificationId
-import com.bitmark.autonomy.feature.notification.NotificationPayloadType
 import com.bitmark.autonomy.feature.notification.NotificationReceivedHandler
-import com.bitmark.autonomy.feature.notification.NotificationType
-import com.bitmark.autonomy.feature.respondhelp.RespondHelpActivity
 import com.bitmark.autonomy.feature.survey.SurveyContainerActivity
-import com.bitmark.autonomy.logging.Event
 import com.bitmark.autonomy.logging.EventLogger
-import com.bitmark.autonomy.util.ext.gone
 import com.bitmark.autonomy.util.ext.openAppSetting
-import com.bitmark.autonomy.util.ext.setImageResource
-import com.bitmark.autonomy.util.ext.visible
-import com.bitmark.autonomy.util.modelview.HelpRequestModelView
 import kotlinx.android.synthetic.main.activity_main.*
-import org.json.JSONObject
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -70,7 +57,7 @@ class MainActivity : BaseAppCompatActivity() {
     internal lateinit var appLifecycleHandler: AppLifecycleHandler
 
     @Inject
-    internal lateinit var viewModel: MainViewModel
+    internal lateinit var viewModel: MainActivityViewModel
 
     @Inject
     internal lateinit var logger: EventLogger
@@ -83,31 +70,7 @@ class MainActivity : BaseAppCompatActivity() {
 
     private val handler = Handler()
 
-    private val helpRequestAdapter = HelpCollectionRecyclerViewAdapter()
-
-    private var lastKnownLocation: Location? = null
-
     private var lastSurveyTimestamp = -1L
-
-    private var score = -1
-
-    private val locationChangedListener = object : LocationService.LocationChangedListener {
-
-        override fun onPlaceChanged(place: String) {
-            if (place.isEmpty()) return
-            tvLocation.text = place
-        }
-
-        override fun onLocationChanged(l: Location) {
-            if (lastKnownLocation == null || lastKnownLocation!!.distanceTo(l) >= BuildConfig.MIN_REFRESH_DISTANCE) {
-                viewModel.listHelpRequest()
-            }
-            if (score == -1) {
-                viewModel.getHealthScore()
-            }
-            lastKnownLocation = l
-        }
-    }
 
     private val appStateChangedListener = object : AppLifecycleHandler.AppStateChangedListener {
         override fun onForeground() {
@@ -115,20 +78,6 @@ class MainActivity : BaseAppCompatActivity() {
             goToSurveyIfSatisfied()
         }
     }
-
-    private val notificationReceiveListener =
-        object : NotificationReceivedHandler.NotificationReceiveListener {
-            override fun onReceived(data: JSONObject?) {
-                when (data?.optString(NotificationPayloadType.NOTIFICATION_TYPE) ?: return) {
-                    NotificationType.ACCEPTED_HELP_REQUEST, NotificationType.HELP_REQUEST_EXPIRED, NotificationType.NEW_HELP_REQUEST -> {
-                        viewModel.listHelpRequest()
-                    }
-                    else -> {
-                        // do nothing
-                    }
-                }
-            }
-        }
 
     private fun goToSurveyIfSatisfied() {
         if (!locationService.isPermissionGranted(this)
@@ -144,82 +93,6 @@ class MainActivity : BaseAppCompatActivity() {
 
     override fun viewModel(): BaseViewModel? = viewModel
 
-    override fun initComponents() {
-        super.initComponents()
-
-        tvLocation.setText(R.string.searching)
-
-        helpRequestAdapter.setItemClickListener(object :
-            HelpCollectionRecyclerViewAdapter.ItemClickListener {
-            override fun onItemClicked(item: HelpRequestModelView) {
-                goToRespondHelp(item)
-            }
-        })
-
-        val layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
-        rvHelp.layoutManager = layoutManager
-        rvHelp.adapter = helpRequestAdapter
-    }
-
-    private fun goToRespondHelp(item: HelpRequestModelView) {
-        val bundle = RespondHelpActivity.getBundle(item)
-        navigator.anim(RIGHT_LEFT).startActivity(RespondHelpActivity::class.java, bundle)
-    }
-
-    override fun observe() {
-        super.observe()
-
-        viewModel.getHealthScoreLiveData.asLiveData().observe(this, Observer { res ->
-            when {
-                res.isSuccess() -> {
-                    score = res.data()!!.toInt()
-                    tvScore.text = score.toString()
-                    ivScore.setImageResource("triangle_%03d".format(score))
-                }
-
-                res.isError() -> {
-                    logger.logError(Event.HEALTH_SCORE_GETTING_ERROR, res.throwable())
-                }
-            }
-        })
-
-        viewModel.listHelpRequestLiveData.asLiveData().observe(this, Observer { res ->
-            when {
-                res.isSuccess() -> {
-                    progressBar.gone()
-                    helpRequestAdapter.set(res.data()!!)
-                }
-
-                res.isError() -> {
-                    progressBar.gone()
-                    logger.logError(Event.HELP_REQUEST_LISTING_ERROR, res.throwable())
-                }
-
-                res.isLoading() -> {
-                    progressBar.visible()
-                }
-            }
-        })
-
-        viewModel.getHelpRequestLiveData.asLiveData().observe(this, Observer { res ->
-            when {
-                res.isSuccess() -> {
-                    progressBar.gone()
-                    goToRespondHelp(res.data()!!)
-                }
-
-                res.isError() -> {
-                    logger.logError(Event.HELP_REQUEST_GETTING_ERROR, res.throwable())
-                    progressBar.gone()
-                }
-
-                res.isLoading() -> {
-                    progressBar.visible()
-                }
-            }
-        })
-    }
-
     override fun onStart() {
         super.onStart()
         locationService.requestPermission(this, grantedCallback = {
@@ -232,11 +105,6 @@ class MainActivity : BaseAppCompatActivity() {
                 navigator.openAppSetting(this)
             }
         })
-        locationService.addLocationChangeListener(locationChangedListener)
-        if (lastKnownLocation != null) {
-            viewModel.getHealthScore()
-            viewModel.listHelpRequest()
-        }
     }
 
     private fun startLocationService() {
@@ -246,7 +114,6 @@ class MainActivity : BaseAppCompatActivity() {
     }
 
     override fun onStop() {
-        locationService.removeLocationChangeListener(locationChangedListener)
         locationService.stop()
         super.onStop()
     }
@@ -258,29 +125,15 @@ class MainActivity : BaseAppCompatActivity() {
         if (notificationBundle != null) {
             when (notificationBundle.getInt("notification_id")) {
                 NotificationId.SURVEY -> goToSurveyIfSatisfied()
-                NotificationId.NEW_HELP_REQUEST, NotificationId.ACCEPTED_HELP_REQUEST -> {
-                    val helpId =
-                        notificationBundle.getString(NotificationPayloadType.HELP_ID) ?: return
-                    val item = helpRequestAdapter.finItemById(helpId)
-                    if (item != null) {
-                        goToRespondHelp(item)
-                    } else {
-                        viewModel.getHelpRequest(helpId)
-                    }
-                }
             }
         } else {
             goToSurveyIfSatisfied()
         }
         appLifecycleHandler.addAppStateChangedListener(appStateChangedListener)
-        notificationReceivedHandler.addNotificationReceiveListener(notificationReceiveListener)
-        viewModel.startServerAuth()
     }
 
     override fun onDestroy() {
         handler.removeCallbacksAndMessages(null)
-        viewModel.stopServerAuth()
-        notificationReceivedHandler.removeNotificationReceiveListener(notificationReceiveListener)
         appLifecycleHandler.removeAppStateChangedListener(appStateChangedListener)
         super.onDestroy()
     }
@@ -290,6 +143,20 @@ class MainActivity : BaseAppCompatActivity() {
         if (resultCode == Activity.RESULT_OK && requestCode == LOCATION_SETTING_CODE) {
             startLocationService()
         }
+    }
+
+    override fun initComponents() {
+        super.initComponents()
+
+        val adapter = MainViewPagerAdapter(supportFragmentManager)
+        adapter.add(MainFragment.newInstance(true))
+        adapter.add(MainFragment.newInstance(false))
+        adapter.add(MainFragment.newInstance(false))
+        adapter.add(MainFragment.newInstance(false))
+        adapter.add(AreaListFragment.newInstance())
+        vp.offscreenPageLimit = 5
+        vp.adapter = adapter
+        vIndicator.setViewPager(vp)
     }
 
 }

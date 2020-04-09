@@ -44,6 +44,7 @@
     <dimen name="dp_166">166dp</dimen>
     <dimen name="dp_180">180dp</dimen>
     <dimen name="dp_200">200dp</dimen>
+    <dimen name="dp_210">210dp</dimen>
     <dimen name="dp_220">220dp</dimen>
     <dimen name="dp_240">240dp</dimen>
     <dimen name="dp_320">320dp</dimen>
@@ -73,6 +74,7 @@
     <dimen name="sp_20">20sp</dimen>
     <dimen name="sp_22">22sp</dimen>
     <dimen name="sp_24">24sp</dimen>
+    <dimen name="sp_30">30sp</dimen>
     <dimen name="sp_36">36sp</dimen>
     <dimen name="sp_40">40sp</dimen>
     <dimen name="sp_42">42sp</dimen>
