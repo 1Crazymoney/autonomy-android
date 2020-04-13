@@ -40,6 +40,10 @@ enum class Event(val value: String) {
 
     NOTIFICATION_HANDLING_ERROR("notification_handling_error"),
 
-    HEALTH_SCORE_GETTING_ERROR("health_score_getting_error")
+    HEALTH_SCORE_GETTING_ERROR("health_score_getting_error"),
+
+    BEHAVIOR_LISTING_ERROR("behavior_listing_error"),
+
+    BEHAVIOR_REPORT_ERROR("behavior_report_error"),
 
 }

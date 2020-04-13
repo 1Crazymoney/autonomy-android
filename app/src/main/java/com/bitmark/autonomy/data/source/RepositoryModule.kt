@@ -54,6 +54,12 @@ class RepositoryModule {
 
     @Singleton
     @Provides
+    fun provideBehaviorRepo(
+        remoteDataSource: BehaviorRemoteDataSource
+    ) = BehaviorRepository(remoteDataSource)
+
+    @Singleton
+    @Provides
     fun provideDatabaseGateway(context: Context): DatabaseGateway {
         return object : DatabaseGateway() {}
     }

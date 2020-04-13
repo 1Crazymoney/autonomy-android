@@ -16,14 +16,13 @@ import com.bitmark.autonomy.feature.Navigator.Companion.FADE_IN
 import com.bitmark.autonomy.feature.Navigator.Companion.RIGHT_LEFT
 import com.bitmark.autonomy.feature.connectivity.ConnectivityHandler
 import com.bitmark.autonomy.feature.main.MainActivity
-import com.bitmark.autonomy.feature.notification.NotificationId
-import com.bitmark.autonomy.feature.notification.buildSimpleNotificationBundle
-import com.bitmark.autonomy.feature.notification.pushHalfDayRepeatingNotification
-import com.bitmark.autonomy.feature.splash.SplashActivity
+import com.bitmark.autonomy.feature.notification.*
+import com.bitmark.autonomy.feature.notification.NotificationHelper.Companion.pushScheduledNotification
 import com.bitmark.autonomy.logging.Event
 import com.bitmark.autonomy.logging.EventLogger
 import com.bitmark.autonomy.util.DateTimeUtil
 import com.bitmark.autonomy.util.ext.*
+import com.bitmark.autonomy.util.randomNextMillisInHourRange
 import com.bitmark.sdk.authentication.KeyAuthenticationSpec
 import com.bitmark.sdk.features.Account
 import kotlinx.android.synthetic.main.activity_risk_level.*
@@ -143,17 +142,27 @@ class RiskLevelActivity : BaseAppCompatActivity() {
 
     private fun scheduleNotification() {
         val currentHour = DateTimeUtil.getCurrentHour()
-        val gap = DateTimeUtil.calculateGapMillisTo(if (currentHour in 9..21) 21 else 9)
-        val bundle = buildSimpleNotificationBundle(
-            this,
-            R.string.check_in_survey,
-            R.string.how_r_u_right_now_tap_to_check_in,
-            R.color.colorAccent,
-            NotificationId.SURVEY,
-            SplashActivity::class.java
-        )
-        val triggerAt = System.currentTimeMillis() + gap
-        pushHalfDayRepeatingNotification(this, bundle, triggerAt)
+        if (currentHour < NotificationConstants.NOTIFICATION_HOUR_RANGE.last) {
+            val randomMillis = DateTimeUtil.randomNextMillisInHourRange(
+                NotificationConstants.NOTIFICATION_HOUR_RANGE,
+                NotificationConstants.PUSH_COUNT_PER_DAY
+            )
+
+            for (triggerMillis in randomMillis) {
+                val bundle = NotificationHelper.buildCheckInSurveyNotificationBundle(this)
+                pushScheduledNotification<ScheduledNotificationReceiver>(
+                    this,
+                    bundle,
+                    triggerMillis,
+                    NotificationId.SURVEY
+                )
+            }
+        }
+
+        // schedule daily notification pushing
+        val gap = DateTimeUtil.calculateGapMillisTo(1) // 1am
+        val triggerAtMillis = System.currentTimeMillis() + gap
+        DailyPushNotificationBroadcastReceiver.trigger(this, triggerAtMillis)
     }
 
     private fun enableDone() {

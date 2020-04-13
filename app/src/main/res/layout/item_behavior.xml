@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layoutRoot"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:paddingStart="@dimen/dp_18"
+    android:paddingTop="@dimen/dp_8"
+    android:paddingEnd="@dimen/dp_18"
+    android:paddingBottom="@dimen/dp_8"
+    tools:background="@color/black">
+
+    <androidx.appcompat.widget.AppCompatCheckBox
+        android:id="@+id/cbBehavior"
+        android:layout_width="@dimen/dp_44"
+        android:layout_height="@dimen/dp_44"
+        android:background="@drawable/bg_checkbox"
+        android:button="@null"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:checked="true" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvBehavior"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp_10"
+        android:fontFamily="@font/grotesk_light_font_family"
+        android:includeFontPadding="false"
+        android:textColor="@color/color_white_stateful"
+        android:textSize="@dimen/sp_24"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/cbBehavior"
+        app:layout_constraintTop_toTopOf="@id/cbBehavior"
+        tools:text="12 mins ago" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvBehaviorDes"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/grotesk_light_font_family"
+        android:includeFontPadding="false"
+        android:textColor="@color/silver_chalice"
+        android:textSize="@dimen/sp_14"
+        app:layout_constraintEnd_toEndOf="@id/tvBehavior"
+        app:layout_constraintStart_toStartOf="@id/tvBehavior"
+        app:layout_constraintTop_toBottomOf="@id/tvBehavior"
+        tools:text="Community request for assistance" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

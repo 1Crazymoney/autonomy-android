@@ -9,7 +9,7 @@ package com.bitmark.autonomy.feature.notification
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-
+import com.bitmark.autonomy.feature.notification.NotificationHelper.Companion.pushNotification
 
 class ScheduledNotificationReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {

@@ -58,6 +58,15 @@
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
 
+        <activity
+            android:name=".feature.behavior.BehaviorReportActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+
+        <receiver android:name=".feature.notification.DailyPushNotificationBroadcastReceiver" />
+
+        <receiver android:name=".feature.notification.ScheduledNotificationReceiver" />
+
         <meta-data
             android:name="com.onesignal.NotificationAccentColor.DEFAULT"
             android:value="@color/colorAccent" />
@@ -69,8 +78,6 @@
         <meta-data
             android:name="io.sentry.dsn"
             android:value="https://99b0fdab83fb432a92791b715267da15@sentry.io/5174225" />
-
-        <receiver android:name=".feature.notification.ScheduledNotificationReceiver" />
 
     </application>
 </manifest>

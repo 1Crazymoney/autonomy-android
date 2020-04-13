@@ -106,6 +106,7 @@ class DateTimeUtil {
         }
 
         fun getCurrentHour() = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
+
     }
 }
 
@@ -143,4 +144,60 @@ fun DateTimeUtil.Companion.formatAgo(context: Context, dateString: String): Stri
         }
     }
 
+}
+
+fun DateTimeUtil.Companion.randomNextMillisInHourRange(
+    range: IntRange,
+    num: Int,
+    minRandomGap: Long = TimeUnit.HOURS.toMillis(1)
+): List<Long> {
+    if (range.first < 0 || range.last < 0 || range.first > 23 || range.last > 23 || range.first >= range.last) {
+        error("invalid hour range")
+    }
+    val currentHour = getCurrentHour()
+    val firstCal = Calendar.getInstance()
+    firstCal.set(Calendar.HOUR_OF_DAY, range.first)
+    firstCal.set(Calendar.MINUTE, 0)
+    firstCal.set(Calendar.SECOND, 0)
+    firstCal.set(Calendar.MILLISECOND, 0)
+    val lastCal = Calendar.getInstance()
+    lastCal.set(Calendar.MINUTE, 0)
+    lastCal.set(Calendar.SECOND, 0)
+    lastCal.set(Calendar.MILLISECOND, 0)
+    lastCal.set(Calendar.HOUR_OF_DAY, range.last)
+
+    if (range.last < currentHour) {
+        firstCal.add(Calendar.DATE, 1)
+        lastCal.add(Calendar.DATE, 1)
+    } else if (range.first < currentHour) {
+        firstCal.set(Calendar.HOUR_OF_DAY, currentHour)
+    }
+
+    var firstMillis = firstCal.timeInMillis
+    val lastMillis = lastCal.timeInMillis
+    val gap = (lastMillis - firstMillis) / num
+
+    val result = mutableListOf<Long>()
+    for (i in 0 until num) {
+        val nextFirstMillis = firstMillis + gap
+
+        var value = (firstMillis..nextFirstMillis).random()
+
+        if (gap < minRandomGap) {
+            result.add(value)
+            break
+        } else {
+            if (result.isNotEmpty()) {
+                val lastValue = result.last()
+                while (value - lastValue < minRandomGap) {
+                    value = (firstMillis..nextFirstMillis).random()
+                }
+            }
+            result.add(value)
+            firstMillis = nextFirstMillis
+            if (firstMillis >= lastMillis) break
+        }
+    }
+
+    return result
 }

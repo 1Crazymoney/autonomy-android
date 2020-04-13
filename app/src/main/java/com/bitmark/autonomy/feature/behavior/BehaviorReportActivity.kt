@@ -4,7 +4,7 @@
  * Use of this source code is governed by an ISC
  * license that can be found in the LICENSE file.
  */
-package com.bitmark.autonomy.feature.symptoms
+package com.bitmark.autonomy.feature.behavior
 
 import android.os.Bundle
 import androidx.lifecycle.Observer
@@ -21,14 +21,14 @@ import com.bitmark.autonomy.logging.Event
 import com.bitmark.autonomy.logging.EventLogger
 import com.bitmark.autonomy.util.ext.*
 import com.bitmark.autonomy.util.view.BottomAlertDialog
-import kotlinx.android.synthetic.main.activity_symptoms_report.*
+import kotlinx.android.synthetic.main.activity_behavior_report.*
 import javax.inject.Inject
 
 
-class SymptomReportActivity : BaseAppCompatActivity() {
+class BehaviorReportActivity : BaseAppCompatActivity() {
 
     @Inject
-    internal lateinit var viewModel: SymptomReportViewModel
+    internal lateinit var viewModel: BehaviorReportViewModel
 
     @Inject
     internal lateinit var navigator: Navigator
@@ -44,16 +44,16 @@ class SymptomReportActivity : BaseAppCompatActivity() {
 
     private var blocked = false
 
-    private val adapter = SymptomRecyclerViewAdapter()
+    private val adapter = BehaviorReportRecyclerViewAdapter()
 
-    override fun layoutRes(): Int = R.layout.activity_symptoms_report
+    override fun layoutRes(): Int = R.layout.activity_behavior_report
 
     override fun viewModel(): BaseViewModel? = viewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        viewModel.listSymptom()
+        viewModel.listBehavior()
     }
 
     override fun initComponents() {
@@ -62,7 +62,7 @@ class SymptomReportActivity : BaseAppCompatActivity() {
         disableSubmit()
 
         adapter.setItemsCheckedChangeListener(object :
-            SymptomRecyclerViewAdapter.ItemsCheckedChangeListener {
+            BehaviorReportRecyclerViewAdapter.ItemsCheckedChangeListener {
             override fun onChecked() {
                 enableSubmit()
             }
@@ -73,12 +73,12 @@ class SymptomReportActivity : BaseAppCompatActivity() {
         })
 
         val layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
-        rvSymptoms.layoutManager = layoutManager
-        rvSymptoms.adapter = adapter
+        rvBehaviors.layoutManager = layoutManager
+        rvBehaviors.adapter = adapter
 
         layoutSubmit.setSafetyOnclickListener {
             if (blocked) return@setSafetyOnclickListener
-            viewModel.reportSymptoms(adapter.getCheckedSymptoms().map { it.id })
+            viewModel.reportBehaviors(adapter.getCheckedBehaviors().map { it.id })
         }
 
         layoutBack.setOnClickListener {
@@ -101,7 +101,7 @@ class SymptomReportActivity : BaseAppCompatActivity() {
     override fun observe() {
         super.observe()
 
-        viewModel.listSymptomLiveData.asLiveData().observe(this, Observer { res ->
+        viewModel.listBehaviorLiveData.asLiveData().observe(this, Observer { res ->
             when {
                 res.isSuccess() -> {
                     progressBar.gone()
@@ -110,7 +110,7 @@ class SymptomReportActivity : BaseAppCompatActivity() {
 
                 res.isError() -> {
                     progressBar.gone()
-                    logger.logError(Event.SYMPTOM_LISTING_ERROR, res.throwable())
+                    logger.logError(Event.BEHAVIOR_LISTING_ERROR, res.throwable())
                 }
 
                 res.isLoading() -> {
@@ -119,15 +119,15 @@ class SymptomReportActivity : BaseAppCompatActivity() {
             }
         })
 
-        viewModel.reportSymptomLiveData.asLiveData().observe(this, Observer { res ->
+        viewModel.reportBehaviorsLiveData.asLiveData().observe(this, Observer { res ->
             when {
                 res.isSuccess() -> {
                     progressBar.gone()
                     val dialog = BottomAlertDialog(
                         this,
                         R.string.reported,
-                        R.string.your_symptoms_have_been_reported,
-                        R.string.thanks_for_taking_the_time_symptoms,
+                        R.string.your_behaviors_have_been_reported,
+                        R.string.thanks_for_taking_the_time_behaviors,
                         R.string.ok
                     )
                     dialog.setOnDismissListener {
@@ -139,9 +139,9 @@ class SymptomReportActivity : BaseAppCompatActivity() {
 
                 res.isError() -> {
                     progressBar.gone()
-                    logger.logError(Event.SYMPTOM_REPORT_ERROR, res.throwable())
+                    logger.logError(Event.BEHAVIOR_REPORT_ERROR, res.throwable())
                     if (connectivityHandler.isConnected()) {
-                        dialogController.alert(R.string.error, R.string.could_not_report_symptoms)
+                        dialogController.alert(R.string.error, R.string.could_not_report_behaviors)
                     } else {
                         dialogController.showNoInternetConnection()
                     }

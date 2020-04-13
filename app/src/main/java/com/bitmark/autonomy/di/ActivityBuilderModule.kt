@@ -6,6 +6,8 @@
  */
 package com.bitmark.autonomy.di
 
+import com.bitmark.autonomy.feature.behavior.BehaviorReportActivity
+import com.bitmark.autonomy.feature.behavior.BehaviorReportModule
 import com.bitmark.autonomy.feature.main.MainActivity
 import com.bitmark.autonomy.feature.main.MainActivityModule
 import com.bitmark.autonomy.feature.onboarding.OnboardingContainerActivity
@@ -65,5 +67,9 @@ abstract class ActivityBuilderModule {
     @ContributesAndroidInjector(modules = [SymptomReportModule::class])
     @ActivityScope
     internal abstract fun bindSymptomReportActivity(): SymptomReportActivity
+
+    @ContributesAndroidInjector(modules = [BehaviorReportModule::class])
+    @ActivityScope
+    internal abstract fun bindBehaviorReportActivity(): BehaviorReportActivity
 
 }

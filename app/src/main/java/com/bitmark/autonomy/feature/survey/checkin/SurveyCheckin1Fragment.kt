@@ -10,7 +10,9 @@ import com.bitmark.autonomy.R
 import com.bitmark.autonomy.feature.BaseSupportFragment
 import com.bitmark.autonomy.feature.BaseViewModel
 import com.bitmark.autonomy.feature.Navigator
+import com.bitmark.autonomy.feature.Navigator.Companion.NONE
 import com.bitmark.autonomy.feature.Navigator.Companion.RIGHT_LEFT
+import com.bitmark.autonomy.feature.behavior.BehaviorReportActivity
 import com.bitmark.autonomy.feature.symptoms.SymptomReportActivity
 import com.bitmark.autonomy.util.ext.setSafetyOnclickListener
 import kotlinx.android.synthetic.main.fragment_survey_checkin_1.*
@@ -35,15 +37,17 @@ class SurveyCheckin1Fragment : BaseSupportFragment() {
 
         ivRed.setSafetyOnclickListener {
             navigator.anim(RIGHT_LEFT).startActivity(SymptomReportActivity::class.java)
-            navigator.anim(Navigator.NONE).finishActivity()
+            navigator.anim(NONE).finishActivity()
         }
 
         ivYellow.setSafetyOnclickListener {
-            navigator.anim(RIGHT_LEFT).finishActivity()
+            navigator.anim(RIGHT_LEFT).startActivity(BehaviorReportActivity::class.java)
+            navigator.anim(NONE).finishActivity()
         }
 
         ivGreen.setSafetyOnclickListener {
-            navigator.anim(RIGHT_LEFT).finishActivity()
+            navigator.anim(RIGHT_LEFT).startActivity(BehaviorReportActivity::class.java)
+            navigator.anim(NONE).finishActivity()
         }
     }
 
