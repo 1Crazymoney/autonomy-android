@@ -14,13 +14,14 @@
     <string name="today">Today</string>
     <string name="work_from_home">Work from home</string>
     <string name="based_on_your_current_location">Based on your current location, environmental factors, and the latest COVID-19 outbreak data, you shouldwork from home today if possible.</string>
-    <string name="we_will_help_you_and_your_community">We’ll help you and your community better manage resources.</string>
+    <string name="of_course_we_will_keep_all_data_private">Of course, we’ll keep all your data private and only for you.</string>
     <string name="help_deliver_food">Help deliver food</string>
     <string name="safely_deliver_food">Safely deliver food to others in your area.</string>
     <string name="permission">Permission</string>
-    <string name="autonomy_can_help_you_most_if">Autonomy can help you most if you turn on the following:</string>
+    <string name="we_will_help_u_and_community_help_one_other">We’ll help you and your community help one another.</string>
     <string name="location_data">Location data</string>
-    <string name="we_will_use_your_location">We’ll use your location data to give you the latest COVID-19 outbreak information for your local current area and tell how to help your local community.</string>
+    <string name="your_current_location_will_be_used">Your current location will be used to help improve your community’s data. Your location data is always private, and you cannot be personally identified by sharing your location.</string>
+    <string name="autonomy_requires_access_to_the_following">Autonomy requires access to the following:</string>
     <string name="done">Done</string>
     <string name="risk_level">Risk level</string>
     <string name="are_u_at_higher_risk">Are you at higher risk for severe illness from COVID-19?</string>
@@ -121,6 +122,15 @@
     <string name="your_behaviors_have_been_reported">Your behaviors have been successfully reported to your community</string>
     <string name="thanks_for_taking_the_time_behaviors">Thanks for taking the time to make your community a healthier and happier place. Please continue to report your behaviors if they continue.</string>
     <string name="could_not_report_behaviors">Could not report your behaviors. Please try again later.</string>
+    <string name="did_u_do_any_behaviors">Did you do any of the following behaviors today?</string>
+    <string name="frequent_hand_cleaning">Frequent hand cleaning</string>
+    <string name="washing_hands_thoroughly">Washing hands thoroughly with soap and water for at least 20 seconds or applying an alcohol-based hand sanitizer.</string>
+    <string name="social_physical_distancing">Social &amp; physical distancing</string>
+    <string name="avoiding_crowds_work_from_home">Avoiding crowds, working from home, and maintaining at least 6 feet of distance from others whenever possible.</string>
+    <string name="fever">Fever</string>
+    <string name="body_temp">Body temperature above 100ºF (38ºC)</string>
+    <string name="dry_cough">Dry cough</string>
+    <string name="without_mucous">Without mucous or phlegm (rattling)</string>
 
     <!--    string format-->
     <string name="send_to_format">Send to %1$s</string>

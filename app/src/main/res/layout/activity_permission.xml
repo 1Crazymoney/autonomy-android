@@ -53,16 +53,14 @@
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tvSlogan"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="@dimen/dp_130"
         android:layout_marginTop="@dimen/dp_24"
         android:layout_marginBottom="@dimen/dp_24"
         android:fontFamily="@font/grotesk_light_font_family"
         android:gravity="center"
         android:includeFontPadding="false"
-        android:paddingStart="@dimen/dp_16"
-        android:paddingEnd="@dimen/dp_16"
-        android:text="@string/autonomy_can_help_you_most_if"
+        android:text="@string/autonomy_requires_access_to_the_following"
         android:textColor="@color/white"
         app:autoSizeMaxTextSize="@dimen/sp_36"
         app:autoSizeMinTextSize="@dimen/sp_18"
@@ -77,8 +75,8 @@
         android:layout_height="1dp"
         android:layout_marginTop="@dimen/dp_30"
         android:background="@color/concord"
-        app:layout_constraintEnd_toEndOf="@id/tvSlogan"
-        app:layout_constraintStart_toStartOf="@id/tvSlogan"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvSlogan" />
 
     <androidx.appcompat.widget.AppCompatTextView
@@ -101,7 +99,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="2dp"
         android:fontFamily="@font/grotesk_light_font_family"
-        android:text="@string/we_will_use_your_location"
+        android:text="@string/your_current_location_will_be_used"
         android:textColor="@color/silver_chalice"
         android:textSize="@dimen/sp_14"
         app:layout_constraintEnd_toEndOf="@id/tvPermission"

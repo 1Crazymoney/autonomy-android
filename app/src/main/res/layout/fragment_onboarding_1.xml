@@ -11,21 +11,53 @@
     android:paddingEnd="@dimen/dp_18"
     android:paddingBottom="@dimen/dp_14">
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/tvTitle"
+    <LinearLayout
+        android:id="@+id/layoutTitle"
         android:layout_width="@dimen/dp_105"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/domaine_sans"
-        android:gravity="center"
-        android:paddingStart="@dimen/dp_24"
-        android:paddingEnd="@dimen/dp_24"
-        android:text="1"
-        android:textAllCaps="true"
-        android:textColor="@color/silver_2"
-        android:textSize="@dimen/sp_14"
+        android:orientation="horizontal"
+        android:weightSum="3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvTitle1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fontFamily="@font/domaine_sans"
+            android:gravity="center"
+            android:text="1"
+            android:textAllCaps="true"
+            android:textColor="@color/white"
+            android:textSize="@dimen/sp_14" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvTitle2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fontFamily="@font/domaine_sans"
+            android:gravity="center"
+            android:text="2"
+            android:textAllCaps="true"
+            android:textColor="@color/concord"
+            android:textSize="@dimen/sp_14" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvTitle3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fontFamily="@font/domaine_sans"
+            android:gravity="center"
+            android:text="3"
+            android:textAllCaps="true"
+            android:textColor="@color/concord"
+            android:textSize="@dimen/sp_14" />
+
+    </LinearLayout>
 
     <View
         android:id="@+id/vToolbar1"
@@ -34,10 +66,10 @@
         android:layout_marginTop="@dimen/dp_4"
         android:layout_marginEnd="@dimen/dp_4"
         android:background="@drawable/ic_double_line"
-        app:layout_constraintBottom_toBottomOf="@id/tvTitle"
-        app:layout_constraintEnd_toStartOf="@id/tvTitle"
+        app:layout_constraintBottom_toBottomOf="@id/layoutTitle"
+        app:layout_constraintEnd_toStartOf="@id/layoutTitle"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/tvTitle"
+        app:layout_constraintTop_toTopOf="@id/layoutTitle"
         tools:visibility="visible" />
 
     <View
@@ -47,10 +79,10 @@
         android:layout_marginStart="@dimen/dp_4"
         android:layout_marginTop="@dimen/dp_4"
         android:background="@drawable/ic_double_line"
-        app:layout_constraintBottom_toBottomOf="@id/tvTitle"
+        app:layout_constraintBottom_toBottomOf="@id/layoutTitle"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/tvTitle"
-        app:layout_constraintTop_toTopOf="@id/tvTitle"
+        app:layout_constraintStart_toEndOf="@id/layoutTitle"
+        app:layout_constraintTop_toTopOf="@id/layoutTitle"
         tools:visibility="visible" />
 
     <androidx.appcompat.widget.AppCompatTextView
@@ -72,7 +104,7 @@
         app:layout_constraintBottom_toTopOf="@id/ivPhone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvTitle" />
+        app:layout_constraintTop_toBottomOf="@id/layoutTitle" />
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/ivPhone"

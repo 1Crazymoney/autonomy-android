@@ -147,18 +147,18 @@ fun View.flip(other: View, duration: Long = 500) {
     this.visible()
     val d = duration / 2
     this.animate().withLayer()
-        .rotationY(90f)
+        .rotationX(90f)
         .setInterpolator(DecelerateInterpolator())
-        .scaleX(0f)
+        .scaleY(0f)
         .setDuration(d)
         .withEndAction {
             this.gone()
             other.visible()
-            other.rotationY = 0f
-            other.scaleX = 0f
+            other.rotationX = 0f
+            other.scaleY = 0f
             other.animate().withLayer()
-                .rotationY(0f)
-                .scaleX(1f)
+                .rotationX(0f)
+                .scaleY(1f)
                 .setDuration(d)
                 .setInterpolator(AccelerateInterpolator())
                 .start()

@@ -39,7 +39,9 @@ class PermissionActivity : BaseAppCompatActivity() {
         super.initComponents()
 
         ivRequestLocation.setSafetyOnclickListener {
-            locationService.requestPermission(this, permanentlyDeniedCallback = {
+            locationService.requestPermission(this, grantedCallback = {
+                ivRequestLocation.setImageResource(R.drawable.ic_checked_stateful)
+            }, permanentlyDeniedCallback = {
                 navigator.openAppSetting(this)
             })
         }

@@ -17,7 +17,7 @@ class MainViewPagerAdapter(fm: FragmentManager) : ViewPagerAdapter(fm), IconPage
     override fun getIconResId(index: Int): Int {
         return when (index) {
             0 -> R.drawable.ic_navigation_stateful
-            fragments.size - 1 -> R.drawable.ic_search_stateful
+            fragments.size - 1 -> R.drawable.ic_plus_stateful
             else -> R.drawable.ic_round_stateful
         }
     }

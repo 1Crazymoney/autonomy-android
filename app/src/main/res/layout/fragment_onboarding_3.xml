@@ -11,21 +11,53 @@
     android:paddingEnd="@dimen/dp_18"
     android:paddingBottom="@dimen/dp_14">
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/tvTitle"
+    <LinearLayout
+        android:id="@+id/layoutTitle"
         android:layout_width="@dimen/dp_105"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/domaine_sans"
-        android:gravity="center"
-        android:paddingStart="@dimen/dp_24"
-        android:paddingEnd="@dimen/dp_24"
-        android:text="3"
-        android:textAllCaps="true"
-        android:textColor="@color/silver_2"
-        android:textSize="@dimen/sp_14"
+        android:orientation="horizontal"
+        android:weightSum="3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvTitle1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fontFamily="@font/domaine_sans"
+            android:gravity="center"
+            android:text="1"
+            android:textAllCaps="true"
+            android:textColor="@color/concord"
+            android:textSize="@dimen/sp_14" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvTitle2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fontFamily="@font/domaine_sans"
+            android:gravity="center"
+            android:text="2"
+            android:textAllCaps="true"
+            android:textColor="@color/concord"
+            android:textSize="@dimen/sp_14" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvTitle3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fontFamily="@font/domaine_sans"
+            android:gravity="center"
+            android:text="3"
+            android:textAllCaps="true"
+            android:textColor="@color/white"
+            android:textSize="@dimen/sp_14" />
+
+    </LinearLayout>
 
     <View
         android:id="@+id/vToolbar1"
@@ -34,10 +66,10 @@
         android:layout_marginTop="@dimen/dp_4"
         android:layout_marginEnd="@dimen/dp_4"
         android:background="@drawable/ic_double_line"
-        app:layout_constraintBottom_toBottomOf="@id/tvTitle"
-        app:layout_constraintEnd_toStartOf="@id/tvTitle"
+        app:layout_constraintBottom_toBottomOf="@id/layoutTitle"
+        app:layout_constraintEnd_toStartOf="@id/layoutTitle"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/tvTitle"
+        app:layout_constraintTop_toTopOf="@id/layoutTitle"
         tools:visibility="visible" />
 
     <View
@@ -47,10 +79,10 @@
         android:layout_marginStart="@dimen/dp_4"
         android:layout_marginTop="@dimen/dp_4"
         android:background="@drawable/ic_double_line"
-        app:layout_constraintBottom_toBottomOf="@id/tvTitle"
+        app:layout_constraintBottom_toBottomOf="@id/layoutTitle"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/tvTitle"
-        app:layout_constraintTop_toTopOf="@id/tvTitle"
+        app:layout_constraintStart_toEndOf="@id/layoutTitle"
+        app:layout_constraintTop_toTopOf="@id/layoutTitle"
         tools:visibility="visible" />
 
     <androidx.appcompat.widget.AppCompatTextView
@@ -64,7 +96,7 @@
         android:includeFontPadding="false"
         android:paddingStart="@dimen/dp_36"
         android:paddingEnd="@dimen/dp_36"
-        android:text="@string/we_will_help_you_and_your_community"
+        android:text="@string/we_will_help_u_and_community_help_one_other"
         android:textColor="@color/white"
         app:autoSizeMaxTextSize="@dimen/sp_36"
         app:autoSizeMinTextSize="@dimen/sp_18"
@@ -72,7 +104,7 @@
         app:layout_constraintBottom_toTopOf="@id/ivPhone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvTitle" />
+        app:layout_constraintTop_toBottomOf="@id/layoutTitle" />
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/ivPhone"
@@ -85,48 +117,118 @@
         app:srcCompat="@drawable/bg_phone" />
 
     <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/tvJob"
+        android:id="@+id/tvPhoneTitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/dp_20"
-        android:layout_marginTop="@dimen/dp_80"
-        android:fontFamily="@font/domaine_sans"
-        android:text="@string/help_deliver_food"
+        android:layout_marginStart="@dimen/dp_14"
+        android:layout_marginTop="@dimen/dp_90"
+        android:layout_marginEnd="@dimen/dp_14"
+        android:fontFamily="@font/grotesk_light_font_family"
+        android:gravity="center"
+        android:text="@string/did_u_practice_any_behaviors"
         android:textColor="@color/white"
         android:textSize="@dimen/sp_24"
-        app:layout_constraintEnd_toStartOf="@id/ivNextStub"
+        app:layout_constraintEnd_toEndOf="@id/ivPhone"
         app:layout_constraintStart_toStartOf="@id/ivPhone"
         app:layout_constraintTop_toTopOf="@id/ivPhone" />
 
+    <View
+        android:id="@+id/vDivider"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginStart="@dimen/dp_14"
+        android:layout_marginTop="@dimen/dp_16"
+        android:layout_marginEnd="@dimen/dp_14"
+        android:background="@color/concord"
+        app:layout_constraintEnd_toEndOf="@id/ivPhone"
+        app:layout_constraintStart_toStartOf="@id/ivPhone"
+        app:layout_constraintTop_toBottomOf="@id/tvPhoneTitle" />
+
     <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/tvJobDes"
+        android:id="@+id/tvSymptom1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp_14"
+        android:fontFamily="@font/grotesk_light_font_family"
+        android:includeFontPadding="false"
+        android:text="@string/frequent_hand_cleaning"
+        android:textColor="@color/white"
+        android:textSize="@dimen/sp_16"
+        app:layout_constraintEnd_toEndOf="@id/vDivider"
+        app:layout_constraintStart_toEndOf="@id/ivSymptom1"
+        app:layout_constraintTop_toTopOf="@id/ivSymptom1" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvSymptomDes1"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="2dp"
-        android:layout_marginEnd="@dimen/dp_44"
         android:fontFamily="@font/grotesk_light_font_family"
-        android:text="@string/safely_deliver_food"
+        android:text="@string/washing_hands_thoroughly"
         android:textColor="@color/silver_chalice"
-        android:textSize="@dimen/sp_14"
-        app:layout_constraintEnd_toEndOf="@id/tvJob"
-        app:layout_constraintStart_toStartOf="@id/tvJob"
-        app:layout_constraintTop_toBottomOf="@id/tvJob" />
+        android:textSize="@dimen/sp_12"
+        app:layout_constraintEnd_toEndOf="@id/tvSymptom1"
+        app:layout_constraintStart_toStartOf="@id/tvSymptom1"
+        app:layout_constraintTop_toBottomOf="@id/tvSymptom1" />
 
     <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/ivNextStub"
+        android:id="@+id/ivSymptom1"
         android:layout_width="@dimen/dp_44"
         android:layout_height="@dimen/dp_44"
-        android:layout_marginEnd="@dimen/dp_20"
-        app:layout_constraintBottom_toBottomOf="@id/tvJob"
-        app:layout_constraintEnd_toEndOf="@id/ivPhone"
-        app:layout_constraintTop_toTopOf="@id/tvJob"
-        app:srcCompat="@drawable/ic_next" />
+        android:layout_marginTop="@dimen/dp_28"
+        app:layout_constraintStart_toStartOf="@id/vDivider"
+        app:layout_constraintTop_toBottomOf="@id/vDivider"
+        app:srcCompat="@drawable/ic_checked" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvSymptom2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp_14"
+        android:fontFamily="@font/grotesk_light_font_family"
+        android:includeFontPadding="false"
+        android:text="@string/social_physical_distancing"
+        android:textColor="@color/white"
+        android:textSize="@dimen/sp_16"
+        app:layout_constraintEnd_toEndOf="@id/vDivider"
+        app:layout_constraintStart_toEndOf="@id/ivSymptom2"
+        app:layout_constraintTop_toTopOf="@id/ivSymptom2" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvSymptomDes2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:fontFamily="@font/grotesk_light_font_family"
+        android:text="@string/avoiding_crowds_work_from_home"
+        android:textColor="@color/silver_chalice"
+        android:textSize="@dimen/sp_12"
+        app:layout_constraintEnd_toEndOf="@id/tvSymptom2"
+        app:layout_constraintStart_toStartOf="@id/tvSymptom2"
+        app:layout_constraintTop_toBottomOf="@id/tvSymptom2" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/ivSymptom2"
+        android:layout_width="@dimen/dp_44"
+        android:layout_height="@dimen/dp_44"
+        android:layout_marginTop="@dimen/dp_16"
+        app:layout_constraintStart_toStartOf="@id/vDivider"
+        app:layout_constraintTop_toBottomOf="@id/tvSymptomDes1"
+        app:srcCompat="@drawable/ic_checked" />
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/bg_black_gradient"
+        app:layout_constraintBottom_toBottomOf="@id/layoutBack"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/layoutBack" />
 
     <LinearLayout
         android:id="@+id/layoutBack"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/bg_black_gradient"
         android:clickable="true"
         android:focusable="true"
         android:gravity="center"
@@ -156,7 +258,6 @@
         android:id="@+id/layoutNext"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/bg_black_gradient"
         android:clickable="true"
         android:focusable="true"
         android:gravity="center"
@@ -181,6 +282,5 @@
             app:srcCompat="@drawable/ic_next_stateful" />
 
     </LinearLayout>
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
