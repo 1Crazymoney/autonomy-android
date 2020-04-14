@@ -6,8 +6,10 @@
  */
 package com.bitmark.autonomy.data.model
 
+import android.os.Parcelable
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
+import kotlinx.android.parcel.Parcelize
 
 
 data class AccountData(
@@ -57,6 +59,7 @@ data class State(
     val location: Location?
 ) : Data
 
+@Parcelize
 data class Location(
     @Expose
     @SerializedName("latitude")
@@ -65,7 +68,7 @@ data class Location(
     @Expose
     @SerializedName("longitude")
     val lng: Double
-) : Data
+) : Data, Parcelable
 
 fun AccountData.Companion.newInstance(): AccountData =
     AccountData("", "", "", "", null, null, false, "")

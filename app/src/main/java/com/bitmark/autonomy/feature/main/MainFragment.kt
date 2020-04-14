@@ -22,6 +22,7 @@ import com.bitmark.autonomy.logging.EventLogger
 import com.bitmark.autonomy.util.ext.flip
 import com.bitmark.autonomy.util.ext.setImageResource
 import com.bitmark.autonomy.util.ext.setSafetyOnclickListener
+import com.bitmark.autonomy.util.modelview.AreaModelView
 import kotlinx.android.synthetic.main.fragment_main.*
 import kotlinx.android.synthetic.main.layout_risk_level_des.*
 import javax.inject.Inject
@@ -30,10 +31,11 @@ import javax.inject.Inject
 class MainFragment : BaseSupportFragment() {
 
     companion object {
-        private const val MSA_0 = "msa_0"
 
-        fun newInstance(isMas0: Boolean = false) = MainFragment().apply {
-            val bundle = Bundle().apply { putBoolean(MSA_0, isMas0) }
+        private const val AREA_DATA = "area_data"
+
+        fun newInstance(areaData: AreaModelView? = null) = MainFragment().apply {
+            val bundle = Bundle().apply { if (areaData != null) putParcelable(AREA_DATA, areaData) }
             arguments = bundle
         }
     }
@@ -58,7 +60,7 @@ class MainFragment : BaseSupportFragment() {
     private val locationChangedListener = object : LocationService.LocationChangedListener {
 
         override fun onPlaceChanged(place: String) {
-            if (!isMsa0 || place.isEmpty()) return
+            if (areaData != null || place.isEmpty()) return
             tvLocation.text = place
         }
 
@@ -69,7 +71,7 @@ class MainFragment : BaseSupportFragment() {
         }
     }
 
-    private var isMsa0 = false
+    private var areaData: AreaModelView? = null
 
     override fun layoutRes(): Int = R.layout.fragment_main
 
@@ -78,7 +80,7 @@ class MainFragment : BaseSupportFragment() {
     override fun onAttach(context: Context) {
         super.onAttach(context)
 
-        isMsa0 = arguments?.getBoolean(MSA_0) ?: false
+        areaData = arguments?.getParcelable(AREA_DATA)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -98,6 +100,11 @@ class MainFragment : BaseSupportFragment() {
 
     override fun initComponents() {
         super.initComponents()
+
+        if (areaData != null) {
+            tvLocation.text = areaData!!.alias
+            tvScore.text = areaData!!.score.toString()
+        }
 
         layoutRiskLevel.setSafetyOnclickListener {
             it?.flip(layoutAreaInfo, 400)

@@ -46,4 +46,10 @@ enum class Event(val value: String) {
 
     BEHAVIOR_REPORT_ERROR("behavior_report_error"),
 
+    AREA_DELETE_ERROR("area_delete_error"),
+
+    AREA_RENAME_ERROR("area_rename_error"),
+
+    AREA_LIST_ERROR("area_list_error")
+
 }

@@ -10,7 +10,9 @@ import androidx.lifecycle.Lifecycle
 import com.bitmark.autonomy.data.source.UserRepository
 import com.bitmark.autonomy.feature.BaseViewModel
 import com.bitmark.autonomy.feature.auth.ServerAuthentication
+import com.bitmark.autonomy.util.livedata.CompositeLiveData
 import com.bitmark.autonomy.util.livedata.RxLiveDataTransformer
+import com.bitmark.autonomy.util.modelview.AreaModelView
 
 
 class MainActivityViewModel(
@@ -19,6 +21,16 @@ class MainActivityViewModel(
     private val rxLiveDataTransformer: RxLiveDataTransformer,
     private val serverAuth: ServerAuthentication
 ) : BaseViewModel(lifecycle) {
+
+    internal val listAreaLiveData = CompositeLiveData<List<AreaModelView>>()
+
+    fun listArea() {
+        listAreaLiveData.add(rxLiveDataTransformer.single(userRepo.listArea().map { areas ->
+            areas.map { a ->
+                AreaModelView.newInstance(a)
+            }
+        }))
+    }
 
     override fun onCreate() {
         super.onCreate()

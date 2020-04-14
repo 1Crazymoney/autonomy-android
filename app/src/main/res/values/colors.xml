@@ -14,6 +14,7 @@
     <color name="white_66">#66FFFFFF</color>
     <color name="white_aa">#AAFFFFFF</color>
     <color name="concord">#828180</color>
+    <color name="concord_66">#66828180</color>
     <color name="tundora">#444444</color>
     <color name="international_klein_blue">#0011AF</color>
     <color name="international_klein_blue_66">#660011AF</color>
@@ -45,4 +46,5 @@
     <color name="cod_gray">#1B1B1B</color>
     <color name="cod_gray_ff">#FF1B1B1B</color>
     <color name="mine_shaft_2">#2B2B2B</color>
+    <color name="gallery">#EAEAEA</color>
 </resources>

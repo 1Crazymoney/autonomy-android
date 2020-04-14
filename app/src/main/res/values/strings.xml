@@ -131,6 +131,11 @@
     <string name="body_temp">Body temperature above 100ºF (38ºC)</string>
     <string name="dry_cough">Dry cough</string>
     <string name="without_mucous">Without mucous or phlegm (rattling)</string>
+    <string name="add_new_location">Add new location …</string>
+    <string name="could_not_rename_area">Could not rename the area. Please try again later.</string>
+    <string name="could_not_delete_area">Could not delete the area. Please try again later.</string>
+    <string name="rename">Rename</string>
+    <string name="delete">Delete</string>
 
     <!--    string format-->
     <string name="send_to_format">Send to %1$s</string>

@@ -9,7 +9,9 @@ package com.bitmark.autonomy.util.ext
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.os.Handler
+import android.util.Log
 import android.util.TypedValue
+import android.view.MotionEvent
 import android.view.View
 import android.view.animation.AccelerateInterpolator
 import android.view.animation.DecelerateInterpolator
@@ -21,6 +23,7 @@ import androidx.annotation.StringRes
 import androidx.core.content.ContextCompat
 import androidx.core.widget.NestedScrollView
 import com.bitmark.autonomy.logging.Tracer
+import kotlin.math.abs
 
 fun View.gone(withAnim: Boolean = false) {
     if (withAnim) {

@@ -7,6 +7,7 @@
 package com.bitmark.autonomy.data.source.remote.api.service
 
 import com.bitmark.autonomy.data.model.*
+import com.bitmark.autonomy.data.source.remote.api.request.AddAreaRequest
 import com.bitmark.autonomy.data.source.remote.api.request.RegisterAccountRequest
 import com.bitmark.autonomy.data.source.remote.api.request.RegisterJwtRequest
 import com.bitmark.autonomy.data.source.remote.api.request.RequestHelpRequest
@@ -59,5 +60,17 @@ interface AutonomyApi {
 
     @GET("api/score")
     fun getHealthScore(): Single<Map<String, Float>>
+
+    @POST("api/points-of-interest")
+    fun addArea(@Body request: AddAreaRequest): Single<AreaData>
+
+    @DELETE("api/points-of-interest/{id}")
+    fun deleteArea(@Path("id") id: String): Completable
+
+    @GET("api/points-of-interest")
+    fun listArea(): Single<Map<String, List<AreaData>>>
+
+    @PUT("api/points-of-interest/order")
+    fun reorderArea(@Body body: RequestBody): Completable
 
 }

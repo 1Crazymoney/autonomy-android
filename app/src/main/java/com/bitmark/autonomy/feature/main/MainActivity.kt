@@ -10,6 +10,7 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
+import androidx.lifecycle.Observer
 import com.bitmark.autonomy.AppLifecycleHandler
 import com.bitmark.autonomy.R
 import com.bitmark.autonomy.feature.BaseAppCompatActivity
@@ -22,8 +23,12 @@ import com.bitmark.autonomy.feature.location.LocationService
 import com.bitmark.autonomy.feature.notification.NotificationId
 import com.bitmark.autonomy.feature.notification.NotificationReceivedHandler
 import com.bitmark.autonomy.feature.survey.SurveyContainerActivity
+import com.bitmark.autonomy.logging.Event
 import com.bitmark.autonomy.logging.EventLogger
 import com.bitmark.autonomy.util.ext.openAppSetting
+import com.bitmark.autonomy.util.ext.openIntercom
+import com.bitmark.autonomy.util.ext.unexpectedAlert
+import com.bitmark.autonomy.util.modelview.AreaModelView
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -68,9 +73,13 @@ class MainActivity : BaseAppCompatActivity() {
     @Inject
     internal lateinit var notificationReceivedHandler: NotificationReceivedHandler
 
+    private lateinit var adapter: MainViewPagerAdapter
+
     private val handler = Handler()
 
     private var lastSurveyTimestamp = -1L
+
+    private lateinit var areaList: MutableList<AreaModelView>
 
     private val appStateChangedListener = object : AppLifecycleHandler.AppStateChangedListener {
         override fun onForeground() {
@@ -130,6 +139,7 @@ class MainActivity : BaseAppCompatActivity() {
             goToSurveyIfSatisfied()
         }
         appLifecycleHandler.addAppStateChangedListener(appStateChangedListener)
+        viewModel.listArea()
     }
 
     override fun onDestroy() {
@@ -148,15 +158,41 @@ class MainActivity : BaseAppCompatActivity() {
     override fun initComponents() {
         super.initComponents()
 
-        val adapter = MainViewPagerAdapter(supportFragmentManager)
-        adapter.add(MainFragment.newInstance(true))
-        adapter.add(MainFragment.newInstance(false))
-        adapter.add(MainFragment.newInstance(false))
-        adapter.add(MainFragment.newInstance(false))
-        adapter.add(AreaListFragment.newInstance())
-        vp.offscreenPageLimit = 5
+        adapter = MainViewPagerAdapter(supportFragmentManager)
         vp.adapter = adapter
         vIndicator.setViewPager(vp)
     }
 
+    override fun observe() {
+        super.observe()
+
+        viewModel.listAreaLiveData.asLiveData().observe(this, Observer { res ->
+            when {
+                res.isSuccess() -> {
+                    areaList = res.data()!!.toMutableList()
+                    adapter.add(MainFragment.newInstance(null))
+                    areaList.forEach { d -> adapter.add(MainFragment.newInstance(d)) }
+                    adapter.add(AreaListFragment.newInstance(ArrayList(areaList)))
+                    adapter.notifyDataSetChanged()
+                    vIndicator.notifyDataSetChanged()
+                }
+
+                res.isError() -> {
+                    logger.logError(Event.AREA_LIST_ERROR, res.throwable())
+                    dialogController.unexpectedAlert { navigator.openIntercom(true) }
+                }
+            }
+        })
+    }
+
+    fun moveArea(fromPos: Int, toPos: Int) {
+        adapter.move(fromPos, toPos)
+    }
+
+    fun removeArea(id: String) {
+        val pos = areaList.indexOfFirst { a -> a.id == id } + 1
+        if (pos != -1) {
+            adapter.remove(pos)
+        }
+    }
 }

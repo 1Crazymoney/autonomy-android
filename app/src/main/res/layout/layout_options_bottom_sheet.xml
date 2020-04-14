@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layoutRootOptions"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/cod_gray"
+    android:orientation="vertical"
+    android:paddingTop="@dimen/dp_24"
+    android:paddingBottom="@dimen/dp_12">
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp_20"
+        android:layout_marginEnd="@dimen/dp_20"
+        android:fontFamily="@font/grotesk_light_font_family"
+        android:textColor="@color/white"
+        android:textSize="@dimen/sp_16"
+        tools:text="This is the title" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvOptions"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_16" />
+
+</LinearLayout>
