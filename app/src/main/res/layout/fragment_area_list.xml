@@ -9,7 +9,10 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvAreas"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:scrollbarSize="@dimen/dp_2"
+        android:scrollbarThumbVertical="@color/white_aa"
+        android:scrollbars="vertical" />
 
     <ProgressBar
         android:id="@+id/progressBar"

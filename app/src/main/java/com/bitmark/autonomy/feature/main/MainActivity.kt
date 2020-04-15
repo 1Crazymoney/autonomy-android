@@ -12,6 +12,7 @@ import android.os.Bundle
 import android.os.Handler
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.viewpager.widget.ViewPager
 import com.bitmark.autonomy.AppLifecycleHandler
 import com.bitmark.autonomy.R
 import com.bitmark.autonomy.feature.BaseAppCompatActivity
@@ -26,6 +27,7 @@ import com.bitmark.autonomy.feature.notification.NotificationReceivedHandler
 import com.bitmark.autonomy.feature.survey.SurveyContainerActivity
 import com.bitmark.autonomy.logging.Event
 import com.bitmark.autonomy.logging.EventLogger
+import com.bitmark.autonomy.util.ext.hideKeyBoard
 import com.bitmark.autonomy.util.ext.openAppSetting
 import com.bitmark.autonomy.util.ext.openIntercom
 import com.bitmark.autonomy.util.ext.unexpectedAlert
@@ -162,6 +164,25 @@ class MainActivity : BaseAppCompatActivity() {
         adapter = MainViewPagerAdapter(supportFragmentManager)
         vp.adapter = adapter
         vIndicator.setViewPager(vp)
+
+        vp.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+            override fun onPageScrollStateChanged(state: Int) {
+                // Do nothing
+            }
+
+            override fun onPageScrolled(
+                position: Int,
+                positionOffset: Float,
+                positionOffsetPixels: Int
+            ) {
+                // Do nothing
+            }
+
+            override fun onPageSelected(position: Int) {
+                hideKeyBoard()
+            }
+
+        })
     }
 
     override fun observe() {
