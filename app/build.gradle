@@ -250,6 +250,7 @@ dependencies {
     implementation 'io.intercom.android:intercom-sdk:6.0.0'
     implementation 'com.github.tbruyelle:rxpermissions:0.10.2'
     implementation 'com.google.android.gms:play-services-location:17.0.0'
+    implementation 'com.chauthai.swipereveallayout:swipe-reveal-layout:1.4.1'
 
     // Geocoding
     implementation 'com.google.maps:google-maps-services:0.11.0'

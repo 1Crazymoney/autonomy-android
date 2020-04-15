@@ -137,6 +137,7 @@
     <string name="could_not_add_area">Could not add new area. Please try again later.</string>
     <string name="rename">Rename</string>
     <string name="delete">Delete</string>
+    <string name="save">Save</string>
 
     <!--    string format-->
     <string name="send_to_format">Send to %1$s</string>

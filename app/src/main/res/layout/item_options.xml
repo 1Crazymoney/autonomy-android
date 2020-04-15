@@ -12,7 +12,7 @@
         android:layout_width="@dimen/dp_20"
         android:layout_height="@dimen/dp_20"
         android:padding="@dimen/dp_2"
-        tools:srcCompat="@drawable/ic_edit" />
+        tools:srcCompat="@drawable/ic_edit_white" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tvContent"

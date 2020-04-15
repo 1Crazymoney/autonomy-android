@@ -13,9 +13,11 @@ import android.view.inputmethod.EditorInfo
 import androidx.recyclerview.widget.RecyclerView
 import com.bitmark.autonomy.R
 import com.bitmark.autonomy.util.ext.gone
+import com.bitmark.autonomy.util.ext.setSafetyOnclickListener
 import com.bitmark.autonomy.util.ext.visible
 import com.bitmark.autonomy.util.modelview.AreaModelView
 import com.bitmark.autonomy.util.modelview.toDrawableRes
+import com.chauthai.swipereveallayout.ViewBinderHelper
 import kotlinx.android.synthetic.main.item_area.view.*
 import kotlinx.android.synthetic.main.item_area_footer.view.*
 import java.util.*
@@ -32,6 +34,8 @@ class AreaListRecyclerViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder
     private val items = mutableListOf<Item>()
 
     private var actionListener: ActionListener? = null
+
+    private val viewBinderHelper = ViewBinderHelper()
 
     fun setActionListener(listener: ActionListener) {
         this.actionListener = listener
@@ -102,7 +106,8 @@ class AreaListRecyclerViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder
         return if (viewType == AREA) {
             AreaVH(
                 LayoutInflater.from(parent.context).inflate(R.layout.item_area, parent, false),
-                actionListener
+                actionListener,
+                viewBinderHelper
             )
         } else {
             FooterVH(
@@ -119,6 +124,8 @@ class AreaListRecyclerViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is AreaVH) {
+            viewBinderHelper.setOpenOnlyOne(true)
+            viewBinderHelper.bind(holder.itemView.layoutRoot, items[position].data!!.id)
             holder.bind(items[position])
         }
     }
@@ -127,20 +134,34 @@ class AreaListRecyclerViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder
         return items[position].type
     }
 
-    class AreaVH(view: View, actionListener: ActionListener?) : RecyclerView.ViewHolder(view) {
+    class AreaVH(
+        view: View,
+        actionListener: ActionListener?,
+        private val binderHelper: ViewBinderHelper
+    ) : RecyclerView.ViewHolder(view) {
 
         private lateinit var item: Item
 
         init {
             with(itemView) {
 
-                layoutRoot.setOnClickListener {
+                layoutContent.setOnClickListener {
                     actionListener?.onAreaClicked(item.data!!.id)
                 }
 
-                layoutRoot.setOnLongClickListener {
-                    actionListener?.onAreaLongClicked(item.data!!.id, item.data!!.alias)
-                    true
+                layoutRoot.setOnTouchListener { v, _ ->
+                    v.parent.parent.requestDisallowInterceptTouchEvent(true)
+                    false
+                }
+
+                ivDelete.setSafetyOnclickListener {
+                    actionListener?.onAreaDeleteClicked(item.data!!.id)
+                    binderHelper.closeLayout(item.data!!.id)
+                }
+
+                ivEdit.setSafetyOnclickListener {
+                    actionListener?.onAreaEditClicked(item.data!!.id)
+                    binderHelper.closeLayout(item.data!!.id)
                 }
 
                 edtName.setOnEditorActionListener { _, actionId, _ ->
@@ -163,6 +184,10 @@ class AreaListRecyclerViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder
                     edtName.setText(alias)
                     edtName.setSelection(alias.length)
                     edtName.setSelectAllOnFocus(true)
+                    edtName.setImeActionLabel(
+                        context.getString(R.string.save),
+                        EditorInfo.IME_ACTION_DONE
+                    )
                     edtName.requestFocus()
                 } else {
                     edtName.gone()
@@ -194,7 +219,9 @@ class AreaListRecyclerViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder
 
         fun onAreaClicked(id: String)
 
-        fun onAreaLongClicked(id: String, name: String)
+        fun onAreaDeleteClicked(id: String)
+
+        fun onAreaEditClicked(id: String)
 
         fun onAddClicked()
 

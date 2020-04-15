@@ -193,16 +193,23 @@ class MainActivity : BaseAppCompatActivity() {
 
     fun removeArea(id: String) {
         val pos = areaList.indexOfFirst { a -> a.id == id } + 1
-        if (pos != -1) {
+        if (pos > 0) {
             adapter.remove(pos)
+            vIndicator.notifyDataSetChanged()
         }
-        vIndicator.notifyDataSetChanged()
     }
 
     fun addArea(area: AreaModelView) {
         areaList.add(area)
         adapter.add(areaList.size, MainFragment.newInstance(area))
         vIndicator.notifyDataSetChanged()
-        vp.currentItem = adapter.count - 1
+        vp.setCurrentItem(adapter.count - 1, false)
+    }
+
+    fun showArea(id: String) {
+        val pos = areaList.indexOfFirst { a -> a.id == id } + 1
+        if (pos > 0) {
+            vp.setCurrentItem(pos, false)
+        }
     }
 }

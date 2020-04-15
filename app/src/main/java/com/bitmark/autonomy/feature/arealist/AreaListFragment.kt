@@ -11,6 +11,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -27,7 +28,6 @@ import com.bitmark.autonomy.logging.Event
 import com.bitmark.autonomy.logging.EventLogger
 import com.bitmark.autonomy.util.ext.*
 import com.bitmark.autonomy.util.modelview.AreaModelView
-import com.bitmark.autonomy.util.view.OptionsDialog
 import com.bitmark.autonomy.util.view.touchhelper.ItemTouchListener
 import kotlinx.android.synthetic.main.fragment_area_list.*
 import javax.inject.Inject
@@ -66,12 +66,19 @@ class AreaListFragment : BaseSupportFragment() {
 
     private val actionListener = object : AreaListRecyclerViewAdapter.ActionListener {
 
-        override fun onAreaClicked(id: String) {
-
+        override fun onAreaDeleteClicked(id: String) {
+            viewModel.delete(id)
         }
 
-        override fun onAreaLongClicked(id: String, name: String) {
-            showMenu(id, name)
+        override fun onAreaEditClicked(id: String) {
+            adapter.setEditable(id, true)
+            Handler().postDelayed({
+                activity?.showKeyBoard()
+            }, 200)
+        }
+
+        override fun onAreaClicked(id: String) {
+            (activity as? MainActivity)?.showArea(id)
         }
 
         override fun onAddClicked() {
@@ -103,6 +110,9 @@ class AreaListFragment : BaseSupportFragment() {
             ?: error("missing area array")
         val layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
         rvAreas.layoutManager = layoutManager
+        val itemDecoration = DividerItemDecoration(context, RecyclerView.VERTICAL)
+        itemDecoration.setDrawable(context!!.getDrawable(R.drawable.bg_divider)!!)
+        rvAreas.addItemDecoration(itemDecoration)
         adapter.set(areaList)
 
         val rvTouchListener = object : ItemTouchListener() {
@@ -188,31 +198,6 @@ class AreaListFragment : BaseSupportFragment() {
                 }
             }
         })
-    }
-
-    private fun showMenu(id: String, name: String) {
-        val opts = listOf(
-            OptionsDialog.OptionsAdapter.Item(
-                R.drawable.ic_edit,
-                getString(R.string.rename)
-            ), OptionsDialog.OptionsAdapter.Item(R.drawable.ic_delete, getString(R.string.delete))
-        )
-
-        val dialog = OptionsDialog(context!!, name, true, opts) { item ->
-            when (item.icon) {
-                R.drawable.ic_delete -> {
-                    viewModel.delete(id)
-                }
-
-                R.drawable.ic_edit -> {
-                    adapter.setEditable(id, true)
-                    Handler().postDelayed({
-                        activity?.showKeyBoard()
-                    }, 200)
-                }
-            }
-        }
-        dialog.show()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
