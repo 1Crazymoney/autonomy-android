@@ -73,4 +73,10 @@ interface AutonomyApi {
     @PUT("api/points-of-interest/order")
     fun reorderArea(@Body body: RequestBody): Completable
 
+    @GET("api/area_profile")
+    fun getCurrentAreaProfile(): Single<AreaProfileData>
+
+    @GET("api/area_profile/{id}")
+    fun getAreaProfile(@Path("id") id: String): Single<AreaProfileData>
+
 }

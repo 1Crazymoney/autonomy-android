@@ -259,7 +259,8 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.5">
+                android:layout_weight="0.5"
+                android:visibility="invisible">
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/tvLbPopDensity"

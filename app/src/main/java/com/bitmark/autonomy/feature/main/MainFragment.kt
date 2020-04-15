@@ -19,13 +19,14 @@ import com.bitmark.autonomy.feature.Navigator
 import com.bitmark.autonomy.feature.location.LocationService
 import com.bitmark.autonomy.logging.Event
 import com.bitmark.autonomy.logging.EventLogger
-import com.bitmark.autonomy.util.ext.flip
-import com.bitmark.autonomy.util.ext.setImageResource
-import com.bitmark.autonomy.util.ext.setSafetyOnclickListener
+import com.bitmark.autonomy.util.ext.*
 import com.bitmark.autonomy.util.modelview.AreaModelView
+import com.bitmark.autonomy.util.modelview.AreaProfileModelView
 import kotlinx.android.synthetic.main.fragment_main.*
+import kotlinx.android.synthetic.main.layout_area_info.*
 import kotlinx.android.synthetic.main.layout_risk_level_des.*
 import javax.inject.Inject
+import kotlin.math.abs
 
 
 class MainFragment : BaseSupportFragment() {
@@ -33,6 +34,8 @@ class MainFragment : BaseSupportFragment() {
     companion object {
 
         private const val AREA_DATA = "area_data"
+
+        private const val AREA_PROFILE = "area_profile"
 
         fun newInstance(areaData: AreaModelView? = null) = MainFragment().apply {
             val bundle = Bundle().apply { if (areaData != null) putParcelable(AREA_DATA, areaData) }
@@ -55,23 +58,25 @@ class MainFragment : BaseSupportFragment() {
     @Inject
     internal lateinit var locationService: LocationService
 
-    private var score = -1
+    private lateinit var areaProfile: AreaProfileModelView
 
     private val locationChangedListener = object : LocationService.LocationChangedListener {
 
         override fun onPlaceChanged(place: String) {
-            if (areaData != null || place.isEmpty()) return
+            if (!isMsa0 || place.isEmpty()) return
             tvLocation.text = place
         }
 
         override fun onLocationChanged(l: Location) {
-            if (score == -1) {
-                viewModel.getHealthScore()
+            if (!this@MainFragment::areaProfile.isInitialized && isMsa0) {
+                viewModel.getCurrentAreaProfile()
             }
         }
     }
 
     private var areaData: AreaModelView? = null
+
+    private var isMsa0 = false
 
     override fun layoutRes(): Int = R.layout.fragment_main
 
@@ -81,9 +86,16 @@ class MainFragment : BaseSupportFragment() {
         super.onAttach(context)
 
         areaData = arguments?.getParcelable(AREA_DATA)
+        isMsa0 = areaData == null
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        if (savedInstanceState != null) {
+            areaData = savedInstanceState.getParcelable(AREA_DATA)
+            if (savedInstanceState.containsKey(AREA_PROFILE)) {
+                areaProfile = savedInstanceState.getParcelable(AREA_PROFILE)!!
+            }
+        }
         super.onViewCreated(view, savedInstanceState)
         locationService.addLocationChangeListener(locationChangedListener)
     }
@@ -93,9 +105,19 @@ class MainFragment : BaseSupportFragment() {
         super.onDestroyView()
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        if (areaData != null) outState.putParcelable(AREA_DATA, areaData)
+        if (::areaProfile.isInitialized) outState.putParcelable(AREA_PROFILE, areaProfile)
+    }
+
     override fun onResume() {
         super.onResume()
-        viewModel.getHealthScore()
+        if (isMsa0) {
+            viewModel.getCurrentAreaProfile()
+        } else {
+            viewModel.getAreaProfile(areaData!!.id)
+        }
     }
 
     override fun initComponents() {
@@ -103,7 +125,10 @@ class MainFragment : BaseSupportFragment() {
 
         if (areaData != null) {
             tvLocation.text = areaData!!.alias
-            tvScore.text = areaData!!.score.toString()
+        }
+
+        if (::areaProfile.isInitialized) {
+            showData(areaProfile)
         }
 
         layoutRiskLevel.setSafetyOnclickListener {
@@ -119,32 +144,79 @@ class MainFragment : BaseSupportFragment() {
     override fun observe() {
         super.observe()
 
-        viewModel.getHealthScoreLiveData.asLiveData().observe(this, Observer { res ->
+        viewModel.getAreaProfileLiveData.asLiveData().observe(this, Observer { res ->
             when {
                 res.isSuccess() -> {
-                    score = res.data()!!.toInt()
-                    tvScore.text = score.toString()
-                    ivScore.setImageResource("triangle_%03d".format(score))
-                    when {
-                        score < 34 -> {
-                            tvRiskLevel.setText(R.string.high_risk)
-                            tvRiskLevelDes.setText(R.string.high_risk)
-                        }
-                        score < 67 -> {
-                            tvRiskLevel.setText(R.string.moderate_risk)
-                            tvRiskLevelDes.setText(R.string.moderate_risk)
-                        }
-                        else -> {
-                            tvRiskLevel.setText(R.string.low_risk)
-                            tvRiskLevelDes.setText(R.string.low_risk)
-                        }
-                    }
+                    progressBar.gone()
+                    areaProfile = res.data()!!
+                    showData(areaProfile)
                 }
 
                 res.isError() -> {
-                    logger.logError(Event.HEALTH_SCORE_GETTING_ERROR, res.throwable())
+                    progressBar.gone()
+                    logger.logError(Event.AREA_PROFILE_GETTING_ERROR, res.throwable())
+                }
+
+                res.isLoading() -> {
+                    progressBar.visible()
                 }
             }
         })
+    }
+
+    private fun showData(profile: AreaProfileModelView) {
+        val score = profile.score
+        tvScore.text = score.toString()
+        ivScore.setImageResource("triangle_%03d".format(score))
+        when {
+            score < 34 -> {
+                tvRiskLevel.setText(R.string.high_risk)
+                tvRiskLevelDes.setText(R.string.high_risk)
+            }
+            score < 67 -> {
+                tvRiskLevel.setText(R.string.moderate_risk)
+                tvRiskLevelDes.setText(R.string.moderate_risk)
+            }
+            else -> {
+                tvRiskLevel.setText(R.string.low_risk)
+                tvRiskLevelDes.setText(R.string.low_risk)
+            }
+        }
+
+        tvConfirmedCases.text = profile.confirmed.decimalFormat()
+        tvConfirmedCasesChange.text = abs(profile.confirmedDelta).decimalFormat()
+        if (profile.confirmed == 0) {
+            tvConfirmedCasesChange.gone()
+            ivConfirmedCasesChange.gone()
+        } else {
+            tvConfirmedCasesChange.visible()
+            ivConfirmedCasesChange.visible()
+        }
+
+        ivConfirmedCasesChange.setImageResource(if (profile.confirmedDelta > 0) R.drawable.ic_up_red else R.drawable.ic_down_green)
+
+        tvReportedSymptom.text = profile.symptoms.decimalFormat()
+        tvReportedSymptomChange.text = abs(profile.symptomsDelta).decimalFormat()
+        if (profile.symptoms == 0) {
+            tvReportedSymptomChange.gone()
+            ivReportedSymptomChange.gone()
+        } else {
+            tvReportedSymptomChange.visible()
+            ivReportedSymptomChange.visible()
+        }
+
+        ivReportedSymptomChange.setImageResource(if (profile.symptomsDelta > 0) R.drawable.ic_up_red else R.drawable.ic_down_green)
+
+        tvHealthyBehavior.text = profile.behaviors.decimalFormat()
+        tvHealthyBehaviorChange.text = abs(profile.behaviorsDelta).decimalFormat()
+        if (profile.behaviors == 0) {
+            tvHealthyBehaviorChange.gone()
+            ivHealthyBehaviorChange.gone()
+        } else {
+            tvHealthyBehaviorChange.visible()
+            ivHealthyBehaviorChange.visible()
+        }
+
+        ivHealthyBehaviorChange.setImageResource(if (profile.behaviorsDelta > 0) R.drawable.ic_up_green else R.drawable.ic_down_red)
     }
 }

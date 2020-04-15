@@ -23,4 +23,8 @@ class UserRepository(private val remoteDataSource: UserRemoteDataSource) : Repos
     fun reorderArea(ids: List<String>) = remoteDataSource.reorderArea(ids)
 
     fun rename(id: String, name: String) = remoteDataSource.rename(id, name)
+
+    fun getCurrentAreaProfile() = remoteDataSource.getCurrentAreaProfile()
+
+    fun getAreaProfile(id: String) = remoteDataSource.getAreaProfile(id)
 }

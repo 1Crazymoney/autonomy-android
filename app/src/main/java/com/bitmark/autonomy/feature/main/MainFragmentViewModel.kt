@@ -11,6 +11,7 @@ import com.bitmark.autonomy.data.source.UserRepository
 import com.bitmark.autonomy.feature.BaseViewModel
 import com.bitmark.autonomy.util.livedata.CompositeLiveData
 import com.bitmark.autonomy.util.livedata.RxLiveDataTransformer
+import com.bitmark.autonomy.util.modelview.AreaProfileModelView
 
 
 class MainFragmentViewModel(
@@ -19,12 +20,20 @@ class MainFragmentViewModel(
     private val rxLiveDataTransformer: RxLiveDataTransformer
 ) : BaseViewModel(lifecycle) {
 
-    internal val getHealthScoreLiveData = CompositeLiveData<Float>()
+    internal val getAreaProfileLiveData = CompositeLiveData<AreaProfileModelView>()
 
-    fun getHealthScore() {
-        getHealthScoreLiveData.add(
+    fun getCurrentAreaProfile() {
+        getAreaProfileLiveData.add(
             rxLiveDataTransformer.single(
-                userRepo.getHealthScore()
+                userRepo.getCurrentAreaProfile().map { a -> AreaProfileModelView.newInstance(a) }
+            )
+        )
+    }
+
+    fun getAreaProfile(id: String) {
+        getAreaProfileLiveData.add(
+            rxLiveDataTransformer.single(
+                userRepo.getAreaProfile(id).map { a -> AreaProfileModelView.newInstance(a) }
             )
         )
     }
