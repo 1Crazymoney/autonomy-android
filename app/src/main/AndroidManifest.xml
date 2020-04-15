@@ -24,7 +24,8 @@
         <activity
             android:name=".feature.main.MainActivity"
             android:launchMode="singleTop"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize" />
 
         <activity
             android:name=".feature.onboarding.OnboardingContainerActivity"
@@ -62,6 +63,11 @@
             android:name=".feature.behavior.BehaviorReportActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".feature.areasearch.AreaSearchActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize" />
 
         <receiver android:name=".feature.notification.DailyPushNotificationBroadcastReceiver" />
 

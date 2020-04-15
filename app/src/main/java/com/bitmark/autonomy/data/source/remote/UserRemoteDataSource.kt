@@ -31,10 +31,15 @@ class UserRemoteDataSource @Inject constructor(
 
     fun addArea(alias: String, address: String, lat: Double, lng: Double) =
         autonomyApi.addArea(AddAreaRequest(alias, address, Location(lat, lng)))
+            .onErrorResumeNext {
+                // TODO remove later
+                Single.just(AreaData("test_id", alias, address, Location(lat, lng), 39))
+            }
             .subscribeOn(Schedulers.io())
 
     // TODO update later
-    fun deleteArea(id: String) = autonomyApi.deleteArea(id).onErrorComplete().subscribeOn(Schedulers.io())
+    fun deleteArea(id: String) =
+        autonomyApi.deleteArea(id).onErrorComplete().subscribeOn(Schedulers.io())
 
     fun listArea() = autonomyApi.listArea().map { res ->
         res["points_of_interest"] ?: error("invalid response")

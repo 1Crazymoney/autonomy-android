@@ -50,6 +50,8 @@ enum class Event(val value: String) {
 
     AREA_RENAME_ERROR("area_rename_error"),
 
-    AREA_LIST_ERROR("area_list_error")
+    AREA_LIST_ERROR("area_list_error"),
+
+    AREA_ADDING_ERROR("area_adding_error")
 
 }

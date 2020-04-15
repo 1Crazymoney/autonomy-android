@@ -24,7 +24,7 @@ import java.util.*
 class AreaListRecyclerViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     companion object {
-        private const val ITEM = 0x00
+        private const val AREA = 0x00
 
         private const val FOOTER = 0x01
     }
@@ -39,13 +39,19 @@ class AreaListRecyclerViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder
 
     fun get(pos: Int) = items[pos]
 
-    fun listId() = items.filter { i -> i.type == ITEM }.map { i -> i.data!!.id }
+    fun listId() = items.filter { i -> i.type == AREA }.map { i -> i.data!!.id }
 
     fun set(items: List<AreaModelView>) {
         this.items.clear()
-        this.items.addAll(items.map { i -> Item(ITEM, i) })
+        this.items.addAll(items.map { i -> Item(AREA, i) })
         this.items.add(Item(FOOTER, null))
         notifyDataSetChanged()
+    }
+
+    fun add(item: AreaModelView) {
+        val pos = items.size - 1
+        items.add(pos, Item(AREA, item))
+        notifyItemInserted(pos)
     }
 
     fun updateAlias(id: String, alias: String) {
@@ -59,6 +65,13 @@ class AreaListRecyclerViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder
     fun setEditable(id: String, editable: Boolean) {
         val index = items.indexOfFirst { i -> i.data?.id == id }
         if (index != -1) {
+            if (editable) {
+                val editableIndex = items.indexOfFirst { i -> i.editable }
+                if (editableIndex != -1) {
+                    items[editableIndex].editable = false
+                    notifyItemChanged(editableIndex)
+                }
+            }
             items[index].editable = editable
             notifyItemChanged(index)
         }
@@ -86,8 +99,8 @@ class AreaListRecyclerViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return if (viewType == ITEM) {
-            ItemVH(
+        return if (viewType == AREA) {
+            AreaVH(
                 LayoutInflater.from(parent.context).inflate(R.layout.item_area, parent, false),
                 actionListener
             )
@@ -105,7 +118,7 @@ class AreaListRecyclerViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder
     override fun getItemCount(): Int = items.size
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        if (holder is ItemVH) {
+        if (holder is AreaVH) {
             holder.bind(items[position])
         }
     }
@@ -114,7 +127,7 @@ class AreaListRecyclerViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder
         return items[position].type
     }
 
-    class ItemVH(view: View, actionListener: ActionListener?) : RecyclerView.ViewHolder(view) {
+    class AreaVH(view: View, actionListener: ActionListener?) : RecyclerView.ViewHolder(view) {
 
         private lateinit var item: Item
 
@@ -148,8 +161,8 @@ class AreaListRecyclerViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder
                     tvName.gone()
                     edtName.visible()
                     edtName.setText(alias)
-                    edtName.setSelectAllOnFocus(true)
                     edtName.setSelection(alias.length)
+                    edtName.setSelectAllOnFocus(true)
                     edtName.requestFocus()
                 } else {
                     edtName.gone()

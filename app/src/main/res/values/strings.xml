@@ -134,6 +134,7 @@
     <string name="add_new_location">Add new location …</string>
     <string name="could_not_rename_area">Could not rename the area. Please try again later.</string>
     <string name="could_not_delete_area">Could not delete the area. Please try again later.</string>
+    <string name="could_not_add_area">Could not add new area. Please try again later.</string>
     <string name="rename">Rename</string>
     <string name="delete">Delete</string>
 

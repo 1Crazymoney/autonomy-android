@@ -10,6 +10,7 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.bitmark.autonomy.AppLifecycleHandler
 import com.bitmark.autonomy.R
@@ -170,10 +171,11 @@ class MainActivity : BaseAppCompatActivity() {
             when {
                 res.isSuccess() -> {
                     areaList = res.data()!!.toMutableList()
-                    adapter.add(MainFragment.newInstance(null))
-                    areaList.forEach { d -> adapter.add(MainFragment.newInstance(d)) }
-                    adapter.add(AreaListFragment.newInstance(ArrayList(areaList)))
-                    adapter.notifyDataSetChanged()
+                    val fragments = mutableListOf<Fragment>()
+                    fragments.add(MainFragment.newInstance(null))
+                    fragments.addAll(areaList.map { a -> MainFragment.newInstance(a) })
+                    fragments.add(AreaListFragment.newInstance(ArrayList(areaList)))
+                    adapter.set(fragments)
                     vIndicator.notifyDataSetChanged()
                 }
 
@@ -194,5 +196,13 @@ class MainActivity : BaseAppCompatActivity() {
         if (pos != -1) {
             adapter.remove(pos)
         }
+        vIndicator.notifyDataSetChanged()
+    }
+
+    fun addArea(area: AreaModelView) {
+        areaList.add(area)
+        adapter.add(areaList.size, MainFragment.newInstance(area))
+        vIndicator.notifyDataSetChanged()
+        vp.currentItem = adapter.count - 1
     }
 }

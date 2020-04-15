@@ -6,6 +6,8 @@
  */
 package com.bitmark.autonomy.feature.arealist
 
+import android.app.Activity.RESULT_OK
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import androidx.lifecycle.Observer
@@ -17,6 +19,8 @@ import com.bitmark.autonomy.feature.BaseSupportFragment
 import com.bitmark.autonomy.feature.BaseViewModel
 import com.bitmark.autonomy.feature.DialogController
 import com.bitmark.autonomy.feature.Navigator
+import com.bitmark.autonomy.feature.Navigator.Companion.BOTTOM_UP
+import com.bitmark.autonomy.feature.areasearch.AreaSearchActivity
 import com.bitmark.autonomy.feature.connectivity.ConnectivityHandler
 import com.bitmark.autonomy.feature.main.MainActivity
 import com.bitmark.autonomy.logging.Event
@@ -32,6 +36,8 @@ import javax.inject.Inject
 class AreaListFragment : BaseSupportFragment() {
 
     companion object {
+
+        private const val SEARCH_REQUEST_CODE = 0x1A
 
         private const val AREA_LIST = "area_list"
 
@@ -69,7 +75,8 @@ class AreaListFragment : BaseSupportFragment() {
         }
 
         override fun onAddClicked() {
-
+            navigator.anim(BOTTOM_UP)
+                .startActivityForResult(AreaSearchActivity::class.java, SEARCH_REQUEST_CODE)
         }
 
         override fun onDone(id: String, oldAlias: String, newAlias: String) {
@@ -119,7 +126,7 @@ class AreaListFragment : BaseSupportFragment() {
 
     override fun onResume() {
         super.onResume()
-        viewModel.listArea()
+        //viewModel.listArea()
     }
 
     override fun observe() {
@@ -206,5 +213,14 @@ class AreaListFragment : BaseSupportFragment() {
             }
         }
         dialog.show()
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == RESULT_OK && requestCode == SEARCH_REQUEST_CODE) {
+            val area = AreaSearchActivity.extractResultData(data!!)
+            (activity as? MainActivity)?.addArea(area)
+            adapter.add(area)
+        }
     }
 }

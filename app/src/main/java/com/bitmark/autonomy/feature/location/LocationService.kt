@@ -26,6 +26,8 @@ import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.*
 import com.google.maps.GeoApiContext
 import com.google.maps.GeocodingApi
+import com.google.maps.PlaceAutocompleteRequest
+import com.google.maps.PlacesApi
 import com.google.maps.model.LatLng
 import com.tbruyelle.rxpermissions2.RxPermissions
 import java.util.concurrent.Executors
@@ -100,6 +102,31 @@ class LocationService(private val context: Context, private val logger: EventLog
             } catch (e: Throwable) {
                 Tracer.ERROR.log(TAG, "failed to do geocoding reverse: ${e.message}")
             }
+        }
+    }
+
+    fun execGeoCoding(
+        placeId: String,
+        success: (com.bitmark.autonomy.data.model.Location) -> Unit,
+        error: (Throwable) -> Unit = {}
+    ) {
+        executor.execute {
+            try {
+                val results = GeocodingApi.newRequest(geoApiContext).place(placeId).await()
+                if (results.isEmpty()) return@execute
+                val r = results[0]
+                handler.post {
+                    success(
+                        com.bitmark.autonomy.data.model.Location(
+                            r.geometry.location.lat,
+                            r.geometry.location.lng
+                        )
+                    )
+                }
+            } catch (e: Throwable) {
+                handler.post { error(e) }
+            }
+
         }
     }
 
@@ -203,6 +230,33 @@ class LocationService(private val context: Context, private val logger: EventLog
                     logger.logError(Event.LOCATION_SETTING_CANNOT_BE_RESOLVED, e)
                 }
             }
+    }
+
+    fun search(
+        text: String,
+        success: (List<PlaceAutoComplete>) -> Unit,
+        error: (Throwable) -> Unit = {}
+    ) {
+        if (text.isEmpty()) return
+        executor.execute {
+            try {
+                val sessionToken = PlaceAutocompleteRequest.SessionToken()
+                val predictions =
+                    PlacesApi.placeAutocomplete(geoApiContext, text, sessionToken).await()
+                val places =
+                    predictions.map { p ->
+                        PlaceAutoComplete(
+                            p.placeId,
+                            p.structuredFormatting.mainText,
+                            p.description
+                        )
+                    }
+                handler.post { success(places) }
+            } catch (e: Throwable) {
+                handler.post { error(e) }
+            }
+        }
+
     }
 
     interface LocationChangedListener {

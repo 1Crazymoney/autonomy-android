@@ -21,11 +21,10 @@ open class ViewPagerAdapter(fm: FragmentManager) :
 
     protected val fragments = mutableListOf<Fragment>()
 
-    open fun add(vararg fragments: Fragment) {
-        for (fr in fragments) {
-            if (this.fragments.contains(fr)) continue
-            this.fragments.add(fr)
-        }
+    fun set(fragments: List<Fragment>) {
+        this.fragments.clear()
+        this.fragments.addAll(fragments)
+        notifyDataSetChanged()
     }
 
     override fun getItem(position: Int): Fragment = fragments[position]
@@ -62,6 +61,12 @@ open class ViewPagerAdapter(fm: FragmentManager) :
 
     fun remove(pos: Int) {
         fragments.removeAt(pos)
+        notifyDataSetChanged()
+    }
+
+    fun add(index: Int, fragment: Fragment) {
+        if (fragments.contains(fragment)) return
+        fragments.add(index, fragment)
         notifyDataSetChanged()
     }
 

@@ -77,12 +77,13 @@
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tvLocation"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/dp_8"
-        android:layout_marginBottom="@dimen/dp_16"
+        android:layout_marginStart="@dimen/dp_32"
+        android:layout_marginEnd="@dimen/dp_32"
         android:ellipsize="end"
         android:fontFamily="@font/grotesk_light_font_family"
+        android:gravity="center"
         android:includeFontPadding="false"
         android:maxLines="1"
         android:text="-"
@@ -91,7 +92,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        tools:text="Nangang Software Park" />
+        tools:text="Nangang Software Park Nangang Software Park Nangang Software Park Nangang Software Park" />
 
     <ProgressBar
         android:id="@+id/progressBar"

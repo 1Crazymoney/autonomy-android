@@ -6,6 +6,8 @@
  */
 package com.bitmark.autonomy.di
 
+import com.bitmark.autonomy.feature.areasearch.AreaSearchActivity
+import com.bitmark.autonomy.feature.areasearch.AreaSearchModule
 import com.bitmark.autonomy.feature.behavior.BehaviorReportActivity
 import com.bitmark.autonomy.feature.behavior.BehaviorReportModule
 import com.bitmark.autonomy.feature.main.MainActivity
@@ -71,5 +73,9 @@ abstract class ActivityBuilderModule {
     @ContributesAndroidInjector(modules = [BehaviorReportModule::class])
     @ActivityScope
     internal abstract fun bindBehaviorReportActivity(): BehaviorReportActivity
+
+    @ContributesAndroidInjector(modules = [AreaSearchModule::class])
+    @ActivityScope
+    internal abstract fun bindAreaSearchActivity(): AreaSearchActivity
 
 }
