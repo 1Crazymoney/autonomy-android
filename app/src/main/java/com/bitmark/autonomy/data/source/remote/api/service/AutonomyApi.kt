@@ -68,7 +68,7 @@ interface AutonomyApi {
     fun deleteArea(@Path("id") id: String): Completable
 
     @GET("api/points-of-interest")
-    fun listArea(): Single<Map<String, List<AreaData>>>
+    fun listArea(): Single<List<AreaData>>
 
     @PUT("api/points-of-interest/order")
     fun reorderArea(@Body body: RequestBody): Completable

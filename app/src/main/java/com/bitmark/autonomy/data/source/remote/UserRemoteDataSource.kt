@@ -42,9 +42,7 @@ class UserRemoteDataSource @Inject constructor(
     fun deleteArea(id: String) =
         autonomyApi.deleteArea(id).onErrorComplete().subscribeOn(Schedulers.io())
 
-    fun listArea() = autonomyApi.listArea().map { res ->
-        res["points_of_interest"] ?: error("invalid response")
-    }.subscribeOn(Schedulers.io()).onErrorResumeNext {
+    fun listArea() = autonomyApi.listArea().subscribeOn(Schedulers.io()).onErrorResumeNext {
         // TODO remove later
         Single.just(
             listOf(

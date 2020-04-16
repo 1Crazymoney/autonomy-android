@@ -37,6 +37,8 @@ class MainFragment : BaseSupportFragment() {
 
         private const val AREA_PROFILE = "area_profile"
 
+        private const val MSA_0 = "MSA_0"
+
         fun newInstance(areaData: AreaModelView? = null) = MainFragment().apply {
             val bundle = Bundle().apply { if (areaData != null) putParcelable(AREA_DATA, areaData) }
             arguments = bundle
@@ -91,9 +93,14 @@ class MainFragment : BaseSupportFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         if (savedInstanceState != null) {
-            areaData = savedInstanceState.getParcelable(AREA_DATA)
+            if (savedInstanceState.containsKey(AREA_DATA)) {
+                areaData = savedInstanceState.getParcelable(AREA_DATA)
+            }
             if (savedInstanceState.containsKey(AREA_PROFILE)) {
                 areaProfile = savedInstanceState.getParcelable(AREA_PROFILE)!!
+            }
+            if (savedInstanceState.containsKey(MSA_0)) {
+                isMsa0 = savedInstanceState.getBoolean(MSA_0)
             }
         }
         super.onViewCreated(view, savedInstanceState)
@@ -105,10 +112,17 @@ class MainFragment : BaseSupportFragment() {
         super.onDestroyView()
     }
 
+    override fun onDetach() {
+        isMsa0 = false
+        areaData = null
+        super.onDetach()
+    }
+
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         if (areaData != null) outState.putParcelable(AREA_DATA, areaData)
         if (::areaProfile.isInitialized) outState.putParcelable(AREA_PROFILE, areaProfile)
+        outState.putBoolean(MSA_0, isMsa0)
     }
 
     override fun onResume() {

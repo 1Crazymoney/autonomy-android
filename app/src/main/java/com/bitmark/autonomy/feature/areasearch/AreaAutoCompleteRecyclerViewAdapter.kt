@@ -78,7 +78,7 @@ class AreaAutoCompleteRecyclerViewAdapter :
                     spannableString.setSpan(
                         ForegroundColorSpan(Color.WHITE),
                         start,
-                        searchText.length,
+                        start + searchText.length,
                         Spannable.SPAN_INCLUSIVE_EXCLUSIVE
                     )
                 }
