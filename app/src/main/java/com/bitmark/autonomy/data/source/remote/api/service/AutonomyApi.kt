@@ -79,4 +79,7 @@ interface AutonomyApi {
     @GET("api/area_profile/{id}")
     fun getAreaProfile(@Path("id") id: String): Single<AreaProfileData>
 
+    @PATCH("api/points-of-interest/{id}")
+    fun renameArea(@Path("id") id: String, @Body body: RequestBody): Completable
+
 }

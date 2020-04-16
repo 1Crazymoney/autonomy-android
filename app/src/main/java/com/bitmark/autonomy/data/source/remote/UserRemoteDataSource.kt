@@ -85,21 +85,91 @@ class UserRemoteDataSource @Inject constructor(
         return autonomyApi.reorderArea(reqBody).subscribeOn(Schedulers.io())
     }
 
-    // TODO update later
-    fun rename(id: String, name: String) = Completable.complete()
+    fun rename(id: String, name: String): Completable {
+        val json = newGsonInstance().toJson(mapOf("alias" to name))
+        val reqBody = json.toRequestBody("application/json".toMediaTypeOrNull())
+        return autonomyApi.renameArea(id, reqBody).subscribeOn(Schedulers.io())
+    }
 
     fun getCurrentAreaProfile() = autonomyApi.getCurrentAreaProfile().onErrorResumeNext {
         // TODO remove later
-        Single.just(AreaProfileData(null, null, null, null, 57, 2, -1, 1321, -54, 3431, 31))
+        Single.just(
+            AreaProfileData(
+                null,
+                null,
+                null,
+                null,
+                57,
+                2,
+                -1,
+                1321,
+                -54,
+                3431,
+                31,
+                "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco."
+            )
+        )
     }.subscribeOn(Schedulers.io())
 
     fun getAreaProfile(id: String) = autonomyApi.getAreaProfile(id).onErrorResumeNext {
         Single.just(
             when (id) {
-                "1" -> AreaProfileData(null, null, null, null, 17, 0, -2, 425, 58, 1242, 174)
-                "2" -> AreaProfileData(null, null, null, null, 23, 12, 9, 3425, 534, 7535, -253)
-                "3" -> AreaProfileData(null, null, null, null, 46, 7, -3, 425, -12, 674, 23)
-                "4" -> AreaProfileData(null, null, null, null, 93, 34, 32, 5325, -324, 5463, -24)
+                "1" -> AreaProfileData(
+                    null,
+                    null,
+                    null,
+                    null,
+                    17,
+                    0,
+                    -2,
+                    425,
+                    58,
+                    1242,
+                    174,
+                    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco."
+                )
+                "2" -> AreaProfileData(
+                    null,
+                    null,
+                    null,
+                    null,
+                    23,
+                    12,
+                    9,
+                    3425,
+                    534,
+                    7535,
+                    -253,
+                    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco."
+                )
+                "3" -> AreaProfileData(
+                    null,
+                    null,
+                    null,
+                    null,
+                    46,
+                    7,
+                    -3,
+                    425,
+                    -12,
+                    674,
+                    23,
+                    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco."
+                )
+                "4" -> AreaProfileData(
+                    null,
+                    null,
+                    null,
+                    null,
+                    93,
+                    34,
+                    32,
+                    5325,
+                    -324,
+                    5463,
+                    -24,
+                    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco."
+                )
                 else -> error("invalid test data")
             }
         )

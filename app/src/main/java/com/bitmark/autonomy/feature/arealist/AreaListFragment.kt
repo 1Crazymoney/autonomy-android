@@ -136,7 +136,7 @@ class AreaListFragment : BaseSupportFragment() {
 
     override fun onResume() {
         super.onResume()
-        //viewModel.listArea()
+        viewModel.listArea()
     }
 
     override fun observe() {

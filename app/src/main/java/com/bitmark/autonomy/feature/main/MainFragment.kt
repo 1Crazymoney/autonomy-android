@@ -171,15 +171,12 @@ class MainFragment : BaseSupportFragment() {
         when {
             score < 34 -> {
                 tvRiskLevel.setText(R.string.high_risk)
-                tvRiskLevelDes.setText(R.string.high_risk)
             }
             score < 67 -> {
                 tvRiskLevel.setText(R.string.moderate_risk)
-                tvRiskLevelDes.setText(R.string.moderate_risk)
             }
             else -> {
                 tvRiskLevel.setText(R.string.low_risk)
-                tvRiskLevelDes.setText(R.string.low_risk)
             }
         }
 
@@ -218,5 +215,7 @@ class MainFragment : BaseSupportFragment() {
         }
 
         ivHealthyBehaviorChange.setImageResource(if (profile.behaviorsDelta > 0) R.drawable.ic_up_green else R.drawable.ic_down_red)
+
+        tvRiskLevelDes.text = profile.guidance
     }
 }

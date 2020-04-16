@@ -53,5 +53,9 @@ data class AreaProfileData(
 
     @Expose
     @SerializedName("behaviror_delta")
-    val behaviorsDelta: Int
+    val behaviorsDelta: Int,
+
+    @Expose
+    @SerializedName("guidance")
+    val guidance: String
 ) : Data
