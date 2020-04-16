@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/cod_gray"
+    android:background="@color/mine_shaft_2"
     android:orientation="vertical"
     android:padding="@dimen/dp_14">
 
