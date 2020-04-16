@@ -80,13 +80,14 @@ class MainFragment : BaseSupportFragment() {
 
     private var isMsa0 = false
 
+    fun getAreaId() = areaData?.id
+
     override fun layoutRes(): Int = R.layout.fragment_main
 
     override fun viewModel(): BaseViewModel? = viewModel
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-
         areaData = arguments?.getParcelable(AREA_DATA)
         isMsa0 = areaData == null
     }
@@ -110,12 +111,6 @@ class MainFragment : BaseSupportFragment() {
     override fun onDestroyView() {
         locationService.removeLocationChangeListener(locationChangedListener)
         super.onDestroyView()
-    }
-
-    override fun onDetach() {
-        isMsa0 = false
-        areaData = null
-        super.onDetach()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -172,6 +167,7 @@ class MainFragment : BaseSupportFragment() {
                 }
 
                 res.isLoading() -> {
+                    if (this@MainFragment::areaProfile.isInitialized) return@Observer
                     progressBar.visible()
                 }
             }
@@ -179,6 +175,7 @@ class MainFragment : BaseSupportFragment() {
     }
 
     private fun showData(profile: AreaProfileModelView) {
+        if (profile.alias != null) tvLocation.text = profile.alias
         val score = profile.score
         tvScore.text = score.toString()
         ivScore.setImageResource("triangle_%03d".format(score))

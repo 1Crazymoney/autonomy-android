@@ -41,6 +41,8 @@ class AreaListFragment : BaseSupportFragment() {
 
         private const val AREA_LIST = "area_list"
 
+        private const val MAX_AREA = 10
+
         fun newInstance(areaList: ArrayList<AreaModelView>) = AreaListFragment().apply {
             val bundle = Bundle().apply { putParcelableArrayList(AREA_LIST, areaList) }
             arguments = bundle
@@ -62,6 +64,8 @@ class AreaListFragment : BaseSupportFragment() {
     @Inject
     internal lateinit var connectivityHandler: ConnectivityHandler
 
+    private lateinit var areaList: List<AreaModelView>
+
     private val adapter = AreaListRecyclerViewAdapter()
 
     private val actionListener = object : AreaListRecyclerViewAdapter.ActionListener {
@@ -72,9 +76,18 @@ class AreaListFragment : BaseSupportFragment() {
 
         override fun onAreaEditClicked(id: String) {
             adapter.setEditable(id, true)
+            adapter.setFooterVisibility(false)
             Handler().postDelayed({
                 activity?.showKeyBoard()
             }, 200)
+
+            var keyBoardShowing = true
+            activity?.detectKeyBoardState({ showing ->
+                keyBoardShowing = showing
+                if (keyBoardShowing) return@detectKeyBoardState
+                adapter.clearEditing()
+                adapter.setFooterVisibility(adapter.areaCount() < MAX_AREA)
+            }, { !keyBoardShowing })
         }
 
         override fun onAreaClicked(id: String) {
@@ -106,14 +119,17 @@ class AreaListFragment : BaseSupportFragment() {
     override fun initComponents() {
         super.initComponents()
 
-        val areaList = arguments?.getParcelableArrayList<AreaModelView>(AREA_LIST)?.toList()
-            ?: error("missing area array")
+        if (!this::areaList.isInitialized) {
+            areaList = arguments?.getParcelableArrayList<AreaModelView>(AREA_LIST)?.toList()
+                ?: error("missing area array")
+        }
+
         val layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
         rvAreas.layoutManager = layoutManager
         val itemDecoration = DividerItemDecoration(context, RecyclerView.VERTICAL)
         itemDecoration.setDrawable(context!!.getDrawable(R.drawable.bg_divider)!!)
         rvAreas.addItemDecoration(itemDecoration)
-        adapter.set(areaList)
+        adapter.set(areaList, areaList.size < MAX_AREA)
 
         val rvTouchListener = object : ItemTouchListener() {
             override fun onMove(oldPos: Int, newPos: Int) {
@@ -145,7 +161,8 @@ class AreaListFragment : BaseSupportFragment() {
         viewModel.listAreaLiveData.asLiveData().observe(this, Observer { res ->
             when {
                 res.isSuccess() -> {
-                    adapter.set(res.data()!!)
+                    areaList = res.data()!!
+                    adapter.set(areaList, areaList.size < MAX_AREA)
                 }
             }
         })
@@ -156,6 +173,7 @@ class AreaListFragment : BaseSupportFragment() {
                     progressBar.gone()
                     val id = res.data()!!
                     adapter.remove(id)
+                    adapter.setFooterVisibility(adapter.areaCount() < MAX_AREA)
                     (activity as? MainActivity)?.removeArea(id)
                 }
 
@@ -206,6 +224,7 @@ class AreaListFragment : BaseSupportFragment() {
             val area = AreaSearchActivity.extractResultData(data!!)
             (activity as? MainActivity)?.addArea(area)
             adapter.add(area)
+            adapter.setFooterVisibility(adapter.areaCount() < MAX_AREA)
         }
     }
 }

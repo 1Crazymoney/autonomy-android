@@ -45,10 +45,10 @@ class AreaListRecyclerViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder
 
     fun listId() = items.filter { i -> i.type == AREA }.map { i -> i.data!!.id }
 
-    fun set(items: List<AreaModelView>) {
+    fun set(items: List<AreaModelView>, hasFooter: Boolean = true) {
         this.items.clear()
         this.items.addAll(items.map { i -> Item(AREA, i) })
-        this.items.add(Item(FOOTER, null))
+        if (hasFooter) this.items.add(Item(FOOTER))
         notifyDataSetChanged()
     }
 
@@ -76,7 +76,17 @@ class AreaListRecyclerViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder
                     notifyItemChanged(editableIndex)
                 }
             }
+
+            if (items[index].editable == editable) return
             items[index].editable = editable
+            notifyItemChanged(index)
+        }
+    }
+
+    fun clearEditing() {
+        val index = items.indexOfFirst { i -> i.editable }
+        if (index != -1) {
+            items[index].editable = false
             notifyItemChanged(index)
         }
     }
@@ -101,6 +111,22 @@ class AreaListRecyclerViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder
         }
         notifyItemMoved(fromPos, toPos)
     }
+
+    fun setFooterVisibility(visible: Boolean) {
+        val index = items.indexOfFirst { i -> i.type == FOOTER }
+        if (visible) {
+            if (index != -1) return
+            val pos = items.size
+            items.add(Item(FOOTER))
+            notifyItemInserted(pos)
+        } else {
+            if (index == -1) return
+            items.removeAt(index)
+            notifyItemRemoved(index)
+        }
+    }
+
+    fun areaCount() = items.count { i -> i.type == AREA }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return if (viewType == AREA) {
@@ -213,7 +239,7 @@ class AreaListRecyclerViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder
         }
     }
 
-    data class Item(val type: Int, val data: AreaModelView?, var editable: Boolean = false)
+    data class Item(val type: Int, val data: AreaModelView? = null, var editable: Boolean = false)
 
     interface ActionListener {
 

@@ -8,8 +8,11 @@ package com.bitmark.autonomy.util.ext
 
 import android.app.Activity
 import android.content.Context.INPUT_METHOD_SERVICE
+import android.graphics.Rect
 import android.view.Gravity
 import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewTreeObserver
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import com.bitmark.apiservice.utils.callback.Callback0
@@ -242,4 +245,34 @@ fun Activity.toast(text: String, duration: Int = Toast.LENGTH_SHORT) {
     toast.duration = duration
     toast.view = view
     toast.show()
+}
+
+fun Activity.detectKeyBoardState(action: (Boolean) -> Unit, interruptSig: () -> Boolean) {
+    val contentView = findViewById<View>(android.R.id.content)
+    var isShowing = false
+    contentView.viewTreeObserver.addOnGlobalLayoutListener(object :
+        ViewTreeObserver.OnGlobalLayoutListener {
+        override fun onGlobalLayout() {
+            val rect = Rect()
+            contentView.getWindowVisibleDisplayFrame(rect)
+            val screenHeight = contentView.rootView.height
+            val keyboardHeight = screenHeight - rect.bottom
+            if (keyboardHeight > screenHeight * 0.15) {
+                if (!isShowing) {
+                    isShowing = true
+                    action(true)
+                }
+            } else {
+                if (isShowing) {
+                    isShowing = false
+                    action(false)
+                }
+            }
+
+            if (interruptSig()) {
+                contentView.viewTreeObserver.removeOnGlobalLayoutListener(this)
+            }
+        }
+
+    })
 }

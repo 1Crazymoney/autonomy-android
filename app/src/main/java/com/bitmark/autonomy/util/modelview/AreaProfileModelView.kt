@@ -26,7 +26,9 @@ data class AreaProfileModelView(
 
     val behaviorsDelta: Int,
 
-    val guidance: String
+    val guidance: String,
+
+    val alias: String?
 ) : ModelView, Parcelable {
     companion object {
         fun newInstance(areaProfile: AreaProfileData) = AreaProfileModelView(
@@ -37,7 +39,8 @@ data class AreaProfileModelView(
             areaProfile.symptomsDelta,
             areaProfile.behaviors,
             areaProfile.behaviorsDelta,
-            areaProfile.guidance
+            areaProfile.guidance,
+            areaProfile.alias
         )
     }
 }

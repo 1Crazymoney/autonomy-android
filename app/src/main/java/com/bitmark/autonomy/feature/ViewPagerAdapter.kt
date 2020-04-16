@@ -9,8 +9,8 @@ package com.bitmark.autonomy.feature
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.viewpager.widget.PagerAdapter
+import com.bitmark.autonomy.util.view.FragmentStatePagerAdapter
 import java.util.*
 
 open class ViewPagerAdapter(fm: FragmentManager) :
@@ -25,6 +25,10 @@ open class ViewPagerAdapter(fm: FragmentManager) :
         this.fragments.clear()
         this.fragments.addAll(fragments)
         notifyDataSetChanged()
+    }
+
+    override fun getTag(position: Int): String {
+        return fragments[position].tag ?: super.getTag(position)
     }
 
     override fun getItem(position: Int): Fragment = fragments[position]
@@ -64,10 +68,11 @@ open class ViewPagerAdapter(fm: FragmentManager) :
         notifyDataSetChanged()
     }
 
-    fun add(index: Int, fragment: Fragment) {
-        if (fragments.contains(fragment)) return
+    fun add(index: Int, fragment: Fragment): Boolean {
+        if (fragments.contains(fragment)) return false
         fragments.add(index, fragment)
         notifyDataSetChanged()
+        return true
     }
 
 }

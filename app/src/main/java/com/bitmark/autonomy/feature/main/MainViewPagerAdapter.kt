@@ -21,4 +21,7 @@ class MainViewPagerAdapter(fm: FragmentManager) : ViewPagerAdapter(fm), IconPage
             else -> R.drawable.ic_round_stateful
         }
     }
+
+    fun indexOfAreaFragment(id: String) =
+        fragments.indexOfFirst { f -> (f as? MainFragment)?.getAreaId() == id }
 }

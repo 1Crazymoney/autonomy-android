@@ -82,8 +82,6 @@ class MainActivity : BaseAppCompatActivity() {
 
     private var lastSurveyTimestamp = -1L
 
-    private lateinit var areaList: MutableList<AreaModelView>
-
     private val appStateChangedListener = object : AppLifecycleHandler.AppStateChangedListener {
         override fun onForeground() {
             super.onForeground()
@@ -191,7 +189,7 @@ class MainActivity : BaseAppCompatActivity() {
         viewModel.listAreaLiveData.asLiveData().observe(this, Observer { res ->
             when {
                 res.isSuccess() -> {
-                    areaList = res.data()!!.toMutableList()
+                    val areaList = res.data()!!.toMutableList()
                     val fragments = mutableListOf<Fragment>()
                     fragments.add(MainFragment.newInstance(null))
                     fragments.addAll(areaList.map { a -> MainFragment.newInstance(a) })
@@ -213,24 +211,26 @@ class MainActivity : BaseAppCompatActivity() {
     }
 
     fun removeArea(id: String) {
-        val pos = areaList.indexOfFirst { a -> a.id == id } + 1
-        if (pos > 0) {
-            adapter.remove(pos)
+        val index = adapter.indexOfAreaFragment(id)
+        if (index != -1) {
+            adapter.remove(index)
             vIndicator.notifyDataSetChanged()
         }
     }
 
     fun addArea(area: AreaModelView) {
-        areaList.add(area)
-        adapter.add(areaList.size, MainFragment.newInstance(area))
-        vIndicator.notifyDataSetChanged()
-        vp.setCurrentItem(adapter.count - 1, false)
+        val existing = adapter.indexOfAreaFragment(area.id) != -1
+        if (existing) return
+        if (adapter.add(adapter.count - 1, MainFragment.newInstance(area))) {
+            vIndicator.notifyDataSetChanged()
+            vp.setCurrentItem(adapter.count - 1, false)
+        }
     }
 
     fun showArea(id: String) {
-        val pos = areaList.indexOfFirst { a -> a.id == id } + 1
-        if (pos > 0) {
-            vp.setCurrentItem(pos, false)
+        val index = adapter.indexOfAreaFragment(id)
+        if (index > 0) {
+            vp.setCurrentItem(index, false)
         }
     }
 }
