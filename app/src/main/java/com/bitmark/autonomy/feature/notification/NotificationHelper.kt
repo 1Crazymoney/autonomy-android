@@ -10,7 +10,6 @@ import android.app.*
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.media.RingtoneManager
 import android.os.Build
 import android.os.Bundle
 import androidx.annotation.ColorInt
@@ -30,6 +29,7 @@ class NotificationHelper {
             @StringRes message: Int,
             @ColorRes color: Int = R.color.colorAccent,
             notificationId: Int = 0,
+            headup: Boolean = false,
             receiver: Class<*> = SplashActivity::class.java
         ): Bundle {
             return buildSimpleNotificationBundle(
@@ -37,6 +37,7 @@ class NotificationHelper {
                 context.getString(message),
                 context.getColor(color),
                 notificationId,
+                headup,
                 receiver
             )
         }
@@ -46,6 +47,7 @@ class NotificationHelper {
             message: String,
             @ColorInt color: Int,
             notificationId: Int = 0,
+            headup: Boolean = false,
             receiver: Class<*> = SplashActivity::class.java
         ): Bundle {
             val bundle = Bundle()
@@ -54,6 +56,7 @@ class NotificationHelper {
             bundle.putString("receiver", receiver.name)
             bundle.putInt("color", color)
             bundle.putInt("notification_id", notificationId)
+            bundle.putBoolean("head_up", headup)
             return bundle
         }
 
@@ -67,7 +70,14 @@ class NotificationHelper {
             currentProgress: Int = -1
         ): Bundle {
             val bundle =
-                buildSimpleNotificationBundle(title, message, color, notificationId, receiver)
+                buildSimpleNotificationBundle(
+                    title,
+                    message,
+                    color,
+                    notificationId,
+                    false,
+                    receiver
+                )
             bundle.putBoolean("progress", true)
             bundle.putInt("max_progress", maxProgress)
             bundle.putInt("current_progress", currentProgress)
@@ -92,14 +102,22 @@ class NotificationHelper {
                 PendingIntent.FLAG_ONE_SHOT
             )
 
+            val headup = bundle.getBoolean("head_up")
+            val isAboveP = Build.VERSION.SDK_INT >= 24
+            val priority = if (headup) {
+                if (isAboveP) NotificationManager.IMPORTANCE_HIGH else Notification.PRIORITY_HIGH
+            } else {
+                if (isAboveP) NotificationManager.IMPORTANCE_DEFAULT else Notification.PRIORITY_DEFAULT
+            }
             val channelName =
                 bundle.getString("channel") ?: context.getString(R.string.notification_channel_name)
             val notificationBuilder = NotificationCompat.Builder(context, channelName)
                 .setContentTitle(bundle.getString("title", ""))
                 .setContentText(bundle.getString("message"))
                 .setAutoCancel(true)
-                .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
                 .setContentIntent(pendingIntent)
+                .setPriority(priority)
+                .setDefaults(Notification.DEFAULT_ALL)
                 .setStyle(
                     NotificationCompat.BigTextStyle()
                         .bigText(bundle.getString("message"))
@@ -140,7 +158,7 @@ class NotificationHelper {
                 val channel = NotificationChannel(
                     channelName,
                     channelName,
-                    NotificationManager.IMPORTANCE_DEFAULT
+                    NotificationManager.IMPORTANCE_HIGH
                 )
                 notificationManager.createNotificationChannel(channel)
             }
@@ -186,5 +204,6 @@ fun NotificationHelper.Companion.buildCheckInSurveyNotificationBundle(context: C
         R.string.how_r_u_right_now_tap_to_check_in,
         R.color.colorAccent,
         NotificationId.SURVEY,
+        true,
         SplashActivity::class.java
     )
