@@ -11,7 +11,7 @@
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:background="@color/cod_gray"
+        android:background="@color/black"
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
@@ -37,7 +37,7 @@
         android:id="@+id/layoutContent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/cod_gray"
+        android:background="@color/black"
         android:clickable="true"
         android:focusable="true"
         android:orientation="vertical"
