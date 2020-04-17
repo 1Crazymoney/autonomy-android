@@ -30,6 +30,7 @@ data class AreaModelView(
 }
 
 fun Score.toDrawableRes() = when {
+    this == 0 -> R.drawable.ic_circle_mine_shaft_2
     this < 34 -> R.drawable.ic_circle_red
     this < 67 -> R.drawable.ic_circle_yellow
     else -> R.drawable.ic_circle_green

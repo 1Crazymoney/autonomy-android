@@ -132,7 +132,7 @@ class AreaSearchActivity : BaseAppCompatActivity() {
                         putParcelable(AREA, data)
                     }
                     val intent = Intent().apply { putExtras(bundle) }
-                    navigator.finishActivityForResult(intent, Activity.RESULT_OK)
+                    navigator.anim(BOTTOM_UP).finishActivityForResult(intent, Activity.RESULT_OK)
                     blocked = false
                 }
 

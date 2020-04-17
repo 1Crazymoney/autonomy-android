@@ -22,11 +22,11 @@ class BehaviorRemoteDataSource @Inject constructor(
 ) : RemoteDataSource(autonomyApi, rxErrorHandlingComposer) {
 
     fun listBehavior() = autonomyApi.listBehavior().map { res ->
-        res["behaviors"] ?: error("invalid response format")
+        res["good_behaviors"] ?: error("invalid response format")
     }.subscribeOn(Schedulers.io())
 
     fun reportBehaviors(ids: List<String>): Completable {
-        val req = mapOf("behaviors" to ids)
+        val req = mapOf("good_behaviors" to ids)
         val reqBody =
             newGsonInstance().toJson(req).toRequestBody("application/json".toMediaTypeOrNull())
         return autonomyApi.reportBehavior(reqBody).subscribeOn(Schedulers.io())

@@ -20,6 +20,6 @@ data class BehaviorData(
     val name: String,
 
     @Expose
-    @SerializedName("description")
+    @SerializedName("desc")
     val description: String
 ) : Data
