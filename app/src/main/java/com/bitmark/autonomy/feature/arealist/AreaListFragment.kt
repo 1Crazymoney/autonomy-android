@@ -26,6 +26,7 @@ import com.bitmark.autonomy.feature.connectivity.ConnectivityHandler
 import com.bitmark.autonomy.feature.main.MainActivity
 import com.bitmark.autonomy.logging.Event
 import com.bitmark.autonomy.logging.EventLogger
+import com.bitmark.autonomy.util.Constants.MAX_AREA
 import com.bitmark.autonomy.util.ext.*
 import com.bitmark.autonomy.util.modelview.AreaModelView
 import com.bitmark.autonomy.util.view.touchhelper.ItemTouchListener
@@ -40,8 +41,6 @@ class AreaListFragment : BaseSupportFragment() {
         private const val SEARCH_REQUEST_CODE = 0x1A
 
         private const val AREA_LIST = "area_list"
-
-        private const val MAX_AREA = 10
 
         fun newInstance(areaList: ArrayList<AreaModelView>) = AreaListFragment().apply {
             val bundle = Bundle().apply { putParcelableArrayList(AREA_LIST, areaList) }

@@ -25,8 +25,10 @@ class NotificationOpenedHandler @Inject constructor(private val context: Context
                 val notificationType =
                     additionalData.optString(NotificationPayloadType.NOTIFICATION_TYPE)
                 val helpId = additionalData.optString(NotificationPayloadType.HELP_ID)
+                val poiId = additionalData.optString(NotificationPayloadType.POI_ID)
                 putString(NotificationPayloadType.NOTIFICATION_TYPE, notificationType)
                 putString(NotificationPayloadType.HELP_ID, helpId)
+                putString(NotificationPayloadType.POI_ID, poiId)
             }
         } else null
         val intent = Intent(context, SplashActivity::class.java)

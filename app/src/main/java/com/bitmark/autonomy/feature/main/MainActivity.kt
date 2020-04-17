@@ -23,10 +23,12 @@ import com.bitmark.autonomy.feature.Navigator.Companion.RIGHT_LEFT
 import com.bitmark.autonomy.feature.arealist.AreaListFragment
 import com.bitmark.autonomy.feature.location.LocationService
 import com.bitmark.autonomy.feature.notification.NotificationId
+import com.bitmark.autonomy.feature.notification.NotificationPayloadType
 import com.bitmark.autonomy.feature.notification.NotificationReceivedHandler
 import com.bitmark.autonomy.feature.survey.SurveyContainerActivity
 import com.bitmark.autonomy.logging.Event
 import com.bitmark.autonomy.logging.EventLogger
+import com.bitmark.autonomy.util.Constants.MAX_AREA
 import com.bitmark.autonomy.util.ext.hideKeyBoard
 import com.bitmark.autonomy.util.ext.openAppSetting
 import com.bitmark.autonomy.util.ext.openIntercom
@@ -45,6 +47,8 @@ class MainActivity : BaseAppCompatActivity() {
         private val SURVEY_INTERVAL = TimeUnit.MINUTES.toMillis(10)
 
         private const val NOTIFICATION_BUNDLE = "notification_bundle"
+
+        private const val NOTIFICATION_ACTION_DELAY = 500L
 
         fun getBundle(notificationBundle: Bundle? = null) =
             Bundle().apply {
@@ -82,6 +86,8 @@ class MainActivity : BaseAppCompatActivity() {
 
     private var lastSurveyTimestamp = -1L
 
+    private var notificationBundle: Bundle? = null
+
     private val appStateChangedListener = object : AppLifecycleHandler.AppStateChangedListener {
         override fun onForeground() {
             super.onForeground()
@@ -96,7 +102,7 @@ class MainActivity : BaseAppCompatActivity() {
         handler.postDelayed({
             navigator.anim(RIGHT_LEFT).startActivity(SurveyContainerActivity::class.java)
             lastSurveyTimestamp = System.currentTimeMillis()
-        }, 500)
+        }, NOTIFICATION_ACTION_DELAY)
     }
 
     override fun layoutRes(): Int = R.layout.activity_main
@@ -131,16 +137,27 @@ class MainActivity : BaseAppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val notificationBundle = intent?.extras?.getBundle(NOTIFICATION_BUNDLE)
-        if (notificationBundle != null) {
-            when (notificationBundle.getInt("notification_id")) {
-                NotificationId.SURVEY -> goToSurveyIfSatisfied()
-            }
-        } else {
+        notificationBundle = intent?.extras?.getBundle(NOTIFICATION_BUNDLE)
+        if (notificationBundle == null) {
             goToSurveyIfSatisfied()
+        } else {
+            handleNotification(notificationBundle!!, adapter.count > 0)
         }
         appLifecycleHandler.addAppStateChangedListener(appStateChangedListener)
         viewModel.listArea()
+    }
+
+    private fun handleNotification(notificationBundle: Bundle, dataReady: Boolean) {
+        when (notificationBundle.getInt("notification_id")) {
+            NotificationId.SURVEY -> goToSurveyIfSatisfied()
+            NotificationId.RISK_LEVEL_CHANGED -> {
+                if (!dataReady) return
+                val areaId = notificationBundle.getString(NotificationPayloadType.POI_ID)
+                handler.postDelayed({ showArea(areaId) }, NOTIFICATION_ACTION_DELAY)
+            }
+        }
+        // destroy after already handled
+        this.notificationBundle = null
     }
 
     override fun onDestroy() {
@@ -195,7 +212,11 @@ class MainActivity : BaseAppCompatActivity() {
                     fragments.addAll(areaList.map { a -> MainFragment.newInstance(a) })
                     fragments.add(AreaListFragment.newInstance(ArrayList(areaList)))
                     adapter.set(fragments)
+                    vp.offscreenPageLimit = MAX_AREA + 2
                     vIndicator.notifyDataSetChanged()
+                    if (notificationBundle != null) {
+                        handleNotification(notificationBundle!!, true)
+                    }
                 }
 
                 res.isError() -> {
@@ -227,10 +248,15 @@ class MainActivity : BaseAppCompatActivity() {
         }
     }
 
-    fun showArea(id: String) {
-        val index = adapter.indexOfAreaFragment(id)
-        if (index > 0) {
-            vp.setCurrentItem(index, false)
+    fun showArea(id: String?) {
+        if (id == null) {
+            vp.setCurrentItem(0, false)
+        } else {
+            val index = adapter.indexOfAreaFragment(id)
+            if (index > 0) {
+                vp.setCurrentItem(index, false)
+            }
         }
+
     }
 }

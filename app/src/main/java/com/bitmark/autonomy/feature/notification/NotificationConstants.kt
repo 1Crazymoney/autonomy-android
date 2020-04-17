@@ -11,6 +11,8 @@ object NotificationPayloadType {
     const val NOTIFICATION_TYPE = "notification_type"
 
     const val HELP_ID = "help_id"
+
+    const val POI_ID = "poi_id"
 }
 
 object NotificationId {
@@ -21,6 +23,8 @@ object NotificationId {
 
     const val ACCEPTED_HELP_REQUEST = 0x03
 
+    const val RISK_LEVEL_CHANGED = 0x04
+
 }
 
 object NotificationType {
@@ -30,4 +34,6 @@ object NotificationType {
     const val ACCEPTED_HELP_REQUEST = "NOTIFY_HELP_ACCEPTED"
 
     const val HELP_REQUEST_EXPIRED = "NOTIFY_HELP_EXPIRED"
+
+    const val RISK_LEVEL_CHANGED = "RISK_LEVEL_CHANGED"
 }
