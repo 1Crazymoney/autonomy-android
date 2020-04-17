@@ -11,7 +11,6 @@ import com.bitmark.autonomy.data.source.UserRepository
 import com.bitmark.autonomy.feature.BaseViewModel
 import com.bitmark.autonomy.util.livedata.CompositeLiveData
 import com.bitmark.autonomy.util.livedata.RxLiveDataTransformer
-import com.bitmark.autonomy.util.modelview.AreaModelView
 import io.reactivex.Single
 
 
@@ -24,8 +23,6 @@ class AreaListViewModel(
     internal val renameAreaLiveData = CompositeLiveData<Pair<String, String>>()
 
     internal val deleteAreaLiveData = CompositeLiveData<String>()
-
-    internal val listAreaLiveData = CompositeLiveData<List<AreaModelView>>()
 
     fun reorder(ids: List<String>) {
         subscribe(userRepo.reorderArea(ids).subscribe({}, {}))
@@ -51,14 +48,6 @@ class AreaListViewModel(
                 )
             )
         )
-    }
-
-    fun listArea() {
-        listAreaLiveData.add(rxLiveDataTransformer.single(userRepo.listArea().map { areas ->
-            areas.map { a ->
-                AreaModelView.newInstance(a)
-            }
-        }))
     }
 
 }

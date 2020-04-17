@@ -10,9 +10,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
+import androidx.core.widget.doOnTextChanged
 import androidx.recyclerview.widget.RecyclerView
 import com.bitmark.autonomy.R
 import com.bitmark.autonomy.util.ext.gone
+import com.bitmark.autonomy.util.ext.move
 import com.bitmark.autonomy.util.ext.setSafetyOnclickListener
 import com.bitmark.autonomy.util.ext.visible
 import com.bitmark.autonomy.util.modelview.AreaModelView
@@ -20,7 +22,6 @@ import com.bitmark.autonomy.util.modelview.toDrawableRes
 import com.chauthai.swipereveallayout.ViewBinderHelper
 import kotlinx.android.synthetic.main.item_area.view.*
 import kotlinx.android.synthetic.main.item_area_footer.view.*
-import java.util.*
 
 
 class AreaListRecyclerViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -100,15 +101,7 @@ class AreaListRecyclerViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder
     }
 
     fun move(fromPos: Int, toPos: Int) {
-        if (fromPos < toPos) {
-            for (i in fromPos until toPos) {
-                Collections.swap(items, i, i + 1)
-            }
-        } else {
-            for (i in fromPos downTo toPos + 1) {
-                Collections.swap(items, i, i - 1)
-            }
-        }
+        items.move(fromPos, toPos)
         notifyItemMoved(fromPos, toPos)
     }
 
@@ -168,6 +161,8 @@ class AreaListRecyclerViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder
 
         private lateinit var item: Item
 
+        private var lastAlias = ""
+
         init {
             with(itemView) {
 
@@ -193,9 +188,14 @@ class AreaListRecyclerViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder
                 edtName.setOnEditorActionListener { _, actionId, _ ->
                     if (actionId == EditorInfo.IME_ACTION_DONE) {
                         val newAlias = edtName.text.toString()
-                        actionListener?.onDone(item.data!!.id, item.data!!.alias, newAlias)
+                        actionListener?.onDone(item.data!!.id, lastAlias, newAlias)
                         true
                     } else false
+                }
+
+                edtName.doOnTextChanged { text, _, _, _ ->
+                    item.data!!.alias = text.toString()
+                    tvName.text = text
                 }
             }
         }
@@ -205,6 +205,7 @@ class AreaListRecyclerViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder
             with(itemView) {
                 val alias = item.data!!.alias
                 if (item.editable) {
+                    lastAlias = alias
                     tvName.gone()
                     edtName.visible()
                     edtName.setText(alias)
@@ -216,6 +217,7 @@ class AreaListRecyclerViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder
                     )
                     edtName.requestFocus()
                 } else {
+                    lastAlias = ""
                     edtName.gone()
                     tvName.visible()
                     tvName.text = alias

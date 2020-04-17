@@ -63,7 +63,7 @@ class AreaListFragment : BaseSupportFragment() {
     @Inject
     internal lateinit var connectivityHandler: ConnectivityHandler
 
-    private lateinit var areaList: List<AreaModelView>
+    private lateinit var areaList: MutableList<AreaModelView>
 
     private val adapter = AreaListRecyclerViewAdapter()
 
@@ -119,7 +119,7 @@ class AreaListFragment : BaseSupportFragment() {
         super.initComponents()
 
         if (!this::areaList.isInitialized) {
-            areaList = arguments?.getParcelableArrayList<AreaModelView>(AREA_LIST)?.toList()
+            areaList = arguments?.getParcelableArrayList<AreaModelView>(AREA_LIST)?.toMutableList()
                 ?: error("missing area array")
         }
 
@@ -137,6 +137,7 @@ class AreaListFragment : BaseSupportFragment() {
 
             override fun onDrop(oldPos: Int, newPos: Int) {
                 super.onDrop(oldPos, newPos)
+                areaList.move(oldPos, newPos)
                 (activity as? MainActivity)?.moveArea(oldPos + 1, newPos + 1)
                 viewModel.reorder(adapter.listId())
             }
@@ -149,28 +150,15 @@ class AreaListFragment : BaseSupportFragment() {
         adapter.setActionListener(actionListener)
     }
 
-    override fun onResume() {
-        super.onResume()
-        viewModel.listArea()
-    }
-
     override fun observe() {
         super.observe()
-
-        viewModel.listAreaLiveData.asLiveData().observe(this, Observer { res ->
-            when {
-                res.isSuccess() -> {
-                    areaList = res.data()!!
-                    adapter.set(areaList, areaList.size < MAX_AREA)
-                }
-            }
-        })
 
         viewModel.deleteAreaLiveData.asLiveData().observe(this, Observer { res ->
             when {
                 res.isSuccess() -> {
                     progressBar.gone()
                     val id = res.data()!!
+                    areaList.removeAll { a -> a.id == id }
                     adapter.remove(id)
                     adapter.setFooterVisibility(adapter.areaCount() < MAX_AREA)
                     (activity as? MainActivity)?.removeArea(id)
@@ -199,6 +187,7 @@ class AreaListFragment : BaseSupportFragment() {
                     val data = res.data()!!
                     val id = data.first
                     val alias = data.second
+                    areaList.find { a -> a.id == id }?.alias = alias
                     adapter.updateAlias(id, alias)
                     (activity as? MainActivity)?.updateAreaAlias(id, alias)
                 }
@@ -225,6 +214,7 @@ class AreaListFragment : BaseSupportFragment() {
         if (resultCode == RESULT_OK && requestCode == SEARCH_REQUEST_CODE) {
             val area = AreaSearchActivity.extractResultData(data!!)
             (activity as? MainActivity)?.addArea(area)
+            areaList.add(area)
             adapter.add(area)
             adapter.setFooterVisibility(adapter.areaCount() < MAX_AREA)
         }

@@ -10,8 +10,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.viewpager.widget.PagerAdapter
+import com.bitmark.autonomy.util.ext.move
 import com.bitmark.autonomy.util.view.FragmentStatePagerAdapter
-import java.util.*
 
 open class ViewPagerAdapter(fm: FragmentManager) :
     FragmentStatePagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
@@ -51,15 +51,7 @@ open class ViewPagerAdapter(fm: FragmentManager) :
     }
 
     fun move(fromPos: Int, toPos: Int) {
-        if (fromPos < toPos) {
-            for (i in fromPos until toPos) {
-                Collections.swap(fragments, i, i + 1)
-            }
-        } else {
-            for (i in fromPos downTo toPos + 1) {
-                Collections.swap(fragments, i, i - 1)
-            }
-        }
+        fragments.move(fromPos, toPos)
         notifyDataSetChanged()
     }
 

@@ -35,3 +35,15 @@ fun <T> List<List<T>>.flatten(): List<T> {
     }
     return copy
 }
+
+fun <T> List<T>.move(fromPos: Int, toPos: Int) {
+    if (fromPos < toPos) {
+        for (i in fromPos until toPos) {
+            Collections.swap(this, i, i + 1)
+        }
+    } else {
+        for (i in fromPos downTo toPos + 1) {
+            Collections.swap(this, i, i - 1)
+        }
+    }
+}
