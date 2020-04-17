@@ -24,4 +24,14 @@ class MainViewPagerAdapter(fm: FragmentManager) : ViewPagerAdapter(fm), IconPage
 
     fun indexOfAreaFragment(id: String) =
         fragments.indexOfFirst { f -> (f as? MainFragment)?.getAreaId() == id }
+
+    fun updateAreaAlias(id: String, alias: String): Boolean {
+        val index = indexOfAreaFragment(id)
+        return if (index != -1) {
+            (fragments[index] as MainFragment).updateAlias(alias)
+            true
+        } else {
+            false
+        }
+    }
 }

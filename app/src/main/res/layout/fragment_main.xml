@@ -80,14 +80,13 @@
                 <include
                     android:id="@+id/layoutAreaInfo"
                     layout="@layout/layout_area_info"
-                    android:visibility="invisible"
+                    android:visibility="visible"
                     tools:visibility="visible" />
 
-                <include
+                <!--<include
                     android:id="@+id/layoutRiskLevel"
                     layout="@layout/layout_risk_level_des"
-                    tools:visibility="gone" />
-
+                    tools:visibility="gone" />-->
 
             </RelativeLayout>
 

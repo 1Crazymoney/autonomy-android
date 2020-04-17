@@ -257,6 +257,9 @@ class MainActivity : BaseAppCompatActivity() {
                 vp.setCurrentItem(index, false)
             }
         }
+    }
 
+    fun updateAreaAlias(id: String, alias: String) {
+        adapter.updateAreaAlias(id, alias)
     }
 }

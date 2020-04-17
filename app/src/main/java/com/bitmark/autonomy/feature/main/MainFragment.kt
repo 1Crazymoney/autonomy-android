@@ -19,12 +19,14 @@ import com.bitmark.autonomy.feature.Navigator
 import com.bitmark.autonomy.feature.location.LocationService
 import com.bitmark.autonomy.logging.Event
 import com.bitmark.autonomy.logging.EventLogger
-import com.bitmark.autonomy.util.ext.*
+import com.bitmark.autonomy.util.ext.decimalFormat
+import com.bitmark.autonomy.util.ext.gone
+import com.bitmark.autonomy.util.ext.setImageResource
+import com.bitmark.autonomy.util.ext.visible
 import com.bitmark.autonomy.util.modelview.AreaModelView
 import com.bitmark.autonomy.util.modelview.AreaProfileModelView
 import kotlinx.android.synthetic.main.fragment_main.*
 import kotlinx.android.synthetic.main.layout_area_info.*
-import kotlinx.android.synthetic.main.layout_risk_level_des.*
 import javax.inject.Inject
 import kotlin.math.abs
 
@@ -81,6 +83,11 @@ class MainFragment : BaseSupportFragment() {
     private var isMsa0 = false
 
     fun getAreaId() = areaData?.id
+
+    fun updateAlias(alias: String) {
+        areaData?.alias = alias
+        tvLocation.text = alias
+    }
 
     override fun layoutRes(): Int = R.layout.fragment_main
 
@@ -140,13 +147,13 @@ class MainFragment : BaseSupportFragment() {
             showData(areaProfile)
         }
 
-        layoutRiskLevel.setSafetyOnclickListener {
+        /*layoutRiskLevel.setSafetyOnclickListener {
             it?.flip(layoutAreaInfo, 400)
-        }
+        }*/
 
-        layoutAreaInfo.setSafetyOnclickListener {
+        /*layoutAreaInfo.setSafetyOnclickListener {
             it?.flip(layoutRiskLevel, 400)
-        }
+        }*/
 
     }
 
@@ -175,7 +182,6 @@ class MainFragment : BaseSupportFragment() {
     }
 
     private fun showData(profile: AreaProfileModelView) {
-        if (profile.alias != null) tvLocation.text = profile.alias
         val score = profile.score
         tvScore.text = score.toString()
         ivScore.setImageResource("triangle_%03d".format(score))
@@ -226,7 +232,5 @@ class MainFragment : BaseSupportFragment() {
         }
 
         ivHealthyBehaviorChange.setImageResource(if (profile.behaviorsDelta > 0) R.drawable.ic_up_green else R.drawable.ic_down_red)
-
-        tvRiskLevelDes.text = profile.guidance
     }
 }

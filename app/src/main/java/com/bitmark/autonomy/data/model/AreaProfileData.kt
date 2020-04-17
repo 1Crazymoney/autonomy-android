@@ -12,22 +12,6 @@ import com.google.gson.annotations.SerializedName
 
 data class AreaProfileData(
     @Expose
-    @SerializedName("id")
-    val id: String?,
-
-    @Expose
-    @SerializedName("location")
-    val location: Location?,
-
-    @Expose
-    @SerializedName("address")
-    val address: String?,
-
-    @Expose
-    @SerializedName("alias")
-    val alias: String?,
-
-    @Expose
     @SerializedName("score")
     val score: Int,
 
@@ -53,9 +37,5 @@ data class AreaProfileData(
 
     @Expose
     @SerializedName("behaviror_delta")
-    val behaviorsDelta: Int,
-
-    @Expose
-    @SerializedName("guidance")
-    val guidance: String
+    val behaviorsDelta: Int
 ) : Data

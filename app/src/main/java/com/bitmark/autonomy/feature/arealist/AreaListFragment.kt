@@ -197,7 +197,10 @@ class AreaListFragment : BaseSupportFragment() {
                 res.isSuccess() -> {
                     progressBar.gone()
                     val data = res.data()!!
-                    adapter.updateAlias(data.first, data.second)
+                    val id = data.first
+                    val alias = data.second
+                    adapter.updateAlias(id, alias)
+                    (activity as? MainActivity)?.updateAreaAlias(id, alias)
                 }
 
                 res.isError() -> {

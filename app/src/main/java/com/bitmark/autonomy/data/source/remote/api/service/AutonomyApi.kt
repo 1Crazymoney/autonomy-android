@@ -49,13 +49,13 @@ interface AutonomyApi {
     @GET("api/symptoms")
     fun listSymptom(): Single<Map<String, List<SymptomData>>>
 
-    @POST("api/report")
+    @POST("api/symptoms")
     fun reportSymptoms(@Body body: RequestBody): Completable
 
     @GET("api/behaviors")
     fun listBehavior(): Single<Map<String, List<BehaviorData>>>
 
-    @POST("api/report")
+    @POST("api/behaviors")
     fun reportBehavior(@Body body: RequestBody): Completable
 
     @GET("api/score")

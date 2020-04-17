@@ -4,20 +4,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="@dimen/dp_210"
-    android:background="@color/concord"
+    android:background="@color/mine_shaft_2"
     android:orientation="vertical"
     android:padding="@dimen/dp_16">
 
-    <androidx.appcompat.widget.AppCompatImageView
+    <!--<androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/ivFlip"
         android:layout_width="@dimen/dp_24"
         android:layout_height="@dimen/dp_24"
         android:padding="@dimen/dp_2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_flip" />
+        app:srcCompat="@drawable/ic_flip" />-->
 
-    <androidx.appcompat.widget.AppCompatTextView
+    <!--<androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tvLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -41,9 +41,23 @@
         android:text="@string/from_last_24_hours"
         android:textColor="@color/silver_2"
         android:textSize="@dimen/sp_13"
-        app:layout_constraintEnd_toStartOf="@id/ivFlip"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/tvLabel"
-        app:layout_constraintTop_toTopOf="@id/tvLabel" />
+        app:layout_constraintTop_toTopOf="@id/tvLabel" />-->
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvRiskLevel"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/domaine_sans"
+        android:includeFontPadding="false"
+        android:textAllCaps="true"
+        android:textColor="@color/white"
+        android:textSize="@dimen/sp_18"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Low risk" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -51,7 +65,7 @@
         android:layout_marginTop="@dimen/dp_24"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvLabel">
+        app:layout_constraintTop_toBottomOf="@id/tvRiskLevel">
 
         <LinearLayout
             android:id="@+id/layout1"
