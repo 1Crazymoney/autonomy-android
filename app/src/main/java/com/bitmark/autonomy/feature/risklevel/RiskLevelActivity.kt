@@ -20,16 +20,22 @@ import com.bitmark.autonomy.feature.notification.*
 import com.bitmark.autonomy.feature.notification.NotificationHelper.Companion.pushScheduledNotification
 import com.bitmark.autonomy.logging.Event
 import com.bitmark.autonomy.logging.EventLogger
+import com.bitmark.autonomy.logging.Tracer
 import com.bitmark.autonomy.util.DateTimeUtil
 import com.bitmark.autonomy.util.ext.*
 import com.bitmark.autonomy.util.randomNextMillisInHourRange
 import com.bitmark.sdk.authentication.KeyAuthenticationSpec
 import com.bitmark.sdk.features.Account
 import kotlinx.android.synthetic.main.activity_risk_level.*
+import java.util.*
 import javax.inject.Inject
 
 
 class RiskLevelActivity : BaseAppCompatActivity() {
+
+    companion object {
+        private const val TAG = "RiskLevelActivity"
+    }
 
     @Inject
     internal lateinit var viewModel: RiskLevelViewModel
@@ -156,6 +162,7 @@ class RiskLevelActivity : BaseAppCompatActivity() {
                     triggerMillis,
                     NotificationId.SURVEY
                 )
+                Tracer.DEBUG.log(TAG, "push survey notification at: ${Date(triggerMillis)}")
             }
         }
 

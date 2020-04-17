@@ -11,14 +11,18 @@ import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import com.bitmark.autonomy.logging.Tracer
 import com.bitmark.autonomy.util.DateTimeUtil
 import com.bitmark.autonomy.util.randomNextMillisInHourRange
+import java.util.*
 
 
 class DailyPushNotificationBroadcastReceiver : BroadcastReceiver() {
 
     companion object {
         private const val REQUEST_CODE = 0xAB
+
+        private const val TAG = "DailyNotification"
 
         fun trigger(context: Context, atMillis: Long) {
             val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
@@ -36,6 +40,7 @@ class DailyPushNotificationBroadcastReceiver : BroadcastReceiver() {
                 AlarmManager.INTERVAL_DAY,
                 pendingIntent
             )
+            Tracer.DEBUG.log(TAG, "push survey notification at: ${Date(atMillis)}")
         }
     }
 
@@ -53,6 +58,7 @@ class DailyPushNotificationBroadcastReceiver : BroadcastReceiver() {
                 triggerMillis,
                 NotificationId.SURVEY
             )
+            Tracer.DEBUG.log(TAG, "push survey notification at: ${Date(triggerMillis)}")
         }
     }
 }
