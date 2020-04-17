@@ -6,6 +6,8 @@
  */
 package com.bitmark.autonomy.feature.survey.checkin
 
+import android.app.Activity
+import android.content.Intent
 import com.bitmark.autonomy.R
 import com.bitmark.autonomy.feature.BaseSupportFragment
 import com.bitmark.autonomy.feature.BaseViewModel
@@ -23,6 +25,10 @@ class SurveyCheckin1Fragment : BaseSupportFragment() {
 
     companion object {
         fun newInstance() = SurveyCheckin1Fragment()
+
+        private const val SYMPTOM_REPORT_REQUEST_CODE = 0x01
+
+        private const val BEHAVIOR_REPORT_REQUEST_CODE = 0x02
     }
 
     @Inject
@@ -36,22 +42,38 @@ class SurveyCheckin1Fragment : BaseSupportFragment() {
         super.initComponents()
 
         ivRed.setSafetyOnclickListener {
-            navigator.anim(RIGHT_LEFT).startActivity(SymptomReportActivity::class.java)
-            navigator.anim(NONE).finishActivity()
+            navigator.anim(RIGHT_LEFT).startActivityForResult(
+                SymptomReportActivity::class.java,
+                SYMPTOM_REPORT_REQUEST_CODE
+            )
         }
 
         ivYellow.setSafetyOnclickListener {
-            navigator.anim(RIGHT_LEFT).startActivity(BehaviorReportActivity::class.java)
-            navigator.anim(NONE).finishActivity()
+            navigator.anim(RIGHT_LEFT).startActivityForResult(
+                BehaviorReportActivity::class.java,
+                BEHAVIOR_REPORT_REQUEST_CODE
+            )
         }
 
         ivGreen.setSafetyOnclickListener {
-            navigator.anim(RIGHT_LEFT).startActivity(BehaviorReportActivity::class.java)
-            navigator.anim(NONE).finishActivity()
+            navigator.anim(RIGHT_LEFT).startActivityForResult(
+                BehaviorReportActivity::class.java,
+                BEHAVIOR_REPORT_REQUEST_CODE
+            )
         }
     }
 
     override fun onBackPressed(): Boolean {
         return navigator.popFragment()
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == Activity.RESULT_OK) {
+            when (requestCode) {
+                SYMPTOM_REPORT_REQUEST_CODE, BEHAVIOR_REPORT_REQUEST_CODE -> navigator.anim(NONE).finishActivity()
+                else -> error("unsupported request code: $requestCode")
+            }
+        }
     }
 }

@@ -19,7 +19,7 @@ import com.bitmark.autonomy.feature.BaseAppCompatActivity
 import com.bitmark.autonomy.feature.BaseViewModel
 import com.bitmark.autonomy.feature.DialogController
 import com.bitmark.autonomy.feature.Navigator
-import com.bitmark.autonomy.feature.Navigator.Companion.RIGHT_LEFT
+import com.bitmark.autonomy.feature.Navigator.Companion.BOTTOM_UP
 import com.bitmark.autonomy.feature.arealist.AreaListFragment
 import com.bitmark.autonomy.feature.location.LocationService
 import com.bitmark.autonomy.feature.notification.NotificationId
@@ -100,7 +100,7 @@ class MainActivity : BaseAppCompatActivity() {
             || (lastSurveyTimestamp != -1L && System.currentTimeMillis() - lastSurveyTimestamp < SURVEY_INTERVAL)
         ) return
         handler.postDelayed({
-            navigator.anim(RIGHT_LEFT).startActivity(SurveyContainerActivity::class.java)
+            navigator.anim(BOTTOM_UP).startActivity(SurveyContainerActivity::class.java)
             lastSurveyTimestamp = System.currentTimeMillis()
         }, NOTIFICATION_ACTION_DELAY)
     }

@@ -35,7 +35,7 @@ class SurveyContainerActivity : BaseAppCompatActivity() {
     override fun onBackPressed() {
         val currentFragment = supportFragmentManager.findFragmentById(R.id.layoutContainer)
         if ((currentFragment as? BehaviorComponent)?.onBackPressed() == false) {
-            navigator.anim(Navigator.RIGHT_LEFT).finishActivity()
+            navigator.anim(Navigator.BOTTOM_UP).finishActivity()
             super.onBackPressed()
         }
     }

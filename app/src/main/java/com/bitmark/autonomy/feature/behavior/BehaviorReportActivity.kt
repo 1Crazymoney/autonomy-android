@@ -6,6 +6,7 @@
  */
 package com.bitmark.autonomy.feature.behavior
 
+import android.app.Activity
 import android.os.Bundle
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -131,7 +132,8 @@ class BehaviorReportActivity : BaseAppCompatActivity() {
                         R.string.ok
                     )
                     dialog.setOnDismissListener {
-                        navigator.anim(RIGHT_LEFT).finishActivity()
+                        navigator.anim(RIGHT_LEFT)
+                            .finishActivityForResult(resultCode = Activity.RESULT_OK)
                     }
                     dialog.show()
                     blocked = false
