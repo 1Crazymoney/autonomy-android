@@ -185,7 +185,7 @@ class MainFragment : BaseSupportFragment() {
         val score = profile.score
         tvScore.text = score.toString()
         ivScore.setImageResource("triangle_%03d".format(score))
-        when {
+        /*when {
             score < 34 -> {
                 tvRiskLevel.setText(R.string.high_risk)
             }
@@ -195,7 +195,7 @@ class MainFragment : BaseSupportFragment() {
             else -> {
                 tvRiskLevel.setText(R.string.low_risk)
             }
-        }
+        }*/
 
         tvConfirmedCases.text = profile.confirmed.decimalFormat()
         tvConfirmedCasesChange.text = abs(profile.confirmedDelta).decimalFormat()

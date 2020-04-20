@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/dp_210"
+    android:layout_height="@dimen/dp_150"
     android:background="@color/mine_shaft_2"
     android:orientation="vertical"
     android:padding="@dimen/dp_16">
@@ -45,7 +45,7 @@
         app:layout_constraintStart_toEndOf="@id/tvLabel"
         app:layout_constraintTop_toTopOf="@id/tvLabel" />-->
 
-    <androidx.appcompat.widget.AppCompatTextView
+    <!--<androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tvRiskLevel"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -57,15 +57,14 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="Low risk" />
+        tools:text="Low risk" />-->
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="@dimen/dp_24"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvRiskLevel">
+        app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
             android:id="@+id/layout1"
