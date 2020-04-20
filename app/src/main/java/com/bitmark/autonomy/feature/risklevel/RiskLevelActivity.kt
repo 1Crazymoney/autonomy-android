@@ -17,6 +17,7 @@ import com.bitmark.autonomy.feature.Navigator.Companion.RIGHT_LEFT
 import com.bitmark.autonomy.feature.connectivity.ConnectivityHandler
 import com.bitmark.autonomy.feature.main.MainActivity
 import com.bitmark.autonomy.feature.notification.*
+import com.bitmark.autonomy.feature.notification.NotificationHelper.Companion.createChannel
 import com.bitmark.autonomy.feature.notification.NotificationHelper.Companion.pushScheduledNotification
 import com.bitmark.autonomy.logging.Event
 import com.bitmark.autonomy.logging.EventLogger
@@ -147,6 +148,10 @@ class RiskLevelActivity : BaseAppCompatActivity() {
     }
 
     private fun scheduleNotification() {
+        // create notification channel for onesignal pushing
+        createChannel(this, ChannelId.IMPORTANT_ALERT, true)
+        createChannel(this, ChannelId.DEFAULT, false)
+
         val currentHour = DateTimeUtil.getCurrentHour()
         if (currentHour < NotificationConstants.NOTIFICATION_HOUR_RANGE.last) {
             val randomMillis = DateTimeUtil.randomNextMillisInHourRange(

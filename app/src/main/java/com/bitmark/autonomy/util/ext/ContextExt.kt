@@ -30,12 +30,12 @@ fun Context.getResIdentifier(resName: String, classifier: String) = try {
     null
 }
 
-fun Context.getString(stringResName: String): String {
-    val id = getResIdentifier(stringResName, "string") ?: return ""
+fun Context.getString(stringResName: String): String? {
+    val id = getResIdentifier(stringResName, "string") ?: return null
     return try {
         getString(id)
     } catch (e: Throwable) {
-        ""
+        null
     }
 }
 

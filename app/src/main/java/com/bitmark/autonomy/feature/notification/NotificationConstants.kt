@@ -37,3 +37,11 @@ object NotificationType {
 
     const val RISK_LEVEL_CHANGED = "RISK_LEVEL_CHANGED"
 }
+
+// need to be the corresponding string resource name
+object ChannelId {
+
+    const val IMPORTANT_ALERT = "important_alert"
+
+    const val DEFAULT = "default_channel"
+}

@@ -138,6 +138,8 @@
     <string name="rename">Rename</string>
     <string name="delete">Delete</string>
     <string name="save">Save</string>
+    <string name="default_channel">Default Channel</string>
+    <string name="important_alert">Important Alert</string>
 
     <!--    string format-->
     <string name="send_to_format">Send to %1$s</string>
