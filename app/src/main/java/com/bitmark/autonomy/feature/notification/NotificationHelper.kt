@@ -10,7 +10,6 @@ import android.app.*
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import androidx.annotation.ColorInt
 import androidx.annotation.ColorRes
@@ -20,7 +19,8 @@ import com.bitmark.autonomy.R
 import com.bitmark.autonomy.feature.splash.SplashActivity
 import com.bitmark.autonomy.util.ext.getResIdentifier
 import com.bitmark.autonomy.util.ext.getString
-import com.bitmark.autonomy.util.isAboveP
+import com.bitmark.autonomy.util.isAboveN
+import com.bitmark.autonomy.util.isAboveO
 
 class NotificationHelper {
 
@@ -113,9 +113,9 @@ class NotificationHelper {
 
             val headup = bundle.getBoolean("head_up")
             val priority = if (headup) {
-                if (isAboveP()) NotificationManager.IMPORTANCE_HIGH else Notification.PRIORITY_HIGH
+                if (isAboveN()) NotificationManager.IMPORTANCE_HIGH else Notification.PRIORITY_HIGH
             } else {
-                if (isAboveP()) NotificationManager.IMPORTANCE_DEFAULT else Notification.PRIORITY_DEFAULT
+                if (isAboveN()) NotificationManager.IMPORTANCE_DEFAULT else Notification.PRIORITY_DEFAULT
             }
             val channelId =
                 bundle.getString("channel") ?: context.getString(R.string.notification_channel_name)
@@ -166,15 +166,15 @@ class NotificationHelper {
         }
 
         fun createChannel(context: Context, channelId: String, importance: Boolean) {
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) return
+            if (!isAboveO()) return
             val notificationManager =
                 context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             if (notificationManager.getNotificationChannel(channelId) != null) return
             val channelName = context.getString(channelId) ?: error("invalid channel name")
             val channelImportance = if (importance) {
-                if (isAboveP()) NotificationManager.IMPORTANCE_HIGH else Notification.PRIORITY_HIGH
+                if (isAboveN()) NotificationManager.IMPORTANCE_HIGH else Notification.PRIORITY_HIGH
             } else {
-                if (isAboveP()) NotificationManager.IMPORTANCE_DEFAULT else Notification.PRIORITY_DEFAULT
+                if (isAboveN()) NotificationManager.IMPORTANCE_DEFAULT else Notification.PRIORITY_DEFAULT
             }
             val channel = NotificationChannel(
                 channelId,

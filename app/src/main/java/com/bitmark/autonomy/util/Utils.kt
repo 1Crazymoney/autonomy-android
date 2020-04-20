@@ -8,4 +8,6 @@ package com.bitmark.autonomy.util
 
 import android.os.Build
 
-fun isAboveP() = Build.VERSION.SDK_INT >= 24
+fun isAboveN() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
+
+fun isAboveO() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
