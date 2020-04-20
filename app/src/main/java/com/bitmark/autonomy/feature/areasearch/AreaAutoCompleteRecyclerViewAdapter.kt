@@ -72,7 +72,7 @@ class AreaAutoCompleteRecyclerViewAdapter :
         fun bind(item: Item, searchText: String) {
             this.item = item
             with(itemView) {
-                val spannableString = SpannableString(item.name)
+                val spannableString = SpannableString(item.address)
                 val start = item.name.indexOf(searchText, ignoreCase = true)
                 if (start != -1) {
                     spannableString.setSpan(

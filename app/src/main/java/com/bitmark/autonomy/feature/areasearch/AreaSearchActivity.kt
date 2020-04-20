@@ -107,7 +107,7 @@ class AreaSearchActivity : BaseAppCompatActivity() {
                     { places ->
                         adapter.set(places, searchText)
                     })
-            }, 1000)
+            }, 500)
         }
 
         ivExit.setOnClickListener {
