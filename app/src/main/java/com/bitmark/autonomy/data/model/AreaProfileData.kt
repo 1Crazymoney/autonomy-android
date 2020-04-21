@@ -16,11 +16,11 @@ data class AreaProfileData(
     val score: Float,
 
     @Expose
-    @SerializedName("comfirm")
+    @SerializedName("confirm")
     val confirmed: Int,
 
     @Expose
-    @SerializedName("comfirm_delta")
+    @SerializedName("confirm_delta")
     val confirmedDelta: Int,
 
     @Expose
@@ -36,6 +36,6 @@ data class AreaProfileData(
     val behaviors: Int,
 
     @Expose
-    @SerializedName("behaviror_delta")
+    @SerializedName("behavior_delta")
     val behaviorsDelta: Int
 ) : Data
