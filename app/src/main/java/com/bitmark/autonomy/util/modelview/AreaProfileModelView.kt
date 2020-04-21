@@ -12,7 +12,7 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class AreaProfileModelView(
-    val score: Int,
+    val score: Float,
 
     val confirmed: Int,
 

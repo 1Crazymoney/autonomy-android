@@ -13,7 +13,7 @@ import com.google.gson.annotations.SerializedName
 data class AreaProfileData(
     @Expose
     @SerializedName("score")
-    val score: Int,
+    val score: Float,
 
     @Expose
     @SerializedName("comfirm")

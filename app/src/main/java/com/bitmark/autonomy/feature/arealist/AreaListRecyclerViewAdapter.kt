@@ -22,6 +22,7 @@ import com.bitmark.autonomy.util.modelview.toDrawableRes
 import com.chauthai.swipereveallayout.ViewBinderHelper
 import kotlinx.android.synthetic.main.item_area.view.*
 import kotlinx.android.synthetic.main.item_area_footer.view.*
+import kotlin.math.roundToInt
 
 
 class AreaListRecyclerViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -224,7 +225,7 @@ class AreaListRecyclerViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder
                     edtName.clearFocus()
                 }
                 ivScore.setImageResource(item.data.score!!.toDrawableRes())
-                tvScore.text = item.data.score.toString()
+                tvScore.text = item.data.score.roundToInt().toString()
             }
         }
     }

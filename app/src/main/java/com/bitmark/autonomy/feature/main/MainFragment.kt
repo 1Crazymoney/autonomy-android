@@ -29,6 +29,7 @@ import kotlinx.android.synthetic.main.fragment_main.*
 import kotlinx.android.synthetic.main.layout_area_info.*
 import javax.inject.Inject
 import kotlin.math.abs
+import kotlin.math.roundToInt
 
 
 class MainFragment : BaseSupportFragment() {
@@ -183,7 +184,7 @@ class MainFragment : BaseSupportFragment() {
     }
 
     private fun showData(profile: AreaProfileModelView) {
-        val score = profile.score
+        val score = profile.score.roundToInt()
         tvScore.text = score.toString()
         ivScore.setImageResource("triangle_%03d".format(score))
         /*when {

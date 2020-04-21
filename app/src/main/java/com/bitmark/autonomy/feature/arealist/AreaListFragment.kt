@@ -213,6 +213,8 @@ class AreaListFragment : BaseSupportFragment() {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == RESULT_OK && requestCode == SEARCH_REQUEST_CODE) {
             val area = AreaSearchActivity.extractResultData(data!!)
+            val existing = areaList.find { a -> a.location == area.location } != null
+            if (existing) return
             (activity as? MainActivity)?.addArea(area)
             areaList.add(area)
             adapter.add(area)

@@ -9,7 +9,7 @@ package com.bitmark.autonomy.data.model
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
-typealias Score = Int
+typealias Score = Float
 
 data class AreaData(
     @Expose
