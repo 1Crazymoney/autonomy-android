@@ -15,10 +15,7 @@ import androidx.lifecycle.Observer
 import androidx.viewpager.widget.ViewPager
 import com.bitmark.autonomy.AppLifecycleHandler
 import com.bitmark.autonomy.R
-import com.bitmark.autonomy.feature.BaseAppCompatActivity
-import com.bitmark.autonomy.feature.BaseViewModel
-import com.bitmark.autonomy.feature.DialogController
-import com.bitmark.autonomy.feature.Navigator
+import com.bitmark.autonomy.feature.*
 import com.bitmark.autonomy.feature.Navigator.Companion.BOTTOM_UP
 import com.bitmark.autonomy.feature.arealist.AreaListFragment
 import com.bitmark.autonomy.feature.location.LocationService
@@ -261,5 +258,14 @@ class MainActivity : BaseAppCompatActivity() {
 
     fun updateAreaAlias(id: String, alias: String) {
         adapter.updateAreaAlias(id, alias)
+    }
+
+    override fun onBackPressed() {
+        val currentFragment = adapter.currentFragment as? BehaviorComponent
+        if ((currentFragment as? MainFragment)?.isMsa0 == true && !currentFragment.onBackPressed())
+            super.onBackPressed()
+        else if (currentFragment?.onBackPressed() == false) {
+            vp.setCurrentItem(0, true)
+        }
     }
 }

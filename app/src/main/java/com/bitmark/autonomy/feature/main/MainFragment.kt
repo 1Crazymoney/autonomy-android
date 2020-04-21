@@ -80,7 +80,8 @@ class MainFragment : BaseSupportFragment() {
 
     private var areaData: AreaModelView? = null
 
-    private var isMsa0 = false
+    var isMsa0 = false
+        private set
 
     fun getAreaId() = areaData?.id
 
@@ -233,4 +234,5 @@ class MainFragment : BaseSupportFragment() {
 
         ivHealthyBehaviorChange.setImageResource(if (profile.behaviorsDelta > 0) R.drawable.ic_up_green else R.drawable.ic_down_red)
     }
+
 }
