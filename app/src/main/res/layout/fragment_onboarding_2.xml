@@ -96,7 +96,7 @@
         android:includeFontPadding="false"
         android:paddingStart="@dimen/dp_18"
         android:paddingEnd="@dimen/dp_18"
-        android:text="@string/of_course_we_will_keep_all_data_private"
+        android:text="@string/your_privacy_get_stronger"
         android:textColor="@color/white"
         app:autoSizeMaxTextSize="@dimen/sp_36"
         app:autoSizeMinTextSize="@dimen/sp_18"
