@@ -7,4 +7,9 @@
 package com.bitmark.autonomy.feature.location
 
 
-data class PlaceAutoComplete(val id: String, val name: String, val desc: String)
+data class PlaceAutoComplete(
+    val id: String,
+    val primaryText: String,
+    val secondaryText: String,
+    val desc: String
+)

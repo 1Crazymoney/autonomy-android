@@ -14,9 +14,23 @@
         android:layout_height="wrap_content"
         android:ellipsize="end"
         android:fontFamily="@font/grotesk_light_font_family"
+        android:includeFontPadding="false"
         android:maxLines="1"
         android:textColor="@color/color_silver_2_stateful"
         android:textSize="@dimen/sp_16"
         tools:text="Songshan Airport" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvDesc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_8"
+        android:ellipsize="end"
+        android:fontFamily="@font/grotesk_light_font_family"
+        android:includeFontPadding="false"
+        android:maxLines="1"
+        android:textColor="@color/color_silver_2_stateful"
+        android:textSize="@dimen/sp_14"
+        tools:text="Section 4, Bade Road, Songshan District, Taipei City" />
 
 </LinearLayout>

@@ -84,7 +84,7 @@ class AreaSearchActivity : BaseAppCompatActivity() {
                     val execFunc = fun(item: AreaAutoCompleteRecyclerViewAdapter.Item) {
                         locationService.execGeoCoding(item.id, { l ->
                             blocked = false
-                            viewModel.addArea(item.name, item.address, l)
+                            viewModel.addArea(item.primaryText, item.desc, l)
                         }, {
                             blocked = false
                         })

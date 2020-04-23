@@ -245,14 +245,17 @@ class LocationService(private val context: Context, private val logger: EventLog
                     PlacesApi.placeAutocomplete(geoApiContext, text, sessionToken).await()
                 val places =
                     predictions.map { p ->
+                        Tracer.DEBUG.log(TAG, "search place: ${p.description}")
                         PlaceAutoComplete(
                             p.placeId,
                             p.structuredFormatting.mainText,
+                            p.structuredFormatting.secondaryText ?: p.description,
                             p.description
                         )
                     }
                 handler.post { success(places) }
             } catch (e: Throwable) {
+                Tracer.ERROR.log(TAG, "search place error: ${e.message}")
                 handler.post { error(e) }
             }
         }

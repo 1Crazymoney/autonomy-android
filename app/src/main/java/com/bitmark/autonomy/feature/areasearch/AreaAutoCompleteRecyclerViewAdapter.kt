@@ -31,7 +31,7 @@ class AreaAutoCompleteRecyclerViewAdapter :
     fun set(places: List<PlaceAutoComplete>, searchText: String) {
         this.searchText = searchText
         this.items.clear()
-        this.items.addAll(places.map { p -> Item(p.id, p.name, p.desc) })
+        this.items.addAll(places.map { p -> Item(p.id, p.primaryText, p.secondaryText, p.desc) })
         notifyDataSetChanged()
     }
 
@@ -72,8 +72,8 @@ class AreaAutoCompleteRecyclerViewAdapter :
         fun bind(item: Item, searchText: String) {
             this.item = item
             with(itemView) {
-                val spannableString = SpannableString(item.address)
-                val start = item.name.indexOf(searchText, ignoreCase = true)
+                val spannableString = SpannableString(item.primaryText)
+                val start = item.primaryText.indexOf(searchText, ignoreCase = true)
                 if (start != -1) {
                     spannableString.setSpan(
                         ForegroundColorSpan(Color.WHITE),
@@ -83,6 +83,7 @@ class AreaAutoCompleteRecyclerViewAdapter :
                     )
                 }
                 tvName.text = spannableString
+                tvDesc.text = item.secondaryText
             }
         }
     }
@@ -91,5 +92,10 @@ class AreaAutoCompleteRecyclerViewAdapter :
         fun onItemClicked(item: Item)
     }
 
-    data class Item(val id: String, val name: String, val address: String)
+    data class Item(
+        val id: String,
+        val primaryText: String,
+        val secondaryText: String,
+        val desc: String
+    )
 }
