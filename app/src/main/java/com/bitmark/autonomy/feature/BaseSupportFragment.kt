@@ -88,4 +88,5 @@ abstract class BaseSupportFragment : DaggerFragment(), BehaviorComponent {
      * Unobserve data change from ViewModel
      */
     protected open fun unobserve() {}
+
 }

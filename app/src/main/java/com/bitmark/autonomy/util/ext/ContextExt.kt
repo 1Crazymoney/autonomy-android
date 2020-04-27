@@ -64,6 +64,9 @@ fun Context.spToPx(sp: Int) = sp * resources.displayMetrics.scaledDensity
 val Context.screenWidth: Int
     get() = resources.displayMetrics.widthPixels
 
+val Context.screenHeight: Int
+    get() = resources.displayMetrics.heightPixels
+
 fun Context.getColorStateList(@ColorRes id: Int) = ContextCompat.getColorStateList(this, id)
 
 fun Context.getFontFamily(id: Int) = ResourcesCompat.getFont(this, id)

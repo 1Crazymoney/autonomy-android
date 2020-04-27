@@ -140,6 +140,17 @@
     <string name="save">Save</string>
     <string name="default_channel">Default Channel</string>
     <string name="important_alert">Important Alert</string>
+    <string name="view_source">View Source</string>
+    <string name="yesterday">Yesterday</string>
+    <string name="cases_equals">cases = </string>
+    <string name="cases_weight_equals">cases_weight = </string>
+    <string name="symptoms_equals">symptoms = </string>
+    <string name="symptoms_weight_equals">symptoms_weight = </string>
+    <string name="behaviors_equals">behaviors =</string>
+    <string name="behaviors_weight_equals">behavior_weights = </string>
+    <string name="score_formula">autonomy = (cases * cases_weight) + (symptoms * symptoms_weight) + (behaviors * behaviors_weight)</string>
+    <string name="reset">Reset</string>
+
 
     <!--    string format-->
     <string name="send_to_format">Send to %1$s</string>

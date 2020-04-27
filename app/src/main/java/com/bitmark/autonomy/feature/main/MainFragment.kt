@@ -9,7 +9,9 @@ package com.bitmark.autonomy.feature.main
 import android.content.Context
 import android.location.Location
 import android.os.Bundle
+import android.util.Log
 import android.view.View
+import android.view.ViewTreeObserver
 import androidx.lifecycle.Observer
 import com.bitmark.autonomy.R
 import com.bitmark.autonomy.feature.BaseSupportFragment
@@ -19,14 +21,14 @@ import com.bitmark.autonomy.feature.Navigator
 import com.bitmark.autonomy.feature.location.LocationService
 import com.bitmark.autonomy.logging.Event
 import com.bitmark.autonomy.logging.EventLogger
-import com.bitmark.autonomy.util.ext.decimalFormat
-import com.bitmark.autonomy.util.ext.gone
-import com.bitmark.autonomy.util.ext.setImageResource
-import com.bitmark.autonomy.util.ext.visible
+import com.bitmark.autonomy.util.ext.*
 import com.bitmark.autonomy.util.modelview.AreaModelView
 import com.bitmark.autonomy.util.modelview.AreaProfileModelView
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import kotlinx.android.synthetic.main.fragment_main.*
+import kotlinx.android.synthetic.main.fragment_main.tvScore
 import kotlinx.android.synthetic.main.layout_area_info.*
+import kotlinx.android.synthetic.main.layout_view_source.*
 import javax.inject.Inject
 import kotlin.math.abs
 import kotlin.math.roundToInt
@@ -80,6 +82,8 @@ class MainFragment : BaseSupportFragment() {
     }
 
     private var areaData: AreaModelView? = null
+
+    private lateinit var bottomSheetBehavior: BottomSheetBehavior<View>
 
     var isMsa0 = false
         private set
@@ -148,6 +152,96 @@ class MainFragment : BaseSupportFragment() {
         if (::areaProfile.isInitialized) {
             showData(areaProfile)
         }
+
+        bottomSheetBehavior = BottomSheetBehavior.from(layoutViewSourceRoot)
+        ivScore.setOnClickListener {
+            bottomSheetBehavior.state =
+                if (bottomSheetBehavior.state == BottomSheetBehavior.STATE_EXPANDED) {
+                    BottomSheetBehavior.STATE_HIDDEN
+                } else {
+                    BottomSheetBehavior.STATE_EXPANDED
+                }
+        }
+
+        rootView!!.viewTreeObserver.addOnGlobalLayoutListener(object :
+            ViewTreeObserver.OnGlobalLayoutListener {
+            override fun onGlobalLayout() {
+                rootView!!.viewTreeObserver.removeOnGlobalLayoutListener(this)
+
+                bottomSheetBehavior.setBottomSheetCallback(object :
+                    BottomSheetBehavior.BottomSheetCallback() {
+
+                    val context = this@MainFragment.context!!
+                    val bottomSheetHeight = context.getDimensionPixelSize(R.dimen.dp_400)
+                    val triangleVerticalPadding = 2 * context.getDimensionPixelSize(R.dimen.dp_32)
+
+                    val triangleYOffset = ivScore.y
+                    val tvScoreYOffset = tvScore.y
+                    val tvAppNameXOffset = tvAppName.x
+                    val triangleHeight = ivScore.height
+                    val tvScoreHeight = tvScore.height
+                    val scaledTriangleHeight =
+                        rootView!!.height - bottomSheetHeight - tvLocation.height - triangleVerticalPadding
+                    val minScale = scaledTriangleHeight.toFloat() / triangleHeight
+                    val scaleDelta = 1f - minScale
+                    val scaledTriangleYOffset = tvLocation.y + triangleVerticalPadding / 2
+                    val scaledTriangleDeltaHeight = triangleHeight * scaleDelta
+                    val maxTriangleTranslateY =
+                        triangleYOffset - scaledTriangleYOffset + scaledTriangleDeltaHeight / 2
+                    val maxTvScoreTranslateY =
+                        maxTriangleTranslateY + tvScoreHeight * scaleDelta / 2 - context.getDimensionPixelSize(
+                            R.dimen.dp_6
+                        ) // estimated px to make the tvScore is vertically center
+                    val maxTvAppNameTranslateX = context.screenWidth / 2 + tvAppName.width / 2
+                    var lastOffset = 0f
+
+                    override fun onSlide(p0: View, offset: Float) {
+                        if (offset == 0f) {
+                            ivScore.scaleX = 1f
+                            ivScore.scaleY = 1f
+                            tvScore.scaleX = 1f
+                            tvScore.scaleY = 1f
+                            tvAppName.alpha = 1f
+                            ivScore.y = triangleYOffset
+                            tvScore.y = tvScoreYOffset
+                            tvAppName.x = tvAppNameXOffset
+                        } else {
+                            // calculate scale
+                            val scaleRate = 1f - (scaleDelta * offset)
+                            ivScore.scaleX = scaleRate
+                            ivScore.scaleY = scaleRate
+                            tvScore.scaleX = scaleRate
+                            tvScore.scaleY = scaleRate
+
+                            // calculate alpha
+                            tvAppName.alpha = 1 - offset
+
+                            // calculate translate X for tvAppName
+                            val translateXDelta = (lastOffset - offset) * maxTvAppNameTranslateX
+                            tvAppName.x -= translateXDelta
+                            Log.d("onSlide", "translateXDelta = $translateXDelta")
+
+                            // calculate translate Y
+                            val triangleDeltaY = (lastOffset - offset) * maxTriangleTranslateY
+                            val tvScoreDeltaY = (lastOffset - offset) * maxTvScoreTranslateY
+                            Log.d(
+                                "onSlide",
+                                "triangleDeltaY = $triangleDeltaY, tvScoreDeltaY = $tvScoreDeltaY,  offset=$offset"
+                            )
+                            ivScore.y += triangleDeltaY
+                            tvScore.y += tvScoreDeltaY
+                        }
+                        lastOffset = offset
+                    }
+
+                    override fun onStateChanged(p0: View, p1: Int) {
+                        // do nothing
+                    }
+
+                })
+            }
+
+        })
 
         /*layoutRiskLevel.setSafetyOnclickListener {
             it?.flip(layoutAreaInfo, 400)
@@ -234,6 +328,15 @@ class MainFragment : BaseSupportFragment() {
         }
 
         ivHealthyBehaviorChange.setImageResource(if (profile.behaviorsDelta > 0) R.drawable.ic_up_green else R.drawable.ic_down_red)
+    }
+
+    override fun onBackPressed(): Boolean {
+        return if (bottomSheetBehavior.state == BottomSheetBehavior.STATE_EXPANDED) {
+            bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+            true
+        } else {
+            super.onBackPressed()
+        }
     }
 
 }
