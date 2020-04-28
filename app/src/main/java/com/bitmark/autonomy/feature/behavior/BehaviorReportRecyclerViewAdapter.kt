@@ -14,53 +14,84 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bitmark.autonomy.R
 import com.bitmark.autonomy.util.modelview.BehaviorModelView
 import kotlinx.android.synthetic.main.item_behavior.view.*
+import kotlinx.android.synthetic.main.item_behavior_footer.view.*
 
 
 class BehaviorReportRecyclerViewAdapter :
-    RecyclerView.Adapter<BehaviorReportRecyclerViewAdapter.ViewHolder>() {
+    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+
+    companion object {
+        private const val BODY = 0x00
+
+        private const val FOOTER = 0x01
+    }
 
     private val items = mutableListOf<Item>()
 
-    private var itemsCheckedChangeListener: ItemsCheckedChangeListener? = null
+    private var itemClickListener: ItemClickListener? = null
 
     private val onCheckedChangeListener = CompoundButton.OnCheckedChangeListener { _, _ ->
         if (getCheckedBehaviors().isNotEmpty()) {
-            itemsCheckedChangeListener?.onChecked()
+            itemClickListener?.onChecked()
         } else {
-            itemsCheckedChangeListener?.onUnChecked()
+            itemClickListener?.onUnChecked()
         }
     }
 
-    fun setItemsCheckedChangeListener(listener: ItemsCheckedChangeListener) {
-        this.itemsCheckedChangeListener = listener
+    fun setItemClickListener(listener: ItemClickListener) {
+        this.itemClickListener = listener
     }
 
     fun set(behaviors: List<BehaviorModelView>) {
         items.clear()
-        items.addAll(behaviors.map { s -> Item(s) })
+        items.addAll(behaviors.map { s -> Item(BODY, s, checked = false, checkable = true) })
+        items.add(Item(FOOTER, null, null, null))
         notifyDataSetChanged()
     }
 
-    fun getCheckedBehaviors() = items.filter { i -> i.checked }.map { i -> i.behavior }
+    fun add(behavior: BehaviorModelView, checked: Boolean = true, checkable: Boolean = true) {
+        val pos = items.size - 1
+        items.add(pos, Item(BODY, behavior, checked, checkable))
+        notifyItemInserted(pos)
+    }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(
-            LayoutInflater.from(parent.context).inflate(
-                R.layout.item_behavior,
-                parent,
-                false
-            ),
-            onCheckedChangeListener
-        )
+    fun getCheckedBehaviors() =
+        items.filter { i -> i.type == BODY && i.checked!! }.map { i -> i.behavior }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        return if (viewType == BODY) {
+            BodyVH(
+                LayoutInflater.from(parent.context).inflate(
+                    R.layout.item_behavior,
+                    parent,
+                    false
+                ),
+                onCheckedChangeListener
+            )
+        } else {
+            FooterVH(
+                LayoutInflater.from(parent.context).inflate(
+                    R.layout.item_behavior_footer,
+                    parent,
+                    false
+                ), itemClickListener
+            )
+        }
     }
 
     override fun getItemCount(): Int = items.size
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(items[position])
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        if (items[position].type == BODY) {
+            (holder as BodyVH).bind(items[position])
+        }
     }
 
-    class ViewHolder(view: View, onCheckedChangeListener: CompoundButton.OnCheckedChangeListener) :
+    override fun getItemViewType(position: Int): Int {
+        return items[position].type
+    }
+
+    class BodyVH(view: View, onCheckedChangeListener: CompoundButton.OnCheckedChangeListener) :
         RecyclerView.ViewHolder(view) {
 
         private lateinit var item: Item
@@ -73,6 +104,7 @@ class BehaviorReportRecyclerViewAdapter :
                 }
 
                 layoutRoot.setOnClickListener {
+                    if (!item.checkable!!) return@setOnClickListener
                     cbBehavior.isChecked = !cbBehavior.isChecked
                 }
             }
@@ -81,18 +113,40 @@ class BehaviorReportRecyclerViewAdapter :
         fun bind(item: Item) {
             this.item = item
             with(itemView) {
-                tvBehavior.text = item.behavior.behavior
+                cbBehavior.isEnabled = item.checkable!!
+                cbBehavior.isChecked = item.checked!!
+                tvBehavior.text = item.behavior!!.behavior
                 tvBehaviorDes.text = item.behavior.behaviorDes
             }
         }
     }
 
-    data class Item(val behavior: BehaviorModelView, var checked: Boolean = false)
+    class FooterVH(view: View, itemClickListener: ItemClickListener?) :
+        RecyclerView.ViewHolder(view) {
 
-    interface ItemsCheckedChangeListener {
+        init {
+            with(itemView) {
+                layoutRootFooter.setOnClickListener {
+                    itemClickListener?.onAddNew()
+                }
+            }
+        }
+
+    }
+
+    data class Item(
+        val type: Int,
+        val behavior: BehaviorModelView?,
+        var checked: Boolean? = null,
+        var checkable: Boolean? = null
+    )
+
+    interface ItemClickListener {
 
         fun onChecked()
 
         fun onUnChecked()
+
+        fun onAddNew()
     }
 }

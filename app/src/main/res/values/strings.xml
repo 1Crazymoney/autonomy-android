@@ -150,7 +150,21 @@
     <string name="behaviors_weight_equals">behavior_weights = </string>
     <string name="score_formula">autonomy = (cases * cases_weight) + (symptoms * symptoms_weight) + (behaviors * behaviors_weight)</string>
     <string name="reset">Reset</string>
-
+    <string name="add_symptom">Add symptom …</string>
+    <string name="create_title_for_symptom">Create a title for your symptom:</string>
+    <string name="enter_your_title_here">Enter your title here …</string>
+    <string name="you_can_add_des_for_symptom">You can add a short description for your symptom (optional):</string>
+    <string name="enter_your_optional_des_here">Enter your optional description here …</string>
+    <string name="your_symptom_has_been_added">Your symptom has been successfully added to your community’s list of symptoms</string>
+    <string name="thanks_for_taking_time_to_make_community_healthier_symptom">Thanks for taking the time to make your community a healthier and happier place. Please continue to report other symptoms as they appear.</string>
+    <string name="could_not_add_new_symptom">Could not add new symptom. Please try again later.</string>
+    <string name="could_not_add_new_behavior">Could not add new behavior. Please try again later.</string>
+    <string name="added">Added</string>
+    <string name="your_behavior_has_been_added">Your behavior has been successfully added to your community’s list of behavior</string>
+    <string name="thanks_for_taking_time_to_make_community_healthier_behavior">Thanks for taking the time to make your community a healthier and happier place. Please continue to report other behaviors as they appear.</string>
+    <string name="add_behavior">Add behavior …</string>
+    <string name="create_title_for_your_behavior">Create a title for your behavior:</string>
+    <string name="create_description_for_your_behavior">Create a short description for your behavior (optional):</string>
 
     <!--    string format-->
     <string name="send_to_format">Send to %1$s</string>

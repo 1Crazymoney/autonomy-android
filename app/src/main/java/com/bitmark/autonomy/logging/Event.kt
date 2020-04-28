@@ -38,6 +38,8 @@ enum class Event(val value: String) {
 
     SYMPTOM_REPORT_ERROR("symptom_report_error"),
 
+    SYMPTOM_ADDING_ERROR("symptom_adding_error"),
+
     NOTIFICATION_HANDLING_ERROR("notification_handling_error"),
 
     AREA_PROFILE_GETTING_ERROR("area_profile_getting_error"),
@@ -46,12 +48,14 @@ enum class Event(val value: String) {
 
     BEHAVIOR_REPORT_ERROR("behavior_report_error"),
 
+    BEHAVIOR_ADDING_ERROR("behavior_adding_error"),
+
     AREA_DELETE_ERROR("area_delete_error"),
 
     AREA_RENAME_ERROR("area_rename_error"),
 
     AREA_LIST_ERROR("area_list_error"),
 
-    AREA_ADDING_ERROR("area_adding_error")
+    AREA_ADDING_ERROR("area_adding_error"),
 
 }

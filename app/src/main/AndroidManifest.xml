@@ -70,6 +70,14 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize" />
 
+        <activity
+            android:name=".feature.symptoms.add.SymptomAddingContainerActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".feature.behavior.add.BehaviorAddingContainerActivity"
+            android:screenOrientation="portrait" />
+
         <receiver android:name=".feature.notification.DailyPushNotificationBroadcastReceiver" />
 
         <receiver android:name=".feature.notification.ScheduledNotificationReceiver" />

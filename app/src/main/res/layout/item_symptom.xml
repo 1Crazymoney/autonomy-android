@@ -19,7 +19,7 @@
         android:background="@drawable/bg_checkbox"
         android:button="@null"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tvSymptom"
         tools:checked="true" />
 
     <androidx.appcompat.widget.AppCompatTextView
@@ -27,14 +27,16 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/dp_10"
+        android:ellipsize="end"
         android:fontFamily="@font/grotesk_light_font_family"
         android:includeFontPadding="false"
+        android:maxLines="2"
         android:textColor="@color/color_white_stateful"
         android:textSize="@dimen/sp_24"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/cbSymptom"
-        app:layout_constraintTop_toTopOf="@id/cbSymptom"
-        tools:text="12 mins ago" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="This is longer longer longer longer longer text" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tvSymptomDes"
@@ -47,7 +49,7 @@
         app:layout_constraintEnd_toEndOf="@id/tvSymptom"
         app:layout_constraintStart_toStartOf="@id/tvSymptom"
         app:layout_constraintTop_toBottomOf="@id/tvSymptom"
-        tools:text="Community request for assistance" />
+        tools:text="Community request for assistance Community request for assistance" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

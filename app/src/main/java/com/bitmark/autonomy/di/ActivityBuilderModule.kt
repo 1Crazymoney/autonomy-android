@@ -10,6 +10,8 @@ import com.bitmark.autonomy.feature.areasearch.AreaSearchActivity
 import com.bitmark.autonomy.feature.areasearch.AreaSearchModule
 import com.bitmark.autonomy.feature.behavior.BehaviorReportActivity
 import com.bitmark.autonomy.feature.behavior.BehaviorReportModule
+import com.bitmark.autonomy.feature.behavior.add.BehaviorAddingContainerActivity
+import com.bitmark.autonomy.feature.behavior.add.BehaviorAddingContainerModule
 import com.bitmark.autonomy.feature.main.MainActivity
 import com.bitmark.autonomy.feature.main.MainActivityModule
 import com.bitmark.autonomy.feature.onboarding.OnboardingContainerActivity
@@ -28,6 +30,8 @@ import com.bitmark.autonomy.feature.survey.SurveyContainerActivity
 import com.bitmark.autonomy.feature.survey.SurveyContainerModule
 import com.bitmark.autonomy.feature.symptoms.SymptomReportActivity
 import com.bitmark.autonomy.feature.symptoms.SymptomReportModule
+import com.bitmark.autonomy.feature.symptoms.add.SymptomAddingContainerActivity
+import com.bitmark.autonomy.feature.symptoms.add.SymptomAddingContainerModule
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
@@ -77,5 +81,13 @@ abstract class ActivityBuilderModule {
     @ContributesAndroidInjector(modules = [AreaSearchModule::class])
     @ActivityScope
     internal abstract fun bindAreaSearchActivity(): AreaSearchActivity
+
+    @ContributesAndroidInjector(modules = [SymptomAddingContainerModule::class])
+    @ActivityScope
+    internal abstract fun bindSymptomAddingContainerActivity(): SymptomAddingContainerActivity
+
+    @ContributesAndroidInjector(modules = [BehaviorAddingContainerModule::class])
+    @ActivityScope
+    internal abstract fun bindBehaviorAddingContainerActivity(): BehaviorAddingContainerActivity
 
 }

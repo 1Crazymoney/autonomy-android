@@ -8,6 +8,8 @@ package com.bitmark.autonomy.di
 
 import com.bitmark.autonomy.feature.arealist.AreaListFragment
 import com.bitmark.autonomy.feature.arealist.AreaListModule
+import com.bitmark.autonomy.feature.behavior.add.BehaviorAddingFragment
+import com.bitmark.autonomy.feature.behavior.add.BehaviorAddingModule
 import com.bitmark.autonomy.feature.main.MainFragment
 import com.bitmark.autonomy.feature.main.MainFragmentModule
 import com.bitmark.autonomy.feature.onboarding.OnboardingFragment
@@ -22,6 +24,8 @@ import com.bitmark.autonomy.feature.survey.checkin.SurveyCheckin1Fragment
 import com.bitmark.autonomy.feature.survey.checkin.SurveyCheckin1Module
 import com.bitmark.autonomy.feature.survey.checkin.SurveyCheckin2Fragment
 import com.bitmark.autonomy.feature.survey.checkin.SurveyCheckin2Module
+import com.bitmark.autonomy.feature.symptoms.add.SymptomAddingFragment
+import com.bitmark.autonomy.feature.symptoms.add.SymptomAddingModule
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
@@ -59,4 +63,12 @@ abstract class FragmentBuilderModule {
     @ContributesAndroidInjector(modules = [AreaListModule::class])
     @FragmentScope
     internal abstract fun bindAreaListFragment(): AreaListFragment
+
+    @ContributesAndroidInjector(modules = [SymptomAddingModule::class])
+    @FragmentScope
+    internal abstract fun bindSymptomAddingFragment(): SymptomAddingFragment
+
+    @ContributesAndroidInjector(modules = [BehaviorAddingModule::class])
+    @FragmentScope
+    internal abstract fun bindBehaviorAddingFragment(): BehaviorAddingFragment
 }

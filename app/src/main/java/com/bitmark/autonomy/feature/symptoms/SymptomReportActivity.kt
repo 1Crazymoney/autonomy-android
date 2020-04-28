@@ -7,6 +7,7 @@
 package com.bitmark.autonomy.feature.symptoms
 
 import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -18,6 +19,8 @@ import com.bitmark.autonomy.feature.DialogController
 import com.bitmark.autonomy.feature.Navigator
 import com.bitmark.autonomy.feature.Navigator.Companion.RIGHT_LEFT
 import com.bitmark.autonomy.feature.connectivity.ConnectivityHandler
+import com.bitmark.autonomy.feature.symptoms.add.SymptomAddingContainerActivity
+import com.bitmark.autonomy.feature.symptoms.add.SymptomAddingFragment
 import com.bitmark.autonomy.logging.Event
 import com.bitmark.autonomy.logging.EventLogger
 import com.bitmark.autonomy.util.ext.*
@@ -27,6 +30,10 @@ import javax.inject.Inject
 
 
 class SymptomReportActivity : BaseAppCompatActivity() {
+
+    companion object {
+        private const val ADD_SYMPTOM_REQUEST_CODE = 0x07
+    }
 
     @Inject
     internal lateinit var viewModel: SymptomReportViewModel
@@ -62,8 +69,16 @@ class SymptomReportActivity : BaseAppCompatActivity() {
 
         disableSubmit()
 
-        adapter.setItemsCheckedChangeListener(object :
-            SymptomRecyclerViewAdapter.ItemsCheckedChangeListener {
+        adapter.setItemClickListener(object :
+            SymptomRecyclerViewAdapter.ItemClickListener {
+
+            override fun onAddNew() {
+                navigator.anim(RIGHT_LEFT).startActivityForResult(
+                    SymptomAddingContainerActivity::class.java,
+                    ADD_SYMPTOM_REQUEST_CODE
+                )
+            }
+
             override fun onChecked() {
                 enableSubmit()
             }
@@ -79,7 +94,7 @@ class SymptomReportActivity : BaseAppCompatActivity() {
 
         layoutSubmit.setSafetyOnclickListener {
             if (blocked) return@setSafetyOnclickListener
-            viewModel.reportSymptoms(adapter.getCheckedSymptoms().map { it.id })
+            viewModel.reportSymptoms(adapter.getCheckedSymptoms().map { it!!.id })
         }
 
         layoutBack.setOnClickListener {
@@ -156,6 +171,14 @@ class SymptomReportActivity : BaseAppCompatActivity() {
                 }
             }
         })
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == ADD_SYMPTOM_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            val newSymptom = SymptomAddingFragment.extractResultData(data)!!
+            adapter.add(newSymptom, checked = true, checkable = false)
+        }
     }
 
     override fun onBackPressed() {

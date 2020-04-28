@@ -14,52 +14,84 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bitmark.autonomy.R
 import com.bitmark.autonomy.util.modelview.SymptomModelView
 import kotlinx.android.synthetic.main.item_symptom.view.*
+import kotlinx.android.synthetic.main.item_symptom_footer.view.*
 
 
-class SymptomRecyclerViewAdapter : RecyclerView.Adapter<SymptomRecyclerViewAdapter.ViewHolder>() {
+class SymptomRecyclerViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+
+    companion object {
+        private const val BODY = 0x00
+
+        private const val FOOTER = 0x01
+    }
 
     private val items = mutableListOf<Item>()
 
-    private var itemsCheckedChangeListener: ItemsCheckedChangeListener? = null
+    private var itemClickListener: ItemClickListener? = null
 
-    private val onCheckedChangeListener = CompoundButton.OnCheckedChangeListener { _, isChecked ->
+    private val onCheckedChangeListener = CompoundButton.OnCheckedChangeListener { _, _ ->
         if (getCheckedSymptoms().isNotEmpty()) {
-            itemsCheckedChangeListener?.onChecked()
+            itemClickListener?.onChecked()
         } else {
-            itemsCheckedChangeListener?.onUnChecked()
+            itemClickListener?.onUnChecked()
         }
     }
 
-    fun setItemsCheckedChangeListener(listener: ItemsCheckedChangeListener) {
-        this.itemsCheckedChangeListener = listener
+    fun setItemClickListener(listener: ItemClickListener) {
+        this.itemClickListener = listener
     }
 
     fun set(symptoms: List<SymptomModelView>) {
         items.clear()
-        items.addAll(symptoms.map { s -> Item(s) })
+        items.addAll(symptoms.map { s -> Item(BODY, s, checked = false, checkable = true) })
+        items.add(Item(FOOTER, null, null))
         notifyDataSetChanged()
     }
 
-    fun getCheckedSymptoms() = items.filter { i -> i.checked }.map { i -> i.symptom }
+    fun add(symptom: SymptomModelView, checked: Boolean = true, checkable: Boolean = true) {
+        val pos = items.size - 1
+        items.add(pos, Item(BODY, symptom, checked, checkable))
+        notifyItemInserted(pos)
+    }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(
-            LayoutInflater.from(parent.context).inflate(
-                R.layout.item_symptom,
-                parent,
-                false
-            ),
-            onCheckedChangeListener
-        )
+    fun getCheckedSymptoms() =
+        items.filter { i -> i.type == BODY && i.checked!! }.map { i -> i.symptom }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        return if (viewType == BODY) {
+            BodyVH(
+                LayoutInflater.from(parent.context).inflate(
+                    R.layout.item_symptom,
+                    parent,
+                    false
+                ),
+                onCheckedChangeListener
+            )
+        } else {
+            FooterVH(
+                LayoutInflater.from(parent.context).inflate(
+                    R.layout.item_symptom_footer,
+                    parent,
+                    false
+                ), itemClickListener
+            )
+        }
     }
 
     override fun getItemCount(): Int = items.size
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(items[position])
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        if (items[position].type == BODY) {
+            (holder as BodyVH).bind(items[position])
+        }
+
     }
 
-    class ViewHolder(view: View, onCheckedChangeListener: CompoundButton.OnCheckedChangeListener) :
+    override fun getItemViewType(position: Int): Int {
+        return items[position].type
+    }
+
+    class BodyVH(view: View, onCheckedChangeListener: CompoundButton.OnCheckedChangeListener) :
         RecyclerView.ViewHolder(view) {
 
         private lateinit var item: Item
@@ -72,6 +104,7 @@ class SymptomRecyclerViewAdapter : RecyclerView.Adapter<SymptomRecyclerViewAdapt
                 }
 
                 layoutRoot.setOnClickListener {
+                    if (!item.checkable!!) return@setOnClickListener
                     cbSymptom.isChecked = !cbSymptom.isChecked
                 }
             }
@@ -80,18 +113,40 @@ class SymptomRecyclerViewAdapter : RecyclerView.Adapter<SymptomRecyclerViewAdapt
         fun bind(item: Item) {
             this.item = item
             with(itemView) {
-                tvSymptom.text = item.symptom.symptom
+                cbSymptom.isEnabled = item.checkable!!
+                cbSymptom.isChecked = item.checked!!
+                tvSymptom.text = item.symptom!!.symptom
                 tvSymptomDes.text = item.symptom.symptomDes
             }
         }
     }
 
-    data class Item(val symptom: SymptomModelView, var checked: Boolean = false)
+    class FooterVH(view: View, itemClickListener: ItemClickListener?) :
+        RecyclerView.ViewHolder(view) {
 
-    interface ItemsCheckedChangeListener {
+        init {
+            with(itemView) {
+                layoutRootFooter.setOnClickListener {
+                    itemClickListener?.onAddNew()
+                }
+            }
+        }
+
+    }
+
+    data class Item(
+        val type: Int,
+        val symptom: SymptomModelView?,
+        var checked: Boolean? = null,
+        var checkable: Boolean? = null
+    )
+
+    interface ItemClickListener {
 
         fun onChecked()
 
         fun onUnChecked()
+
+        fun onAddNew()
     }
 }

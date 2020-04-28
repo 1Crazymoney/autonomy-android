@@ -6,8 +6,11 @@
  */
 package com.bitmark.autonomy.util.modelview
 
+import android.os.Parcelable
 import com.bitmark.autonomy.data.model.BehaviorData
+import kotlinx.android.parcel.Parcelize
 
+@Parcelize
 data class BehaviorModelView(
 
     val id: String,
@@ -15,7 +18,7 @@ data class BehaviorModelView(
     val behavior: String,
 
     val behaviorDes: String
-) : ModelView {
+) : ModelView, Parcelable {
     companion object {
         fun newInstance(behavior: BehaviorData) =
             BehaviorModelView(behavior.id, behavior.name, behavior.description)

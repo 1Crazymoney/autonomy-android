@@ -7,6 +7,7 @@
 package com.bitmark.autonomy.feature.behavior
 
 import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -17,6 +18,8 @@ import com.bitmark.autonomy.feature.BaseViewModel
 import com.bitmark.autonomy.feature.DialogController
 import com.bitmark.autonomy.feature.Navigator
 import com.bitmark.autonomy.feature.Navigator.Companion.RIGHT_LEFT
+import com.bitmark.autonomy.feature.behavior.add.BehaviorAddingContainerActivity
+import com.bitmark.autonomy.feature.behavior.add.BehaviorAddingFragment
 import com.bitmark.autonomy.feature.connectivity.ConnectivityHandler
 import com.bitmark.autonomy.logging.Event
 import com.bitmark.autonomy.logging.EventLogger
@@ -27,6 +30,10 @@ import javax.inject.Inject
 
 
 class BehaviorReportActivity : BaseAppCompatActivity() {
+
+    companion object {
+        private const val ADD_BEHAVIOR_REQUEST_CODE = 0x08
+    }
 
     @Inject
     internal lateinit var viewModel: BehaviorReportViewModel
@@ -62,8 +69,16 @@ class BehaviorReportActivity : BaseAppCompatActivity() {
 
         disableSubmit()
 
-        adapter.setItemsCheckedChangeListener(object :
-            BehaviorReportRecyclerViewAdapter.ItemsCheckedChangeListener {
+        adapter.setItemClickListener(object :
+            BehaviorReportRecyclerViewAdapter.ItemClickListener {
+
+            override fun onAddNew() {
+                navigator.anim(RIGHT_LEFT).startActivityForResult(
+                    BehaviorAddingContainerActivity::class.java,
+                    ADD_BEHAVIOR_REQUEST_CODE
+                )
+            }
+
             override fun onChecked() {
                 enableSubmit()
             }
@@ -79,7 +94,7 @@ class BehaviorReportActivity : BaseAppCompatActivity() {
 
         layoutSubmit.setSafetyOnclickListener {
             if (blocked) return@setSafetyOnclickListener
-            viewModel.reportBehaviors(adapter.getCheckedBehaviors().map { it.id })
+            viewModel.reportBehaviors(adapter.getCheckedBehaviors().map { it!!.id })
         }
 
         layoutBack.setOnClickListener {
@@ -156,6 +171,14 @@ class BehaviorReportActivity : BaseAppCompatActivity() {
                 }
             }
         })
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == ADD_BEHAVIOR_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            val newBehavior = BehaviorAddingFragment.extractResultData(data)!!
+            adapter.add(newBehavior, checked = true, checkable = false)
+        }
     }
 
     override fun onBackPressed() {

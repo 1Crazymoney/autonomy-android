@@ -10,6 +10,7 @@ import com.bitmark.autonomy.data.ext.newGsonInstance
 import com.bitmark.autonomy.data.source.remote.api.middleware.RxErrorHandlingComposer
 import com.bitmark.autonomy.data.source.remote.api.service.AutonomyApi
 import io.reactivex.Completable
+import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
@@ -30,5 +31,16 @@ class SymptomRemoteDataSource @Inject constructor(
         val reqBody =
             newGsonInstance().toJson(req).toRequestBody("application/json".toMediaTypeOrNull())
         return autonomyApi.reportSymptoms(reqBody).subscribeOn(Schedulers.io())
+    }
+
+    fun addSymptom(name: String, desc: String): Single<String> {
+        val req = mapOf("name" to name, "desc" to desc)
+        val reqBody =
+            newGsonInstance().toJson(req).toRequestBody("application/json".toMediaTypeOrNull())
+        return autonomyApi.addSymptom(reqBody).map { res -> res["id"] ?: error("invalid response") }
+            .subscribeOn(Schedulers.io()).onErrorResumeNext {
+                // TODO remove later
+                Single.just("test_id")
+            }
     }
 }

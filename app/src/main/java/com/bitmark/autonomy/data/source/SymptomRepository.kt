@@ -14,4 +14,7 @@ class SymptomRepository(private val remoteDataSource: SymptomRemoteDataSource) :
     fun listSymptom() = remoteDataSource.listSymptom()
 
     fun reportSymptom(ids: List<String>) = remoteDataSource.reportSymptom(ids)
+
+    fun addSymptom(name: String, desc: String) = remoteDataSource.addSymptom(name, desc)
+
 }
