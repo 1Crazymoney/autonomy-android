@@ -67,27 +67,12 @@ class SplashActivity : BaseAppCompatActivity() {
 
         hideLanding()
 
-        val tosAndPpString = getString(R.string.by_continuing_you_agree)
-        val spannableString = SpannableString(tosAndPpString)
-        val eulaString = getString(R.string.eula)
-        val ppString = getString(R.string.privacy_policy)
+        val privacyString = getString(R.string.we_protect_your_digital_rights)
+        val spannableString = SpannableString(privacyString)
+        val ppString = getString(R.string.digital_rights)
 
-        var startIndex = tosAndPpString.indexOf(eulaString)
-        var endIndex = startIndex + eulaString.length
-        spannableString.setSpan(
-            object : ClickableSpan() {
-                override fun onClick(widget: View) {
-                    // TODO change link later
-                    navigator.anim(NONE).openBrowser("https://bitmark.com")
-                }
-
-            }, startIndex,
-            endIndex,
-            Spannable.SPAN_INCLUSIVE_EXCLUSIVE
-        )
-
-        startIndex = tosAndPpString.indexOf(ppString)
-        endIndex = startIndex + ppString.length
+        val startIndex = privacyString.indexOf(ppString)
+        val endIndex = startIndex + ppString.length
         spannableString.setSpan(
             object : ClickableSpan() {
                 override fun onClick(widget: View) {

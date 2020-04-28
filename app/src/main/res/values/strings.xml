@@ -4,6 +4,8 @@
     <string name="notification_channel_name">@string/app_name</string>
     <string name="get_better_dot">Get better.\nTogether.</string>
     <string name="by_continuing_you_agree">By continuing, you agree to our\nEULA and Privacy Policy.</string>
+    <string name="we_protect_your_digital_rights">We protect your Digital Rights.</string>
+    <string name="digital_rights">Digital Rights</string>
     <string name="eula">EULA</string>
     <string name="privacy_policy">Privacy Policy</string>
     <string name="start">Start</string>
