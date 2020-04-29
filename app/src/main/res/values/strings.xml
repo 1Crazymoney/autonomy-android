@@ -183,7 +183,27 @@
     <string name="contact">Contact</string>
     <string name="behavior_history">Behavior History</string>
     <string name="location_history">Location History</string>
-
+    <string name="cases_weight">Cases weight</string>
+    <string name="behaviors_weight">Behaviors weight</string>
+    <string name="symptom_weight">Symptoms weight</string>
+    <string name="confirmed_cases_score">Confirmed Cases Score</string>
+    <string name="reported_behaviors_score">Reported Behaviors Score</string>
+    <string name="the_score_is_calculated_for_all">The score is calculated for all people reporting behaviors in a 1km radius.</string>
+    <string name="behaviors_total">Behaviors total</string>
+    <string name="total_people">Total people</string>
+    <string name="max_score_per_person">Max score\nper person</string>
+    <string name="reported_symptoms_score">Reported Symptoms Score</string>
+    <string name="each_reported_symptom_is_given_a_score">Each reported symptom is given a score of 1 to 3, depending on the likelihood of it being a predictor of COVID-19. The overall symptoms score is calculated for all symptoms in a 1km radius. Current symptoms and scores are:</string>
+    <string name="fever_equal">Fever = </string>
+    <string name="dry_cough_equal">Dry cough = </string>
+    <string name="chest_pain_equal">Chest pain = </string>
+    <string name="bluish_lips_equal">Bluish lips or face = </string>
+    <string name="fatigue_equal">Fatigue = </string>
+    <string name="shortness_of_breath_equal">Shortness of breath = </string>
+    <string name="nasal_congestion_equal">Nasal congestion = </string>
+    <string name="sore_throat_equal">Sore throat = </string>
+    <string name="symptoms_total">Symptoms total</string>
+    <string name="jupyter_notebook">Jupyter Notebook</string>
 
     <!--    string format-->
     <string name="send_to_format">Send to %1$s</string>
