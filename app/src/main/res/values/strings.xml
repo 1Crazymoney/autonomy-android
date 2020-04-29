@@ -8,6 +8,7 @@
     <string name="digital_rights">Digital Rights</string>
     <string name="eula">EULA</string>
     <string name="privacy_policy">Privacy Policy</string>
+    <string name="eula_and_pp">EULA and Privacy Policy</string>
     <string name="start">Start</string>
     <string name="we_will_use_community">We’ll use community data to calculate a health score for your current location.</string>
     <string name="back">Back</string>
@@ -167,6 +168,22 @@
     <string name="add_behavior">Add behavior …</string>
     <string name="create_title_for_your_behavior">Create a title for your behavior:</string>
     <string name="create_description_for_your_behavior">Create a short description for your behavior (optional):</string>
+    <string name="profile">Profile</string>
+    <string name="report">Report</string>
+    <string name="history">History</string>
+    <string name="symptom_history">Symptom History</string>
+    <string name="locations">Locations</string>
+    <string name="data">Data</string>
+    <string name="export">Export</string>
+    <string name="security">Security</string>
+    <string name="sign_out">Sign out</string>
+    <string name="recovery_key">Recovery Key</string>
+    <string name="support">Support</string>
+    <string name="faq">FAQ</string>
+    <string name="contact">Contact</string>
+    <string name="behavior_history">Behavior History</string>
+    <string name="location_history">Location History</string>
+
 
     <!--    string format-->
     <string name="send_to_format">Send to %1$s</string>
@@ -176,5 +193,6 @@
     <string name="hours_ago_format">%1$s hours ago</string>
     <string name="day_ago_format">%1$s day ago</string>
     <string name="days_ago_format">%1$s days ago</string>
+    <string name="date_time_format">%1$s at %2$s</string>
 
 </resources>

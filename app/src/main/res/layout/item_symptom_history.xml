@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="@dimen/dp_16">
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvPrimary"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/grotesk_light_font_family"
+        android:includeFontPadding="false"
+        android:textColor="@color/white"
+        android:textSize="@dimen/sp_12"
+        tools:text="Apr 01 at 8:54 am (121.58505350000001, 25.0483372)" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvSecondary"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_6"
+        android:fontFamily="@font/grotesk_light_font_family"
+        android:includeFontPadding="false"
+        android:textColor="@color/silver_2"
+        android:textSize="@dimen/sp_14"
+        tools:text="Dry Cough, Fever, Shortness of breath, Extreme fatigue" />
+
+</LinearLayout>

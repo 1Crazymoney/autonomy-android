@@ -26,7 +26,11 @@ class DateTimeUtil {
 
         val DATE_FORMAT_1 = "yyyy MMM dd"
 
+        val DATE_FORMAT_2 = "MMM dd"
+
         val TIME_FORMAT_1 = "HH:mm"
+
+        val TIME_FORMAT_2 = "hh:mm a"
 
         fun stringToString(
             date: String,
@@ -58,13 +62,9 @@ class DateTimeUtil {
             format: String = ISO8601_FORMAT,
             timezone: String = "UTC"
         ): String {
-            return try {
-                val formatter = SimpleDateFormat(format, Locale.getDefault())
-                formatter.timeZone = TimeZone.getTimeZone(timezone)
-                formatter.format(date)
-            } catch (e: Throwable) {
-                ""
-            }
+            val formatter = SimpleDateFormat(format, Locale.getDefault())
+            formatter.timeZone = TimeZone.getTimeZone(timezone)
+            return formatter.format(date)
         }
 
         fun stringToDate(
@@ -72,13 +72,9 @@ class DateTimeUtil {
             format: String = ISO8601_FORMAT,
             timezone: String = "UTC"
         ): Date? {
-            return try {
-                val formatter = SimpleDateFormat(format, Locale.getDefault())
-                formatter.timeZone = TimeZone.getTimeZone(timezone)
-                formatter.parse(date)
-            } catch (e: Throwable) {
-                null
-            }
+            val formatter = SimpleDateFormat(format, Locale.getDefault())
+            formatter.timeZone = TimeZone.getTimeZone(timezone)
+            return formatter.parse(date)
         }
 
         fun isToday(dateString: String, timezone: String = "UTC"): Boolean {
@@ -106,6 +102,17 @@ class DateTimeUtil {
         }
 
         fun getCurrentHour() = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
+
+        fun millisToString(
+            millis: Long,
+            format: String,
+            inputTimeZone: String = "UTC",
+            outputTimeZone: String = "UTC"
+        ): String {
+            val calendar = Calendar.getInstance(TimeZone.getTimeZone(inputTimeZone))
+            calendar.timeInMillis = millis
+            return dateToString(calendar.time, format, outputTimeZone)
+        }
 
     }
 }

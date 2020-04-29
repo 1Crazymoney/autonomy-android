@@ -16,4 +16,7 @@ class BehaviorRepository(private val remoteDataSource: BehaviorRemoteDataSource)
     fun reportBehaviors(ids: List<String>) = remoteDataSource.reportBehaviors(ids)
 
     fun addBehavior(name: String, desc: String) = remoteDataSource.addBehavior(name, desc)
+
+    fun listBehaviorHistory(beforeSec: Long, limit: Int = 20) =
+        remoteDataSource.listBehaviorHistory(beforeSec, limit)
 }

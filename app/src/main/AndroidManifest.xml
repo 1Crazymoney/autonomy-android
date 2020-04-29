@@ -78,6 +78,22 @@
             android:name=".feature.behavior.add.BehaviorAddingContainerActivity"
             android:screenOrientation="portrait" />
 
+        <activity
+            android:name=".feature.profile.ProfileActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".feature.symptoms.history.SymptomHistoryActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".feature.behavior.history.BehaviorHistoryActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".feature.locationhistory.LocationHistoryActivity"
+            android:screenOrientation="portrait" />
+
         <receiver android:name=".feature.notification.DailyPushNotificationBroadcastReceiver" />
 
         <receiver android:name=".feature.notification.ScheduledNotificationReceiver" />

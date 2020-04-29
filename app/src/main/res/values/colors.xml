@@ -2,7 +2,7 @@
 <resources>
     <color name="colorPrimary">@color/black</color>
     <color name="colorPrimaryDark">@color/black</color>
-    <color name="colorAccent">@color/black</color>
+    <color name="colorAccent">@color/apple</color>
     <color name="cognac">#932C19</color>
     <color name="cognac_66">#66932C19</color>
     <color name="cognac_80">#80932C19</color>

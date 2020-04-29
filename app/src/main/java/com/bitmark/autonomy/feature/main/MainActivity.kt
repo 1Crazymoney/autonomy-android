@@ -17,11 +17,13 @@ import com.bitmark.autonomy.AppLifecycleHandler
 import com.bitmark.autonomy.R
 import com.bitmark.autonomy.feature.*
 import com.bitmark.autonomy.feature.Navigator.Companion.BOTTOM_UP
+import com.bitmark.autonomy.feature.Navigator.Companion.UP_BOTTOM
 import com.bitmark.autonomy.feature.arealist.AreaListFragment
 import com.bitmark.autonomy.feature.location.LocationService
 import com.bitmark.autonomy.feature.notification.NotificationId
 import com.bitmark.autonomy.feature.notification.NotificationPayloadType
 import com.bitmark.autonomy.feature.notification.NotificationReceivedHandler
+import com.bitmark.autonomy.feature.profile.ProfileActivity
 import com.bitmark.autonomy.feature.survey.SurveyContainerActivity
 import com.bitmark.autonomy.logging.Event
 import com.bitmark.autonomy.logging.EventLogger
@@ -195,6 +197,11 @@ class MainActivity : BaseAppCompatActivity() {
             }
 
         })
+
+        ivMenu.setOnClickListener {
+            navigator.anim(UP_BOTTOM).startActivity(ProfileActivity::class.java)
+        }
+
     }
 
     override fun observe() {

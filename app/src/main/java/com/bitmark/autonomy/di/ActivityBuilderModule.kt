@@ -12,12 +12,18 @@ import com.bitmark.autonomy.feature.behavior.BehaviorReportActivity
 import com.bitmark.autonomy.feature.behavior.BehaviorReportModule
 import com.bitmark.autonomy.feature.behavior.add.BehaviorAddingContainerActivity
 import com.bitmark.autonomy.feature.behavior.add.BehaviorAddingContainerModule
+import com.bitmark.autonomy.feature.behavior.history.BehaviorHistoryActivity
+import com.bitmark.autonomy.feature.behavior.history.BehaviorHistoryModule
+import com.bitmark.autonomy.feature.locationhistory.LocationHistoryActivity
+import com.bitmark.autonomy.feature.locationhistory.LocationHistoryModule
 import com.bitmark.autonomy.feature.main.MainActivity
 import com.bitmark.autonomy.feature.main.MainActivityModule
 import com.bitmark.autonomy.feature.onboarding.OnboardingContainerActivity
 import com.bitmark.autonomy.feature.onboarding.OnboardingContainerModule
 import com.bitmark.autonomy.feature.permission.PermissionActivity
 import com.bitmark.autonomy.feature.permission.PermissionModule
+import com.bitmark.autonomy.feature.profile.ProfileActivity
+import com.bitmark.autonomy.feature.profile.ProfileModule
 import com.bitmark.autonomy.feature.requesthelp.RequestHelpContainerActivity
 import com.bitmark.autonomy.feature.requesthelp.RequestHelpContainerModule
 import com.bitmark.autonomy.feature.respondhelp.RespondHelpActivity
@@ -32,6 +38,8 @@ import com.bitmark.autonomy.feature.symptoms.SymptomReportActivity
 import com.bitmark.autonomy.feature.symptoms.SymptomReportModule
 import com.bitmark.autonomy.feature.symptoms.add.SymptomAddingContainerActivity
 import com.bitmark.autonomy.feature.symptoms.add.SymptomAddingContainerModule
+import com.bitmark.autonomy.feature.symptoms.history.SymptomHistoryActivity
+import com.bitmark.autonomy.feature.symptoms.history.SymptomHistoryModule
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
@@ -89,5 +97,21 @@ abstract class ActivityBuilderModule {
     @ContributesAndroidInjector(modules = [BehaviorAddingContainerModule::class])
     @ActivityScope
     internal abstract fun bindBehaviorAddingContainerActivity(): BehaviorAddingContainerActivity
+
+    @ContributesAndroidInjector(modules = [ProfileModule::class])
+    @ActivityScope
+    internal abstract fun bindProfileActivity(): ProfileActivity
+
+    @ContributesAndroidInjector(modules = [SymptomHistoryModule::class])
+    @ActivityScope
+    internal abstract fun bindSymptomHistoryActivity(): SymptomHistoryActivity
+
+    @ContributesAndroidInjector(modules = [BehaviorHistoryModule::class])
+    @ActivityScope
+    internal abstract fun bindBehaviorHistoryActivity(): BehaviorHistoryActivity
+
+    @ContributesAndroidInjector(modules = [LocationHistoryModule::class])
+    @ActivityScope
+    internal abstract fun bindLocationHistoryActivity(): LocationHistoryActivity
 
 }

@@ -22,6 +22,7 @@ class Navigator(host: Any) {
         const val BOTTOM_UP = 0x01
         const val RIGHT_LEFT = 0x02
         const val FADE_IN = 0x03
+        const val UP_BOTTOM = 0x04
     }
 
     private var fragment: Fragment? = null
@@ -181,6 +182,10 @@ class Navigator(host: Any) {
                 R.anim.slide_left_out
             )
             FADE_IN -> activity?.overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
+            UP_BOTTOM -> activity?.overridePendingTransition(
+                R.anim.slide_up_in,
+                R.anim.slide_bottom_out
+            )
         }
     }
 
@@ -195,6 +200,10 @@ class Navigator(host: Any) {
                 R.anim.slide_right_out
             )
             FADE_IN -> activity?.overridePendingTransition(R.anim.fade_out, R.anim.fade_in)
+            UP_BOTTOM -> activity?.overridePendingTransition(
+                R.anim.slide_bottom_in,
+                R.anim.slide_up_out
+            )
         }
     }
 
@@ -216,6 +225,12 @@ class Navigator(host: Any) {
                 R.anim.fade_out,
                 R.anim.fade_out,
                 R.anim.fade_in
+            )
+            UP_BOTTOM -> transaction.setCustomAnimations(
+                R.anim.slide_up_in,
+                R.anim.slide_bottom_out,
+                R.anim.slide_up_out,
+                R.anim.slide_bottom_in
             )
         }
     }

@@ -58,7 +58,7 @@ interface AutonomyApi {
     @GET("api/behaviors")
     fun listBehavior(): Single<Map<String, List<BehaviorData>>>
 
-    @POST("api/behaviors/report")
+    @POST("api/behaviors")
     fun reportBehavior(@Body body: RequestBody): Completable
 
     @POST("api/behaviors")
@@ -87,5 +87,14 @@ interface AutonomyApi {
 
     @PATCH("api/points-of-interest/{id}")
     fun renameArea(@Path("id") id: String, @Body body: RequestBody): Completable
+
+    @GET("api/history/symptoms")
+    fun listSymptomHistory(@Query("before") before: Long, @Query("limit") limit: Int): Single<Map<String, List<SymptomHistoryData>>>
+
+    @GET("api/history/behaviors")
+    fun listBehaviorHistory(@Query("before") before: Long, @Query("limit") limit: Int): Single<Map<String, List<BehaviorHistoryData>>>
+
+    @GET("api/history/locations")
+    fun listLocationHistory(@Query("before") before: Long, @Query("limit") limit: Int): Single<Map<String, List<LocationHistoryData>>>
 
 }

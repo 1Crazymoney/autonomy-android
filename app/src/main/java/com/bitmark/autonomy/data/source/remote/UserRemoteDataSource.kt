@@ -51,4 +51,9 @@ class UserRemoteDataSource @Inject constructor(
     fun getCurrentAreaProfile() = autonomyApi.getCurrentAreaProfile().subscribeOn(Schedulers.io())
 
     fun getAreaProfile(id: String) = autonomyApi.getAreaProfile(id).subscribeOn(Schedulers.io())
+
+    fun listLocationHistory(beforeSec: Long, limit: Int) =
+        autonomyApi.listLocationHistory(beforeSec, limit).map { res ->
+            res["locations_history"] ?: error("invalid response")
+        }.subscribeOn(Schedulers.io())
 }

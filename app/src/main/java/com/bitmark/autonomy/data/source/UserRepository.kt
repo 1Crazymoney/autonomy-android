@@ -27,4 +27,7 @@ class UserRepository(private val remoteDataSource: UserRemoteDataSource) : Repos
     fun getCurrentAreaProfile() = remoteDataSource.getCurrentAreaProfile()
 
     fun getAreaProfile(id: String) = remoteDataSource.getAreaProfile(id)
+
+    fun listLocationHistory(beforeSec: Long, limit: Int = 20) =
+        remoteDataSource.listLocationHistory(beforeSec, limit)
 }
