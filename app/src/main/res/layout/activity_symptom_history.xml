@@ -39,7 +39,8 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="@dimen/dp_44"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:paddingBottom="@dimen/dp_8"
+        app:layout_constraintBottom_toTopOf="@id/layoutBack"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvTitle">
 
