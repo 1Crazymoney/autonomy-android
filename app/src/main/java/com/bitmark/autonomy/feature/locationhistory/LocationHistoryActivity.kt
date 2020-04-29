@@ -20,6 +20,7 @@ import com.bitmark.autonomy.util.EndlessScrollListener
 import com.bitmark.autonomy.util.ext.gone
 import com.bitmark.autonomy.util.ext.visible
 import kotlinx.android.synthetic.main.activity_location_history.*
+import java.util.*
 import javax.inject.Inject
 
 
@@ -64,6 +65,7 @@ class LocationHistoryActivity : BaseAppCompatActivity() {
         }
 
         layoutBack.setOnClickListener {
+            Locale.US
             navigator.anim(Navigator.RIGHT_LEFT).finishActivity()
         }
     }
