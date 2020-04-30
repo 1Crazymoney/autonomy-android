@@ -58,7 +58,7 @@ interface AutonomyApi {
     @GET("api/behaviors")
     fun listBehavior(): Single<Map<String, List<BehaviorData>>>
 
-    @POST("api/behaviors")
+    @POST("api/behaviors/report")
     fun reportBehavior(@Body body: RequestBody): Completable
 
     @POST("api/behaviors")

@@ -38,10 +38,7 @@ class SymptomRemoteDataSource @Inject constructor(
         val reqBody =
             newGsonInstance().toJson(req).toRequestBody("application/json".toMediaTypeOrNull())
         return autonomyApi.addSymptom(reqBody).map { res -> res["id"] ?: error("invalid response") }
-            .subscribeOn(Schedulers.io()).onErrorResumeNext {
-                // TODO remove later
-                Single.just("test_id")
-            }
+            .subscribeOn(Schedulers.io())
     }
 
     fun listSymptomHistory(beforeSec: Long, limit: Int) =
