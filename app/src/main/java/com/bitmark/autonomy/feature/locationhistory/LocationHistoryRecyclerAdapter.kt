@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bitmark.autonomy.R
 import com.bitmark.autonomy.util.DateTimeUtil
 import com.bitmark.autonomy.util.modelview.LocationHistoryModelView
-import com.bitmark.autonomy.util.modelview.timestamp
 import kotlinx.android.synthetic.main.item_location_history.view.*
 
 

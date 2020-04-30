@@ -14,7 +14,6 @@ import com.bitmark.autonomy.R
 import com.bitmark.autonomy.util.DateTimeUtil
 import com.bitmark.autonomy.util.modelview.BehaviorHistoryModelView
 import com.bitmark.autonomy.util.modelview.joinSymptoms
-import com.bitmark.autonomy.util.modelview.timestamp
 import kotlinx.android.synthetic.main.item_behavior_history.view.*
 
 
