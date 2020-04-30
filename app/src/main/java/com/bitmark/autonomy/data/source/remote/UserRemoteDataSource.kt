@@ -7,6 +7,7 @@
 package com.bitmark.autonomy.data.source.remote
 
 import com.bitmark.autonomy.data.ext.newGsonInstance
+import com.bitmark.autonomy.data.model.CoefficientData
 import com.bitmark.autonomy.data.model.Location
 import com.bitmark.autonomy.data.source.remote.api.middleware.RxErrorHandlingComposer
 import com.bitmark.autonomy.data.source.remote.api.request.AddAreaRequest
@@ -56,4 +57,14 @@ class UserRemoteDataSource @Inject constructor(
         autonomyApi.listLocationHistory(beforeSec, limit).map { res ->
             res["locations_history"] ?: error("invalid response")
         }.subscribeOn(Schedulers.io())
+
+    fun getFormula() = autonomyApi.getFormula().subscribeOn(Schedulers.io())
+
+    fun deleteFormula() = autonomyApi.deleteFormula().subscribeOn(Schedulers.io())
+
+    fun updateFormula(coefficientData: CoefficientData): Completable {
+        val json = newGsonInstance().toJson(mapOf("coefficient" to coefficientData))
+        val reqBody = json.toRequestBody("application/json".toMediaTypeOrNull())
+        return autonomyApi.updateFormula(reqBody).subscribeOn(Schedulers.io())
+    }
 }

@@ -12,6 +12,7 @@ import com.bitmark.autonomy.feature.BaseViewModel
 import com.bitmark.autonomy.util.livedata.CompositeLiveData
 import com.bitmark.autonomy.util.livedata.RxLiveDataTransformer
 import com.bitmark.autonomy.util.modelview.AreaProfileModelView
+import com.bitmark.autonomy.util.modelview.FormulaModelView
 
 
 class MainFragmentViewModel(
@@ -21,6 +22,12 @@ class MainFragmentViewModel(
 ) : BaseViewModel(lifecycle) {
 
     internal val getAreaProfileLiveData = CompositeLiveData<AreaProfileModelView>()
+
+    internal val getFormulaLiveData = CompositeLiveData<FormulaModelView>()
+
+    internal val deleteFormulaLiveData = CompositeLiveData<FormulaModelView>()
+
+    internal val updateFormulaLiveData = CompositeLiveData<Any>()
 
     fun getCurrentAreaProfile() {
         getAreaProfileLiveData.add(
@@ -34,6 +41,29 @@ class MainFragmentViewModel(
         getAreaProfileLiveData.add(
             rxLiveDataTransformer.single(
                 userRepo.getAreaProfile(id).map { a -> AreaProfileModelView.newInstance(a) }
+            )
+        )
+    }
+
+    fun getFormula() {
+        getFormulaLiveData.add(rxLiveDataTransformer.single(userRepo.getFormula().map { f ->
+            FormulaModelView.newInstance(f)
+        }))
+    }
+
+    fun deleteFormula() {
+        deleteFormulaLiveData.add(
+            rxLiveDataTransformer.single(
+                userRepo.deleteFormula().andThen(
+                    userRepo.getFormula().map { f -> FormulaModelView.newInstance(f) })
+            )
+        )
+    }
+
+    fun updateFormula(formula: FormulaModelView) {
+        updateFormulaLiveData.add(
+            rxLiveDataTransformer.completable(
+                userRepo.updateFormula(formula.toCoefficientData())
             )
         )
     }

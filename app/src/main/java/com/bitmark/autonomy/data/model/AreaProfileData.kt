@@ -37,5 +37,77 @@ data class AreaProfileData(
 
     @Expose
     @SerializedName("behavior_delta")
-    val behaviorsDelta: Int
+    val behaviorsDelta: Int,
+
+    @Expose
+    @SerializedName("details")
+    val detail: AreaProfileDetailData
+) : Data
+
+data class AreaProfileDetailData(
+
+    @Expose
+    @SerializedName("confirm")
+    val confirmMetric: ConfirmMetricData,
+
+    @Expose
+    @SerializedName("behaviors")
+    val behaviorMetric: BehaviorMetricData,
+
+    @Expose
+    @SerializedName("symptoms")
+    val symptomMetric: SymptomMetricData
+) : Data
+
+data class ConfirmMetricData(
+    @Expose
+    @SerializedName("yesterday")
+    val yesterday: Int,
+
+    @Expose
+    @SerializedName("today")
+    val today: Int,
+
+    @Expose
+    @SerializedName("score")
+    val score: Score
+) : Data
+
+data class BehaviorMetricData(
+    @Expose
+    @SerializedName("behavior_total")
+    val totalBehaviors: Int,
+
+    @Expose
+    @SerializedName("total_people")
+    val totalPeople: Int,
+
+    @Expose
+    @SerializedName("max_score_per_person")
+    val maxScorePerPerson: Int,
+
+    @Expose
+    @SerializedName("score")
+    val score: Score
+
+) : Data
+
+data class SymptomMetricData(
+
+    @Expose
+    @SerializedName("symptom_total")
+    val totalSymptom: Int,
+
+    @Expose
+    @SerializedName("total_people")
+    val totalPeople: Int,
+
+    @Expose
+    @SerializedName("max_score_per_person")
+    val maxScorePerPerson: Int,
+
+    @Expose
+    @SerializedName("score")
+    val score: Score
+
 ) : Data

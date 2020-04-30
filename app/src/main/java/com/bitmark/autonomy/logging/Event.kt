@@ -58,4 +58,10 @@ enum class Event(val value: String) {
 
     AREA_ADDING_ERROR("area_adding_error"),
 
+    FORMULA_GETTING_ERROR("formula_getting_error"),
+
+    FORMULA_UPDATE_ERROR("formula_update_error"),
+
+    FORMULA_DELETE_ERROR("formula_delete_error")
+
 }

@@ -35,3 +35,10 @@ fun Score.toDrawableRes() = when {
     this < 67f -> R.drawable.ic_circle_yellow
     else -> R.drawable.ic_circle_green
 }
+
+fun Score.toColorRes() = when {
+    this == 0f -> R.color.mine_shaft_2
+    this < 34f -> R.color.persian_red
+    this < 67f -> R.color.gold_tip
+    else -> R.color.apple
+}

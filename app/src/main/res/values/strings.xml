@@ -204,6 +204,7 @@
     <string name="sore_throat_equal">Sore throat = </string>
     <string name="symptoms_total">Symptoms total</string>
     <string name="jupyter_notebook">Jupyter Notebook</string>
+    <string name="could_not_reset_formula">Could not reset your customized formula. Please try again later.</string>
 
     <!--    string format-->
     <string name="send_to_format">Send to %1$s</string>

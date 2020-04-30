@@ -6,6 +6,7 @@
  */
 package com.bitmark.autonomy.data.source
 
+import com.bitmark.autonomy.data.model.CoefficientData
 import com.bitmark.autonomy.data.source.remote.UserRemoteDataSource
 
 
@@ -30,4 +31,11 @@ class UserRepository(private val remoteDataSource: UserRemoteDataSource) : Repos
 
     fun listLocationHistory(beforeSec: Long, limit: Int = 20) =
         remoteDataSource.listLocationHistory(beforeSec, limit)
+
+    fun getFormula() = remoteDataSource.getFormula()
+
+    fun deleteFormula() = remoteDataSource.deleteFormula()
+
+    fun updateFormula(coefficientData: CoefficientData) =
+        remoteDataSource.updateFormula(coefficientData)
 }

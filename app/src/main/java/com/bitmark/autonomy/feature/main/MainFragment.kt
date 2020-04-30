@@ -12,21 +12,25 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.view.ViewTreeObserver
+import android.widget.SeekBar
 import androidx.lifecycle.Observer
 import com.bitmark.autonomy.R
 import com.bitmark.autonomy.feature.BaseSupportFragment
 import com.bitmark.autonomy.feature.BaseViewModel
 import com.bitmark.autonomy.feature.DialogController
 import com.bitmark.autonomy.feature.Navigator
+import com.bitmark.autonomy.feature.Navigator.Companion.NONE
+import com.bitmark.autonomy.feature.connectivity.ConnectivityHandler
 import com.bitmark.autonomy.feature.location.LocationService
 import com.bitmark.autonomy.logging.Event
 import com.bitmark.autonomy.logging.EventLogger
 import com.bitmark.autonomy.util.ext.*
 import com.bitmark.autonomy.util.modelview.AreaModelView
 import com.bitmark.autonomy.util.modelview.AreaProfileModelView
+import com.bitmark.autonomy.util.modelview.FormulaModelView
+import com.bitmark.autonomy.util.modelview.toColorRes
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import kotlinx.android.synthetic.main.fragment_main.*
-import kotlinx.android.synthetic.main.fragment_main.tvScore
 import kotlinx.android.synthetic.main.layout_area_info.*
 import kotlinx.android.synthetic.main.layout_view_source.*
 import javax.inject.Inject
@@ -41,6 +45,8 @@ class MainFragment : BaseSupportFragment() {
         private const val AREA_DATA = "area_data"
 
         private const val AREA_PROFILE = "area_profile"
+
+        private const val FORMULA = "formula"
 
         private const val MSA_0 = "MSA_0"
 
@@ -65,7 +71,14 @@ class MainFragment : BaseSupportFragment() {
     @Inject
     internal lateinit var locationService: LocationService
 
+    @Inject
+    internal lateinit var connectivityHandler: ConnectivityHandler
+
     private lateinit var areaProfile: AreaProfileModelView
+
+    private lateinit var formula: FormulaModelView
+
+    private var blocked = false
 
     private val locationChangedListener = object : LocationService.LocationChangedListener {
 
@@ -75,7 +88,7 @@ class MainFragment : BaseSupportFragment() {
         }
 
         override fun onLocationChanged(l: Location) {
-            if (!this@MainFragment::areaProfile.isInitialized && isMsa0) {
+            if (!isAreaProfileReady() && isMsa0) {
                 viewModel.getCurrentAreaProfile()
             }
         }
@@ -94,6 +107,10 @@ class MainFragment : BaseSupportFragment() {
         areaData?.alias = alias
         tvLocation.text = alias
     }
+
+    private fun isAreaProfileReady() = ::areaProfile.isInitialized
+
+    private fun isFormulaReady() = ::formula.isInitialized
 
     override fun layoutRes(): Int = R.layout.fragment_main
 
@@ -116,6 +133,9 @@ class MainFragment : BaseSupportFragment() {
             if (savedInstanceState.containsKey(MSA_0)) {
                 isMsa0 = savedInstanceState.getBoolean(MSA_0)
             }
+            if (savedInstanceState.containsKey(FORMULA)) {
+                formula = savedInstanceState.getParcelable(FORMULA)!!
+            }
         }
         super.onViewCreated(view, savedInstanceState)
         locationService.addLocationChangeListener(locationChangedListener)
@@ -129,7 +149,8 @@ class MainFragment : BaseSupportFragment() {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         if (areaData != null) outState.putParcelable(AREA_DATA, areaData)
-        if (::areaProfile.isInitialized) outState.putParcelable(AREA_PROFILE, areaProfile)
+        if (isAreaProfileReady()) outState.putParcelable(AREA_PROFILE, areaProfile)
+        if (isFormulaReady()) outState.putParcelable(FORMULA, formula)
         outState.putBoolean(MSA_0, isMsa0)
     }
 
@@ -155,6 +176,7 @@ class MainFragment : BaseSupportFragment() {
 
         bottomSheetBehavior = BottomSheetBehavior.from(layoutViewSourceRoot)
         ivScore.setOnClickListener {
+            if (!isAreaProfileReady()) return@setOnClickListener
             bottomSheetBehavior.state =
                 if (bottomSheetBehavior.state == BottomSheetBehavior.STATE_EXPANDED) {
                     BottomSheetBehavior.STATE_HIDDEN
@@ -234,14 +256,75 @@ class MainFragment : BaseSupportFragment() {
                         lastOffset = offset
                     }
 
-                    override fun onStateChanged(p0: View, p1: Int) {
-                        // do nothing
+                    override fun onStateChanged(p0: View, state: Int) {
+                        if (state == BottomSheetBehavior.STATE_EXPANDED) {
+                            viewModel.getFormula()
+                        }
                     }
 
                 })
             }
 
         })
+
+        val seekBarChangeListener = object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                if (!isAreaProfileReady() || !isFormulaReady()) return
+                when (seekBar) {
+                    sbFever -> formula.coefficient.symptomWeight.fever = progress
+                    sbDryCough -> formula.coefficient.symptomWeight.cough = progress
+                    sbChestPain -> formula.coefficient.symptomWeight.chest = progress
+                    sbBluishLips -> formula.coefficient.symptomWeight.face = progress
+                    sbFatigue -> formula.coefficient.symptomWeight.fatigue = progress
+                    sbShortnessOfBreath -> formula.coefficient.symptomWeight.breath = progress
+                    sbNasalCongestion -> formula.coefficient.symptomWeight.nasal = progress
+                    sbSoreThroat -> formula.coefficient.symptomWeight.throat = progress
+                    sbCasesWeight -> formula.coefficient.confirms = progress / 100f
+                    sbBehaviorsWeight -> formula.coefficient.behaviors = progress / 100f
+                    sbSymptomsWeight -> formula.coefficient.symptoms = progress / 100f
+                }
+                showFormula(areaProfile, formula)
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {
+                // do nothing
+            }
+
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {
+                if (!isAreaProfileReady() || !isFormulaReady()) return
+                viewModel.updateFormula(formula)
+            }
+
+        }
+
+        sbFever.setOnSeekBarChangeListener(seekBarChangeListener)
+        sbDryCough.setOnSeekBarChangeListener(seekBarChangeListener)
+        sbChestPain.setOnSeekBarChangeListener(seekBarChangeListener)
+        sbBluishLips.setOnSeekBarChangeListener(seekBarChangeListener)
+        sbFatigue.setOnSeekBarChangeListener(seekBarChangeListener)
+        sbShortnessOfBreath.setOnSeekBarChangeListener(seekBarChangeListener)
+        sbNasalCongestion.setOnSeekBarChangeListener(seekBarChangeListener)
+        sbSoreThroat.setOnSeekBarChangeListener(seekBarChangeListener)
+        sbCasesWeight.setOnSeekBarChangeListener(seekBarChangeListener)
+        sbBehaviorsWeight.setOnSeekBarChangeListener(seekBarChangeListener)
+        sbSymptomsWeight.setOnSeekBarChangeListener(seekBarChangeListener)
+
+        val formulaClickListener: (View?) -> Unit = { _ -> openJupyterNotebook() }
+
+        tvConfirmedCasesYesterday.setSafetyOnclickListener(formulaClickListener)
+        tvConfirmedCasesToday.setSafetyOnclickListener(formulaClickListener)
+        tvBehaviorTotal.setSafetyOnclickListener(formulaClickListener)
+        tvTotalPeople1.setSafetyOnclickListener(formulaClickListener)
+        tvMaxScore1.setSafetyOnclickListener(formulaClickListener)
+        tvSymptomTotal.setSafetyOnclickListener(formulaClickListener)
+        tvTotalPeople2.setSafetyOnclickListener(formulaClickListener)
+        tvMaxScore2.setSafetyOnclickListener(formulaClickListener)
+
+        tvReset.setSafetyOnclickListener {
+            if (blocked) return@setSafetyOnclickListener
+            viewModel.deleteFormula()
+        }
+
 
         /*layoutRiskLevel.setSafetyOnclickListener {
             it?.flip(layoutAreaInfo, 400)
@@ -251,6 +334,11 @@ class MainFragment : BaseSupportFragment() {
             it?.flip(layoutRiskLevel, 400)
         }*/
 
+    }
+
+    private fun openJupyterNotebook() {
+        // TODO update later
+        navigator.anim(NONE).openBrowser("https://www.cdc.gov.tw")
     }
 
     override fun observe() {
@@ -275,23 +363,158 @@ class MainFragment : BaseSupportFragment() {
                 }
             }
         })
+
+        viewModel.getFormulaLiveData.asLiveData().observe(this, Observer { res ->
+            when {
+                res.isSuccess() -> {
+                    formula = res.data()!!
+                    showFormula(areaProfile, formula)
+                }
+
+                res.isError() -> {
+                    logger.logError(Event.FORMULA_GETTING_ERROR, res.throwable())
+                }
+            }
+        })
+
+        viewModel.deleteFormulaLiveData.asLiveData().observe(this, Observer { res ->
+            when {
+                res.isSuccess() -> {
+                    progressBarViewSource.gone()
+                    formula = res.data()!!
+                    showFormula(areaProfile, formula)
+                    blocked = false
+                }
+
+                res.isError() -> {
+                    progressBarViewSource.gone()
+                    logger.logError(Event.FORMULA_DELETE_ERROR, res.throwable())
+                    if (connectivityHandler.isConnected()) {
+                        dialogController.alert(R.string.error, R.string.could_not_reset_formula)
+                    } else {
+                        dialogController.showNoInternetConnection()
+                    }
+                    blocked = false
+                }
+
+                res.isLoading() -> {
+                    progressBarViewSource.visible()
+                    blocked = true
+                }
+            }
+        })
+
+        viewModel.updateFormulaLiveData.asLiveData().observe(this, Observer { res ->
+            when {
+                res.isError() -> {
+                    logger.logError(Event.FORMULA_UPDATE_ERROR, res.throwable())
+                }
+            }
+        })
+    }
+
+    private fun showFormula(areaProfile: AreaProfileModelView, formula: FormulaModelView) {
+        val confirmCoefficient = formula.coefficient.confirms
+        val behaviorsCoefficient = formula.coefficient.behaviors
+        val symptomCoefficient = formula.coefficient.symptoms
+        sbCasesWeight.progress = (confirmCoefficient * 100).roundToInt()
+        sbBehaviorsWeight.progress = (behaviorsCoefficient * 100).roundToInt()
+        sbSymptomsWeight.progress = (symptomCoefficient * 100).roundToInt()
+        tvCasesWeight.text = String.format("%.2f", confirmCoefficient)
+        tvBehaviorsWeight.text = String.format("%.2f", behaviorsCoefficient)
+        tvSymptomsWeight.text = String.format("%.2f", symptomCoefficient)
+
+        val yesterdayConfirms = areaProfile.detail.confirmMetric.yesterday
+        val todayConfirms = areaProfile.detail.confirmMetric.today
+        tvConfirmedCasesYesterday.text = yesterdayConfirms.toString()
+        tvConfirmedCasesToday.text = todayConfirms.toString()
+
+        val casesCore = 100f - 5 * (yesterdayConfirms - todayConfirms)
+        tvCasesScore1.text = casesCore.roundToInt().toString()
+        tvCasesScore1.setTextColorRes(casesCore.toColorRes())
+
+        val totalBehaviors = areaProfile.detail.behaviorMetric.totalBehaviors
+        val totalPeopleBehaviors = areaProfile.detail.behaviorMetric.totalPeople
+        val maxScorePerPersonBehaviors = areaProfile.detail.behaviorMetric.maxScorePerPerson
+
+        tvBehaviorTotal.text = totalBehaviors.toString()
+        tvTotalPeople1.text = totalPeopleBehaviors.toString()
+        tvMaxScore1.text = maxScorePerPersonBehaviors.toString()
+
+        val behaviorScore = if (totalPeopleBehaviors == 0 || maxScorePerPersonBehaviors == 0) {
+            0f
+        } else {
+            100f * (totalBehaviors / (totalPeopleBehaviors * maxScorePerPersonBehaviors))
+        }
+        val roundBehaviorScore = behaviorScore.roundToInt()
+        tvBehaviorsScore1.text = roundBehaviorScore.toString()
+        tvBehaviorsScore1.setTextColorRes(behaviorScore.toColorRes())
+        tvBehaviorsScore2.text = roundBehaviorScore.toString()
+        tvBehaviorsScore2.setTextColorRes(behaviorScore.toColorRes())
+
+        sbFever.progress = formula.coefficient.symptomWeight.fever
+        tvFever.text = formula.coefficient.symptomWeight.fever.toString()
+        sbDryCough.progress = formula.coefficient.symptomWeight.cough
+        tvDryCough.text = formula.coefficient.symptomWeight.cough.toString()
+        sbChestPain.progress = formula.coefficient.symptomWeight.chest
+        tvChestPain.text = formula.coefficient.symptomWeight.chest.toString()
+        sbBluishLips.progress = formula.coefficient.symptomWeight.face
+        tvBluishLips.text = formula.coefficient.symptomWeight.face.toString()
+        sbFatigue.progress = formula.coefficient.symptomWeight.fatigue
+        tvFatigue.text = formula.coefficient.symptomWeight.fatigue.toString()
+        sbShortnessOfBreath.progress = formula.coefficient.symptomWeight.breath
+        tvShortnessOfBreath.text = formula.coefficient.symptomWeight.breath.toString()
+        sbNasalCongestion.progress = formula.coefficient.symptomWeight.nasal
+        tvNasalCongestion.text = formula.coefficient.symptomWeight.nasal.toString()
+        sbSoreThroat.progress = formula.coefficient.symptomWeight.throat
+        tvSoreThroat.text = formula.coefficient.symptomWeight.throat.toString()
+
+
+        val totalSymptom = arrayOf(
+            sbFever,
+            sbDryCough,
+            sbChestPain,
+            sbBluishLips,
+            sbFatigue,
+            sbShortnessOfBreath,
+            sbNasalCongestion,
+            sbSoreThroat
+        ).sumBy { sb -> sb.progress }
+
+        val totalPeopleSymptom = areaProfile.detail.symptomMetric.totalPeople
+        val maxScorePerPersonSymptom = areaProfile.detail.symptomMetric.maxScorePerPerson
+
+        tvSymptomTotal.text = totalSymptom.toString()
+        tvTotalPeople2.text = totalPeopleSymptom.toString()
+        tvMaxScore2.text = maxScorePerPersonSymptom.toString()
+
+        val symptomScore = if (totalPeopleSymptom == 0 || maxScorePerPersonSymptom == 0) {
+            0f
+        } else {
+            100 - (100f * (totalSymptom / (totalPeopleSymptom * maxScorePerPersonSymptom)))
+        }
+        val roundSymptomScore = symptomScore.roundToInt()
+        tvSymptomsScore1.text = roundSymptomScore.toString()
+        tvSymptomsScore1.setTextColorRes(symptomScore.toColorRes())
+        tvSymptomsScore2.text = roundSymptomScore.toString()
+        tvSymptomsScore2.setTextColorRes(symptomScore.toColorRes())
+
+        val score =
+            casesCore * confirmCoefficient + behaviorScore * behaviorsCoefficient + symptomScore * symptomCoefficient
+        tvScoreViewSource.text = score.roundToInt().toString()
+        tvScoreViewSource.setTextColorRes(score.toColorRes())
+        showScore(score)
+
+    }
+
+    private fun showScore(score: Float) {
+        val roundScore = score.roundToInt()
+        tvScore.text = roundScore.toString()
+        ivScore.setImageResource("triangle_%03d".format(roundScore))
     }
 
     private fun showData(profile: AreaProfileModelView) {
-        val score = profile.score.roundToInt()
-        tvScore.text = score.toString()
-        ivScore.setImageResource("triangle_%03d".format(score))
-        /*when {
-            score < 34 -> {
-                tvRiskLevel.setText(R.string.high_risk)
-            }
-            score < 67 -> {
-                tvRiskLevel.setText(R.string.moderate_risk)
-            }
-            else -> {
-                tvRiskLevel.setText(R.string.low_risk)
-            }
-        }*/
+        showScore(profile.score)
 
         tvConfirmedCases.text = profile.confirmed.decimalFormat()
         tvConfirmedCasesChange.text = abs(profile.confirmedDelta).decimalFormat()

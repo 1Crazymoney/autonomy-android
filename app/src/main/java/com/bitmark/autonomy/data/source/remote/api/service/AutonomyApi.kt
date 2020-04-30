@@ -97,4 +97,13 @@ interface AutonomyApi {
     @GET("api/history/locations")
     fun listLocationHistory(@Query("before") before: Long, @Query("limit") limit: Int): Single<Map<String, List<LocationHistoryData>>>
 
+    @GET("api/accounts/me/profile_formula")
+    fun getFormula(): Single<FormulaData>
+
+    @DELETE("api/accounts/me/profile_formula")
+    fun deleteFormula() : Completable
+
+    @PUT("api/accounts/me/profile_formula")
+    fun updateFormula(@Body body : RequestBody) : Completable
+
 }
