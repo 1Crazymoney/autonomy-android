@@ -36,7 +36,7 @@ class SymptomHistoryViewModel(
     }
 
     private fun symptomHistoryStream() = if (lastTimestamp == -1L) {
-        symptomRepo.listSymptomHistory(System.currentTimeMillis() / 1000)
+        symptomRepo.listSymptomHistory(System.currentTimeMillis())
     } else {
         symptomRepo.listSymptomHistory(lastTimestamp)
     }.map { symptomHistories ->

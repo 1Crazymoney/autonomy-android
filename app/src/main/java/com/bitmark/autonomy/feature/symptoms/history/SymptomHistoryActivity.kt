@@ -37,6 +37,8 @@ class SymptomHistoryActivity : BaseAppCompatActivity() {
 
     private val adapter = SymptomHistoryRecyclerAdapter()
 
+    private lateinit var endlessScrollListener: EndlessScrollListener
+
     override fun layoutRes(): Int = R.layout.activity_symptom_history
 
     override fun viewModel(): BaseViewModel? = viewModel
@@ -50,7 +52,7 @@ class SymptomHistoryActivity : BaseAppCompatActivity() {
         itemDecoration.setDrawable(getDrawable(R.drawable.bg_divider)!!)
         rvHistory.addItemDecoration(itemDecoration)
 
-        val endlessScrollListener = object : EndlessScrollListener(layoutManager) {
+        endlessScrollListener = object : EndlessScrollListener(layoutManager) {
             override fun onLoadMore(page: Int, totalItemsCount: Int, view: RecyclerView) {
                 viewModel.nextSymptomHistory()
             }
@@ -99,6 +101,7 @@ class SymptomHistoryActivity : BaseAppCompatActivity() {
                 res.isSuccess() -> {
                     layoutSwipeRefresh.isRefreshing = false
                     adapter.set(res.data()!!)
+                    endlessScrollListener.resetState()
                 }
 
                 res.isError() -> {

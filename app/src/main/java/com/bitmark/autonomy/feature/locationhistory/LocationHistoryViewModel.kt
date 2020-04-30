@@ -14,7 +14,7 @@ import com.bitmark.autonomy.util.livedata.RxLiveDataTransformer
 import com.bitmark.autonomy.util.modelview.LocationHistoryModelView
 
 
-class LocationHistoryViewModel (
+class LocationHistoryViewModel(
     lifecycle: Lifecycle,
     private val userRepo: UserRepository,
     private val rxLiveDataTransformer: RxLiveDataTransformer
@@ -22,7 +22,8 @@ class LocationHistoryViewModel (
 
     internal val nextLocationHistoryLiveData = CompositeLiveData<List<LocationHistoryModelView>>()
 
-    internal val refreshLocationHistoryLiveData = CompositeLiveData<List<LocationHistoryModelView>>()
+    internal val refreshLocationHistoryLiveData =
+        CompositeLiveData<List<LocationHistoryModelView>>()
 
     private var lastTimestamp = -1L
 
@@ -36,7 +37,7 @@ class LocationHistoryViewModel (
     }
 
     private fun locationHistoryStream() = if (lastTimestamp == -1L) {
-        userRepo.listLocationHistory(System.currentTimeMillis() / 1000)
+        userRepo.listLocationHistory(System.currentTimeMillis())
     } else {
         userRepo.listLocationHistory(lastTimestamp)
     }.map { locationHistories ->

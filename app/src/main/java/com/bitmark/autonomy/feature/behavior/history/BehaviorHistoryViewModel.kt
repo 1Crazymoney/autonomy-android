@@ -37,7 +37,7 @@ class BehaviorHistoryViewModel(
     }
 
     private fun behaviorHistoryStream() = if (lastTimestamp == -1L) {
-        behaviorRepo.listBehaviorHistory(System.currentTimeMillis() / 1000)
+        behaviorRepo.listBehaviorHistory(System.currentTimeMillis())
     } else {
         behaviorRepo.listBehaviorHistory(lastTimestamp)
     }.map { behaviorHistories ->

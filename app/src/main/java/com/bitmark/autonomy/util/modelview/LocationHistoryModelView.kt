@@ -13,13 +13,10 @@ import com.bitmark.autonomy.data.model.LocationHistoryData
 class LocationHistoryModelView(
     val location: Location,
 
-    val timestampSec: Long
+    val timestamp: Long
 ) : ModelView {
     companion object {
         fun newInstance(data: LocationHistoryData) =
             LocationHistoryModelView(data.location, data.timestamp)
     }
 }
-
-val LocationHistoryModelView.timestamp
-    get() = timestampSec * 1000

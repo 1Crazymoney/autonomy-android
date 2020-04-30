@@ -36,6 +36,8 @@ class BehaviorHistoryActivity : BaseAppCompatActivity() {
 
     private val adapter = BehaviorHistoryRecyclerAdapter()
 
+    private lateinit var endlessScrollListener: EndlessScrollListener
+
     override fun layoutRes(): Int = R.layout.activity_behavior_history
 
     override fun viewModel(): BaseViewModel? = viewModel
@@ -49,7 +51,7 @@ class BehaviorHistoryActivity : BaseAppCompatActivity() {
         itemDecoration.setDrawable(getDrawable(R.drawable.bg_divider)!!)
         rvHistory.addItemDecoration(itemDecoration)
 
-        val endlessScrollListener = object : EndlessScrollListener(layoutManager) {
+        endlessScrollListener = object : EndlessScrollListener(layoutManager) {
             override fun onLoadMore(page: Int, totalItemsCount: Int, view: RecyclerView) {
                 viewModel.nextBehaviorHistory()
             }
@@ -81,6 +83,7 @@ class BehaviorHistoryActivity : BaseAppCompatActivity() {
                 res.isSuccess() -> {
                     progressBar.gone()
                     adapter.add(res.data()!!)
+                    endlessScrollListener.resetState()
                 }
 
                 res.isError() -> {
