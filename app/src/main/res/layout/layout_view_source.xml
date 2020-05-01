@@ -1,25 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/layoutViewSourceRoot"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/dp_400"
+    android:layout_height="wrap_content"
     android:background="@color/white"
-    android:paddingBottom="@dimen/dp_40"
     app:behavior_hideable="true"
     app:behavior_peekHeight="0dp"
     app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/sv"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginBottom="@dimen/dp_30"
+        android:layout_height="@dimen/dp_400"
         android:background="@color/white"
         android:scrollbars="vertical"
-        app:layout_constraintBottom_toTopOf="@id/tvReset"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -1358,59 +1355,65 @@
 
     </androidx.core.widget.NestedScrollView>
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/tvReset"
-        android:layout_width="@dimen/dp_90"
-        android:layout_height="@dimen/dp_30"
-        android:layout_margin="@dimen/dp_16"
-        android:background="@drawable/bg_rect_silver_2"
-        android:drawableEnd="@drawable/ic_reset"
-        android:drawablePadding="@dimen/dp_4"
-        android:fontFamily="@font/ibm_plex_mono_light_font_family"
-        android:gravity="center"
-        android:includeFontPadding="false"
-        android:paddingStart="@dimen/dp_8"
-        android:paddingEnd="@dimen/dp_8"
-        android:text="@string/reset"
-        android:textAllCaps="true"
-        android:textColor="@color/color_white_stateful"
-        android:textSize="@dimen/sp_14"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:text="@string/reset" />
+    <LinearLayout
+        android:id="@+id/layoutBottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:background="@color/white"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingTop="@dimen/dp_30"
+        android:paddingBottom="@dimen/dp_30"
+        app:layout_behavior="@string/hide_bottom_view_on_scroll_behavior">
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/btnJupyterNotebook"
-        android:layout_width="@dimen/dp_200"
-        android:layout_height="@dimen/dp_30"
-        android:layout_marginStart="@dimen/dp_16"
-        android:background="@drawable/bg_rect_blue"
-        android:drawableEnd="@drawable/ic_share"
-        android:drawablePadding="@dimen/dp_4"
-        android:fontFamily="@font/ibm_plex_mono_light_font_family"
-        android:gravity="center"
-        android:includeFontPadding="false"
-        android:paddingStart="@dimen/dp_8"
-        android:paddingEnd="@dimen/dp_8"
-        android:text="@string/jupyter_notebook"
-        android:textAllCaps="true"
-        android:textColor="@color/color_white_stateful"
-        android:textSize="@dimen/sp_14"
-        app:layout_constraintBottom_toBottomOf="@id/tvReset"
-        app:layout_constraintStart_toEndOf="@id/tvReset"
-        app:layout_constraintTop_toTopOf="@id/tvReset" />
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvReset"
+            android:layout_width="@dimen/dp_90"
+            android:layout_height="@dimen/dp_30"
+            android:layout_margin="@dimen/dp_16"
+            android:background="@drawable/bg_rect_silver_2"
+            android:drawableEnd="@drawable/ic_reset"
+            android:drawablePadding="@dimen/dp_4"
+            android:fontFamily="@font/ibm_plex_mono_light_font_family"
+            android:gravity="center"
+            android:includeFontPadding="false"
+            android:paddingStart="@dimen/dp_8"
+            android:paddingEnd="@dimen/dp_8"
+            android:text="@string/reset"
+            android:textAllCaps="true"
+            android:textColor="@color/color_white_stateful"
+            android:textSize="@dimen/sp_14"
+            tools:text="@string/reset" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvJupyterNotebook"
+            android:layout_width="@dimen/dp_200"
+            android:layout_height="@dimen/dp_30"
+            android:layout_marginStart="@dimen/dp_16"
+            android:background="@drawable/bg_rect_blue"
+            android:drawableEnd="@drawable/ic_share"
+            android:drawablePadding="@dimen/dp_4"
+            android:fontFamily="@font/ibm_plex_mono_light_font_family"
+            android:gravity="center"
+            android:includeFontPadding="false"
+            android:paddingStart="@dimen/dp_8"
+            android:paddingEnd="@dimen/dp_8"
+            android:text="@string/jupyter_notebook"
+            android:textAllCaps="true"
+            android:textColor="@color/color_white_stateful"
+            android:textSize="@dimen/sp_14" />
+
+    </LinearLayout>
 
     <ProgressBar
         android:id="@+id/progressBarViewSource"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
         tools:visibility="visible" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 

@@ -170,8 +170,11 @@ class MainFragment : BaseSupportFragment() {
             tvLocation.text = areaData!!.alias
         }
 
-        if (::areaProfile.isInitialized) {
+        if (isAreaProfileReady()) {
             showData(areaProfile)
+            if (isFormulaReady()) {
+                showFormula(areaProfile, formula)
+            }
         }
 
         bottomSheetBehavior = BottomSheetBehavior.from(layoutViewSourceRoot)
@@ -185,84 +188,11 @@ class MainFragment : BaseSupportFragment() {
                 }
         }
 
-        rootView!!.viewTreeObserver.addOnGlobalLayoutListener(object :
+        view!!.viewTreeObserver.addOnGlobalLayoutListener(object :
             ViewTreeObserver.OnGlobalLayoutListener {
             override fun onGlobalLayout() {
-                rootView!!.viewTreeObserver.removeOnGlobalLayoutListener(this)
-
-                bottomSheetBehavior.setBottomSheetCallback(object :
-                    BottomSheetBehavior.BottomSheetCallback() {
-
-                    val context = this@MainFragment.context!!
-                    val bottomSheetHeight = context.getDimensionPixelSize(R.dimen.dp_400)
-                    val triangleVerticalPadding = 2 * context.getDimensionPixelSize(R.dimen.dp_32)
-
-                    val triangleYOffset = ivScore.y
-                    val tvScoreYOffset = tvScore.y
-                    val tvAppNameXOffset = tvAppName.x
-                    val triangleHeight = ivScore.height
-                    val tvScoreHeight = tvScore.height
-                    val scaledTriangleHeight =
-                        rootView!!.height - bottomSheetHeight - tvLocation.height - triangleVerticalPadding
-                    val minScale = scaledTriangleHeight.toFloat() / triangleHeight
-                    val scaleDelta = 1f - minScale
-                    val scaledTriangleYOffset = tvLocation.y + triangleVerticalPadding / 2
-                    val scaledTriangleDeltaHeight = triangleHeight * scaleDelta
-                    val maxTriangleTranslateY =
-                        triangleYOffset - scaledTriangleYOffset + scaledTriangleDeltaHeight / 2
-                    val maxTvScoreTranslateY =
-                        maxTriangleTranslateY + tvScoreHeight * scaleDelta / 2 - context.getDimensionPixelSize(
-                            R.dimen.dp_6
-                        ) // estimated px to make the tvScore is vertically center
-                    val maxTvAppNameTranslateX = context.screenWidth / 2 + tvAppName.width / 2
-                    var lastOffset = 0f
-
-                    override fun onSlide(p0: View, offset: Float) {
-                        if (offset == 0f) {
-                            ivScore.scaleX = 1f
-                            ivScore.scaleY = 1f
-                            tvScore.scaleX = 1f
-                            tvScore.scaleY = 1f
-                            tvAppName.alpha = 1f
-                            ivScore.y = triangleYOffset
-                            tvScore.y = tvScoreYOffset
-                            tvAppName.x = tvAppNameXOffset
-                        } else {
-                            // calculate scale
-                            val scaleRate = 1f - (scaleDelta * offset)
-                            ivScore.scaleX = scaleRate
-                            ivScore.scaleY = scaleRate
-                            tvScore.scaleX = scaleRate
-                            tvScore.scaleY = scaleRate
-
-                            // calculate alpha
-                            tvAppName.alpha = 1 - offset
-
-                            // calculate translate X for tvAppName
-                            val translateXDelta = (lastOffset - offset) * maxTvAppNameTranslateX
-                            tvAppName.x -= translateXDelta
-                            Log.d("onSlide", "translateXDelta = $translateXDelta")
-
-                            // calculate translate Y
-                            val triangleDeltaY = (lastOffset - offset) * maxTriangleTranslateY
-                            val tvScoreDeltaY = (lastOffset - offset) * maxTvScoreTranslateY
-                            Log.d(
-                                "onSlide",
-                                "triangleDeltaY = $triangleDeltaY, tvScoreDeltaY = $tvScoreDeltaY,  offset=$offset"
-                            )
-                            ivScore.y += triangleDeltaY
-                            tvScore.y += tvScoreDeltaY
-                        }
-                        lastOffset = offset
-                    }
-
-                    override fun onStateChanged(p0: View, state: Int) {
-                        if (state == BottomSheetBehavior.STATE_EXPANDED) {
-                            viewModel.getFormula()
-                        }
-                    }
-
-                })
+                view!!.viewTreeObserver.removeOnGlobalLayoutListener(this)
+                handleBottomPanelInteraction()
             }
 
         })
@@ -325,6 +255,8 @@ class MainFragment : BaseSupportFragment() {
             viewModel.deleteFormula()
         }
 
+        tvJupyterNotebook.setSafetyOnclickListener(formulaClickListener)
+
 
         /*layoutRiskLevel.setSafetyOnclickListener {
             it?.flip(layoutAreaInfo, 400)
@@ -334,6 +266,82 @@ class MainFragment : BaseSupportFragment() {
             it?.flip(layoutRiskLevel, 400)
         }*/
 
+    }
+
+    private fun handleBottomPanelInteraction() {
+        bottomSheetBehavior.setBottomSheetCallback(object :
+            BottomSheetBehavior.BottomSheetCallback() {
+
+            val context = this@MainFragment.context!!
+            val bottomSheetHeight = layoutViewSourceRoot.height
+            val triangleVerticalPadding = 2 * context.getDimensionPixelSize(R.dimen.dp_32)
+
+            val triangleYOffset = ivScore.y
+            val tvScoreYOffset = tvScore.y
+            val tvAppNameXOffset = tvAppName.x
+            val triangleHeight = ivScore.height
+            val tvScoreHeight = tvScore.height
+            val scaledTriangleHeight =
+                rootView!!.height - bottomSheetHeight - tvLocation.height - triangleVerticalPadding
+            val minScale = scaledTriangleHeight.toFloat() / triangleHeight
+            val scaleDelta = 1f - minScale
+            val scaledTriangleYOffset = tvLocation.y + triangleVerticalPadding / 2
+            val scaledTriangleDeltaHeight = triangleHeight * scaleDelta
+            val maxTriangleTranslateY =
+                triangleYOffset - scaledTriangleYOffset + scaledTriangleDeltaHeight / 2
+            val maxTvScoreTranslateY =
+                maxTriangleTranslateY + tvScoreHeight * scaleDelta / 2 - context.getDimensionPixelSize(
+                    R.dimen.dp_6
+                ) // estimated px to make the tvScore is vertically center
+            val maxTvAppNameTranslateX = context.screenWidth / 2 + tvAppName.width / 2
+            var lastOffset = 0f
+
+            override fun onSlide(p0: View, offset: Float) {
+                if (offset == 0f) {
+                    ivScore.scaleX = 1f
+                    ivScore.scaleY = 1f
+                    tvScore.scaleX = 1f
+                    tvScore.scaleY = 1f
+                    tvAppName.alpha = 1f
+                    ivScore.y = triangleYOffset
+                    tvScore.y = tvScoreYOffset
+                    tvAppName.x = tvAppNameXOffset
+                } else {
+                    // calculate scale
+                    val scaleRate = 1f - (scaleDelta * offset)
+                    ivScore.scaleX = scaleRate
+                    ivScore.scaleY = scaleRate
+                    tvScore.scaleX = scaleRate
+                    tvScore.scaleY = scaleRate
+
+                    // calculate alpha
+                    tvAppName.alpha = 1 - offset
+
+                    // calculate translate X for tvAppName
+                    val translateXDelta = (lastOffset - offset) * maxTvAppNameTranslateX
+                    tvAppName.x -= translateXDelta
+                    Log.d("onSlide", "translateXDelta = $translateXDelta")
+
+                    // calculate translate Y
+                    val triangleDeltaY = (lastOffset - offset) * maxTriangleTranslateY
+                    val tvScoreDeltaY = (lastOffset - offset) * maxTvScoreTranslateY
+                    Log.d(
+                        "onSlide",
+                        "triangleDeltaY = $triangleDeltaY, tvScoreDeltaY = $tvScoreDeltaY,  offset=$offset"
+                    )
+                    ivScore.y += triangleDeltaY
+                    tvScore.y += tvScoreDeltaY
+                }
+                lastOffset = offset
+            }
+
+            override fun onStateChanged(p0: View, state: Int) {
+                if (state == BottomSheetBehavior.STATE_EXPANDED) {
+                    viewModel.getFormula()
+                }
+            }
+
+        })
     }
 
     private fun openJupyterNotebook() {
@@ -561,5 +569,4 @@ class MainFragment : BaseSupportFragment() {
             super.onBackPressed()
         }
     }
-
 }
