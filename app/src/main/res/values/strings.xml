@@ -23,7 +23,7 @@
     <string name="permission">Permission</string>
     <string name="we_will_help_u_and_community_help_one_other">We’ll help you and your community help one another.</string>
     <string name="location_data">Location data</string>
-    <string name="your_current_location_will_be_used">Your current location will be used to help improve your community’s data. Your location data is always private, and you cannot be personally identified by sharing your location.</string>
+    <string name="your_current_location_will_be_used">Your data will be used to help improve your neighborhood’s health. Your own location will be kept private.</string>
     <string name="autonomy_requires_access_to_the_following">Autonomy requires access to the following:</string>
     <string name="done">Done</string>
     <string name="risk_level">Risk level</string>
