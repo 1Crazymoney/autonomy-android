@@ -533,39 +533,17 @@ class MainFragment : BaseSupportFragment() {
         tvConfirmedCases.text = profile.confirmed.decimalFormat()
         tvConfirmedCasesChange.text = String.format("%.2f%%", abs(profile.confirmedDelta))
         tvConfirmedCasesChange.setTextColorRes(if (profile.confirmedDelta > 0) R.color.persian_red else R.color.apple)
-        if (profile.confirmedDelta == 0f) {
-            tvConfirmedCasesChange.gone()
-            ivConfirmedCasesChange.gone()
-        } else {
-            tvConfirmedCasesChange.visible()
-            ivConfirmedCasesChange.visible()
-        }
-
         ivConfirmedCasesChange.setImageResource(if (profile.confirmedDelta > 0) R.drawable.ic_up_red else R.drawable.ic_down_green)
 
         tvReportedSymptom.text = profile.symptoms.decimalFormat()
         tvReportedSymptomChange.text = String.format("%.2f%%", abs(profile.symptomsDelta))
         tvReportedSymptomChange.setTextColorRes(if (profile.symptomsDelta > 0) R.color.persian_red else R.color.apple)
-        if (profile.symptomsDelta == 0f) {
-            tvReportedSymptomChange.gone()
-            ivReportedSymptomChange.gone()
-        } else {
-            tvReportedSymptomChange.visible()
-            ivReportedSymptomChange.visible()
-        }
 
         ivReportedSymptomChange.setImageResource(if (profile.symptomsDelta > 0) R.drawable.ic_up_red else R.drawable.ic_down_green)
 
         tvHealthyBehavior.text = profile.behaviors.decimalFormat()
         tvHealthyBehaviorChange.text = String.format("%.2f%%", abs(profile.behaviorsDelta))
-        tvHealthyBehaviorChange.setTextColorRes(if (profile.behaviorsDelta > 0) R.color.apple else R.color.persian_red)
-        if (profile.behaviorsDelta == 0f) {
-            tvHealthyBehaviorChange.gone()
-            ivHealthyBehaviorChange.gone()
-        } else {
-            tvHealthyBehaviorChange.visible()
-            ivHealthyBehaviorChange.visible()
-        }
+        tvHealthyBehaviorChange.setTextColorRes(if (profile.behaviorsDelta >= 0) R.color.apple else R.color.persian_red)
 
         ivHealthyBehaviorChange.setImageResource(if (profile.behaviorsDelta > 0) R.drawable.ic_up_green else R.drawable.ic_down_red)
     }
