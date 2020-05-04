@@ -6,8 +6,10 @@
  */
 package com.bitmark.autonomy.data.model
 
+import android.os.Parcelable
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
+import kotlinx.android.parcel.Parcelize
 
 data class FormulaData(
     @Expose
@@ -19,55 +21,33 @@ data class FormulaData(
     val isDefault: Boolean
 ) : Data
 
+@Parcelize
 data class CoefficientData(
     @Expose
     @SerializedName("symptoms")
-    val symptoms: Float,
+    var symptoms: Float,
 
     @Expose
     @SerializedName("behaviors")
-    val behaviors: Float,
+    var behaviors: Float,
 
     @Expose
     @SerializedName("confirms")
-    val confirms: Float,
+    var confirms: Float,
 
     @Expose
     @SerializedName("symptom_weights")
-    val symptomWeight: SymptomWeightData
-) : Data
+    val symptomWeights: List<SymptomWeightData>
+) : Data, Parcelable
 
+@Parcelize
 data class SymptomWeightData(
 
     @Expose
-    @SerializedName("face")
-    val face: Int,
+    @SerializedName("symptom")
+    val symptom: SymptomData,
 
     @Expose
-    @SerializedName("breath")
-    val breath: Int,
-
-    @Expose
-    @SerializedName("chest")
-    val chest: Int,
-
-    @Expose
-    @SerializedName("cough")
-    val cough: Int,
-
-    @Expose
-    @SerializedName("fatigue")
-    val fatigue: Int,
-
-    @Expose
-    @SerializedName("fever")
-    val fever: Int,
-
-    @Expose
-    @SerializedName("nasal")
-    val nasal: Int,
-
-    @Expose
-    @SerializedName("throat")
-    val throat: Int
-) : Data
+    @SerializedName("weight")
+    var weight: Int
+) : Data, Parcelable

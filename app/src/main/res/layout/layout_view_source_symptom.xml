@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    tools:background="@color/white">
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvSymptomName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/ibm_plex_mono_light_font_family"
+        android:includeFontPadding="false"
+        android:inputType="textCapSentences"
+        android:textColor="@color/black"
+        android:textSize="@dimen/sp_17"
+        tools:text="@string/fever_equal" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/dp_30"
+        android:layout_marginStart="@dimen/dp_10"
+        android:background="@drawable/bg_rect_concord"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="@dimen/dp_4">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvSymptomWeight"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/dp_4"
+            android:fontFamily="@font/ibm_plex_mono_light_font_family"
+            android:gravity="center"
+            android:includeFontPadding="false"
+            android:text="-"
+            android:textColor="@color/white"
+            android:textSize="@dimen/sp_17"
+            tools:text="3" />
+
+        <androidx.appcompat.widget.AppCompatSeekBar
+            android:id="@+id/sbSymptomWeight"
+            style="@style/SeekBarWhite"
+            android:layout_width="@dimen/dp_80"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/dp_4"
+            android:max="3"
+            android:paddingStart="@dimen/dp_10"
+            android:paddingEnd="@dimen/dp_10"
+            android:progress="0"
+            tools:progress="1" />
+
+    </LinearLayout>
+
+</LinearLayout>

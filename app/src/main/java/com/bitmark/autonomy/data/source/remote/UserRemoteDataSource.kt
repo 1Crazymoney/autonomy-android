@@ -11,6 +11,7 @@ import com.bitmark.autonomy.data.model.CoefficientData
 import com.bitmark.autonomy.data.model.Location
 import com.bitmark.autonomy.data.source.remote.api.middleware.RxErrorHandlingComposer
 import com.bitmark.autonomy.data.source.remote.api.request.AddAreaRequest
+import com.bitmark.autonomy.data.source.remote.api.request.UpdateProfileFormulaRequest
 import com.bitmark.autonomy.data.source.remote.api.service.AutonomyApi
 import io.reactivex.Completable
 import io.reactivex.schedulers.Schedulers
@@ -63,7 +64,18 @@ class UserRemoteDataSource @Inject constructor(
     fun deleteFormula() = autonomyApi.deleteFormula().subscribeOn(Schedulers.io())
 
     fun updateFormula(coefficientData: CoefficientData): Completable {
-        val json = newGsonInstance().toJson(mapOf("coefficient" to coefficientData))
+        val symptomWeights = mutableMapOf<String, Int>()
+        coefficientData.symptomWeights.forEach { s -> symptomWeights[s.symptom.id] = s.weight }
+        val json = newGsonInstance().toJson(
+            mapOf(
+                "coefficient" to UpdateProfileFormulaRequest(
+                    coefficientData.symptoms,
+                    coefficientData.behaviors,
+                    coefficientData.confirms,
+                    symptomWeights
+                )
+            )
+        )
         val reqBody = json.toRequestBody("application/json".toMediaTypeOrNull())
         return autonomyApi.updateFormula(reqBody).subscribeOn(Schedulers.io())
     }

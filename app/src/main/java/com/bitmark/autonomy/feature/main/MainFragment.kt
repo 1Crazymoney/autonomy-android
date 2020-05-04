@@ -10,9 +10,12 @@ import android.content.Context
 import android.location.Location
 import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewTreeObserver
+import android.widget.LinearLayout
 import android.widget.SeekBar
+import androidx.core.view.children
 import androidx.lifecycle.Observer
 import com.bitmark.autonomy.R
 import com.bitmark.autonomy.feature.BaseSupportFragment
@@ -33,6 +36,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import kotlinx.android.synthetic.main.fragment_main.*
 import kotlinx.android.synthetic.main.layout_area_info.*
 import kotlinx.android.synthetic.main.layout_view_source.*
+import kotlinx.android.synthetic.main.layout_view_source_symptom.view.*
 import javax.inject.Inject
 import kotlin.math.abs
 import kotlin.math.roundToInt
@@ -201,14 +205,6 @@ class MainFragment : BaseSupportFragment() {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 if (!isAreaProfileReady() || !isFormulaReady()) return
                 when (seekBar) {
-                    sbFever -> formula.coefficient.symptomWeight.fever = progress
-                    sbDryCough -> formula.coefficient.symptomWeight.cough = progress
-                    sbChestPain -> formula.coefficient.symptomWeight.chest = progress
-                    sbBluishLips -> formula.coefficient.symptomWeight.face = progress
-                    sbFatigue -> formula.coefficient.symptomWeight.fatigue = progress
-                    sbShortnessOfBreath -> formula.coefficient.symptomWeight.breath = progress
-                    sbNasalCongestion -> formula.coefficient.symptomWeight.nasal = progress
-                    sbSoreThroat -> formula.coefficient.symptomWeight.throat = progress
                     sbCasesWeight -> formula.coefficient.confirms = progress / 100f
                     sbBehaviorsWeight -> formula.coefficient.behaviors = progress / 100f
                     sbSymptomsWeight -> formula.coefficient.symptoms = progress / 100f
@@ -227,14 +223,6 @@ class MainFragment : BaseSupportFragment() {
 
         }
 
-        sbFever.setOnSeekBarChangeListener(seekBarChangeListener)
-        sbDryCough.setOnSeekBarChangeListener(seekBarChangeListener)
-        sbChestPain.setOnSeekBarChangeListener(seekBarChangeListener)
-        sbBluishLips.setOnSeekBarChangeListener(seekBarChangeListener)
-        sbFatigue.setOnSeekBarChangeListener(seekBarChangeListener)
-        sbShortnessOfBreath.setOnSeekBarChangeListener(seekBarChangeListener)
-        sbNasalCongestion.setOnSeekBarChangeListener(seekBarChangeListener)
-        sbSoreThroat.setOnSeekBarChangeListener(seekBarChangeListener)
         sbCasesWeight.setOnSeekBarChangeListener(seekBarChangeListener)
         sbBehaviorsWeight.setOnSeekBarChangeListener(seekBarChangeListener)
         sbSymptomsWeight.setOnSeekBarChangeListener(seekBarChangeListener)
@@ -460,34 +448,51 @@ class MainFragment : BaseSupportFragment() {
         tvBehaviorsScore2.text = roundBehaviorScore.toString()
         tvBehaviorsScore2.setTextColorRes(toColorRes(behaviorScore))
 
-        sbFever.progress = formula.coefficient.symptomWeight.fever
-        tvFever.text = formula.coefficient.symptomWeight.fever.toString()
-        sbDryCough.progress = formula.coefficient.symptomWeight.cough
-        tvDryCough.text = formula.coefficient.symptomWeight.cough.toString()
-        sbChestPain.progress = formula.coefficient.symptomWeight.chest
-        tvChestPain.text = formula.coefficient.symptomWeight.chest.toString()
-        sbBluishLips.progress = formula.coefficient.symptomWeight.face
-        tvBluishLips.text = formula.coefficient.symptomWeight.face.toString()
-        sbFatigue.progress = formula.coefficient.symptomWeight.fatigue
-        tvFatigue.text = formula.coefficient.symptomWeight.fatigue.toString()
-        sbShortnessOfBreath.progress = formula.coefficient.symptomWeight.breath
-        tvShortnessOfBreath.text = formula.coefficient.symptomWeight.breath.toString()
-        sbNasalCongestion.progress = formula.coefficient.symptomWeight.nasal
-        tvNasalCongestion.text = formula.coefficient.symptomWeight.nasal.toString()
-        sbSoreThroat.progress = formula.coefficient.symptomWeight.throat
-        tvSoreThroat.text = formula.coefficient.symptomWeight.throat.toString()
+        val symptomSeekBarChangeListener = object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(
+                seekBar: SeekBar?,
+                progress: Int,
+                fromUser: Boolean
+            ) {
+                val tag = seekBar!!.tag
+                formula.coefficient.symptomWeights.find { s -> "sb_${s.symptom.id}" == tag }
+                    ?.weight = progress
+                val tvSymptomWeight =
+                    layoutSymptoms.children.find { c -> c.tag == tag.toString().replace("sb_", "") }
+                        ?.tvSymptomWeight
+                tvSymptomWeight?.text = progress.toString()
+            }
 
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {
+                // do nothing
+            }
 
-        val totalSymptom = arrayOf(
-            sbFever,
-            sbDryCough,
-            sbChestPain,
-            sbBluishLips,
-            sbFatigue,
-            sbShortnessOfBreath,
-            sbNasalCongestion,
-            sbSoreThroat
-        ).sumBy { sb -> sb.progress }
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {
+                viewModel.updateFormula(formula)
+            }
+
+        }
+
+        layoutSymptoms.removeAllViews()
+        for (symptomWeight in formula.coefficient.symptomWeights) {
+            val view =
+                LayoutInflater.from(context).inflate(R.layout.layout_view_source_symptom, null)
+            view.tvSymptomName.text = String.format("%s =", symptomWeight.symptom.name)
+            view.tvSymptomWeight.text = symptomWeight.weight.toString()
+            view.sbSymptomWeight.progress = symptomWeight.weight
+            view.sbSymptomWeight.setOnSeekBarChangeListener(symptomSeekBarChangeListener)
+            view.tag = symptomWeight.symptom.id
+            view.sbSymptomWeight.tag = "sb_${symptomWeight.symptom.id}"
+            val params = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            )
+            params.setMargins(0, context!!.getDimensionPixelSize(R.dimen.dp_6), 0, 0)
+            view.layoutParams = params
+            layoutSymptoms.addView(view)
+        }
+
+        val totalSymptom = formula.coefficient.symptomWeights.sumBy { s -> s.weight }
 
         val totalPeopleSymptom = areaProfile.detail.symptomMetric.totalPeople
         val maxScorePerPersonSymptom = areaProfile.detail.symptomMetric.maxScorePerPerson
@@ -507,8 +512,9 @@ class MainFragment : BaseSupportFragment() {
         tvSymptomsScore2.text = roundSymptomScore.toString()
         tvSymptomsScore2.setTextColorRes(toColorRes(symptomScore))
 
-        val score =
+        var score =
             casesCore * confirmCoefficient + behaviorScore * behaviorsCoefficient + symptomScore * symptomCoefficient
+        if (score > 100) score = 100f
         tvScoreViewSource.text = score.roundToInt().toString()
         tvScoreViewSource.setTextColorRes(toColorRes(score))
         showScore(score)
@@ -522,7 +528,7 @@ class MainFragment : BaseSupportFragment() {
     }
 
     private fun showData(profile: AreaProfileModelView) {
-        showScore(profile.score)
+        showScore(if (profile.score > 100f) 100f else profile.score)
 
         tvConfirmedCases.text = profile.confirmed.decimalFormat()
         tvConfirmedCasesChange.text = String.format("%.2f%%", abs(profile.confirmedDelta))
