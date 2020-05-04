@@ -224,7 +224,7 @@ class AreaListRecyclerViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder
                     tvName.text = alias
                     edtName.clearFocus()
                 }
-                ivScore.setImageResource(item.data.score!!.toDrawableRes())
+                ivScore.setImageResource(toDrawableRes(item.data.score!!))
                 tvScore.text = item.data.score.roundToInt().toString()
             }
         }

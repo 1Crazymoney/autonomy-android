@@ -9,7 +9,6 @@ package com.bitmark.autonomy.data.model
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
-
 data class AreaProfileData(
     @Expose
     @SerializedName("score")
@@ -21,7 +20,7 @@ data class AreaProfileData(
 
     @Expose
     @SerializedName("confirm_delta")
-    val confirmedDelta: Int,
+    val confirmedDelta: Float,
 
     @Expose
     @SerializedName("symptoms")
@@ -29,7 +28,7 @@ data class AreaProfileData(
 
     @Expose
     @SerializedName("symptoms_delta")
-    val symptomsDelta: Int,
+    val symptomsDelta: Float,
 
     @Expose
     @SerializedName("behavior")
@@ -37,7 +36,7 @@ data class AreaProfileData(
 
     @Expose
     @SerializedName("behavior_delta")
-    val behaviorsDelta: Int,
+    val behaviorsDelta: Float,
 
     @Expose
     @SerializedName("details")
@@ -70,7 +69,7 @@ data class ConfirmMetricData(
 
     @Expose
     @SerializedName("score")
-    val score: Score
+    val score: Float
 ) : Data
 
 data class BehaviorMetricData(
@@ -88,7 +87,7 @@ data class BehaviorMetricData(
 
     @Expose
     @SerializedName("score")
-    val score: Score
+    val score: Float
 
 ) : Data
 
@@ -108,6 +107,6 @@ data class SymptomMetricData(
 
     @Expose
     @SerializedName("score")
-    val score: Score
+    val score: Float
 
 ) : Data

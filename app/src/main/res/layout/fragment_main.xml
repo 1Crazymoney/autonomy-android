@@ -114,10 +114,10 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tvLocation"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/dp_32"
-            android:layout_marginEnd="@dimen/dp_32"
+            android:layout_marginStart="@dimen/dp_44"
+            android:layout_marginEnd="@dimen/dp_44"
             android:ellipsize="end"
             android:fontFamily="@font/grotesk_light_font_family"
             android:gravity="center"

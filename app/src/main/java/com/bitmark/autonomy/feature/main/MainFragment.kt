@@ -439,7 +439,7 @@ class MainFragment : BaseSupportFragment() {
 
         val casesCore = 100f - 5 * (yesterdayConfirms - todayConfirms)
         tvCasesScore1.text = casesCore.roundToInt().toString()
-        tvCasesScore1.setTextColorRes(casesCore.toColorRes())
+        tvCasesScore1.setTextColorRes(toColorRes(casesCore))
 
         val totalBehaviors = areaProfile.detail.behaviorMetric.totalBehaviors
         val totalPeopleBehaviors = areaProfile.detail.behaviorMetric.totalPeople
@@ -456,9 +456,9 @@ class MainFragment : BaseSupportFragment() {
         }
         val roundBehaviorScore = behaviorScore.roundToInt()
         tvBehaviorsScore1.text = roundBehaviorScore.toString()
-        tvBehaviorsScore1.setTextColorRes(behaviorScore.toColorRes())
+        tvBehaviorsScore1.setTextColorRes(toColorRes(behaviorScore))
         tvBehaviorsScore2.text = roundBehaviorScore.toString()
-        tvBehaviorsScore2.setTextColorRes(behaviorScore.toColorRes())
+        tvBehaviorsScore2.setTextColorRes(toColorRes(behaviorScore))
 
         sbFever.progress = formula.coefficient.symptomWeight.fever
         tvFever.text = formula.coefficient.symptomWeight.fever.toString()
@@ -503,14 +503,14 @@ class MainFragment : BaseSupportFragment() {
         }
         val roundSymptomScore = symptomScore.roundToInt()
         tvSymptomsScore1.text = roundSymptomScore.toString()
-        tvSymptomsScore1.setTextColorRes(symptomScore.toColorRes())
+        tvSymptomsScore1.setTextColorRes(toColorRes(symptomScore))
         tvSymptomsScore2.text = roundSymptomScore.toString()
-        tvSymptomsScore2.setTextColorRes(symptomScore.toColorRes())
+        tvSymptomsScore2.setTextColorRes(toColorRes(symptomScore))
 
         val score =
             casesCore * confirmCoefficient + behaviorScore * behaviorsCoefficient + symptomScore * symptomCoefficient
         tvScoreViewSource.text = score.roundToInt().toString()
-        tvScoreViewSource.setTextColorRes(score.toColorRes())
+        tvScoreViewSource.setTextColorRes(toColorRes(score))
         showScore(score)
 
     }
@@ -525,8 +525,9 @@ class MainFragment : BaseSupportFragment() {
         showScore(profile.score)
 
         tvConfirmedCases.text = profile.confirmed.decimalFormat()
-        tvConfirmedCasesChange.text = abs(profile.confirmedDelta).decimalFormat()
-        if (profile.confirmed == 0) {
+        tvConfirmedCasesChange.text = String.format("%.2f%%", abs(profile.confirmedDelta))
+        tvConfirmedCasesChange.setTextColorRes(if (profile.confirmedDelta > 0) R.color.persian_red else R.color.apple)
+        if (profile.confirmedDelta == 0f) {
             tvConfirmedCasesChange.gone()
             ivConfirmedCasesChange.gone()
         } else {
@@ -537,8 +538,9 @@ class MainFragment : BaseSupportFragment() {
         ivConfirmedCasesChange.setImageResource(if (profile.confirmedDelta > 0) R.drawable.ic_up_red else R.drawable.ic_down_green)
 
         tvReportedSymptom.text = profile.symptoms.decimalFormat()
-        tvReportedSymptomChange.text = abs(profile.symptomsDelta).decimalFormat()
-        if (profile.symptoms == 0) {
+        tvReportedSymptomChange.text = String.format("%.2f%%", abs(profile.symptomsDelta))
+        tvReportedSymptomChange.setTextColorRes(if (profile.symptomsDelta > 0) R.color.persian_red else R.color.apple)
+        if (profile.symptomsDelta == 0f) {
             tvReportedSymptomChange.gone()
             ivReportedSymptomChange.gone()
         } else {
@@ -549,8 +551,9 @@ class MainFragment : BaseSupportFragment() {
         ivReportedSymptomChange.setImageResource(if (profile.symptomsDelta > 0) R.drawable.ic_up_red else R.drawable.ic_down_green)
 
         tvHealthyBehavior.text = profile.behaviors.decimalFormat()
-        tvHealthyBehaviorChange.text = abs(profile.behaviorsDelta).decimalFormat()
-        if (profile.behaviors == 0) {
+        tvHealthyBehaviorChange.text = String.format("%.2f%%", abs(profile.behaviorsDelta))
+        tvHealthyBehaviorChange.setTextColorRes(if (profile.behaviorsDelta > 0) R.color.apple else R.color.persian_red)
+        if (profile.behaviorsDelta == 0f) {
             tvHealthyBehaviorChange.gone()
             ivHealthyBehaviorChange.gone()
         } else {

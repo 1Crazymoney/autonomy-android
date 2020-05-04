@@ -10,7 +10,6 @@ import android.os.Parcelable
 import com.bitmark.autonomy.R
 import com.bitmark.autonomy.data.model.AreaData
 import com.bitmark.autonomy.data.model.Location
-import com.bitmark.autonomy.data.model.Score
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
@@ -21,7 +20,7 @@ data class AreaModelView(
 
     val location: Location,
 
-    val score: Score?
+    val score: Float?
 ) : ModelView, Parcelable {
     companion object {
         fun newInstance(area: AreaData) =
@@ -29,16 +28,16 @@ data class AreaModelView(
     }
 }
 
-fun Score.toDrawableRes() = when {
-    this == 0f -> R.drawable.ic_circle_mine_shaft_2
-    this < 34f -> R.drawable.ic_circle_red
-    this < 67f -> R.drawable.ic_circle_yellow
+fun toDrawableRes(value: Float) = when {
+    value == 0f -> R.drawable.ic_circle_mine_shaft_2
+    value < 34f -> R.drawable.ic_circle_red
+    value < 67f -> R.drawable.ic_circle_yellow
     else -> R.drawable.ic_circle_green
 }
 
-fun Score.toColorRes() = when {
-    this == 0f -> R.color.mine_shaft_2
-    this < 34f -> R.color.persian_red
-    this < 67f -> R.color.gold_tip
+fun toColorRes(value: Float) = when {
+    value == 0f -> R.color.mine_shaft_2
+    value < 34f -> R.color.persian_red
+    value < 67f -> R.color.gold_tip
     else -> R.color.apple
 }

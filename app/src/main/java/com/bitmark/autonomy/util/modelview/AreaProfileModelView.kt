@@ -16,15 +16,15 @@ data class AreaProfileModelView(
 
     val confirmed: Int,
 
-    val confirmedDelta: Int,
+    val confirmedDelta: Float,
 
     val symptoms: Int,
 
-    val symptomsDelta: Int,
+    val symptomsDelta: Float,
 
     val behaviors: Int,
 
-    val behaviorsDelta: Int,
+    val behaviorsDelta: Float,
 
     val detail: AreaProfileDetailModelView
 
