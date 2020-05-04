@@ -43,13 +43,12 @@ class ProfileActivity : BaseAppCompatActivity() {
     override fun initComponents() {
         super.initComponents()
 
-        val eulaAndPpString = getString(R.string.eula_and_pp)
-        val spannableString = SpannableString(eulaAndPpString)
-        val eulaString = getString(R.string.eula)
-        val ppString = getString(R.string.privacy_policy)
+        val privacyString = getString(R.string.we_protect_your_digital_rights)
+        val spannableString = SpannableString(privacyString)
+        val ppString = getString(R.string.digital_rights)
 
-        var startIndex = eulaAndPpString.indexOf(eulaString)
-        var endIndex = startIndex + eulaString.length
+        val startIndex = privacyString.indexOf(ppString)
+        val endIndex = startIndex + ppString.length
         spannableString.setSpan(
             object : ClickableSpan() {
                 override fun onClick(widget: View) {
@@ -62,24 +61,10 @@ class ProfileActivity : BaseAppCompatActivity() {
             Spannable.SPAN_INCLUSIVE_EXCLUSIVE
         )
 
-        startIndex = eulaAndPpString.indexOf(ppString)
-        endIndex = startIndex + ppString.length
-        spannableString.setSpan(
-            object : ClickableSpan() {
-                override fun onClick(widget: View) {
-                    // TODO change link later
-                    navigator.anim(NONE).openBrowser("https://bitmark.com")
-                }
-
-            }, startIndex,
-            endIndex,
-            Spannable.SPAN_INCLUSIVE_EXCLUSIVE
-        )
-
-        tvEulaPP.text = spannableString
-        tvEulaPP.movementMethod = LinkMovementMethod.getInstance()
-        tvEulaPP.setLinkTextColor(getColor(R.color.white))
-        tvEulaPP.highlightColor = Color.TRANSPARENT
+        tvPP.text = spannableString
+        tvPP.movementMethod = LinkMovementMethod.getInstance()
+        tvPP.setLinkTextColor(getColor(R.color.white))
+        tvPP.highlightColor = Color.TRANSPARENT
 
         tvVersion.text = BuildConfig.VERSION_NAME
 

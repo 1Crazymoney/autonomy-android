@@ -557,14 +557,14 @@
                     tools:text="Version 1.X.X" />
 
                 <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/tvEulaPP"
+                    android:id="@+id/tvPP"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginBottom="@dimen/dp_16"
                     android:fontFamily="@font/grotesk_light_font_family"
                     android:includeFontPadding="false"
-                    android:text="@string/eula_and_pp"
+                    android:text="@string/we_protect_your_digital_rights"
                     android:textColor="@color/white"
                     android:textSize="@dimen/sp_12" />
 
