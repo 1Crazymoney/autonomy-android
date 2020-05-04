@@ -6,7 +6,6 @@
  */
 package com.bitmark.autonomy.feature.locationhistory
 
-import android.os.Bundle
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -72,9 +71,9 @@ class LocationHistoryActivity : BaseAppCompatActivity() {
         }
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        viewModel.nextLocationHistory()
+    override fun onStart() {
+        super.onStart()
+        if (adapter.isEmpty()) viewModel.nextLocationHistory()
     }
 
     override fun observe() {

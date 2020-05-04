@@ -16,13 +16,16 @@ class BehaviorHistoryModelView(
 
     val location: Location,
 
-    val timestamp: Long
+    val timestampSec: Long
 ) : ModelView {
     companion object {
         fun newInstance(data: BehaviorHistoryData) =
             BehaviorHistoryModelView(data.behaviors, data.location, data.timestamp)
     }
 }
+
+val BehaviorHistoryModelView.timestamp
+    get() = timestampSec * 1000
 
 fun BehaviorHistoryModelView.joinSymptoms() =
     if (behaviors.isEmpty()) "" else behaviors.joinToString(", ") { b -> b.name.capitalize() }

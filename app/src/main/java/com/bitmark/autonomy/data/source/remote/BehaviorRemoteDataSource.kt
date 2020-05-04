@@ -42,7 +42,7 @@ class BehaviorRemoteDataSource @Inject constructor(
             .subscribeOn(Schedulers.io())
     }
 
-    fun listBehaviorHistory(beforeSec: Long, limit: Int) =
+    fun listBehaviorHistory(beforeSec: Long?, limit: Int) =
         autonomyApi.listBehaviorHistory(beforeSec, limit).map { res ->
             res["behaviors_history"] ?: error("invalid response")
         }.subscribeOn(Schedulers.io())

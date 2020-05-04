@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bitmark.autonomy.R
 import com.bitmark.autonomy.util.DateTimeUtil
 import com.bitmark.autonomy.util.modelview.LocationHistoryModelView
+import com.bitmark.autonomy.util.modelview.timestamp
 import kotlinx.android.synthetic.main.item_location_history.view.*
 
 
@@ -29,7 +30,7 @@ class LocationHistoryRecyclerAdapter :
 
     fun add(items: List<LocationHistoryModelView>) {
         if (items.isEmpty()) return
-        val pos = items.size
+        val pos = this.items.size
         this.items.addAll(items)
         notifyItemRangeInserted(pos, items.size)
     }
@@ -48,6 +49,7 @@ class LocationHistoryRecyclerAdapter :
         holder.bind(items[position])
     }
 
+    fun isEmpty() = itemCount == 0
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 

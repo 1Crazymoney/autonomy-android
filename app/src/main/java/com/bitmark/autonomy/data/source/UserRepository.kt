@@ -29,7 +29,7 @@ class UserRepository(private val remoteDataSource: UserRemoteDataSource) : Repos
 
     fun getAreaProfile(id: String) = remoteDataSource.getAreaProfile(id)
 
-    fun listLocationHistory(beforeSec: Long, limit: Int = 20) =
+    fun listLocationHistory(beforeSec: Long? = null, limit: Int = 20) =
         remoteDataSource.listLocationHistory(beforeSec, limit)
 
     fun getFormula() = remoteDataSource.getFormula()

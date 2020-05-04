@@ -14,6 +14,7 @@ import com.bitmark.autonomy.R
 import com.bitmark.autonomy.util.DateTimeUtil
 import com.bitmark.autonomy.util.modelview.SymptomHistoryModelView
 import com.bitmark.autonomy.util.modelview.joinSymptoms
+import com.bitmark.autonomy.util.modelview.timestamp
 import kotlinx.android.synthetic.main.item_symptom_history.view.*
 
 
@@ -30,7 +31,7 @@ class SymptomHistoryRecyclerAdapter :
 
     fun add(items: List<SymptomHistoryModelView>) {
         if (items.isEmpty()) return
-        val pos = items.size
+        val pos = this.items.size
         this.items.addAll(items)
         notifyItemRangeInserted(pos, items.size)
     }
@@ -49,6 +50,7 @@ class SymptomHistoryRecyclerAdapter :
         holder.bind(items[position])
     }
 
+    fun isEmpty() = itemCount == 0
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 

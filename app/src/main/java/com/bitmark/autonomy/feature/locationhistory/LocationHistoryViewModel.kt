@@ -37,11 +37,15 @@ class LocationHistoryViewModel(
     }
 
     private fun locationHistoryStream() = if (lastTimestamp == -1L) {
-        userRepo.listLocationHistory(System.currentTimeMillis())
+        userRepo.listLocationHistory()
     } else {
         userRepo.listLocationHistory(lastTimestamp)
     }.map { locationHistories ->
-        lastTimestamp = locationHistories.minBy { s -> s.timestamp }!!.timestamp
-        locationHistories.map { l -> LocationHistoryModelView.newInstance(l) }
+        if (locationHistories.isNotEmpty()) {
+            lastTimestamp = locationHistories.minBy { s -> s.timestamp }!!.timestamp
+            locationHistories.map { l -> LocationHistoryModelView.newInstance(l) }
+        } else {
+            listOf()
+        }
     }
 }

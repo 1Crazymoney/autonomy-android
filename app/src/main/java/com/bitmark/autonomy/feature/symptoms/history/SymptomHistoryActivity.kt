@@ -6,7 +6,6 @@
  */
 package com.bitmark.autonomy.feature.symptoms.history
 
-import android.os.Bundle
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -16,9 +15,11 @@ import com.bitmark.autonomy.feature.BaseAppCompatActivity
 import com.bitmark.autonomy.feature.BaseViewModel
 import com.bitmark.autonomy.feature.Navigator
 import com.bitmark.autonomy.feature.Navigator.Companion.RIGHT_LEFT
+import com.bitmark.autonomy.feature.symptoms.SymptomReportActivity
 import com.bitmark.autonomy.logging.EventLogger
 import com.bitmark.autonomy.util.EndlessScrollListener
 import com.bitmark.autonomy.util.ext.gone
+import com.bitmark.autonomy.util.ext.setSafetyOnclickListener
 import com.bitmark.autonomy.util.ext.visible
 import kotlinx.android.synthetic.main.activity_symptom_history.*
 import javax.inject.Inject
@@ -69,11 +70,15 @@ class SymptomHistoryActivity : BaseAppCompatActivity() {
         layoutBack.setOnClickListener {
             navigator.anim(RIGHT_LEFT).finishActivity()
         }
+
+        layoutReport.setSafetyOnclickListener {
+            navigator.anim(RIGHT_LEFT).startActivity(SymptomReportActivity::class.java)
+        }
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        viewModel.nextSymptomHistory()
+    override fun onStart() {
+        super.onStart()
+        if (adapter.isEmpty()) viewModel.nextSymptomHistory()
     }
 
     override fun observe() {
@@ -83,7 +88,16 @@ class SymptomHistoryActivity : BaseAppCompatActivity() {
             when {
                 res.isSuccess() -> {
                     progressBar.gone()
-                    adapter.add(res.data()!!)
+                    val data = res.data()!!
+                    if (data.isEmpty() && adapter.isEmpty()) {
+                        tvNoRecord.visible()
+                        layoutReport.visible()
+                    } else {
+                        tvNoRecord.gone()
+                        layoutReport.gone()
+                        adapter.add(data)
+                    }
+
                 }
 
                 res.isError() -> {
@@ -100,8 +114,16 @@ class SymptomHistoryActivity : BaseAppCompatActivity() {
             when {
                 res.isSuccess() -> {
                     layoutSwipeRefresh.isRefreshing = false
-                    adapter.set(res.data()!!)
-                    endlessScrollListener.resetState()
+                    val data = res.data()!!
+                    if (data.isEmpty() && adapter.isEmpty()) {
+                        tvNoRecord.visible()
+                        layoutReport.visible()
+                    } else {
+                        tvNoRecord.gone()
+                        layoutReport.gone()
+                        adapter.set(data)
+                        endlessScrollListener.resetState()
+                    }
                 }
 
                 res.isError() -> {

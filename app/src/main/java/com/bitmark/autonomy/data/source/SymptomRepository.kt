@@ -17,7 +17,7 @@ class SymptomRepository(private val remoteDataSource: SymptomRemoteDataSource) :
 
     fun addSymptom(name: String, desc: String) = remoteDataSource.addSymptom(name, desc)
 
-    fun listSymptomHistory(beforeSec: Long, limit: Int = 20) =
+    fun listSymptomHistory(beforeSec: Long? = null, limit: Int = 20) =
         remoteDataSource.listSymptomHistory(beforeSec, limit)
 
 }

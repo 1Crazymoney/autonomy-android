@@ -16,13 +16,16 @@ data class SymptomHistoryModelView(
 
     val location: Location,
 
-    val timestamp: Long
+    val timestampSec: Long
 ) : ModelView {
     companion object {
         fun newInstance(data: SymptomHistoryData) =
             SymptomHistoryModelView(data.symptoms, data.location, data.timestamp)
     }
 }
+
+val SymptomHistoryModelView.timestamp
+    get() = timestampSec * 1000
 
 fun SymptomHistoryModelView.joinSymptoms() =
     if (symptoms.isEmpty()) "" else symptoms.joinToString(", ") { s -> s.name.capitalize() }

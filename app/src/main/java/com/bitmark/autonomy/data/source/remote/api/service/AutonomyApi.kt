@@ -89,13 +89,13 @@ interface AutonomyApi {
     fun renameArea(@Path("id") id: String, @Body body: RequestBody): Completable
 
     @GET("api/history/symptoms")
-    fun listSymptomHistory(@Query("before") before: Long, @Query("limit") limit: Int): Single<Map<String, List<SymptomHistoryData>>>
+    fun listSymptomHistory(@Query("before") before: Long?, @Query("limit") limit: Int): Single<Map<String, List<SymptomHistoryData>>>
 
     @GET("api/history/behaviors")
-    fun listBehaviorHistory(@Query("before") before: Long, @Query("limit") limit: Int): Single<Map<String, List<BehaviorHistoryData>>>
+    fun listBehaviorHistory(@Query("before") before: Long?, @Query("limit") limit: Int): Single<Map<String, List<BehaviorHistoryData>>>
 
     @GET("api/history/locations")
-    fun listLocationHistory(@Query("before") before: Long, @Query("limit") limit: Int): Single<Map<String, List<LocationHistoryData>>>
+    fun listLocationHistory(@Query("before") before: Long?, @Query("limit") limit: Int): Single<Map<String, List<LocationHistoryData>>>
 
     @GET("api/accounts/me/profile_formula")
     fun getFormula(): Single<FormulaData>

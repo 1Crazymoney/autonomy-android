@@ -37,11 +37,15 @@ class BehaviorHistoryViewModel(
     }
 
     private fun behaviorHistoryStream() = if (lastTimestamp == -1L) {
-        behaviorRepo.listBehaviorHistory(System.currentTimeMillis())
+        behaviorRepo.listBehaviorHistory()
     } else {
         behaviorRepo.listBehaviorHistory(lastTimestamp)
     }.map { behaviorHistories ->
-        lastTimestamp = behaviorHistories.minBy { s -> s.timestamp }!!.timestamp
-        behaviorHistories.map { b -> BehaviorHistoryModelView.newInstance(b) }
+        if (behaviorHistories.isNotEmpty()) {
+            lastTimestamp = behaviorHistories.minBy { s -> s.timestamp }!!.timestamp
+            behaviorHistories.map { b -> BehaviorHistoryModelView.newInstance(b) }
+        } else {
+            listOf()
+        }
     }
 }

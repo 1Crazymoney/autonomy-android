@@ -36,11 +36,15 @@ class SymptomHistoryViewModel(
     }
 
     private fun symptomHistoryStream() = if (lastTimestamp == -1L) {
-        symptomRepo.listSymptomHistory(System.currentTimeMillis())
+        symptomRepo.listSymptomHistory()
     } else {
         symptomRepo.listSymptomHistory(lastTimestamp)
     }.map { symptomHistories ->
-        lastTimestamp = symptomHistories.minBy { s -> s.timestamp }!!.timestamp
-        symptomHistories.map { s -> SymptomHistoryModelView.newInstance(s) }
+        if (symptomHistories.isNotEmpty()) {
+            lastTimestamp = symptomHistories.minBy { s -> s.timestamp }!!.timestamp
+            symptomHistories.map { s -> SymptomHistoryModelView.newInstance(s) }
+        } else {
+            listOf()
+        }
     }
 }

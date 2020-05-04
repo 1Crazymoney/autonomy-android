@@ -41,7 +41,7 @@ class SymptomRemoteDataSource @Inject constructor(
             .subscribeOn(Schedulers.io())
     }
 
-    fun listSymptomHistory(beforeSec: Long, limit: Int) =
+    fun listSymptomHistory(beforeSec: Long?, limit: Int) =
         autonomyApi.listSymptomHistory(beforeSec, limit).map { res ->
             res["symptoms_history"] ?: error("invalid response")
         }.subscribeOn(Schedulers.io())
