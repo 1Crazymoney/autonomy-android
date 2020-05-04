@@ -32,7 +32,7 @@ class UserRepository(private val remoteDataSource: UserRemoteDataSource) : Repos
     fun listLocationHistory(beforeSec: Long? = null, limit: Int = 20) =
         remoteDataSource.listLocationHistory(beforeSec, limit)
 
-    fun getFormula() = remoteDataSource.getFormula()
+    fun getFormula(lang: String) = remoteDataSource.getFormula(lang)
 
     fun deleteFormula() = remoteDataSource.deleteFormula()
 

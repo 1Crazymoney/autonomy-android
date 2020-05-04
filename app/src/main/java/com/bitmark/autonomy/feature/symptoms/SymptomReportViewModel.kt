@@ -23,8 +23,8 @@ class SymptomReportViewModel(
 
     internal val reportSymptomLiveData = CompositeLiveData<Any>()
 
-    fun listSymptom() {
-        listSymptomLiveData.add(rxLiveDataTransformer.single(symptomRepo.listSymptom().map { symptoms ->
+    fun listSymptom(lang: String) {
+        listSymptomLiveData.add(rxLiveDataTransformer.single(symptomRepo.listSymptom(lang).map { symptoms ->
             symptoms.map { s ->
                 SymptomModelView.newInstance(s)
             }

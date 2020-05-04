@@ -37,6 +37,7 @@ import kotlinx.android.synthetic.main.fragment_main.*
 import kotlinx.android.synthetic.main.layout_area_info.*
 import kotlinx.android.synthetic.main.layout_view_source.*
 import kotlinx.android.synthetic.main.layout_view_source_symptom.view.*
+import java.util.*
 import javax.inject.Inject
 import kotlin.math.abs
 import kotlin.math.roundToInt
@@ -240,7 +241,7 @@ class MainFragment : BaseSupportFragment() {
 
         tvReset.setSafetyOnclickListener {
             if (blocked) return@setSafetyOnclickListener
-            viewModel.deleteFormula()
+            viewModel.deleteFormula(Locale.getDefault().displayName)
         }
 
         tvJupyterNotebook.setSafetyOnclickListener(formulaClickListener)
@@ -325,7 +326,7 @@ class MainFragment : BaseSupportFragment() {
 
             override fun onStateChanged(p0: View, state: Int) {
                 if (state == BottomSheetBehavior.STATE_EXPANDED) {
-                    viewModel.getFormula()
+                    viewModel.getFormula(Locale.getDefault().langCountry())
                 }
             }
 

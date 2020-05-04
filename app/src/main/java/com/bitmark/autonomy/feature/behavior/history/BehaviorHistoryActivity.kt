@@ -18,9 +18,11 @@ import com.bitmark.autonomy.feature.behavior.BehaviorReportActivity
 import com.bitmark.autonomy.logging.EventLogger
 import com.bitmark.autonomy.util.EndlessScrollListener
 import com.bitmark.autonomy.util.ext.gone
+import com.bitmark.autonomy.util.ext.langCountry
 import com.bitmark.autonomy.util.ext.setSafetyOnclickListener
 import com.bitmark.autonomy.util.ext.visible
 import kotlinx.android.synthetic.main.activity_behavior_history.*
+import java.util.*
 import javax.inject.Inject
 
 
@@ -54,7 +56,7 @@ class BehaviorHistoryActivity : BaseAppCompatActivity() {
 
         endlessScrollListener = object : EndlessScrollListener(layoutManager) {
             override fun onLoadMore(page: Int, totalItemsCount: Int, view: RecyclerView) {
-                viewModel.nextBehaviorHistory()
+                viewModel.nextBehaviorHistory(Locale.getDefault().langCountry())
             }
         }
 
@@ -63,7 +65,7 @@ class BehaviorHistoryActivity : BaseAppCompatActivity() {
 
         layoutSwipeRefresh.setColorSchemeColors(getColor(R.color.colorAccent))
         layoutSwipeRefresh.setOnRefreshListener {
-            viewModel.refreshBehaviorHistory()
+            viewModel.refreshBehaviorHistory(Locale.getDefault().langCountry())
         }
 
         layoutBack.setOnClickListener {
@@ -77,7 +79,7 @@ class BehaviorHistoryActivity : BaseAppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        if (adapter.isEmpty()) viewModel.nextBehaviorHistory()
+        if (adapter.isEmpty()) viewModel.nextBehaviorHistory(Locale.getDefault().langCountry())
     }
 
     override fun observe() {

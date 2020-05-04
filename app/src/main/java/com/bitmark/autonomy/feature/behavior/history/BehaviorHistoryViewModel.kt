@@ -27,19 +27,19 @@ class BehaviorHistoryViewModel(
 
     private var lastTimestamp = -1L
 
-    fun nextBehaviorHistory() {
-        nextBehaviorHistoryLiveData.add(rxLiveDataTransformer.single(behaviorHistoryStream()))
+    fun nextBehaviorHistory(lang: String) {
+        nextBehaviorHistoryLiveData.add(rxLiveDataTransformer.single(behaviorHistoryStream(lang)))
     }
 
-    fun refreshBehaviorHistory() {
+    fun refreshBehaviorHistory(lang: String) {
         lastTimestamp = -1L
-        refreshBehaviorHistoryLiveData.add(rxLiveDataTransformer.single(behaviorHistoryStream()))
+        refreshBehaviorHistoryLiveData.add(rxLiveDataTransformer.single(behaviorHistoryStream(lang)))
     }
 
-    private fun behaviorHistoryStream() = if (lastTimestamp == -1L) {
-        behaviorRepo.listBehaviorHistory()
+    private fun behaviorHistoryStream(lang: String) = if (lastTimestamp == -1L) {
+        behaviorRepo.listBehaviorHistory(lang = lang)
     } else {
-        behaviorRepo.listBehaviorHistory(lastTimestamp)
+        behaviorRepo.listBehaviorHistory(beforeSec = lastTimestamp, lang = lang)
     }.map { behaviorHistories ->
         if (behaviorHistories.isNotEmpty()) {
             lastTimestamp = behaviorHistories.minBy { s -> s.timestamp }!!.timestamp

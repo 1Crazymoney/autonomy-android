@@ -19,9 +19,11 @@ import com.bitmark.autonomy.feature.symptoms.SymptomReportActivity
 import com.bitmark.autonomy.logging.EventLogger
 import com.bitmark.autonomy.util.EndlessScrollListener
 import com.bitmark.autonomy.util.ext.gone
+import com.bitmark.autonomy.util.ext.langCountry
 import com.bitmark.autonomy.util.ext.setSafetyOnclickListener
 import com.bitmark.autonomy.util.ext.visible
 import kotlinx.android.synthetic.main.activity_symptom_history.*
+import java.util.*
 import javax.inject.Inject
 
 
@@ -55,7 +57,7 @@ class SymptomHistoryActivity : BaseAppCompatActivity() {
 
         endlessScrollListener = object : EndlessScrollListener(layoutManager) {
             override fun onLoadMore(page: Int, totalItemsCount: Int, view: RecyclerView) {
-                viewModel.nextSymptomHistory()
+                viewModel.nextSymptomHistory(Locale.getDefault().langCountry())
             }
         }
 
@@ -64,7 +66,7 @@ class SymptomHistoryActivity : BaseAppCompatActivity() {
 
         layoutSwipeRefresh.setColorSchemeColors(getColor(R.color.colorAccent))
         layoutSwipeRefresh.setOnRefreshListener {
-            viewModel.refreshSymptomHistory()
+            viewModel.refreshSymptomHistory(Locale.getDefault().langCountry())
         }
 
         layoutBack.setOnClickListener {
@@ -78,7 +80,7 @@ class SymptomHistoryActivity : BaseAppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        if (adapter.isEmpty()) viewModel.nextSymptomHistory()
+        if (adapter.isEmpty()) viewModel.nextSymptomHistory(Locale.getDefault().langCountry())
     }
 
     override fun observe() {

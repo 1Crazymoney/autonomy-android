@@ -26,19 +26,19 @@ class SymptomHistoryViewModel(
 
     private var lastTimestamp = -1L
 
-    fun nextSymptomHistory() {
-        nextSymptomHistoryLiveData.add(rxLiveDataTransformer.single(symptomHistoryStream()))
+    fun nextSymptomHistory(lang: String) {
+        nextSymptomHistoryLiveData.add(rxLiveDataTransformer.single(symptomHistoryStream(lang)))
     }
 
-    fun refreshSymptomHistory() {
+    fun refreshSymptomHistory(lang: String) {
         lastTimestamp = -1L
-        refreshSymptomHistoryLiveData.add(rxLiveDataTransformer.single(symptomHistoryStream()))
+        refreshSymptomHistoryLiveData.add(rxLiveDataTransformer.single(symptomHistoryStream(lang)))
     }
 
-    private fun symptomHistoryStream() = if (lastTimestamp == -1L) {
-        symptomRepo.listSymptomHistory()
+    private fun symptomHistoryStream(lang: String) = if (lastTimestamp == -1L) {
+        symptomRepo.listSymptomHistory(lang = lang)
     } else {
-        symptomRepo.listSymptomHistory(lastTimestamp)
+        symptomRepo.listSymptomHistory(beforeSec = lastTimestamp, lang = lang)
     }.map { symptomHistories ->
         if (symptomHistories.isNotEmpty()) {
             lastTimestamp = symptomHistories.minBy { s -> s.timestamp }!!.timestamp

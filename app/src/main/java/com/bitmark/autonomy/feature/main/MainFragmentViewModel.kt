@@ -45,17 +45,17 @@ class MainFragmentViewModel(
         )
     }
 
-    fun getFormula() {
-        getFormulaLiveData.add(rxLiveDataTransformer.single(userRepo.getFormula().map { f ->
+    fun getFormula(lang: String) {
+        getFormulaLiveData.add(rxLiveDataTransformer.single(userRepo.getFormula(lang).map { f ->
             FormulaModelView.newInstance(f)
         }))
     }
 
-    fun deleteFormula() {
+    fun deleteFormula(lang: String) {
         deleteFormulaLiveData.add(
             rxLiveDataTransformer.single(
                 userRepo.deleteFormula().andThen(
-                    userRepo.getFormula().map { f -> FormulaModelView.newInstance(f) })
+                    userRepo.getFormula(lang).map { f -> FormulaModelView.newInstance(f) })
             )
         )
     }

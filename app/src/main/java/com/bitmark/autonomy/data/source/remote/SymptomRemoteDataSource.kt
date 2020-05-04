@@ -22,7 +22,7 @@ class SymptomRemoteDataSource @Inject constructor(
     rxErrorHandlingComposer: RxErrorHandlingComposer
 ) : RemoteDataSource(autonomyApi, rxErrorHandlingComposer) {
 
-    fun listSymptom() = autonomyApi.listSymptom().map { res ->
+    fun listSymptom(lang: String) = autonomyApi.listSymptom(lang).map { res ->
         res["symptoms"] ?: error("invalid response format")
     }.subscribeOn(Schedulers.io())
 
@@ -41,8 +41,8 @@ class SymptomRemoteDataSource @Inject constructor(
             .subscribeOn(Schedulers.io())
     }
 
-    fun listSymptomHistory(beforeSec: Long?, limit: Int) =
-        autonomyApi.listSymptomHistory(beforeSec, limit).map { res ->
+    fun listSymptomHistory(beforeSec: Long?, lang: String, limit: Int) =
+        autonomyApi.listSymptomHistory(beforeSec, lang, limit).map { res ->
             res["symptoms_history"] ?: error("invalid response")
         }.subscribeOn(Schedulers.io())
 }

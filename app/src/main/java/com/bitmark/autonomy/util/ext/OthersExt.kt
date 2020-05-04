@@ -7,6 +7,9 @@
 package com.bitmark.autonomy.util.ext
 
 import com.bitmark.sdk.features.Account
+import java.util.*
 
 fun Account.generateKeyAlias() =
     "%s.%d.encryption_key".format(accountNumber, System.currentTimeMillis())
+
+fun Locale.langCountry() = "%s-%s".format(language, country)

@@ -59,7 +59,7 @@ class UserRemoteDataSource @Inject constructor(
             res["locations_history"] ?: error("invalid response")
         }.subscribeOn(Schedulers.io())
 
-    fun getFormula() = autonomyApi.getFormula().subscribeOn(Schedulers.io())
+    fun getFormula(lang: String) = autonomyApi.getFormula(lang).subscribeOn(Schedulers.io())
 
     fun deleteFormula() = autonomyApi.deleteFormula().subscribeOn(Schedulers.io())
 

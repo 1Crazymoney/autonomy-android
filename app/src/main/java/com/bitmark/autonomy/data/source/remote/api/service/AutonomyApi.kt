@@ -47,7 +47,7 @@ interface AutonomyApi {
     fun respondHelpRequest(@Path("id") id: String): Completable
 
     @GET("api/symptoms")
-    fun listSymptom(): Single<Map<String, List<SymptomData>>>
+    fun listSymptom(@Query("lang") lang: String): Single<Map<String, List<SymptomData>>>
 
     @POST("api/symptoms/report")
     fun reportSymptoms(@Body body: RequestBody): Completable
@@ -56,7 +56,7 @@ interface AutonomyApi {
     fun addSymptom(@Body body: RequestBody): Single<Map<String, String>>
 
     @GET("api/behaviors")
-    fun listBehavior(): Single<Map<String, List<BehaviorData>>>
+    fun listBehavior(@Query("lang") lang: String): Single<Map<String, List<BehaviorData>>>
 
     @POST("api/behaviors/report")
     fun reportBehavior(@Body body: RequestBody): Completable
@@ -89,21 +89,21 @@ interface AutonomyApi {
     fun renameArea(@Path("id") id: String, @Body body: RequestBody): Completable
 
     @GET("api/history/symptoms")
-    fun listSymptomHistory(@Query("before") before: Long?, @Query("limit") limit: Int): Single<Map<String, List<SymptomHistoryData>>>
+    fun listSymptomHistory(@Query("before") before: Long?, @Query("lang") lang: String, @Query("limit") limit: Int): Single<Map<String, List<SymptomHistoryData>>>
 
     @GET("api/history/behaviors")
-    fun listBehaviorHistory(@Query("before") before: Long?, @Query("limit") limit: Int): Single<Map<String, List<BehaviorHistoryData>>>
+    fun listBehaviorHistory(@Query("before") before: Long?, @Query("lang") lang: String, @Query("limit") limit: Int): Single<Map<String, List<BehaviorHistoryData>>>
 
     @GET("api/history/locations")
     fun listLocationHistory(@Query("before") before: Long?, @Query("limit") limit: Int): Single<Map<String, List<LocationHistoryData>>>
 
     @GET("api/accounts/me/profile_formula")
-    fun getFormula(): Single<FormulaData>
+    fun getFormula(@Query("lang") lang: String): Single<FormulaData>
 
     @DELETE("api/accounts/me/profile_formula")
-    fun deleteFormula() : Completable
+    fun deleteFormula(): Completable
 
     @PUT("api/accounts/me/profile_formula")
-    fun updateFormula(@Body body : RequestBody) : Completable
+    fun updateFormula(@Body body: RequestBody): Completable
 
 }

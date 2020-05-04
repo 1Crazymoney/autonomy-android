@@ -24,8 +24,8 @@ class BehaviorReportViewModel(
 
     internal val reportBehaviorsLiveData = CompositeLiveData<Any>()
 
-    fun listBehavior() {
-        listBehaviorLiveData.add(rxLiveDataTransformer.single(behaviorRepo.listBehavior().map { symptoms ->
+    fun listBehavior(lang: String) {
+        listBehaviorLiveData.add(rxLiveDataTransformer.single(behaviorRepo.listBehavior(lang).map { symptoms ->
             symptoms.map { s ->
                 BehaviorModelView.newInstance(s)
             }

@@ -11,12 +11,12 @@ import com.bitmark.autonomy.data.source.remote.BehaviorRemoteDataSource
 
 class BehaviorRepository(private val remoteDataSource: BehaviorRemoteDataSource) : Repository {
 
-    fun listBehavior() = remoteDataSource.listBehavior()
+    fun listBehavior(lang: String) = remoteDataSource.listBehavior(lang)
 
     fun reportBehaviors(ids: List<String>) = remoteDataSource.reportBehaviors(ids)
 
     fun addBehavior(name: String, desc: String) = remoteDataSource.addBehavior(name, desc)
 
-    fun listBehaviorHistory(beforeSec: Long? = null, limit: Int = 20) =
-        remoteDataSource.listBehaviorHistory(beforeSec, limit)
+    fun listBehaviorHistory(beforeSec: Long? = null, lang: String, limit: Int = 20) =
+        remoteDataSource.listBehaviorHistory(beforeSec, lang, limit)
 }

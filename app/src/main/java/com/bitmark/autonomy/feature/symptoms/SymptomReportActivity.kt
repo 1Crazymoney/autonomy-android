@@ -26,6 +26,7 @@ import com.bitmark.autonomy.logging.EventLogger
 import com.bitmark.autonomy.util.ext.*
 import com.bitmark.autonomy.util.view.BottomAlertDialog
 import kotlinx.android.synthetic.main.activity_symptoms_report.*
+import java.util.*
 import javax.inject.Inject
 
 
@@ -61,7 +62,7 @@ class SymptomReportActivity : BaseAppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        viewModel.listSymptom()
+        viewModel.listSymptom(Locale.getDefault().langCountry())
     }
 
     override fun initComponents() {

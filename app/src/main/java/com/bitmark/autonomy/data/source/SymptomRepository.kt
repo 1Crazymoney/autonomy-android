@@ -11,13 +11,13 @@ import com.bitmark.autonomy.data.source.remote.SymptomRemoteDataSource
 
 class SymptomRepository(private val remoteDataSource: SymptomRemoteDataSource) : Repository {
 
-    fun listSymptom() = remoteDataSource.listSymptom()
+    fun listSymptom(lang: String) = remoteDataSource.listSymptom(lang)
 
     fun reportSymptom(ids: List<String>) = remoteDataSource.reportSymptom(ids)
 
     fun addSymptom(name: String, desc: String) = remoteDataSource.addSymptom(name, desc)
 
-    fun listSymptomHistory(beforeSec: Long? = null, limit: Int = 20) =
-        remoteDataSource.listSymptomHistory(beforeSec, limit)
+    fun listSymptomHistory(beforeSec: Long? = null, lang: String, limit: Int = 20) =
+        remoteDataSource.listSymptomHistory(beforeSec, lang, limit)
 
 }

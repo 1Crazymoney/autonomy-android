@@ -22,7 +22,7 @@ class BehaviorRemoteDataSource @Inject constructor(
     rxErrorHandlingComposer: RxErrorHandlingComposer
 ) : RemoteDataSource(autonomyApi, rxErrorHandlingComposer) {
 
-    fun listBehavior() = autonomyApi.listBehavior().map { res ->
+    fun listBehavior(lang: String) = autonomyApi.listBehavior(lang).map { res ->
         res["behaviors"] ?: error("invalid response format")
     }.subscribeOn(Schedulers.io())
 
@@ -42,8 +42,8 @@ class BehaviorRemoteDataSource @Inject constructor(
             .subscribeOn(Schedulers.io())
     }
 
-    fun listBehaviorHistory(beforeSec: Long?, limit: Int) =
-        autonomyApi.listBehaviorHistory(beforeSec, limit).map { res ->
+    fun listBehaviorHistory(beforeSec: Long?, lang: String, limit: Int) =
+        autonomyApi.listBehaviorHistory(beforeSec, lang, limit).map { res ->
             res["behaviors_history"] ?: error("invalid response")
         }.subscribeOn(Schedulers.io())
 
