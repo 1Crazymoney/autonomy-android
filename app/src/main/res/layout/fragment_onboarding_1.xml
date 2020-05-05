@@ -96,7 +96,7 @@
         android:includeFontPadding="false"
         android:paddingStart="@dimen/dp_18"
         android:paddingEnd="@dimen/dp_18"
-        android:text="@string/we_will_use_community"
+        android:text="@string/we_will_forecast_the_public_health"
         android:textColor="@color/white"
         app:autoSizeMaxTextSize="@dimen/sp_36"
         app:autoSizeMinTextSize="@dimen/sp_18"

@@ -17,7 +17,7 @@
     <string name="today">Today</string>
     <string name="work_from_home">Work from home</string>
     <string name="based_on_your_current_location">Based on your current location, environmental factors, and the latest COVID-19 outbreak data, you shouldwork from home today if possible.</string>
-    <string name="your_privacy_get_stronger">Your privacy gets stronger as more people join Autonomy.</string>
+    <string name="your_privacy_get_stronger">Your privacy gets stronger as more people join.</string>
     <string name="help_deliver_food">Help deliver food</string>
     <string name="safely_deliver_food">Safely deliver food to others in your area.</string>
     <string name="permission">Permission</string>
@@ -211,6 +211,8 @@
     <string name="total_weight">Total Weight</string>
     <string name="customized_weight">Customized\nWeight</string>
     <string name="max_weight">Max weight</string>
+    <string name="we_will_forecast_the_public_health">We’ll forecast the public health of your neighborhood.</string>
+    <string name="we_will_help_your_neighborhood">We’ll help your neighborhood grow healthier together.</string>
 
     <!--    string format-->
     <string name="send_to_format">Send to %1$s</string>
