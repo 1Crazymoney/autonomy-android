@@ -3,25 +3,14 @@
     <string name="autonomy">Autonomy</string>
     <string name="notification_channel_name">@string/app_name</string>
     <string name="get_better_dot">Get better.\nTogether.</string>
-    <string name="by_continuing_you_agree">By continuing, you agree to our\nEULA and Privacy Policy.</string>
     <string name="we_protect_your_digital_rights">We protect your Digital Rights.</string>
     <string name="digital_rights">Digital Rights</string>
-    <string name="eula">EULA</string>
-    <string name="privacy_policy">Privacy Policy</string>
-    <string name="eula_and_pp">EULA and Privacy Policy</string>
     <string name="start">Start</string>
-    <string name="we_will_use_community">We’ll use community data to calculate a health score for your current location.</string>
     <string name="back">Back</string>
     <string name="next">Next</string>
-    <string name="we_will_send_u_actionable">We’ll send you actionable, science-based updates from local institutions.</string>
     <string name="today">Today</string>
-    <string name="work_from_home">Work from home</string>
-    <string name="based_on_your_current_location">Based on your current location, environmental factors, and the latest COVID-19 outbreak data, you shouldwork from home today if possible.</string>
     <string name="your_privacy_get_stronger">Your privacy gets stronger as more people join.</string>
-    <string name="help_deliver_food">Help deliver food</string>
-    <string name="safely_deliver_food">Safely deliver food to others in your area.</string>
     <string name="permission">Permission</string>
-    <string name="we_will_help_u_and_community_help_one_other">We’ll help you and your community help one another.</string>
     <string name="location_data">Location data</string>
     <string name="your_current_location_will_be_used">Your data will be used to help improve your neighborhood’s health. Your own location will be kept private.</string>
     <string name="autonomy_requires_access_to_the_following">Autonomy requires access to the following:</string>
@@ -84,8 +73,6 @@
     <string name="need_transport_healthcare">Need transport to healthcare</string>
     <string name="need_traveling_to_safe_location">Need transport from an unsafe home</string>
     <string name="could_not_broadcast_your_request">Could not broadcast your request. Please try again later.</string>
-    <string name="community_request_for_assistance">Community request for assistance</string>
-    <string name="requests">Requests</string>
     <string name="request">Request</string>
     <string name="sign_up">Sign up</string>
     <string name="you_are_currently_signed_up">You are currently signed up to fulfill this community request. If you are unable to complete it, please contact the community member to let them know.</string>
@@ -97,7 +84,6 @@
     <string name="could_not_report_symptoms">Could not report your symptoms. Please try again later.</string>
     <string name="access_to_location_required">Access to Location Required</string>
     <string name="autonomy_requires_access_to_your_location">Autonomy requires access to your location to use the app. We will only use this data in calculating statistics for a general location and will never reveal any personally identifiable information about you.</string>
-    <string name="searching">Searching…</string>
     <string name="some_one_has_signed_up_requester">Someone has signed up to fulfill your community request. Please wait for time to contact you.</string>
     <string name="some_one_has_signed_up_visitor">Someone has already signed up to fulfill this community request.</string>
     <string name="could_not_open_google_map">Could not open Google maps</string>
@@ -108,19 +94,13 @@
     <string name="sorry_u_already_have_a_outstanding_help_request">Sorry, but you already have an outstanding help request to your community. Currently, our system only supports one request at a time for each community member.</string>
     <string name="someone_just_signed_up">Someone Just Signed Up</string>
     <string name="thanks_so_much_for_your_eagerness">Thanks so much for your eagerness to help out, but another community member just signed up for this request.</string>
-    <string name="raw_data">Raw Data</string>
-    <string name="from_last_24_hours">from last 24 hours</string>
     <string name="confirmed_cases">Confirmed cases</string>
     <string name="reported_symptoms">Reported symptoms</string>
     <string name="healthy_behaviors">Healthy behaviors</string>
     <string name="population_density">Population density</string>
-    <string name="low_risk">Low risk</string>
-    <string name="moderate_risk">Moderate risk</string>
-    <string name="high_risk">High risk</string>
     <string name="your_symptoms_have_been_reported">Your symptoms have been successfully reported to your community</string>
     <string name="thanks_for_taking_the_time_symptoms">Thanks for taking the time to make your community a healthier and happier place. Please continue to report your symptoms if they continue.</string>
     <string name="behaviors">Behaviors</string>
-    <string name="did_u_practice_any_behaviors">Did you practice any of the following behaviors today?</string>
     <string name="reported">Reported</string>
     <string name="your_behaviors_have_been_reported">Your behaviors have been successfully reported to your community</string>
     <string name="thanks_for_taking_the_time_behaviors">Thanks for taking the time to make your community a healthier and happier place. Please continue to report your behaviors if they continue.</string>
@@ -141,17 +121,7 @@
     <string name="rename">Rename</string>
     <string name="delete">Delete</string>
     <string name="save">Save</string>
-    <string name="default_channel">Default Channel</string>
-    <string name="important_alert">Important Alert</string>
-    <string name="view_source">View Source</string>
     <string name="yesterday">Yesterday</string>
-    <string name="cases_equals">cases = </string>
-    <string name="cases_weight_equals">cases_weight = </string>
-    <string name="symptoms_equals">symptoms = </string>
-    <string name="symptoms_weight_equals">symptoms_weight = </string>
-    <string name="behaviors_equals">behaviors =</string>
-    <string name="behaviors_weight_equals">behavior_weights = </string>
-    <string name="score_formula">autonomy = (cases * cases_weight) + (symptoms * symptoms_weight) + (behaviors * behaviors_weight)</string>
     <string name="reset">Reset</string>
     <string name="add_symptom">Add symptom …</string>
     <string name="create_title_for_symptom">Create a title for your symptom:</string>
@@ -195,14 +165,6 @@
     <string name="reported_symptoms_score">Reported Symptoms Score</string>
     <string name="each_reported_symptom_is_given_a_score">Each reported symptom is given a score of 1 to 3, depending on the likelihood of it being a predictor of COVID-19. The overall symptoms score is calculated for all symptoms in a 1km radius. Current symptoms and scores are:</string>
     <string name="fever_equal">Fever = </string>
-    <string name="dry_cough_equal">Dry cough = </string>
-    <string name="chest_pain_equal">Chest pain = </string>
-    <string name="bluish_lips_equal">Bluish lips or face = </string>
-    <string name="fatigue_equal">Fatigue = </string>
-    <string name="shortness_of_breath_equal">Shortness of breath = </string>
-    <string name="nasal_congestion_equal">Nasal congestion = </string>
-    <string name="sore_throat_equal">Sore throat = </string>
-    <string name="symptoms_total">Symptoms total</string>
     <string name="jupyter_notebook">Jupyter Notebook</string>
     <string name="could_not_reset_formula">Could not reset your customized formula. Please try again later.</string>
     <string name="you_have_not_reported_symptom">You haven’t reported any symptoms yet.</string>
@@ -215,7 +177,6 @@
     <string name="we_will_help_your_neighborhood">We’ll help your neighborhood grow healthier together.</string>
 
     <!--    string format-->
-    <string name="send_to_format">Send to %1$s</string>
     <string name="min_ago_format">%1$s min ago</string>
     <string name="mins_ago_format">%1$s mins ago</string>
     <string name="hour_ago_format">%1$s hour ago</string>
