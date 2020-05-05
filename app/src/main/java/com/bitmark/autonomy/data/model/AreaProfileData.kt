@@ -6,8 +6,10 @@
  */
 package com.bitmark.autonomy.data.model
 
+import android.os.Parcelable
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
+import kotlinx.android.parcel.Parcelize
 
 data class AreaProfileData(
     @Expose
@@ -43,6 +45,7 @@ data class AreaProfileData(
     val detail: AreaProfileDetailData
 ) : Data
 
+@Parcelize
 data class AreaProfileDetailData(
 
     @Expose
@@ -56,8 +59,9 @@ data class AreaProfileDetailData(
     @Expose
     @SerializedName("symptoms")
     val symptomMetric: SymptomMetricData
-) : Data
+) : Data, Parcelable
 
+@Parcelize
 data class ConfirmMetricData(
     @Expose
     @SerializedName("yesterday")
@@ -70,8 +74,9 @@ data class ConfirmMetricData(
     @Expose
     @SerializedName("score")
     val score: Float
-) : Data
+) : Data, Parcelable
 
+@Parcelize
 data class BehaviorMetricData(
     @Expose
     @SerializedName("behavior_total")
@@ -86,27 +91,40 @@ data class BehaviorMetricData(
     val maxScorePerPerson: Int,
 
     @Expose
+    @SerializedName("behavior_customized_total")
+    val totalCustomized: Int,
+
+    @Expose
     @SerializedName("score")
     val score: Float
 
-) : Data
+) : Data, Parcelable
 
+@Parcelize
 data class SymptomMetricData(
 
     @Expose
-    @SerializedName("symptom_total")
-    val totalSymptom: Int,
+    @SerializedName("total_weight")
+    val totalWeight: Int,
 
     @Expose
     @SerializedName("total_people")
     val totalPeople: Int,
 
     @Expose
-    @SerializedName("max_score_per_person")
-    val maxScorePerPerson: Int,
+    @SerializedName("custom_symptom_count")
+    val customSymptomCount: Int,
+
+    @Expose
+    @SerializedName("customized_weight")
+    val customizedWeight: Int,
+
+    @Expose
+    @SerializedName("max_weight")
+    val maxWeight: Int,
 
     @Expose
     @SerializedName("score")
     val score: Float
 
-) : Data
+) : Data, Parcelable

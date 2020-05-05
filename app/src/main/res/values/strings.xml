@@ -207,6 +207,10 @@
     <string name="could_not_reset_formula">Could not reset your customized formula. Please try again later.</string>
     <string name="you_have_not_reported_symptom">You haven’t reported any symptoms yet.</string>
     <string name="you_have_not_reported_behavior">You haven’t reported any healthy behaviors yet.</string>
+    <string name="total_customized">Total\nCustomized</string>
+    <string name="total_weight">Total Weight</string>
+    <string name="customized_weight">Customized\nWeight</string>
+    <string name="max_weight">Max weight</string>
 
     <!--    string format-->
     <string name="send_to_format">Send to %1$s</string>

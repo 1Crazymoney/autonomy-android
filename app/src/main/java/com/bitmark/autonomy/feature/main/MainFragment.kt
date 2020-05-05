@@ -233,11 +233,13 @@ class MainFragment : BaseSupportFragment() {
         tvConfirmedCasesYesterday.setSafetyOnclickListener(formulaClickListener)
         tvConfirmedCasesToday.setSafetyOnclickListener(formulaClickListener)
         tvBehaviorTotal.setSafetyOnclickListener(formulaClickListener)
-        tvTotalPeople1.setSafetyOnclickListener(formulaClickListener)
-        tvMaxScore1.setSafetyOnclickListener(formulaClickListener)
-        tvSymptomTotal.setSafetyOnclickListener(formulaClickListener)
-        tvTotalPeople2.setSafetyOnclickListener(formulaClickListener)
-        tvMaxScore2.setSafetyOnclickListener(formulaClickListener)
+        tvTotalBehaviorPeople.setSafetyOnclickListener(formulaClickListener)
+        tvMaxScore.setSafetyOnclickListener(formulaClickListener)
+        tvTotalCustomizedBehavior.setSafetyOnclickListener(formulaClickListener)
+        tvTotalSymptomWeight.setSafetyOnclickListener(formulaClickListener)
+        tvTotalSymptomPeople.setSafetyOnclickListener(formulaClickListener)
+        tvTotalCustomizedSymptom.setSafetyOnclickListener(formulaClickListener)
+        tvMaxWeight.setSafetyOnclickListener(formulaClickListener)
 
         tvReset.setSafetyOnclickListener {
             if (blocked) return@setSafetyOnclickListener
@@ -426,28 +428,31 @@ class MainFragment : BaseSupportFragment() {
         tvConfirmedCasesYesterday.text = yesterdayConfirms.toString()
         tvConfirmedCasesToday.text = todayConfirms.toString()
 
-        val casesCore = 100f - 5 * (yesterdayConfirms - todayConfirms)
-        tvCasesScore1.text = casesCore.roundToInt().toString()
+        val casesCore = (100f - 5 * (yesterdayConfirms - todayConfirms)).roundToInt()
+        tvCasesScore1.text = casesCore.toString()
         tvCasesScore1.setTextColorRes(toColorRes(casesCore))
 
         val totalBehaviors = areaProfile.detail.behaviorMetric.totalBehaviors
-        val totalPeopleBehaviors = areaProfile.detail.behaviorMetric.totalPeople
-        val maxScorePerPersonBehaviors = areaProfile.detail.behaviorMetric.maxScorePerPerson
+        val totalBehaviorPeople = areaProfile.detail.behaviorMetric.totalPeople
+        val maxBehaviorScorePerPerson = areaProfile.detail.behaviorMetric.maxScorePerPerson
+        val totalCustomizedBehavior = areaProfile.detail.behaviorMetric.totalCustomized
 
         tvBehaviorTotal.text = totalBehaviors.toString()
-        tvTotalPeople1.text = totalPeopleBehaviors.toString()
-        tvMaxScore1.text = maxScorePerPersonBehaviors.toString()
+        tvTotalBehaviorPeople.text = totalBehaviorPeople.toString()
+        tvMaxScore.text = maxBehaviorScorePerPerson.toString()
+        tvTotalCustomizedBehavior.text = totalCustomizedBehavior.toString()
 
-        val behaviorScore = if (totalPeopleBehaviors == 0 || maxScorePerPersonBehaviors == 0) {
-            0f
-        } else {
-            100f * (totalBehaviors / (totalPeopleBehaviors * maxScorePerPersonBehaviors))
-        }
+        val behaviorScore =
+            if (totalBehaviorPeople == 0 || maxBehaviorScorePerPerson == 0) {
+                100f * totalCustomizedBehavior
+            } else {
+                100f * (totalBehaviors / ((totalBehaviorPeople * maxBehaviorScorePerPerson) + totalCustomizedBehavior).toFloat())
+            }
         val roundBehaviorScore = behaviorScore.roundToInt()
         tvBehaviorsScore1.text = roundBehaviorScore.toString()
-        tvBehaviorsScore1.setTextColorRes(toColorRes(behaviorScore))
+        tvBehaviorsScore1.setTextColorRes(toColorRes(roundBehaviorScore))
         tvBehaviorsScore2.text = roundBehaviorScore.toString()
-        tvBehaviorsScore2.setTextColorRes(toColorRes(behaviorScore))
+        tvBehaviorsScore2.setTextColorRes(toColorRes(roundBehaviorScore))
 
         val symptomSeekBarChangeListener = object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(
@@ -493,43 +498,43 @@ class MainFragment : BaseSupportFragment() {
             layoutSymptoms.addView(view)
         }
 
-        val totalSymptom = formula.coefficient.symptomWeights.sumBy { s -> s.weight }
+        val maxSymptomWeight = formula.coefficient.symptomWeights.sumBy { s -> s.weight }
+        val totalSymptomWeight = areaProfile.detail.symptomMetric.totalWeight
+        val totalSymptomPeople = areaProfile.detail.symptomMetric.totalPeople
+        val totalCustomizedSymptomWeight = areaProfile.detail.symptomMetric.customizedWeight
 
-        val totalPeopleSymptom = areaProfile.detail.symptomMetric.totalPeople
-        val maxScorePerPersonSymptom = areaProfile.detail.symptomMetric.maxScorePerPerson
+        tvTotalSymptomWeight.text = totalSymptomWeight.toString()
+        tvTotalSymptomPeople.text = totalSymptomPeople.toString()
+        tvMaxWeight.text = maxSymptomWeight.toString()
+        tvTotalCustomizedSymptom.text = totalCustomizedSymptomWeight.toString()
 
-        tvSymptomTotal.text = totalSymptom.toString()
-        tvTotalPeople2.text = totalPeopleSymptom.toString()
-        tvMaxScore2.text = maxScorePerPersonSymptom.toString()
-
-        val symptomScore = if (totalPeopleSymptom == 0 || maxScorePerPersonSymptom == 0) {
-            0f
-        } else {
-            100 - (100f * (totalSymptom / (totalPeopleSymptom * maxScorePerPersonSymptom)))
-        }
+        val symptomScore =
+            if (totalSymptomPeople == 0 || maxSymptomWeight == 0) {
+                100f * (1 - totalCustomizedSymptomWeight)
+            } else {
+                100 * (1 - (totalSymptomWeight / ((totalSymptomPeople * maxSymptomWeight).toFloat() + totalCustomizedSymptomWeight)))
+            }
         val roundSymptomScore = symptomScore.roundToInt()
         tvSymptomsScore1.text = roundSymptomScore.toString()
-        tvSymptomsScore1.setTextColorRes(toColorRes(symptomScore))
+        tvSymptomsScore1.setTextColorRes(toColorRes(roundSymptomScore))
         tvSymptomsScore2.text = roundSymptomScore.toString()
-        tvSymptomsScore2.setTextColorRes(toColorRes(symptomScore))
+        tvSymptomsScore2.setTextColorRes(toColorRes(roundSymptomScore))
 
-        var score =
-            casesCore * confirmCoefficient + behaviorScore * behaviorsCoefficient + symptomScore * symptomCoefficient
-        if (score > 100) score = 100f
-        tvScoreViewSource.text = score.roundToInt().toString()
+        val score =
+            (casesCore * confirmCoefficient + behaviorScore * behaviorsCoefficient + symptomScore * symptomCoefficient).roundToInt()
+        tvScoreViewSource.text = score.toString()
         tvScoreViewSource.setTextColorRes(toColorRes(score))
         showScore(score)
 
     }
 
-    private fun showScore(score: Float) {
-        val roundScore = score.roundToInt()
-        tvScore.text = roundScore.toString()
-        ivScore.setImageResource("triangle_%03d".format(roundScore))
+    private fun showScore(score: Int) {
+        tvScore.text = score.toString()
+        ivScore.setImageResource("triangle_%03d".format(if (score > 100) 100 else score))
     }
 
     private fun showData(profile: AreaProfileModelView) {
-        showScore(if (profile.score > 100f) 100f else profile.score)
+        showScore(if (profile.score > 100f) 100 else profile.score.roundToInt())
 
         tvConfirmedCases.text = profile.confirmed.decimalFormat()
         tvConfirmedCasesChange.text = String.format("%.2f%%", abs(profile.confirmedDelta))

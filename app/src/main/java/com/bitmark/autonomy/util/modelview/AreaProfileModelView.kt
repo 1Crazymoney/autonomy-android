@@ -7,7 +7,8 @@
 package com.bitmark.autonomy.util.modelview
 
 import android.os.Parcelable
-import com.bitmark.autonomy.data.model.*
+import com.bitmark.autonomy.data.model.AreaProfileData
+import com.bitmark.autonomy.data.model.AreaProfileDetailData
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
@@ -26,7 +27,7 @@ data class AreaProfileModelView(
 
     val behaviorsDelta: Float,
 
-    val detail: AreaProfileDetailModelView
+    val detail: AreaProfileDetailData
 
 ) : ModelView, Parcelable {
     companion object {
@@ -38,85 +39,7 @@ data class AreaProfileModelView(
             areaProfile.symptomsDelta,
             areaProfile.behaviors,
             areaProfile.behaviorsDelta,
-            AreaProfileDetailModelView.newInstance(areaProfile.detail)
-        )
-    }
-}
-
-@Parcelize
-data class AreaProfileDetailModelView(
-
-    val confirmMetric: ConfirmMetricModelView,
-
-    val behaviorMetric: BehaviorMetricModelView,
-
-    val symptomMetric: SymptomMetricModelView
-) : ModelView, Parcelable {
-    companion object {
-        fun newInstance(areaProfileDetail: AreaProfileDetailData) = AreaProfileDetailModelView(
-            ConfirmMetricModelView.newInstance(areaProfileDetail.confirmMetric),
-            BehaviorMetricModelView.newInstance(areaProfileDetail.behaviorMetric),
-            SymptomMetricModelView.newInstance(areaProfileDetail.symptomMetric)
-        )
-    }
-}
-
-@Parcelize
-data class ConfirmMetricModelView(
-    val yesterday: Int,
-
-    val today: Int,
-
-    val score: Float
-) : ModelView, Parcelable {
-    companion object {
-        fun newInstance(confirmMetric: ConfirmMetricData) = ConfirmMetricModelView(
-            confirmMetric.yesterday,
-            confirmMetric.today,
-            confirmMetric.score
-        )
-    }
-}
-
-@Parcelize
-data class BehaviorMetricModelView(
-    val totalBehaviors: Int,
-
-    val totalPeople: Int,
-
-    val maxScorePerPerson: Int,
-
-    val score: Float
-
-) : ModelView, Parcelable {
-    companion object {
-        fun newInstance(behaviorMetric: BehaviorMetricData) = BehaviorMetricModelView(
-            behaviorMetric.totalBehaviors,
-            behaviorMetric.totalPeople,
-            behaviorMetric.maxScorePerPerson,
-            behaviorMetric.score
-        )
-    }
-}
-
-@Parcelize
-data class SymptomMetricModelView(
-
-    val totalSymptom: Int,
-
-    val totalPeople: Int,
-
-    val maxScorePerPerson: Int,
-
-    val score: Float
-
-) : ModelView, Parcelable {
-    companion object {
-        fun newInstance(symptomMetric: SymptomMetricData) = SymptomMetricModelView(
-            symptomMetric.totalSymptom,
-            symptomMetric.totalPeople,
-            symptomMetric.maxScorePerPerson,
-            symptomMetric.score
+            areaProfile.detail
         )
     }
 }
