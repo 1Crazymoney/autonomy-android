@@ -164,7 +164,6 @@
     <string name="max_score_per_person">Max score\nper person</string>
     <string name="reported_symptoms_score">Reported Symptoms Score</string>
     <string name="each_reported_symptom_is_given_a_score">Each reported symptom is given a score of 1 to 3, depending on the likelihood of it being a predictor of COVID-19. The overall symptoms score is calculated for all symptoms in a 1km radius. Current symptoms and scores are:</string>
-    <string name="fever_equal">Fever = </string>
     <string name="jupyter_notebook">Jupyter Notebook</string>
     <string name="could_not_reset_formula">Could not reset your customized formula. Please try again later.</string>
     <string name="you_have_not_reported_symptom">You haven’t reported any symptoms yet.</string>
@@ -184,5 +183,8 @@
     <string name="day_ago_format">%1$s day ago</string>
     <string name="days_ago_format">%1$s days ago</string>
     <string name="date_time_format">%1$s at %2$s</string>
+
+    <string name="default_channel">Default Channel</string>
+    <string name="important_alert">Important Alert</string>
 
 </resources>
