@@ -624,20 +624,51 @@ class MainFragment : BaseSupportFragment() {
 
         tvConfirmedCases.text = profile.confirmed.decimalFormat()
         tvConfirmedCasesChange.text = String.format("%.2f%%", abs(profile.confirmedDelta))
-        tvConfirmedCasesChange.setTextColorRes(if (profile.confirmedDelta > 0) R.color.persian_red else R.color.apple)
-        ivConfirmedCasesChange.setImageResource(if (profile.confirmedDelta > 0) R.drawable.ic_up_red else R.drawable.ic_down_green)
+        tvConfirmedCasesChange.setTextColorRes(
+            when {
+                profile.confirmedDelta == 0f -> R.color.white
+                profile.confirmedDelta > 0 -> R.color.persian_red
+                else -> R.color.apple
+            }
+        )
+        if (profile.confirmedDelta == 0f) {
+            ivConfirmedCasesChange.invisible()
+        } else {
+            ivConfirmedCasesChange.visible()
+            ivConfirmedCasesChange.setImageResource(if (profile.confirmedDelta > 0) R.drawable.ic_up_red else R.drawable.ic_down_green)
+        }
 
         tvReportedSymptom.text = profile.symptoms.decimalFormat()
         tvReportedSymptomChange.text = String.format("%.2f%%", abs(profile.symptomsDelta))
-        tvReportedSymptomChange.setTextColorRes(if (profile.symptomsDelta > 0) R.color.persian_red else R.color.apple)
-
-        ivReportedSymptomChange.setImageResource(if (profile.symptomsDelta > 0) R.drawable.ic_up_red else R.drawable.ic_down_green)
+        tvReportedSymptomChange.setTextColorRes(
+            when {
+                profile.symptomsDelta == 0f -> R.color.white
+                profile.symptomsDelta > 0 -> R.color.persian_red
+                else -> R.color.apple
+            }
+        )
+        if (profile.symptomsDelta == 0f) {
+            ivReportedSymptomChange.invisible()
+        } else {
+            ivReportedSymptomChange.visible()
+            ivReportedSymptomChange.setImageResource(if (profile.symptomsDelta > 0) R.drawable.ic_up_red else R.drawable.ic_down_green)
+        }
 
         tvHealthyBehavior.text = profile.behaviors.decimalFormat()
         tvHealthyBehaviorChange.text = String.format("%.2f%%", abs(profile.behaviorsDelta))
-        tvHealthyBehaviorChange.setTextColorRes(if (profile.behaviorsDelta >= 0) R.color.apple else R.color.persian_red)
-
-        ivHealthyBehaviorChange.setImageResource(if (profile.behaviorsDelta > 0) R.drawable.ic_up_green else R.drawable.ic_down_red)
+        tvHealthyBehaviorChange.setTextColorRes(
+            when {
+                profile.behaviorsDelta == 0f -> R.color.white
+                profile.behaviorsDelta > 0 -> R.color.apple
+                else -> R.color.persian_red
+            }
+        )
+        if (profile.behaviorsDelta == 0f) {
+            ivHealthyBehaviorChange.invisible()
+        } else {
+            ivHealthyBehaviorChange.visible()
+            ivHealthyBehaviorChange.setImageResource(if (profile.behaviorsDelta > 0) R.drawable.ic_up_green else R.drawable.ic_down_red)
+        }
     }
 
     override fun onBackPressed(): Boolean {
