@@ -1,10 +1,9 @@
 <resources>
-
     <string name="autonomy">Autonomy</string>
     <string name="notification_channel_name">@string/app_name</string>
     <string name="get_better_dot">大家一起。\n變得更好。</string>
-    <string name="we_protect_your_digital_rights">We protect your Digital Rights.</string>
-    <string name="digital_rights">Digital Rights</string>
+    <string name="we_protect_your_digital_rights">我們保護您的數位權利。</string>
+    <string name="digital_rights">數位權利</string>
     <string name="start">開始</string>
     <string name="back">返回</string>
     <string name="next">下一步</string>
@@ -21,18 +20,18 @@
     <string name="higher_risk_individuals">高危險群目前包含：\n• 65歲以上 \n\n 以及任何有以下健康狀況的人： \n• 高血壓 \n• 心血管疾病 \n• 糖尿病 \n• 慢性呼吸道疾病(例如肺病或氣喘) \n• 癌症</string>
     <string name="no_im_not_at_higher_risk">不，我不屬於高危險群</string>
     <string name="error">錯誤</string>
-    <string name="passcode_pin_required">Device PIN setup is required</string>
-    <string name="fingerprint_required">Biometric authentication setup is required</string>
+    <string name="passcode_pin_required">需要設定設備PIN碼</string>
+    <string name="fingerprint_required">需要設定生物辨識認證</string>
     <string name="your_authorization_is_required">需要您的授權。</string>
-    <string name="unexpected_error">Unexpected error has occurred. Please contact support team</string>
+    <string name="unexpected_error">發生不明錯誤。請聯絡支援團隊</string>
     <string name="contact_us">聯絡我們</string>
     <string name="update_available">請立即進行軟體更新</string>
     <string name="a_new_version_is_available">您裝置上的 Autonomy app 不是最新版本。請立即更新以繼續使用。</string>
     <string name="update_now">立即更新</string>
     <string name="no_internet_connection">偵測不到網路連線</string>
-    <string name="pls_check_your_connection">Please check your connection and try again.</string>
-    <string name="please_authorize_arrow">Please authorize »</string>
-    <string name="could_not_register_account">Could not register account. Please try again later.</string>
+    <string name="pls_check_your_connection">請檢查您的網路連線再重試一次。</string>
+    <string name="please_authorize_arrow">請認證 »</string>
+    <string name="could_not_register_account">無法註冊帳號。請稍後再試。</string>
     <string name="how_r_u_right_now">您現在感覺如何？</string>
     <string name="survey">問卷</string>
     <string name="how_can_we_help">我們可以如何幫忙您？</string>
@@ -70,30 +69,30 @@
     <string name="review">審閱</string>
     <string name="need_access_food">需要取得食物或飲水</string>
     <string name="need_access_medicine">我需要取得醫療物資。</string>
-    <string name="need_transport_healthcare">Need transport to healthcare</string>
-    <string name="need_traveling_to_safe_location">Need transport from an unsafe home</string>
-    <string name="could_not_broadcast_your_request">Could not broadcast your request. Please try again later.</string>
+    <string name="need_transport_healthcare">需要前往醫療院所</string>
+    <string name="need_traveling_to_safe_location">需要離開不安全的住所</string>
+    <string name="could_not_broadcast_your_request">無法廣播您的需求，請稍後再試。</string>
     <string name="request">請求</string>
     <string name="sign_up">註冊</string>
-    <string name="you_are_currently_signed_up">You are currently signed up to fulfill this community request. If you are unable to complete it, please contact the community member to let them know.</string>
-    <string name="could_not_sign_up_request">Could not sign up request. Please try again later.</string>
+    <string name="you_are_currently_signed_up">您現已報名來達成此項來自社群的請求。若您無法完成任務，請聯絡並告知社群成員。</string>
+    <string name="could_not_sign_up_request">無法報名此項請求。請稍後再試。</string>
     <string name="signed_up">已註冊</string>
-    <string name="thank_u_for_signing_up">Thank you for signing up to fulfill this community request</string>
-    <string name="the_community_member_in_need">The community member in need has been notified of your response. Please write down or take a screenshot of the request details now then contact the community member.</string>
+    <string name="thank_u_for_signing_up">感謝您報名來達成此項來自社群的請求</string>
+    <string name="the_community_member_in_need">提出請求的社群成員已被告知您回覆。請現在寫下或是擷取螢幕畫面請求的細節，然後聯絡該位社群成員。</string>
     <string name="copied">已複製</string>
-    <string name="could_not_report_symptoms">Could not report your symptoms. Please try again later.</string>
-    <string name="access_to_location_required">Access to Location Required</string>
-    <string name="autonomy_requires_access_to_your_location">Autonomy requires access to your location to use the app. We will only use this data in calculating statistics for a general location and will never reveal any personally identifiable information about you.</string>
-    <string name="some_one_has_signed_up_requester">Someone has signed up to fulfill your community request. Please wait for time to contact you.</string>
-    <string name="some_one_has_signed_up_visitor">Someone has already signed up to fulfill this community request.</string>
-    <string name="could_not_open_google_map">Could not open Google maps</string>
-    <string name="just_now">Just now</string>
+    <string name="could_not_report_symptoms">無法回報您的症狀。請稍後再試。</string>
+    <string name="access_to_location_required">需要存取位置</string>
+    <string name="autonomy_requires_access_to_your_location">Autonomy需要存取您所在的位置。位置資料只會被用於計算一個地區範圍內的統計數字，並不會透露任何可識別您個人的資訊。</string>
+    <string name="some_one_has_signed_up_requester">有人報名來達成您對社群發出的請求。請靜候聯絡。</string>
+    <string name="some_one_has_signed_up_visitor">已經有人報名來達成此項來自社群的請求。</string>
+    <string name="could_not_open_google_map">無法開啟Google地圖</string>
+    <string name="just_now">就在剛剛</string>
     <string name="check_in_survey">報到問卷</string>
-    <string name="how_r_u_right_now_tap_to_check_in">How are you right now? Tap to check in.</string>
-    <string name="only_one_help_request_allowed">Only One Help Request Allowed</string>
-    <string name="sorry_u_already_have_a_outstanding_help_request">Sorry, but you already have an outstanding help request to your community. Currently, our system only supports one request at a time for each community member.</string>
-    <string name="someone_just_signed_up">Someone Just Signed Up</string>
-    <string name="thanks_so_much_for_your_eagerness">Thanks so much for your eagerness to help out, but another community member just signed up for this request.</string>
+    <string name="how_r_u_right_now_tap_to_check_in">您現在覺得如何？請點擊報到。</string>
+    <string name="only_one_help_request_allowed">只能提出一項請求</string>
+    <string name="sorry_u_already_have_a_outstanding_help_request">抱歉，您尚有一項等待中的社群請求。目前系統只支援每位成員提出一項請求。</string>
+    <string name="someone_just_signed_up">有人報名了</string>
+    <string name="thanks_so_much_for_your_eagerness">非常感謝您願意幫忙，但此項請求已由另外一位社群成員報名達成。</string>
     <string name="confirmed_cases">確診數</string>
     <string name="reported_symptoms">通報症狀</string>
     <string name="healthy_behaviors">健康行為</string>
@@ -104,7 +103,7 @@
     <string name="reported">已提交報告</string>
     <string name="your_behaviors_have_been_reported">已成功回報您的行為至您的社群</string>
     <string name="thanks_for_taking_the_time_behaviors">感謝您花時間讓您的社群更開心健康。如果您持續有相同的行為，請持續回報。</string>
-    <string name="could_not_report_behaviors">Could not report your behaviors. Please try again later.</string>
+    <string name="could_not_report_behaviors">無法回到您的行為。請稍後再試。</string>
     <string name="did_u_do_any_behaviors">您今天有執行以下事項嗎？</string>
     <string name="frequent_hand_cleaning">經常洗手</string>
     <string name="washing_hands_thoroughly">徹底使用肥皂與水洗手至少20秒，或是使用含有酒精的手部消毒劑。</string>
@@ -115,12 +114,12 @@
     <string name="dry_cough">乾咳</string>
     <string name="without_mucous">沒有痰或黏液 (嘎嘎作響)</string>
     <string name="add_new_location">新增位置…</string>
-    <string name="could_not_rename_area">Could not rename the area. Please try again later.</string>
-    <string name="could_not_delete_area">Could not delete the area. Please try again later.</string>
-    <string name="could_not_add_area">Could not add new area. Please try again later.</string>
-    <string name="rename">Rename</string>
-    <string name="delete">Delete</string>
-    <string name="save">Save</string>
+    <string name="could_not_rename_area">無法重新命名此區域。請稍後再試。</string>
+    <string name="could_not_delete_area">無法刪除此區域。請稍後再試。</string>
+    <string name="could_not_add_area">無法新增區域。請稍後再試。</string>
+    <string name="rename">重新命名</string>
+    <string name="delete">刪除</string>
+    <string name="save">儲存</string>
     <string name="yesterday">昨日</string>
     <string name="reset">重置</string>
     <string name="add_symptom">新增症狀…</string>
@@ -130,8 +129,8 @@
     <string name="enter_your_optional_des_here">請輸入您選填的描述…</string>
     <string name="your_symptom_has_been_added">已成功新增症狀至您所屬的社群的症狀清單中</string>
     <string name="thanks_for_taking_time_to_make_community_healthier_symptom">感謝您花時間讓您的社群更開心健康。若有其他症狀，請持續新增。</string>
-    <string name="could_not_add_new_symptom">Could not add new symptom. Please try again later.</string>
-    <string name="could_not_add_new_behavior">Could not add new behavior. Please try again later.</string>
+    <string name="could_not_add_new_symptom">無法新增症狀。請稍後再試。</string>
+    <string name="could_not_add_new_behavior">無法新增行為。請稍後再試。</string>
     <string name="added">已增加</string>
     <string name="your_behavior_has_been_added">已成功新增症狀至您所屬的社群的行為清單中</string>
     <string name="thanks_for_taking_time_to_make_community_healthier_behavior">感謝您花時間讓您的社群更開心健康。若之後有其他新的行為，請持續新增。</string>
@@ -150,7 +149,7 @@
     <string name="recovery_key">恢復金鑰</string>
     <string name="support">支援</string>
     <string name="faq">FAQ</string>
-    <string name="contact">Contact</string>
+    <string name="contact">聯絡</string>
     <string name="behavior_history">行為歷史</string>
     <string name="location_history">位置歷史</string>
     <string name="cases_weight">確診權重</string>
@@ -165,7 +164,7 @@
     <string name="reported_symptoms_score">已回報症狀評分</string>
     <string name="each_reported_symptom_is_given_a_score">針對每個回報的證據，依據其為新冠肺炎徵狀的可能性給予 1 至 3 不等的評分。綜合症狀評分是依據 1 公里距離內的所有症狀綜合計算。目前的症狀及評分為：</string>
     <string name="jupyter_notebook">Jupyter Notebook</string>
-    <string name="could_not_reset_formula">Could not reset your customized formula. Please try again later.</string>
+    <string name="could_not_reset_formula">無法重置您的自訂算式。請稍後再試。</string>
     <string name="you_have_not_reported_symptom">您尚未回報任何症狀。</string>
     <string name="you_have_not_reported_behavior">您尚未回報任何健康行為。</string>
     <string name="total_customized">總自定義</string>
@@ -174,20 +173,23 @@
     <string name="max_weight">每人最大權重</string>
     <string name="we_will_forecast_the_public_health">我們將會預測您周圍的公共健康狀況。</string>
     <string name="we_will_help_your_neighborhood">我們會幫助您周圍的人一起變得更健康。</string>
-    <string name="debug_mode_is_enabled">Debug mode is enabled</string>
+    <string name="debug_mode_is_enabled">除錯模式已啟動</string>
+
 
     <!--    string format-->
-    <string name="min_ago_format">%1$s min ago</string>
-    <string name="mins_ago_format">%1$s mins ago</string>
-    <string name="hour_ago_format">%1$s hour ago</string>
-    <string name="hours_ago_format">%1$s hours ago</string>
-    <string name="day_ago_format">%1$s day ago</string>
-    <string name="days_ago_format">%1$s days ago</string>
-    <string name="date_time_format">%1$s at %2$s</string>
-    <string name="tap_times_to_enable_debug_mode">Tap more %1$d times to enable Debug Mode</string>
-    <string name="tap_time_to_enable_debug_mode">Tap more %1$d time to enable Debug Mode</string>
+    <string name="min_ago_format">%1$s 分鐘前</string>
+    <string name="mins_ago_format">%1$s 分鐘前</string>
+    <string name="hour_ago_format">%1$s 小時前</string>
+    <string name="hours_ago_format">%1$s 小時前</string>
+    <string name="day_ago_format">%1$s 天前</string>
+    <string name="days_ago_format">%1$s 天前</string>
+    <string name="date_time_format">%1$s %2$s</string>
+    <string name="tap_times_to_enable_debug_mode">再點擊 %1$d 次以啟動除錯模式</string>
+    <string name="tap_time_to_enable_debug_mode">再點擊 %1$d 次以啟動除錯模式</string>
 
-    <string name="default_channel">Default Channel</string>
-    <string name="important_alert">Important Alert</string>
+
+    <string name="default_channel">預設頻道</string>
+    <string name="important_alert">重要警示</string>
+
 
 </resources>
