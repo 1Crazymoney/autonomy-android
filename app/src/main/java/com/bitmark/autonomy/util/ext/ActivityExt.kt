@@ -236,7 +236,7 @@ fun Activity.removeAccount(
     })
 }
 
-fun Activity.toast(text: String, duration: Int = Toast.LENGTH_SHORT) {
+fun Activity.toast(text: String, duration: Int = Toast.LENGTH_SHORT) : Toast {
     val inflater = LayoutInflater.from(this)
     val view = inflater.inflate(R.layout.layout_toast, findViewById(R.id.layoutRoot))
     view.tvContent.text = text
@@ -245,6 +245,7 @@ fun Activity.toast(text: String, duration: Int = Toast.LENGTH_SHORT) {
     toast.duration = duration
     toast.view = view
     toast.show()
+    return toast
 }
 
 fun Activity.detectKeyBoardState(action: (Boolean) -> Unit, interruptSig: () -> Boolean) {

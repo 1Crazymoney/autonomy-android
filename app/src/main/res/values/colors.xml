@@ -9,6 +9,7 @@
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
     <color name="black_66">#66000000</color>
+    <color name="black_88">#88000000</color>
     <color name="black_aa">#AA000000</color>
     <color name="black_ee">#EE000000</color>
     <color name="white_66">#66FFFFFF</color>
@@ -47,10 +48,14 @@
     <color name="cod_gray">#1B1B1B</color>
     <color name="cod_gray_ff">#FF1B1B1B</color>
     <color name="mine_shaft_2">#2B2B2B</color>
+    <color name="mine_shaft_2_40">#402B2B2B</color>
     <color name="gallery">#EAEAEA</color>
     <color name="shark">#282B32</color>
     <color name="apple">#2DC937</color>
+    <color name="apple_40">#402DC937</color>
     <color name="blue_ribbon">#0060F2</color>
     <color name="gold_tip">#E7B416</color>
+    <color name="gold_tip_40">#40E7B416</color>
     <color name="persian_red">#CC3232</color>
+    <color name="persian_red_40">#40CC3232</color>
 </resources>

@@ -19,6 +19,7 @@ class SharedPrefApi @Inject constructor(context: Context) {
 
     companion object {
         const val ACCOUNT_DATA = "account_data"
+        const val DEBUG_MODE = "debug_mode"
     }
 
     fun <T> rxSingle(action: (SharedPrefGateway) -> T): Single<T> {

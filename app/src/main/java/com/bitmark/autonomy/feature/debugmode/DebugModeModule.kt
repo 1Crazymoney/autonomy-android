@@ -4,42 +4,37 @@
  * Use of this source code is governed by an ISC
  * license that can be found in the LICENSE file.
  */
-package com.bitmark.autonomy.feature.main
+package com.bitmark.autonomy.feature.debugmode
 
-import com.bitmark.autonomy.data.source.AppRepository
 import com.bitmark.autonomy.data.source.UserRepository
 import com.bitmark.autonomy.di.ActivityScope
 import com.bitmark.autonomy.feature.DialogController
 import com.bitmark.autonomy.feature.Navigator
-import com.bitmark.autonomy.feature.auth.ServerAuthentication
 import com.bitmark.autonomy.util.livedata.RxLiveDataTransformer
 import dagger.Module
 import dagger.Provides
 
 @Module
-class MainActivityModule {
+class DebugModeModule {
 
     @Provides
     @ActivityScope
-    fun provideNav(activity: MainActivity) = Navigator(activity)
+    fun provideNav(activity: DebugModeActivity) = Navigator(activity)
 
     @Provides
     @ActivityScope
-    fun provideDialogController(activity: MainActivity) = DialogController(activity)
+    fun provideDialogController(activity: DebugModeActivity) = DialogController(activity)
 
     @Provides
     @ActivityScope
     fun provideVM(
-        activity: MainActivity,
+        activity: DebugModeActivity,
         userRepo: UserRepository,
-        appRepo: AppRepository,
-        rxLiveDataTransformer: RxLiveDataTransformer,
-        serverAuth: ServerAuthentication
-    ) = MainActivityViewModel(
+        rxLiveDataTransformer: RxLiveDataTransformer
+    ) = DebugModeViewModel(
         activity.lifecycle,
         userRepo,
-        appRepo,
-        rxLiveDataTransformer,
-        serverAuth
+        rxLiveDataTransformer
     )
+
 }

@@ -38,4 +38,8 @@ class UserRepository(private val remoteDataSource: UserRemoteDataSource) : Repos
 
     fun updateFormula(coefficientData: CoefficientData) =
         remoteDataSource.updateFormula(coefficientData)
+
+    fun getDebugInfo() = remoteDataSource.getDebugInfo()
+
+    fun getDebugInfo(id: String) = remoteDataSource.getDebugInfo(id)
 }

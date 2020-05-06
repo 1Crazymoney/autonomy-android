@@ -42,7 +42,7 @@ data class AreaProfileData(
 
     @Expose
     @SerializedName("details")
-    val detail: AreaProfileDetailData
+    val detail: AreaProfileDetailData?
 ) : Data
 
 @Parcelize

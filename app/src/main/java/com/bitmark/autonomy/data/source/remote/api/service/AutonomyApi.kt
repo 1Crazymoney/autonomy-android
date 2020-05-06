@@ -106,4 +106,10 @@ interface AutonomyApi {
     @PUT("api/accounts/me/profile_formula")
     fun updateFormula(@Body body: RequestBody): Completable
 
+    @GET("api/debug")
+    fun getDebugInfo(): Single<DebugInfoData>
+
+    @GET("api/debug/{id}")
+    fun getDebugInfo(@Path("id") id: String): Single<DebugInfoData>
+
 }

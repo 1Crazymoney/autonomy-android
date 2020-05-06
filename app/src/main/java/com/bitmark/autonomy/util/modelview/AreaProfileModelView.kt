@@ -39,7 +39,7 @@ data class AreaProfileModelView(
             areaProfile.symptomsDelta,
             areaProfile.behaviors,
             areaProfile.behaviorsDelta,
-            areaProfile.detail
+            areaProfile.detail!!
         )
     }
 }

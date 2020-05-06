@@ -68,7 +68,11 @@ data class Location(
     @Expose
     @SerializedName("longitude")
     val lng: Double
-) : Data, Parcelable
+) : Data, Parcelable {
+    override fun toString(): String {
+        return "(%f, %f)".format(lat, lng)
+    }
+}
 
 fun AccountData.Companion.newInstance(): AccountData =
     AccountData("", "", "", "", null, null, false, "")

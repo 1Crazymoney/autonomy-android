@@ -79,4 +79,8 @@ class UserRemoteDataSource @Inject constructor(
         val reqBody = json.toRequestBody("application/json".toMediaTypeOrNull())
         return autonomyApi.updateFormula(reqBody).subscribeOn(Schedulers.io())
     }
+
+    fun getDebugInfo() = autonomyApi.getDebugInfo().subscribeOn(Schedulers.io())
+
+    fun getDebugInfo(id: String) = autonomyApi.getDebugInfo(id).subscribeOn(Schedulers.io())
 }

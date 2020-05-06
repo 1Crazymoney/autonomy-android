@@ -10,6 +10,7 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
+import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.viewpager.widget.ViewPager
@@ -19,6 +20,7 @@ import com.bitmark.autonomy.feature.*
 import com.bitmark.autonomy.feature.Navigator.Companion.BOTTOM_UP
 import com.bitmark.autonomy.feature.Navigator.Companion.UP_BOTTOM
 import com.bitmark.autonomy.feature.arealist.AreaListFragment
+import com.bitmark.autonomy.feature.debugmode.DebugModeActivity
 import com.bitmark.autonomy.feature.location.LocationService
 import com.bitmark.autonomy.feature.notification.NotificationId
 import com.bitmark.autonomy.feature.notification.NotificationPayloadType
@@ -28,10 +30,7 @@ import com.bitmark.autonomy.feature.survey.SurveyContainerActivity
 import com.bitmark.autonomy.logging.Event
 import com.bitmark.autonomy.logging.EventLogger
 import com.bitmark.autonomy.util.Constants.MAX_AREA
-import com.bitmark.autonomy.util.ext.hideKeyBoard
-import com.bitmark.autonomy.util.ext.openAppSetting
-import com.bitmark.autonomy.util.ext.openIntercom
-import com.bitmark.autonomy.util.ext.unexpectedAlert
+import com.bitmark.autonomy.util.ext.*
 import com.bitmark.autonomy.util.modelview.AreaModelView
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.concurrent.TimeUnit
@@ -87,6 +86,8 @@ class MainActivity : BaseAppCompatActivity() {
 
     private var notificationBundle: Bundle? = null
 
+    private lateinit var areaList: MutableList<AreaModelView>
+
     private val appStateChangedListener = object : AppLifecycleHandler.AppStateChangedListener {
         override fun onForeground() {
             super.onForeground()
@@ -120,6 +121,7 @@ class MainActivity : BaseAppCompatActivity() {
                 navigator.openAppSetting(this)
             }
         })
+        viewModel.checkDebugModeEnable()
     }
 
     private fun startLocationService() {
@@ -198,8 +200,14 @@ class MainActivity : BaseAppCompatActivity() {
 
         })
 
-        ivMenu.setOnClickListener {
+        ivMenu.setSafetyOnclickListener {
             navigator.anim(UP_BOTTOM).startActivity(ProfileActivity::class.java)
+        }
+
+        ivDebug.setSafetyOnclickListener {
+            if (!isAreaListReady()) return@setSafetyOnclickListener
+            val bundle = DebugModeActivity.getBundle(areaList)
+            navigator.anim(BOTTOM_UP).startActivity(DebugModeActivity::class.java, bundle)
         }
 
     }
@@ -210,7 +218,7 @@ class MainActivity : BaseAppCompatActivity() {
         viewModel.listAreaLiveData.asLiveData().observe(this, Observer { res ->
             when {
                 res.isSuccess() -> {
-                    val areaList = res.data()!!.toMutableList()
+                    areaList = res.data()!!.toMutableList()
                     val fragments = mutableListOf<Fragment>()
                     fragments.add(MainFragment.newInstance(null))
                     fragments.addAll(areaList.map { a -> MainFragment.newInstance(a) })
@@ -229,17 +237,36 @@ class MainActivity : BaseAppCompatActivity() {
                 }
             }
         })
+
+        viewModel.checkDebugModeEnableLiveData.asLiveData().observe(this, Observer { res ->
+            when {
+                res.isSuccess() -> {
+                    ivDebug.visibility = if (res.data()!!) View.VISIBLE else View.INVISIBLE
+                }
+
+                res.isError() -> {
+                    logger.logSharedPrefError(res.throwable(), "main check debug mode state error")
+                }
+            }
+        })
     }
+
+    private fun isAreaListReady() = ::areaList.isInitialized
 
     fun moveArea(fromPos: Int, toPos: Int) {
         adapter.move(fromPos, toPos)
+        areaList.move(fromPos, toPos)
     }
 
     fun removeArea(id: String) {
-        val index = adapter.indexOfAreaFragment(id)
-        if (index != -1) {
-            adapter.remove(index)
+        val fIndex = adapter.indexOfAreaFragment(id)
+        if (fIndex != -1) {
+            adapter.remove(fIndex)
             vIndicator.notifyDataSetChanged()
+            val aIndex = areaList.indexOfFirst { a -> a.id == id }
+            if (aIndex != -1) {
+                areaList.removeAt(aIndex)
+            }
         }
     }
 
@@ -249,6 +276,7 @@ class MainActivity : BaseAppCompatActivity() {
         if (adapter.add(adapter.count - 1, MainFragment.newInstance(area))) {
             vIndicator.notifyDataSetChanged()
             vp.setCurrentItem(adapter.count - 1, false)
+            areaList.add(area)
         }
     }
 
@@ -265,6 +293,7 @@ class MainActivity : BaseAppCompatActivity() {
 
     fun updateAreaAlias(id: String, alias: String) {
         adapter.updateAreaAlias(id, alias)
+        areaList.find { a -> a.id == id }?.alias = alias
     }
 
     override fun onBackPressed() {

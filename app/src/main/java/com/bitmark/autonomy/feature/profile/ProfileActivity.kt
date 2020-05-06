@@ -7,11 +7,15 @@
 package com.bitmark.autonomy.feature.profile
 
 import android.graphics.Color
+import android.os.Bundle
+import android.os.Handler
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.view.View
+import android.widget.Toast
+import androidx.lifecycle.Observer
 import com.bitmark.autonomy.BuildConfig
 import com.bitmark.autonomy.R
 import com.bitmark.autonomy.feature.BaseAppCompatActivity
@@ -25,8 +29,11 @@ import com.bitmark.autonomy.feature.behavior.history.BehaviorHistoryActivity
 import com.bitmark.autonomy.feature.locationhistory.LocationHistoryActivity
 import com.bitmark.autonomy.feature.symptoms.SymptomReportActivity
 import com.bitmark.autonomy.feature.symptoms.history.SymptomHistoryActivity
+import com.bitmark.autonomy.logging.EventLogger
+import com.bitmark.autonomy.util.ext.logSharedPrefError
 import com.bitmark.autonomy.util.ext.openBrowser
 import com.bitmark.autonomy.util.ext.setSafetyOnclickListener
+import com.bitmark.autonomy.util.ext.toast
 import kotlinx.android.synthetic.main.activity_profile.*
 import javax.inject.Inject
 
@@ -34,11 +41,26 @@ import javax.inject.Inject
 class ProfileActivity : BaseAppCompatActivity() {
 
     @Inject
-    lateinit var navigator: Navigator
+    internal lateinit var navigator: Navigator
+
+    @Inject
+    internal lateinit var viewModel: ProfileViewModel
+
+    @Inject
+    internal lateinit var logger: EventLogger
+
+    private var debugModeEnabled = false
+
+    private var handler = Handler()
 
     override fun layoutRes(): Int = R.layout.activity_profile
 
-    override fun viewModel(): BaseViewModel? = null
+    override fun viewModel(): BaseViewModel? = viewModel
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        viewModel.checkDebugModeEnable()
+    }
 
     override fun initComponents() {
         super.initComponents()
@@ -92,6 +114,70 @@ class ProfileActivity : BaseAppCompatActivity() {
             navigator.anim(RIGHT_LEFT).startActivity(LocationHistoryActivity::class.java)
         }
 
+        var count = 0
+        var toast: Toast? = null
+        val resetCount = Runnable { count = 0 }
+        tvVersion.setOnClickListener {
+            if (debugModeEnabled) return@setOnClickListener
+            handler.removeCallbacks(resetCount)
+            handler.postDelayed(resetCount, 1000)
+            ++count
+            if (toast != null) {
+                toast!!.cancel()
+            }
+            if (count == 7) {
+                viewModel.saveDebugModeState(true)
+                count = 0
+            } else {
+                val remaining = 7 - count
+                toast = toast(
+                    getString(
+                        if (remaining > 1) {
+                            R.string.tap_times_to_enable_debug_mode
+                        } else {
+                            R.string.tap_time_to_enable_debug_mode
+                        }
+                    ).format(remaining)
+                )
+            }
+        }
+
+    }
+
+    override fun deinitComponents() {
+        handler.removeCallbacksAndMessages(null)
+        super.deinitComponents()
+    }
+
+    override fun observe() {
+        super.observe()
+
+        viewModel.saveDebugModeStateLiveData.asLiveData().observe(this, Observer { res ->
+            when {
+                res.isSuccess() -> {
+                    toast(getString(R.string.debug_mode_is_enabled))
+                }
+
+                res.isError() -> {
+                    logger.logSharedPrefError(res.throwable(), "save debug mode state error")
+                }
+            }
+        })
+
+        viewModel.checkDebugModeEnableLiveData.asLiveData().observe(this, Observer { res ->
+            when {
+                res.isSuccess() -> {
+                    debugModeEnabled = res.data()!!
+                }
+
+                res.isError() -> {
+                    logger.logSharedPrefError(
+                        res.throwable(),
+                        "profile check debug mode state error"
+                    )
+                }
+            }
+        })
     }
 
     override fun onBackPressed() {

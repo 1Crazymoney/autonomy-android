@@ -6,8 +6,10 @@
  */
 package com.bitmark.autonomy.feature.profile
 
+import com.bitmark.autonomy.data.source.AppRepository
 import com.bitmark.autonomy.di.ActivityScope
 import com.bitmark.autonomy.feature.Navigator
+import com.bitmark.autonomy.util.livedata.RxLiveDataTransformer
 import dagger.Module
 import dagger.Provides
 
@@ -17,5 +19,13 @@ class ProfileModule {
     @Provides
     @ActivityScope
     fun provideNav(activity: ProfileActivity) = Navigator(activity)
+
+    @Provides
+    @ActivityScope
+    fun provideVM(
+        activity: ProfileActivity,
+        appRepo: AppRepository,
+        rxLiveDataTransformer: RxLiveDataTransformer
+    ) = ProfileViewModel(activity.lifecycle, appRepo, rxLiveDataTransformer)
 
 }

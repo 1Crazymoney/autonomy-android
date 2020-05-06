@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/black"
     android:orientation="vertical">
 
@@ -11,10 +12,10 @@
         android:layout_width="0dp"
         android:layout_height="@dimen/dp_12"
         android:layout_marginStart="@dimen/dp_8"
-        android:layout_marginEnd="@dimen/dp_52"
+        android:layout_marginEnd="@dimen/dp_8"
         app:icon_margin="@dimen/dp_4"
         app:layout_constraintBottom_toBottomOf="@id/ivMenu"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/ivDebug"
         app:layout_constraintStart_toEndOf="@id/ivMenu"
         app:layout_constraintTop_toTopOf="@id/ivMenu" />
 
@@ -37,6 +38,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_menu_stateful" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/ivDebug"
+        android:layout_width="@dimen/dp_44"
+        android:layout_height="@dimen/dp_44"
+        android:padding="@dimen/dp_10"
+        tools:visibility="visible"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_setting_stateful" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

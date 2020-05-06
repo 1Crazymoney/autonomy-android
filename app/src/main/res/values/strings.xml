@@ -174,6 +174,8 @@
     <string name="max_weight">Max weight</string>
     <string name="we_will_forecast_the_public_health">We’ll forecast the public health of your neighborhood.</string>
     <string name="we_will_help_your_neighborhood">We’ll help your neighborhood grow healthier together.</string>
+    <string name="debug_mode_is_enabled">Debug Mode is enabled</string>
+
 
     <!--    string format-->
     <string name="min_ago_format">%1$s min ago</string>
@@ -183,6 +185,8 @@
     <string name="day_ago_format">%1$s day ago</string>
     <string name="days_ago_format">%1$s days ago</string>
     <string name="date_time_format">%1$s at %2$s</string>
+    <string name="tap_times_to_enable_debug_mode">Tap more %1$d times to enable Debug Mode</string>
+    <string name="tap_time_to_enable_debug_mode">Tap more %1$d time to enable Debug Mode</string>
 
     <string name="default_channel">Default Channel</string>
     <string name="important_alert">Important Alert</string>

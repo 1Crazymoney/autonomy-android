@@ -62,6 +62,8 @@ enum class Event(val value: String) {
 
     FORMULA_UPDATE_ERROR("formula_update_error"),
 
-    FORMULA_DELETE_ERROR("formula_delete_error")
+    FORMULA_DELETE_ERROR("formula_delete_error"),
+
+    DEBUG_INFO_GETTING_ERROR("debug_info_getting_error")
 
 }

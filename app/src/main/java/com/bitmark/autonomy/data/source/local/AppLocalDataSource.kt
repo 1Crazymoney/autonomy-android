@@ -17,4 +17,15 @@ class AppLocalDataSource @Inject constructor(
     sharedPrefApi: SharedPrefApi,
     fileStorageApi: FileStorageApi
 ) : LocalDataSource(databaseApi, sharedPrefApi, fileStorageApi) {
+
+    fun checkDebugModeEnable() = sharedPrefApi.rxSingle { sharedPrefGateway ->
+        sharedPrefGateway.get(
+            SharedPrefApi.DEBUG_MODE,
+            Boolean::class
+        )
+    }
+
+    fun saveDebugModeState(enable: Boolean) = sharedPrefApi.rxCompletable { sharedPrefGateway ->
+        sharedPrefGateway.put(SharedPrefApi.DEBUG_MODE, enable)
+    }
 }

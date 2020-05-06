@@ -14,6 +14,8 @@ import com.bitmark.autonomy.feature.behavior.add.BehaviorAddingContainerActivity
 import com.bitmark.autonomy.feature.behavior.add.BehaviorAddingContainerModule
 import com.bitmark.autonomy.feature.behavior.history.BehaviorHistoryActivity
 import com.bitmark.autonomy.feature.behavior.history.BehaviorHistoryModule
+import com.bitmark.autonomy.feature.debugmode.DebugModeActivity
+import com.bitmark.autonomy.feature.debugmode.DebugModeModule
 import com.bitmark.autonomy.feature.locationhistory.LocationHistoryActivity
 import com.bitmark.autonomy.feature.locationhistory.LocationHistoryModule
 import com.bitmark.autonomy.feature.main.MainActivity
@@ -113,5 +115,9 @@ abstract class ActivityBuilderModule {
     @ContributesAndroidInjector(modules = [LocationHistoryModule::class])
     @ActivityScope
     internal abstract fun bindLocationHistoryActivity(): LocationHistoryActivity
+
+    @ContributesAndroidInjector(modules = [DebugModeModule::class])
+    @ActivityScope
+    internal abstract fun bindDebugModeActivity(): DebugModeActivity
 
 }

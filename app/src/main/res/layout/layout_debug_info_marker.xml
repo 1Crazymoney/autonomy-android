@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@color/black_88"
+    android:orientation="vertical"
+    android:padding="@dimen/dp_6">
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvCoordinate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/ibm_plex_mono_light_font_family"
+        android:textSize="@dimen/sp_9"
+        tools:text="coordinate: (2,123)"
+        tools:textColor="@color/apple" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvMetricScore"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/ibm_plex_mono_light_font_family"
+        android:textSize="@dimen/sp_9"
+        tools:text="score: 43"
+        tools:textColor="@color/apple" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvMetricSymptom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/ibm_plex_mono_light_font_family"
+        android:textSize="@dimen/sp_9"
+        tools:text="24h_symptoms_count/delta: 12/-4"
+        tools:textColor="@color/apple" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvMetricBehavior"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/ibm_plex_mono_light_font_family"
+        android:textSize="@dimen/sp_9"
+        tools:text="24h_behaviors_count/delta: 12/-4"
+        tools:textColor="@color/apple" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvMetricConfirm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/ibm_plex_mono_light_font_family"
+        android:textSize="@dimen/sp_9"
+        tools:text="24h_confirmed_count/delta: 12/-4"
+        tools:textColor="@color/apple" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvUserCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/ibm_plex_mono_light_font_family"
+        android:textSize="@dimen/sp_9"
+        tools:text="user_count: 1324"
+        tools:textColor="@color/apple" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvAqi"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/ibm_plex_mono_light_font_family"
+        android:textSize="@dimen/sp_9"
+        tools:text="aqi: 12"
+        tools:textColor="@color/apple" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvTotalSymptom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/ibm_plex_mono_light_font_family"
+        android:textSize="@dimen/sp_9"
+        tools:text="total_symptom: 21435"
+        tools:textColor="@color/apple" />
+
+</LinearLayout>

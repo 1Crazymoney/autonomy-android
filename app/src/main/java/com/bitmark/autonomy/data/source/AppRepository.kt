@@ -16,4 +16,8 @@ class AppRepository(
 ) : Repository {
 
     fun getAppInfo() = remoteDataSource.getAppInfo()
+
+    fun checkDebugModeEnable() = localDataSource.checkDebugModeEnable()
+
+    fun saveDebugModeState(enable: Boolean) = localDataSource.saveDebugModeState(enable)
 }
