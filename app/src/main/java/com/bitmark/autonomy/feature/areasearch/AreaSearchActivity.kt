@@ -25,6 +25,7 @@ import com.bitmark.autonomy.feature.location.LocationService
 import com.bitmark.autonomy.logging.Event
 import com.bitmark.autonomy.logging.EventLogger
 import com.bitmark.autonomy.util.ext.gone
+import com.bitmark.autonomy.util.ext.hideKeyBoard
 import com.bitmark.autonomy.util.ext.showNoInternetConnection
 import com.bitmark.autonomy.util.ext.visible
 import com.bitmark.autonomy.util.modelview.AreaModelView
@@ -79,6 +80,7 @@ class AreaSearchActivity : BaseAppCompatActivity() {
         adapter.setItemClickListener(object :
             AreaAutoCompleteRecyclerViewAdapter.ItemClickListener {
             override fun onItemClicked(item: AreaAutoCompleteRecyclerViewAdapter.Item) {
+                hideKeyBoard()
                 if (connectivityHandler.isConnected()) {
                     if (blocked) return
                     val execFunc = fun(item: AreaAutoCompleteRecyclerViewAdapter.Item) {
