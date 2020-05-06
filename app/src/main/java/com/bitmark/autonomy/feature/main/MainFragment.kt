@@ -534,7 +534,7 @@ class MainFragment : BaseSupportFragment() {
     }
 
     private fun showData(profile: AreaProfileModelView) {
-        showScore(if (profile.score > 100f) 100 else profile.score.roundToInt())
+        showScore(profile.score.roundToInt())
 
         tvConfirmedCases.text = profile.confirmed.decimalFormat()
         tvConfirmedCasesChange.text = String.format("%.2f%%", abs(profile.confirmedDelta))
