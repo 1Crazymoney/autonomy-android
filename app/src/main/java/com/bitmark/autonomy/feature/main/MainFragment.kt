@@ -166,7 +166,13 @@ class MainFragment : BaseSupportFragment() {
         } else {
             viewModel.getAreaProfile(areaData!!.id)
         }
+        if (isViewSourceShowing()) {
+            viewModel.getFormula(Locale.getDefault().langCountry())
+        }
     }
+
+    private fun isViewSourceShowing() =
+        ::bottomSheetBehavior.isInitialized && bottomSheetBehavior.state == BottomSheetBehavior.STATE_EXPANDED
 
     override fun initComponents() {
         super.initComponents()
@@ -186,7 +192,7 @@ class MainFragment : BaseSupportFragment() {
         ivScore.setOnClickListener {
             if (!isAreaProfileReady()) return@setOnClickListener
             bottomSheetBehavior.state =
-                if (bottomSheetBehavior.state == BottomSheetBehavior.STATE_EXPANDED) {
+                if (isViewSourceShowing()) {
                     BottomSheetBehavior.STATE_HIDDEN
                 } else {
                     BottomSheetBehavior.STATE_EXPANDED
@@ -327,7 +333,7 @@ class MainFragment : BaseSupportFragment() {
             }
 
             override fun onStateChanged(p0: View, state: Int) {
-                if (state == BottomSheetBehavior.STATE_EXPANDED) {
+                if (isViewSourceShowing()) {
                     viewModel.getFormula(Locale.getDefault().langCountry())
                 }
             }
@@ -423,15 +429,18 @@ class MainFragment : BaseSupportFragment() {
         tvBehaviorsWeight.text = String.format("%.2f", behaviorsCoefficient)
         tvSymptomsWeight.text = String.format("%.2f", symptomCoefficient)
 
+        // confirmed cases score
         val yesterdayConfirms = areaProfile.detail.confirmMetric.yesterday
         val todayConfirms = areaProfile.detail.confirmMetric.today
         tvConfirmedCasesYesterday.text = yesterdayConfirms.toString()
         tvConfirmedCasesToday.text = todayConfirms.toString()
 
-        val casesCore = (100f - 5 * (yesterdayConfirms - todayConfirms)).roundToInt()
-        tvCasesScore1.text = casesCore.toString()
-        tvCasesScore1.setTextColorRes(toColorRes(casesCore))
+        val casesCore = (100f - 5 * (yesterdayConfirms - todayConfirms))
+        val roundedCaseScore = casesCore.roundToInt()
+        tvCasesScore1.text = roundedCaseScore.toString()
+        tvCasesScore1.setTextColorRes(toColorRes(roundedCaseScore))
 
+        // behavior score
         val totalBehaviors = areaProfile.detail.behaviorMetric.totalBehaviors
         val totalBehaviorPeople = areaProfile.detail.behaviorMetric.totalPeople
         val maxBehaviorScorePerPerson = areaProfile.detail.behaviorMetric.maxScorePerPerson
@@ -442,17 +451,24 @@ class MainFragment : BaseSupportFragment() {
         tvMaxScore.text = maxBehaviorScorePerPerson.toString()
         tvTotalCustomizedBehavior.text = totalCustomizedBehavior.toString()
 
-        val behaviorScore =
-            if (totalBehaviorPeople == 0 || maxBehaviorScorePerPerson == 0) {
-                100f * totalCustomizedBehavior
-            } else {
-                100f * (totalBehaviors / ((totalBehaviorPeople * maxBehaviorScorePerPerson) + totalCustomizedBehavior).toFloat())
-            }
-        val roundBehaviorScore = behaviorScore.roundToInt()
-        tvBehaviorsScore1.text = roundBehaviorScore.toString()
-        tvBehaviorsScore1.setTextColorRes(toColorRes(roundBehaviorScore))
-        tvBehaviorsScore2.text = roundBehaviorScore.toString()
-        tvBehaviorsScore2.setTextColorRes(toColorRes(roundBehaviorScore))
+        val behaviorScore = calculateBehaviorScore(
+            totalBehaviors,
+            totalBehaviorPeople,
+            maxBehaviorScorePerPerson,
+            totalCustomizedBehavior
+        )
+        showBehaviorScore(behaviorScore.roundToInt())
+
+        // symptom score
+        var maxSymptomWeight = formula.coefficient.symptomWeights.sumBy { s -> s.weight }
+        var totalSymptomWeight = areaProfile.detail.symptomMetric.totalWeight
+        val totalSymptomPeople = areaProfile.detail.symptomMetric.totalPeople
+        val totalCustomizedSymptomWeight = areaProfile.detail.symptomMetric.customizedWeight
+
+        tvTotalSymptomWeight.text = totalSymptomWeight.toString()
+        tvTotalSymptomPeople.text = totalSymptomPeople.toString()
+        tvMaxWeight.text = maxSymptomWeight.toString()
+        tvTotalCustomizedSymptom.text = totalCustomizedSymptomWeight.toString()
 
         val symptomSeekBarChangeListener = object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(
@@ -461,12 +477,43 @@ class MainFragment : BaseSupportFragment() {
                 fromUser: Boolean
             ) {
                 val tag = seekBar!!.tag
+                val symptomId = tag.toString().replace("sb_", "")
                 formula.coefficient.symptomWeights.find { s -> "sb_${s.symptom.id}" == tag }
                     ?.weight = progress
                 val tvSymptomWeight =
-                    layoutSymptoms.children.find { c -> c.tag == tag.toString().replace("sb_", "") }
-                        ?.tvSymptomWeight
+                    layoutSymptoms.children.find { c -> c.tag == symptomId }?.tvSymptomWeight
                 tvSymptomWeight?.text = progress.toString()
+
+                // adjust symptom score
+                maxSymptomWeight = layoutSymptoms.children.sumBy { c -> c.sbSymptomWeight.progress }
+                tvMaxWeight.text = maxSymptomWeight.toString()
+                totalSymptomWeight =
+                    areaProfile.detail.symptomMetric.todayData.weightDistribution?.map { entry ->
+                        val weight =
+                            layoutSymptoms.children.find { c -> c.tag == entry.key }?.sbSymptomWeight?.progress!!
+                        weight * entry.value
+                    }?.sum() ?: 0
+                tvTotalSymptomWeight.text = totalSymptomWeight.toString()
+                val symptomScore = calculateSymptomScore(
+                    totalSymptomWeight,
+                    totalSymptomPeople,
+                    maxSymptomWeight,
+                    totalCustomizedSymptomWeight
+                )
+                showSymptomScore(symptomScore.roundToInt())
+
+                // calculate total score
+                val score = calculateScore(
+                    casesCore,
+                    confirmCoefficient,
+                    behaviorScore,
+                    behaviorsCoefficient,
+                    symptomScore,
+                    symptomCoefficient
+                ).roundToInt()
+                tvScoreViewSource.text = score.toString()
+                tvScoreViewSource.setTextColorRes(toColorRes(score))
+                showScore(score)
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) {
@@ -479,6 +526,7 @@ class MainFragment : BaseSupportFragment() {
 
         }
 
+        // dynamically add symptom seekbars
         layoutSymptoms.removeAllViews()
         for (symptomWeight in formula.coefficient.symptomWeights) {
             val view =
@@ -498,34 +546,72 @@ class MainFragment : BaseSupportFragment() {
             layoutSymptoms.addView(view)
         }
 
-        val maxSymptomWeight = formula.coefficient.symptomWeights.sumBy { s -> s.weight }
-        val totalSymptomWeight = areaProfile.detail.symptomMetric.totalWeight
-        val totalSymptomPeople = areaProfile.detail.symptomMetric.totalPeople
-        val totalCustomizedSymptomWeight = areaProfile.detail.symptomMetric.customizedWeight
+        val symptomScore = calculateSymptomScore(
+            totalSymptomWeight,
+            totalSymptomPeople,
+            maxSymptomWeight,
+            totalCustomizedSymptomWeight
+        )
+        showSymptomScore(symptomScore.roundToInt())
 
-        tvTotalSymptomWeight.text = totalSymptomWeight.toString()
-        tvTotalSymptomPeople.text = totalSymptomPeople.toString()
-        tvMaxWeight.text = maxSymptomWeight.toString()
-        tvTotalCustomizedSymptom.text = totalCustomizedSymptomWeight.toString()
-
-        val symptomScore =
-            if (totalSymptomPeople == 0 || maxSymptomWeight == 0) {
-                100f * (1 - totalCustomizedSymptomWeight)
-            } else {
-                100 * (1 - (totalSymptomWeight / ((totalSymptomPeople * maxSymptomWeight).toFloat() + totalCustomizedSymptomWeight)))
-            }
-        val roundSymptomScore = symptomScore.roundToInt()
-        tvSymptomsScore1.text = roundSymptomScore.toString()
-        tvSymptomsScore1.setTextColorRes(toColorRes(roundSymptomScore))
-        tvSymptomsScore2.text = roundSymptomScore.toString()
-        tvSymptomsScore2.setTextColorRes(toColorRes(roundSymptomScore))
-
-        val score =
-            (casesCore * confirmCoefficient + behaviorScore * behaviorsCoefficient + symptomScore * symptomCoefficient).roundToInt()
+        // calculate total score
+        val score = calculateScore(
+            casesCore,
+            confirmCoefficient,
+            behaviorScore,
+            behaviorsCoefficient,
+            symptomScore,
+            symptomCoefficient
+        ).roundToInt()
         tvScoreViewSource.text = score.toString()
         tvScoreViewSource.setTextColorRes(toColorRes(score))
         showScore(score)
+    }
 
+    private fun calculateScore(
+        casesCore: Float,
+        confirmCoefficient: Float,
+        behaviorScore: Float,
+        behaviorsCoefficient: Float,
+        symptomScore: Float,
+        symptomCoefficient: Float
+    ) =
+        (casesCore * confirmCoefficient + behaviorScore * behaviorsCoefficient + symptomScore * symptomCoefficient)
+
+    private fun calculateBehaviorScore(
+        totalBehaviors: Int,
+        totalBehaviorPeople: Int,
+        maxBehaviorScorePerPerson: Int,
+        totalCustomizedBehavior: Int
+    ) = if (totalBehaviorPeople == 0 || maxBehaviorScorePerPerson == 0) {
+        100f * totalCustomizedBehavior
+    } else {
+        100f * (totalBehaviors / ((totalBehaviorPeople * maxBehaviorScorePerPerson) + totalCustomizedBehavior).toFloat())
+    }
+
+    private fun showBehaviorScore(score: Int) {
+        tvBehaviorsScore1.text = score.toString()
+        tvBehaviorsScore1.setTextColorRes(toColorRes(score))
+        tvBehaviorsScore2.text = score.toString()
+        tvBehaviorsScore2.setTextColorRes(toColorRes(score))
+    }
+
+    private fun calculateSymptomScore(
+        totalSymptomWeight: Int,
+        totalSymptomPeople: Int,
+        maxSymptomWeight: Int,
+        totalCustomizedSymptomWeight: Int
+    ) = if (totalSymptomPeople == 0 || maxSymptomWeight == 0) {
+        100f * (1 - totalCustomizedSymptomWeight)
+    } else {
+        100 * (1 - (totalSymptomWeight / ((totalSymptomPeople * maxSymptomWeight).toFloat() + totalCustomizedSymptomWeight)))
+    }
+
+    private fun showSymptomScore(score: Int) {
+        tvSymptomsScore1.text = score.toString()
+        tvSymptomsScore1.setTextColorRes(toColorRes(score))
+        tvSymptomsScore2.text = score.toString()
+        tvSymptomsScore2.setTextColorRes(toColorRes(score))
     }
 
     private fun showScore(score: Int) {
@@ -555,7 +641,7 @@ class MainFragment : BaseSupportFragment() {
     }
 
     override fun onBackPressed(): Boolean {
-        return if (bottomSheetBehavior.state == BottomSheetBehavior.STATE_EXPANDED) {
+        return if (isViewSourceShowing()) {
             bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
             true
         } else {

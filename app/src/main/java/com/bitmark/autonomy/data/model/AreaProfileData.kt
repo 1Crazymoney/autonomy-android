@@ -125,6 +125,30 @@ data class SymptomMetricData(
 
     @Expose
     @SerializedName("score")
-    val score: Float
+    val score: Float,
+
+    @Expose
+    @SerializedName("today_data")
+    val todayData: SymptomTodayData
 
 ) : Data, Parcelable
+
+@Parcelize
+data class SymptomTodayData(
+    @Expose
+    @SerializedName("user_count")
+    val userCount: Int,
+
+    @Expose
+    @SerializedName("official_count")
+    val officialCount: Int,
+
+    @Expose
+    @SerializedName("customized_count")
+    val customizedCount: Int,
+
+    @Expose
+    @SerializedName("weight_distribution")
+    val weightDistribution: Map<String, Int>?
+) : Data, Parcelable
+
