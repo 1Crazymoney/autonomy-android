@@ -128,6 +128,7 @@ class ProfileActivity : BaseAppCompatActivity() {
             if (count == 7) {
                 viewModel.saveDebugModeState(true)
                 count = 0
+                debugModeEnabled = true
             } else {
                 val remaining = 7 - count
                 toast = toast(
