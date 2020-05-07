@@ -51,12 +51,14 @@ before_script:
   - echo -n >sentry.properties && echo "defaults.project=bitmark-fbm-android"$'\n'"defaults.org=bitmark-inc"$'\n'"auth.token=$SENTRY_AUTH_TOKEN" >sentry.properties
   - echo -n >app/src/main/resources/sentry.properties && echo "dsn=$SENTRY_DSN" >app/src/main/resources/sentry.properties
   - echo -n >keystores/release.properties && echo "key.alias=btmrktnm2020"$'\n'"key.store.password=$key.store.password"$'\n'"key.alias.password=$key.alias.password" >keystores/release.properties
-script:
-#  - ./gradlew clean fillSecretKey assembleInhouseDebug
-  - if ["$TRAVIS_BRANCH" == "master"]; then
-      echo "start uploading APK file"
-      ./gradlew appCenterUploadInhouseDebug
-    else
-      echo "skip uploading APK in branch $TRAVIS_BRANCH"
-    fi
+
+jobs:
+  include:
+    - stage: build
+      name: "Build & run tests"
+      script: ./gradlew clean fillSecretKey assembleInhouseDebug
+    - stage: deploy
+      name: "Upload APK"
+      if: branch = master type = push
+      script: ./gradlew appCenterUploadInhouseDebug
 
