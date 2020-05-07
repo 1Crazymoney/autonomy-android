@@ -58,7 +58,7 @@
         android:layout_marginTop="@dimen/dp_24"
         android:layout_marginBottom="@dimen/dp_24"
         android:fontFamily="@font/grotesk_light_font_family"
-        android:gravity="center_horizontal"
+        android:gravity="center"
         android:includeFontPadding="false"
         android:text="@string/autonomy_requires_access_to_the_following"
         android:textColor="@color/white"

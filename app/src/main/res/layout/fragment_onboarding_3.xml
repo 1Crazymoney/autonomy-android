@@ -87,15 +87,13 @@
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tvSlogan"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="@dimen/dp_52"
         android:layout_marginBottom="@dimen/dp_24"
         android:fontFamily="@font/grotesk_light_font_family"
-        android:gravity="center_horizontal"
+        android:gravity="center"
         android:includeFontPadding="false"
-        android:paddingStart="@dimen/dp_36"
-        android:paddingEnd="@dimen/dp_36"
         android:text="@string/we_will_help_your_neighborhood"
         android:textColor="@color/white"
         app:autoSizeMaxTextSize="@dimen/sp_36"

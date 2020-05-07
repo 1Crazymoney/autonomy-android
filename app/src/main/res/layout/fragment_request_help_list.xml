@@ -60,8 +60,6 @@
         android:fontFamily="@font/grotesk_light_font_family"
         android:gravity="center"
         android:includeFontPadding="false"
-        android:paddingStart="@dimen/dp_16"
-        android:paddingEnd="@dimen/dp_16"
         android:text="@string/what_kind_of_assistance"
         android:textColor="@color/white"
         app:autoSizeMaxTextSize="@dimen/sp_36"

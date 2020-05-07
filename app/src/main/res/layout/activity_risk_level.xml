@@ -66,14 +66,12 @@
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/tvSlogan"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="@dimen/dp_130"
                 android:layout_marginBottom="@dimen/dp_24"
                 android:fontFamily="@font/grotesk_light_font_family"
-                android:gravity="center_horizontal"
+                android:gravity="center"
                 android:includeFontPadding="false"
-                android:paddingStart="@dimen/dp_16"
-                android:paddingEnd="@dimen/dp_16"
                 android:text="@string/are_u_at_higher_risk"
                 android:textColor="@color/white"
                 app:autoSizeMaxTextSize="@dimen/sp_36"
@@ -95,7 +93,7 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/layoutRisk"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp_30"
                 app:layout_constraintEnd_toEndOf="@id/vDivider1"
@@ -111,10 +109,9 @@
                     android:text="@string/yes_im_at_higher_risk"
                     android:textColor="@color/color_white_stateful"
                     android:textSize="@dimen/sp_24"
-                    app:layout_constraintBottom_toBottomOf="@id/cbRisk"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@id/cbRisk"
-                    app:layout_constraintTop_toTopOf="@id/cbRisk" />
+                    app:layout_constraintTop_toTopOf="parent" />
 
 
                 <androidx.appcompat.widget.AppCompatTextView
@@ -154,7 +151,7 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/layoutNoRisk"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp_30"
                 app:layout_constraintEnd_toEndOf="@id/vDivider2"
@@ -180,10 +177,9 @@
                     android:text="@string/no_im_not_at_higher_risk"
                     android:textColor="@color/color_white_stateful"
                     android:textSize="@dimen/sp_24"
-                    app:layout_constraintBottom_toBottomOf="@id/cbNoRisk"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@id/cbNoRisk"
-                    app:layout_constraintTop_toTopOf="@id/cbNoRisk" />
+                    app:layout_constraintTop_toTopOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

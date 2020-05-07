@@ -76,8 +76,6 @@
                 android:fontFamily="@font/grotesk_light_font_family"
                 android:gravity="center"
                 android:includeFontPadding="false"
-                android:paddingStart="@dimen/dp_16"
-                android:paddingEnd="@dimen/dp_16"
                 android:text="@string/what_exactly_do_u_need"
                 android:textColor="@color/white"
                 app:autoSizeMaxTextSize="@dimen/sp_36"
