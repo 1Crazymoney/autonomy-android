@@ -33,7 +33,6 @@ import com.bitmark.autonomy.util.Constants.MAX_AREA
 import com.bitmark.autonomy.util.ext.*
 import com.bitmark.autonomy.util.modelview.AreaModelView
 import kotlinx.android.synthetic.main.activity_main.*
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class MainActivity : BaseAppCompatActivity() {
@@ -41,8 +40,6 @@ class MainActivity : BaseAppCompatActivity() {
     companion object {
 
         private const val LOCATION_SETTING_CODE = 0xAE
-
-        private val SURVEY_INTERVAL = TimeUnit.MINUTES.toMillis(10)
 
         private const val NOTIFICATION_BUNDLE = "notification_bundle"
 
@@ -82,26 +79,14 @@ class MainActivity : BaseAppCompatActivity() {
 
     private val handler = Handler()
 
-    private var lastSurveyTimestamp = -1L
-
     private var notificationBundle: Bundle? = null
 
     private lateinit var areaList: MutableList<AreaModelView>
 
-    private val appStateChangedListener = object : AppLifecycleHandler.AppStateChangedListener {
-        override fun onForeground() {
-            super.onForeground()
-            goToSurveyIfSatisfied()
-        }
-    }
-
     private fun goToSurveyIfSatisfied() {
-        if (!locationService.isPermissionGranted(this)
-            || (lastSurveyTimestamp != -1L && System.currentTimeMillis() - lastSurveyTimestamp < SURVEY_INTERVAL)
-        ) return
+        if (!locationService.isPermissionGranted(this)) return
         handler.postDelayed({
             navigator.anim(BOTTOM_UP).startActivity(SurveyContainerActivity::class.java)
-            lastSurveyTimestamp = System.currentTimeMillis()
         }, NOTIFICATION_ACTION_DELAY)
     }
 
@@ -139,12 +124,9 @@ class MainActivity : BaseAppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         notificationBundle = intent?.extras?.getBundle(NOTIFICATION_BUNDLE)
-        if (notificationBundle == null) {
-            goToSurveyIfSatisfied()
-        } else {
+        if (notificationBundle != null) {
             handleNotification(notificationBundle!!, adapter.count > 0)
         }
-        appLifecycleHandler.addAppStateChangedListener(appStateChangedListener)
         viewModel.listArea()
     }
 
@@ -163,7 +145,6 @@ class MainActivity : BaseAppCompatActivity() {
 
     override fun onDestroy() {
         handler.removeCallbacksAndMessages(null)
-        appLifecycleHandler.removeAppStateChangedListener(appStateChangedListener)
         super.onDestroy()
     }
 
