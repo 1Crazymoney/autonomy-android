@@ -52,4 +52,11 @@ before_script:
   - echo -n >app/src/main/resources/sentry.properties && echo "dsn=$SENTRY_DSN" >app/src/main/resources/sentry.properties
   - echo -n >keystores/release.properties && echo "key.alias=btmrktnm2020"$'\n'"key.store.password=$key.store.password"$'\n'"key.alias.password=$key.alias.password" >keystores/release.properties
 script:
-  - ./gradlew clean fillSecretKey assembleInhouseDebug appCenterUploadInhouseDebug
+#  - ./gradlew clean fillSecretKey assembleInhouseDebug
+  - if ["$TRAVIS_BRANCH" == "master"]; then
+      echo "start uploading APK file"
+      ./gradlew appCenterUploadInhouseDebug
+    else
+      echo "skip uploading APK in branch $TRAVIS_BRANCH"
+    fi
+
