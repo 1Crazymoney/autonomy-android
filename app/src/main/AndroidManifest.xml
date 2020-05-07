@@ -102,8 +102,6 @@
             android:name=".feature.debugmode.DebugModeActivity"
             android:screenOrientation="portrait" />
 
-        <receiver android:name=".feature.notification.DailyPushNotificationBroadcastReceiver" />
-
         <receiver android:name=".feature.notification.ScheduledNotificationReceiver" />
 
         <meta-data

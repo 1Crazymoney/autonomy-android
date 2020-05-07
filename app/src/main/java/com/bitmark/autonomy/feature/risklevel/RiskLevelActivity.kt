@@ -6,6 +6,8 @@
  */
 package com.bitmark.autonomy.feature.risklevel
 
+import android.app.AlarmManager
+import android.content.Context
 import androidx.lifecycle.Observer
 import com.bitmark.autonomy.R
 import com.bitmark.autonomy.feature.BaseAppCompatActivity
@@ -18,7 +20,6 @@ import com.bitmark.autonomy.feature.connectivity.ConnectivityHandler
 import com.bitmark.autonomy.feature.main.MainActivity
 import com.bitmark.autonomy.feature.notification.*
 import com.bitmark.autonomy.feature.notification.NotificationHelper.Companion.createChannel
-import com.bitmark.autonomy.feature.notification.NotificationHelper.Companion.pushScheduledNotification
 import com.bitmark.autonomy.logging.Event
 import com.bitmark.autonomy.logging.EventLogger
 import com.bitmark.autonomy.logging.Tracer
@@ -152,29 +153,25 @@ class RiskLevelActivity : BaseAppCompatActivity() {
         createChannel(this, ChannelId.IMPORTANT_ALERT, true)
         createChannel(this, ChannelId.DEFAULT, false)
 
-        val currentHour = DateTimeUtil.getCurrentHour()
-        if (currentHour < NotificationConstants.NOTIFICATION_HOUR_RANGE.last) {
-            val randomMillis = DateTimeUtil.randomNextMillisInHourRange(
-                NotificationConstants.NOTIFICATION_HOUR_RANGE,
-                NotificationConstants.PUSH_COUNT_PER_DAY
+        val randomMillis = DateTimeUtil.randomNextMillisInHourRange(
+            NotificationConstants.NOTIFICATION_HOUR_RANGE,
+            NotificationConstants.PUSH_COUNT_PER_DAY
+        )
+
+        val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+
+        for (triggerMillis in randomMillis) {
+            val bundle = NotificationHelper.buildCheckInSurveyNotificationBundle(this)
+            val pendingIntent =
+                ScheduledNotificationReceiver.getPendingIntent(this, bundle, NotificationId.SURVEY)
+            alarmManager.setRepeating(
+                AlarmManager.RTC_WAKEUP,
+                triggerMillis,
+                AlarmManager.INTERVAL_DAY,
+                pendingIntent
             )
-
-            for (triggerMillis in randomMillis) {
-                val bundle = NotificationHelper.buildCheckInSurveyNotificationBundle(this)
-                pushScheduledNotification<ScheduledNotificationReceiver>(
-                    this,
-                    bundle,
-                    triggerMillis,
-                    NotificationId.SURVEY
-                )
-                Tracer.DEBUG.log(TAG, "push survey notification at: ${Date(triggerMillis)}")
-            }
+            Tracer.DEBUG.log(TAG, "push survey notification at: ${Date(triggerMillis)}")
         }
-
-        // schedule daily notification pushing
-        val gap = DateTimeUtil.calculateGapMillisTo(1) // 1am
-        val triggerAtMillis = System.currentTimeMillis() + gap
-        DailyPushNotificationBroadcastReceiver.trigger(this, triggerAtMillis)
     }
 
     private fun enableDone() {
