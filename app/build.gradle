@@ -368,7 +368,7 @@ appcenter {
 
     apiToken = keyProperties["api-key"]
     ownerName = "support-zzd0-28"
-    distributionGroups = ["Bitmark"]
+    distributionGroups = ["Bitmark", "Public Tester"]
     releaseNotes = file("../CHANGELOG.md")
     notifyTesters = true
     apps {
