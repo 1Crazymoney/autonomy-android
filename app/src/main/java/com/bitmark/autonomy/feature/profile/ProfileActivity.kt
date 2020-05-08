@@ -30,10 +30,7 @@ import com.bitmark.autonomy.feature.locationhistory.LocationHistoryActivity
 import com.bitmark.autonomy.feature.symptoms.SymptomReportActivity
 import com.bitmark.autonomy.feature.symptoms.history.SymptomHistoryActivity
 import com.bitmark.autonomy.logging.EventLogger
-import com.bitmark.autonomy.util.ext.logSharedPrefError
-import com.bitmark.autonomy.util.ext.openBrowser
-import com.bitmark.autonomy.util.ext.setSafetyOnclickListener
-import com.bitmark.autonomy.util.ext.toast
+import com.bitmark.autonomy.util.ext.*
 import kotlinx.android.synthetic.main.activity_profile.*
 import javax.inject.Inject
 
@@ -112,6 +109,10 @@ class ProfileActivity : BaseAppCompatActivity() {
 
         layoutHistoryLocation.setSafetyOnclickListener {
             navigator.anim(RIGHT_LEFT).startActivity(LocationHistoryActivity::class.java)
+        }
+
+        layoutSupport.setSafetyOnclickListener {
+            navigator.openIntercom()
         }
 
         var count = 0
