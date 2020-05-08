@@ -236,7 +236,7 @@ class MainActivity : BaseAppCompatActivity() {
 
     fun moveArea(fromPos: Int, toPos: Int) {
         adapter.move(fromPos, toPos)
-        areaList.move(fromPos, toPos)
+        areaList.move(fromPos - 1, toPos - 1)
     }
 
     fun removeArea(id: String) {
