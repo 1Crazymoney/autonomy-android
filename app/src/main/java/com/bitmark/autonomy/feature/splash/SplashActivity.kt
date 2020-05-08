@@ -35,6 +35,7 @@ import com.bitmark.autonomy.logging.EventLogger
 import com.bitmark.autonomy.util.ext.*
 import com.bitmark.sdk.authentication.KeyAuthenticationSpec
 import com.bitmark.sdk.features.Account
+import io.intercom.android.sdk.Intercom
 import kotlinx.android.synthetic.main.activity_splash.*
 import javax.inject.Inject
 
@@ -131,6 +132,7 @@ class SplashActivity : BaseAppCompatActivity() {
                             viewModel.prepareData(account)
                         }
                     } else {
+                        Intercom.client().registerUnidentifiedUser()
                         showLanding()
                     }
                 }
