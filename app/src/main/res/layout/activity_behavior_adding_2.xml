@@ -46,7 +46,10 @@
         android:id="@+id/rvAutocomplete"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/layoutSearch" />
+        android:layout_below="@id/layoutSearch"
+        android:scrollbarSize="@dimen/dp_2"
+        android:scrollbarThumbVertical="@color/white_aa"
+        android:scrollbars="vertical" />
 
     <ProgressBar
         android:id="@+id/progressBar"
