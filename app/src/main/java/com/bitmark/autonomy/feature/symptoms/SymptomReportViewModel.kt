@@ -9,9 +9,11 @@ package com.bitmark.autonomy.feature.symptoms
 import androidx.lifecycle.Lifecycle
 import com.bitmark.autonomy.data.source.SymptomRepository
 import com.bitmark.autonomy.feature.BaseViewModel
+import com.bitmark.autonomy.util.ext.append
 import com.bitmark.autonomy.util.livedata.CompositeLiveData
 import com.bitmark.autonomy.util.livedata.RxLiveDataTransformer
 import com.bitmark.autonomy.util.modelview.SymptomModelView
+import com.bitmark.autonomy.util.modelview.SymptomType
 
 class SymptomReportViewModel(
     lifecycle: Lifecycle,
@@ -24,10 +26,12 @@ class SymptomReportViewModel(
     internal val reportSymptomLiveData = CompositeLiveData<Any>()
 
     fun listSymptom(lang: String) {
-        listSymptomLiveData.add(rxLiveDataTransformer.single(symptomRepo.listSymptom(lang).map { symptoms ->
-            symptoms.map { s ->
-                SymptomModelView.newInstance(s)
-            }
+        listSymptomLiveData.add(rxLiveDataTransformer.single(symptomRepo.listSymptom(lang).map { p ->
+            val officialSymptoms =
+                p.first.map { s -> SymptomModelView.newInstance(s, SymptomType.OFFICIAL) }
+            val neighborhoodSymptoms =
+                p.second.map { s -> SymptomModelView.newInstance(s, SymptomType.NEIGHBORHOOD) }
+            officialSymptoms.toMutableList().append(neighborhoodSymptoms)
         }))
     }
 

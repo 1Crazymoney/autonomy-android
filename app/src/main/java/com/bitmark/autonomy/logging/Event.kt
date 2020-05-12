@@ -36,9 +36,15 @@ enum class Event(val value: String) {
 
     SYMPTOM_LISTING_ERROR("symptom_listing_error"),
 
+    SYMPTOM_AUTOCOMPLETE_LISTING_ERROR("symptom_autocomplete_listing_error"),
+
+    SYMPTOM_AUTOCOMPLETE_SEARCHING_ERROR("symptom_autocomplete_searching_error"),
+
     SYMPTOM_REPORT_ERROR("symptom_report_error"),
 
     SYMPTOM_ADDING_ERROR("symptom_adding_error"),
+
+    SYMPTOM_METRIC_ERROR("symptom_metric_error"),
 
     NOTIFICATION_HANDLING_ERROR("notification_handling_error"),
 

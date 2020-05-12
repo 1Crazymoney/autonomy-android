@@ -175,6 +175,20 @@
     <string name="we_will_forecast_the_public_health">We’ll forecast the public health of your neighborhood.</string>
     <string name="we_will_help_your_neighborhood">We’ll help your neighborhood grow healthier together.</string>
     <string name="debug_mode_is_enabled">Debug Mode is enabled</string>
+    <string name="tap_any_symptoms_you_have">Tap any symptoms you have or add new ones:</string>
+    <string name="common_covid_symptoms">Common COVID-19 symptoms</string>
+    <string name="recent_neighborhood_symptoms">Recent neighborhood symptoms</string>
+    <string name="report_other_symptom">Report other symptom …</string>
+    <string name="none">None</string>
+    <string name="thanks_for_sharing_your_symptom">Thanks for sharing your symptoms with your neighborhood!</string>
+    <string name="your_total_for_today">Your total\nfor today</string>
+    <string name="from_yesterday">From yesterday</string>
+    <string name="community_average_for_today">Community average\nfor today</string>
+    <string name="are_u_doing_them_correctly">Are you doing them correctly?</string>
+    <string name="report_behaviors">Report\nbehaviors</string>
+    <string name="reporting_your_symptoms_to_your_neighborhood">Reporting your symptoms to your neighborhood…</string>
+    <string name="submitting">Submitting</string>
+    <string name="learn_how_to_keep_other_safe">Learn how to keep others safe</string>
 
 
     <!--    string format-->

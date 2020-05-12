@@ -9,31 +9,37 @@ package com.bitmark.autonomy.feature.symptoms
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.CompoundButton
+import androidx.annotation.StringRes
 import androidx.recyclerview.widget.RecyclerView
 import com.bitmark.autonomy.R
+import com.bitmark.autonomy.util.ext.setTextColorRes
 import com.bitmark.autonomy.util.modelview.SymptomModelView
+import com.bitmark.autonomy.util.modelview.SymptomType
+import kotlinx.android.synthetic.main.item_simple_text_footer.view.*
+import kotlinx.android.synthetic.main.item_simple_text_header.view.*
 import kotlinx.android.synthetic.main.item_symptom.view.*
-import kotlinx.android.synthetic.main.item_symptom_footer.view.*
+import java.util.*
 
 
 class SymptomRecyclerViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     companion object {
-        private const val BODY = 0x00
+        private const val HEADER = 0x00
 
-        private const val FOOTER = 0x01
+        private const val BODY = 0x01
+
+        private const val FOOTER = 0x02
     }
 
     private val items = mutableListOf<Item>()
 
     private var itemClickListener: ItemClickListener? = null
 
-    private val onCheckedChangeListener = CompoundButton.OnCheckedChangeListener { _, _ ->
-        if (getCheckedSymptoms().isNotEmpty()) {
-            itemClickListener?.onChecked()
+    private val onSelectedChangeListener: () -> Unit = {
+        if (getSelectedSymptoms().isNotEmpty()) {
+            itemClickListener?.onSelected()
         } else {
-            itemClickListener?.onUnChecked()
+            itemClickListener?.onDeselected()
         }
     }
 
@@ -43,69 +49,144 @@ class SymptomRecyclerViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     fun set(symptoms: List<SymptomModelView>) {
         items.clear()
-        items.addAll(symptoms.map { s -> Item(BODY, s, checked = false, checkable = true) })
-        items.add(Item(FOOTER, null, null))
+        items.add(Item(HEADER, headerStringRes = R.string.common_covid_symptoms))
+        val officialSymptoms = symptoms.filter { s -> s.type == SymptomType.OFFICIAL }
+        items.addAll(officialSymptoms.map { s ->
+            Item(
+                BODY,
+                s,
+                null,
+                selected = false,
+                selectable = true
+            )
+        })
+        items.add(Item(HEADER, headerStringRes = R.string.recent_neighborhood_symptoms))
+        val neighborhoodSymptoms = symptoms.filter { s -> s.type == SymptomType.NEIGHBORHOOD }
+        items.addAll(neighborhoodSymptoms.map { s ->
+            Item(
+                BODY,
+                s,
+                null,
+                selected = false,
+                selectable = true
+            )
+        })
         notifyDataSetChanged()
     }
 
-    fun add(symptom: SymptomModelView, checked: Boolean = true, checkable: Boolean = true) {
-        val pos = items.size - 1
-        items.add(pos, Item(BODY, symptom, checked, checkable))
+    fun addFooter() {
+        val pos = items.size
+        items.add(Item(FOOTER))
         notifyItemInserted(pos)
     }
 
-    fun getCheckedSymptoms() =
-        items.filter { i -> i.type == BODY && i.checked!! }.map { i -> i.symptom }
+    fun removeFooter() {
+        val index = items.indexOfFirst { i -> i.type == FOOTER }
+        if (index != -1) {
+            items.removeAt(index)
+            notifyItemRemoved(index)
+        }
+    }
+
+    fun hasNeighborhoodSymptom() =
+        items.indexOfFirst { i -> i.type == BODY && i.symptom!!.type == SymptomType.NEIGHBORHOOD } != -1
+
+    fun add(symptom: SymptomModelView, selected: Boolean = true, selectable: Boolean = true) {
+        val pos = items.size
+        items.add(pos, Item(BODY, symptom, selected = selected, selectable = selectable))
+        notifyItemInserted(pos)
+    }
+
+    fun isExisting(id: String) =
+        items.indexOfFirst { i -> i.type == BODY && i.symptom!!.id == id } != -1
+
+    fun setSelected(id: String, selected: Boolean = true, selectable: Boolean = true) {
+        val index = items.indexOfFirst { i -> i.symptom?.id == id }
+        if (index != -1) {
+            val item = items[index]
+            item.selected = selected
+            item.selectable = selectable
+            notifyItemChanged(index)
+        }
+    }
+
+    fun getSelectedSymptoms() =
+        items.filter { i -> i.type == BODY && i.selected!! }.map { i -> i.symptom }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return if (viewType == BODY) {
-            BodyVH(
+        return when (viewType) {
+            HEADER -> HeaderVH(
+                LayoutInflater.from(parent.context).inflate(
+                    R.layout.item_simple_text_header,
+                    parent,
+                    false
+                )
+            )
+            BODY -> BodyVH(
                 LayoutInflater.from(parent.context).inflate(
                     R.layout.item_symptom,
                     parent,
                     false
                 ),
-                onCheckedChangeListener
+                onSelectedChangeListener
             )
-        } else {
-            FooterVH(
+            FOOTER -> FooterVH(
                 LayoutInflater.from(parent.context).inflate(
-                    R.layout.item_symptom_footer,
+                    R.layout.item_simple_text_footer,
                     parent,
                     false
-                ), itemClickListener
+                )
             )
+            else -> error("unsupported viewType: $viewType")
         }
     }
 
     override fun getItemCount(): Int = items.size
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        if (items[position].type == BODY) {
-            (holder as BodyVH).bind(items[position])
+        val item = items[position]
+        when (holder) {
+            is HeaderVH -> holder.bind(item)
+            is BodyVH -> holder.bind(item)
+            is FooterVH -> holder.bind()
         }
-
     }
 
     override fun getItemViewType(position: Int): Int {
         return items[position].type
     }
 
-    class BodyVH(view: View, onCheckedChangeListener: CompoundButton.OnCheckedChangeListener) :
+    class HeaderVH(view: View) : RecyclerView.ViewHolder(view) {
+
+        fun bind(item: Item) {
+            with(itemView) {
+                tvHeader.text = context.getString(item.headerStringRes!!)
+            }
+        }
+    }
+
+    class FooterVH(view: View) : RecyclerView.ViewHolder(view) {
+
+        fun bind() {
+            with(itemView) {
+                tvFooter.setText(R.string.none)
+                tvFooter.setTextColorRes(R.color.concord)
+            }
+        }
+    }
+
+    class BodyVH(view: View, onSelectedChangeListener: () -> Unit) :
         RecyclerView.ViewHolder(view) {
 
         private lateinit var item: Item
 
         init {
             with(itemView) {
-                cbSymptom.setOnCheckedChangeListener { view, isChecked ->
-                    item.checked = isChecked
-                    onCheckedChangeListener.onCheckedChanged(view, isChecked)
-                }
-
                 layoutRoot.setOnClickListener {
-                    if (!item.checkable!!) return@setOnClickListener
-                    cbSymptom.isChecked = !cbSymptom.isChecked
+                    if (!item.selectable!!) return@setOnClickListener
+                    layoutRoot.isSelected = !layoutRoot.isSelected
+                    item.selected = layoutRoot.isSelected
+                    onSelectedChangeListener()
                 }
             }
         }
@@ -113,40 +194,26 @@ class SymptomRecyclerViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>
         fun bind(item: Item) {
             this.item = item
             with(itemView) {
-                cbSymptom.isEnabled = item.checkable!!
-                cbSymptom.isChecked = item.checked!!
-                tvSymptom.text = item.symptom!!.symptom
-                tvSymptomDes.text = item.symptom.symptomDes
+                tvSymptom.text = item.symptom!!.name.toLowerCase(Locale.getDefault())
+                layoutRoot.isSelected = item.selected!!
+                layoutRoot.isClickable = item.selectable!!
             }
         }
-    }
-
-    class FooterVH(view: View, itemClickListener: ItemClickListener?) :
-        RecyclerView.ViewHolder(view) {
-
-        init {
-            with(itemView) {
-                layoutRootFooter.setOnClickListener {
-                    itemClickListener?.onAddNew()
-                }
-            }
-        }
-
     }
 
     data class Item(
         val type: Int,
-        val symptom: SymptomModelView?,
-        var checked: Boolean? = null,
-        var checkable: Boolean? = null
+        val symptom: SymptomModelView? = null,
+        @StringRes val headerStringRes: Int? = null,
+        var selected: Boolean? = null,
+        var selectable: Boolean? = null
     )
 
     interface ItemClickListener {
 
-        fun onChecked()
+        fun onSelected()
 
-        fun onUnChecked()
+        fun onDeselected()
 
-        fun onAddNew()
     }
 }

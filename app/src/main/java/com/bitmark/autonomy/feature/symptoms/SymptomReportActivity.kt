@@ -9,22 +9,28 @@ package com.bitmark.autonomy.feature.symptoms
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
 import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.bitmark.autonomy.R
 import com.bitmark.autonomy.feature.BaseAppCompatActivity
 import com.bitmark.autonomy.feature.BaseViewModel
 import com.bitmark.autonomy.feature.DialogController
 import com.bitmark.autonomy.feature.Navigator
+import com.bitmark.autonomy.feature.Navigator.Companion.BOTTOM_UP
+import com.bitmark.autonomy.feature.Navigator.Companion.NONE
 import com.bitmark.autonomy.feature.Navigator.Companion.RIGHT_LEFT
 import com.bitmark.autonomy.feature.connectivity.ConnectivityHandler
-import com.bitmark.autonomy.feature.symptoms.add.SymptomAddingContainerActivity
-import com.bitmark.autonomy.feature.symptoms.add.SymptomAddingFragment
+import com.bitmark.autonomy.feature.symptoms.add2.SymptomAdding2Activity
+import com.bitmark.autonomy.feature.symptoms.metric.SymptomMetricActivity
 import com.bitmark.autonomy.logging.Event
 import com.bitmark.autonomy.logging.EventLogger
 import com.bitmark.autonomy.util.ext.*
-import com.bitmark.autonomy.util.view.BottomAlertDialog
+import com.bitmark.autonomy.util.livedata.Resource
+import com.bitmark.autonomy.util.view.BottomProgressDialog
+import com.google.android.flexbox.FlexDirection
+import com.google.android.flexbox.FlexWrap
+import com.google.android.flexbox.FlexboxLayoutManager
+import com.google.android.flexbox.JustifyContent
 import kotlinx.android.synthetic.main.activity_symptoms_report.*
 import java.util.*
 import javax.inject.Inject
@@ -55,6 +61,8 @@ class SymptomReportActivity : BaseAppCompatActivity() {
 
     private val adapter = SymptomRecyclerViewAdapter()
 
+    private val handler = Handler()
+
     override fun layoutRes(): Int = R.layout.activity_symptoms_report
 
     override fun viewModel(): BaseViewModel? = viewModel
@@ -73,34 +81,42 @@ class SymptomReportActivity : BaseAppCompatActivity() {
         adapter.setItemClickListener(object :
             SymptomRecyclerViewAdapter.ItemClickListener {
 
-            override fun onAddNew() {
-                navigator.anim(RIGHT_LEFT).startActivityForResult(
-                    SymptomAddingContainerActivity::class.java,
-                    ADD_SYMPTOM_REQUEST_CODE
-                )
-            }
-
-            override fun onChecked() {
+            override fun onSelected() {
                 enableSubmit()
             }
 
-            override fun onUnChecked() {
+            override fun onDeselected() {
                 disableSubmit()
             }
         })
 
-        val layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
+        val layoutManager = FlexboxLayoutManager(this)
+        layoutManager.flexDirection = FlexDirection.ROW
+        layoutManager.justifyContent = JustifyContent.FLEX_START
+        layoutManager.flexWrap = FlexWrap.WRAP
         rvSymptoms.layoutManager = layoutManager
         rvSymptoms.adapter = adapter
 
         layoutSubmit.setSafetyOnclickListener {
             if (blocked) return@setSafetyOnclickListener
-            viewModel.reportSymptoms(adapter.getCheckedSymptoms().map { it!!.id })
+            viewModel.reportSymptoms(adapter.getSelectedSymptoms().map { it!!.id })
         }
 
         layoutBack.setOnClickListener {
             navigator.anim(RIGHT_LEFT).finishActivity()
         }
+
+        layoutReportOther.setSafetyOnclickListener {
+            navigator.anim(BOTTOM_UP).startActivityForResult(
+                SymptomAdding2Activity::class.java,
+                ADD_SYMPTOM_REQUEST_CODE
+            )
+        }
+    }
+
+    override fun deinitComponents() {
+        handler.removeCallbacksAndMessages(null)
+        super.deinitComponents()
     }
 
     private fun enableSubmit() {
@@ -122,7 +138,11 @@ class SymptomReportActivity : BaseAppCompatActivity() {
             when {
                 res.isSuccess() -> {
                     progressBar.gone()
-                    adapter.set(res.data()!!)
+                    val data = res.data()!!
+                    adapter.set(data)
+                    if (!adapter.hasNeighborhoodSymptom()) {
+                        adapter.addFooter()
+                    }
                 }
 
                 res.isError() -> {
@@ -136,49 +156,69 @@ class SymptomReportActivity : BaseAppCompatActivity() {
             }
         })
 
-        viewModel.reportSymptomLiveData.asLiveData().observe(this, Observer { res ->
-            when {
-                res.isSuccess() -> {
-                    progressBar.gone()
-                    val dialog = BottomAlertDialog(
-                        this,
-                        R.string.reported,
-                        R.string.your_symptoms_have_been_reported,
-                        R.string.thanks_for_taking_the_time_symptoms,
-                        R.string.ok
-                    )
-                    dialog.setOnDismissListener {
-                        navigator.anim(RIGHT_LEFT)
-                            .finishActivityForResult(resultCode = Activity.RESULT_OK)
+        viewModel.reportSymptomLiveData.asLiveData()
+            .observe(this, object : Observer<Resource<Any>> {
+
+                lateinit var progressDialog: BottomProgressDialog
+
+                override fun onChanged(res: Resource<Any>) {
+                    when {
+                        res.isSuccess() -> {
+                            handler.postDelayed({
+                                blocked = false
+                                progressDialog.dismiss()
+                                navigator.anim(BOTTOM_UP)
+                                    .startActivity(SymptomMetricActivity::class.java)
+                                navigator.anim(NONE)
+                                    .finishActivityForResult(resultCode = Activity.RESULT_OK)
+                            }, 1000)
+                        }
+
+                        res.isError() -> {
+                            logger.logError(Event.SYMPTOM_REPORT_ERROR, res.throwable())
+                            handler.postDelayed({
+                                progressDialog.dismiss()
+                                if (connectivityHandler.isConnected()) {
+                                    dialogController.alert(
+                                        R.string.error,
+                                        R.string.could_not_report_symptoms
+                                    )
+                                } else {
+                                    dialogController.showNoInternetConnection()
+                                }
+                                blocked = false
+                            }, 1000)
+                        }
+
+                        res.isLoading() -> {
+                            blocked = true
+                            progressDialog = BottomProgressDialog(
+                                this@SymptomReportActivity,
+                                R.string.submitting,
+                                R.string.reporting_your_symptoms_to_your_neighborhood
+                            )
+                            progressDialog.show()
+                        }
                     }
-                    dialog.show()
-                    blocked = false
                 }
 
-                res.isError() -> {
-                    progressBar.gone()
-                    logger.logError(Event.SYMPTOM_REPORT_ERROR, res.throwable())
-                    if (connectivityHandler.isConnected()) {
-                        dialogController.alert(R.string.error, R.string.could_not_report_symptoms)
-                    } else {
-                        dialogController.showNoInternetConnection()
-                    }
-                    blocked = false
-                }
-
-                res.isLoading() -> {
-                    blocked = true
-                    progressBar.visible()
-                }
-            }
-        })
+            })
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == ADD_SYMPTOM_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
-            val newSymptom = SymptomAddingFragment.extractResultData(data)!!
-            adapter.add(newSymptom, checked = true, checkable = false)
+            val newSymptom = SymptomAdding2Activity.extractData(data)!!
+            if (adapter.isExisting(newSymptom.id)) {
+                adapter.setSelected(newSymptom.id, selected = true, selectable = false)
+            } else {
+                adapter.add(newSymptom, selected = true, selectable = false)
+            }
+
+            if (adapter.hasNeighborhoodSymptom()) {
+                adapter.removeFooter()
+            }
+            enableSubmit()
         }
     }
 

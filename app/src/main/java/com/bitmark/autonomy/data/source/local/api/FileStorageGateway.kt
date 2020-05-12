@@ -28,10 +28,9 @@ class FileStorageGateway internal constructor(private val context: Context) {
 
     fun isExisting(path: String): Boolean = File(path).exists()
 
-    fun read(path: String): ByteArray? = File(path).readBytes()
+    fun read(path: String) = File(path).readBytes()
 
-    fun readOnFilesDir(name: String): ByteArray? =
-        read(File(context.filesDir, name).absolutePath)
+    fun readOnFilesDir(name: String) = read(File(context.filesDir, name).absolutePath)
 
     fun filesDir() = context.filesDir
 

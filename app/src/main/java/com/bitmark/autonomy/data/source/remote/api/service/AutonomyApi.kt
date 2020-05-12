@@ -46,8 +46,8 @@ interface AutonomyApi {
     @PATCH("api/helps/{id}")
     fun respondHelpRequest(@Path("id") id: String): Completable
 
-    @GET("api/symptoms")
-    fun listSymptom(@Query("lang") lang: String): Single<Map<String, List<SymptomData>>>
+    @GET("https://d4f1ab4c-09a8-4d4f-923a-41a6f773e59e.mock.pstmn.io/api/v2/symptoms")
+    fun listSymptom(@Query("lang") lang: String, @Query("all") all: Boolean? = null): Single<Map<String, List<SymptomData>>>
 
     @POST("api/symptoms/report")
     fun reportSymptoms(@Body body: RequestBody): Completable
@@ -111,5 +111,8 @@ interface AutonomyApi {
 
     @GET("api/debug/{id}")
     fun getDebugInfo(@Path("id") id: String): Single<DebugInfoData>
+
+    @GET("https://d4f1ab4c-09a8-4d4f-923a-41a6f773e59e.mock.pstmn.io/api/metrics/symptom")
+    fun getSymptomMetric(): Single<SymptomMetricData2>
 
 }

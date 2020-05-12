@@ -40,8 +40,12 @@ import com.bitmark.autonomy.feature.symptoms.SymptomReportActivity
 import com.bitmark.autonomy.feature.symptoms.SymptomReportModule
 import com.bitmark.autonomy.feature.symptoms.add.SymptomAddingContainerActivity
 import com.bitmark.autonomy.feature.symptoms.add.SymptomAddingContainerModule
+import com.bitmark.autonomy.feature.symptoms.add2.SymptomAdding2Activity
+import com.bitmark.autonomy.feature.symptoms.add2.SymptomAdding2Module
 import com.bitmark.autonomy.feature.symptoms.history.SymptomHistoryActivity
 import com.bitmark.autonomy.feature.symptoms.history.SymptomHistoryModule
+import com.bitmark.autonomy.feature.symptoms.metric.SymptomMetricActivity
+import com.bitmark.autonomy.feature.symptoms.metric.SymptomMetricModule
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
@@ -119,5 +123,13 @@ abstract class ActivityBuilderModule {
     @ContributesAndroidInjector(modules = [DebugModeModule::class])
     @ActivityScope
     internal abstract fun bindDebugModeActivity(): DebugModeActivity
+
+    @ContributesAndroidInjector(modules = [SymptomAdding2Module::class])
+    @ActivityScope
+    internal abstract fun bindSymptomAdding2Activity(): SymptomAdding2Activity
+
+    @ContributesAndroidInjector(modules = [SymptomMetricModule::class])
+    @ActivityScope
+    internal abstract fun bindSymptomMetricActivity(): SymptomMetricActivity
 
 }

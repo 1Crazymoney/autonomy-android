@@ -9,6 +9,7 @@ package com.bitmark.autonomy.data.source
 import android.content.Context
 import com.bitmark.autonomy.data.source.local.AccountLocalDataSource
 import com.bitmark.autonomy.data.source.local.AppLocalDataSource
+import com.bitmark.autonomy.data.source.local.SymptomLocalDataSource
 import com.bitmark.autonomy.data.source.local.api.DatabaseGateway
 import com.bitmark.autonomy.data.source.remote.*
 import dagger.Module
@@ -43,8 +44,9 @@ class RepositoryModule {
     @Singleton
     @Provides
     fun provideSymptomRepo(
-        remoteDataSource: SymptomRemoteDataSource
-    ) = SymptomRepository(remoteDataSource)
+        remoteDataSource: SymptomRemoteDataSource,
+        localDataSource: SymptomLocalDataSource
+    ) = SymptomRepository(remoteDataSource, localDataSource)
 
     @Singleton
     @Provides

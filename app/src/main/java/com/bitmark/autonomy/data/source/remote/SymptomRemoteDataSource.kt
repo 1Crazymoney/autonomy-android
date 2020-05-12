@@ -22,8 +22,25 @@ class SymptomRemoteDataSource @Inject constructor(
     rxErrorHandlingComposer: RxErrorHandlingComposer
 ) : RemoteDataSource(autonomyApi, rxErrorHandlingComposer) {
 
+    fun listAllSymptom(lang: String) =
+        autonomyApi.listSymptom(lang, true).map { res ->
+            val officialSymptoms =
+                res["official_symptoms"]
+                    ?: error("invalid response format, do not contains 'official_symptoms' key")
+            val customizedSymptoms = res["customized_symptoms"]
+                ?: error("invalid response format, do not contains 'customized_symptoms' key")
+            val suggestedSymptoms = res["suggested_symptoms"]
+                ?: error("invalid response format, do not contains 'suggested_symptoms' key")
+            Triple(officialSymptoms, customizedSymptoms, suggestedSymptoms)
+        }.subscribeOn(Schedulers.io())
+
     fun listSymptom(lang: String) = autonomyApi.listSymptom(lang).map { res ->
-        res["symptoms"] ?: error("invalid response format")
+        val officialSymptoms =
+            res["official_symptoms"]
+                ?: error("invalid response format, do not contains 'official_symptoms' key")
+        val neighborhoodSymptoms = res["neighborhood_symptoms"]
+            ?: error("invalid response format, do not contains 'neighborhood_symptoms' key")
+        Pair(officialSymptoms, neighborhoodSymptoms)
     }.subscribeOn(Schedulers.io())
 
     fun reportSymptom(ids: List<String>): Completable {
@@ -45,4 +62,6 @@ class SymptomRemoteDataSource @Inject constructor(
         autonomyApi.listSymptomHistory(beforeSec, lang, limit).map { res ->
             res["symptoms_history"] ?: error("invalid response")
         }.subscribeOn(Schedulers.io())
+
+    fun getSymptomMetric() = autonomyApi.getSymptomMetric().subscribeOn(Schedulers.io())
 }

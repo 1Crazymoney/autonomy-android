@@ -6,7 +6,8 @@
     android:layout_height="match_parent"
     android:background="@color/black"
     android:orientation="vertical"
-    android:padding="@dimen/dp_16">
+    android:paddingTop="@dimen/dp_16"
+    android:paddingBottom="@dimen/dp_16">
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tvTitle"
@@ -26,6 +27,7 @@
         android:id="@+id/vToolbar1"
         android:layout_width="0dp"
         android:layout_height="@dimen/dp_3"
+        android:layout_marginStart="@dimen/dp_16"
         android:layout_marginTop="@dimen/dp_4"
         android:layout_marginEnd="@dimen/dp_4"
         android:background="@drawable/ic_double_line"
@@ -41,6 +43,7 @@
         android:layout_height="@dimen/dp_3"
         android:layout_marginStart="@dimen/dp_4"
         android:layout_marginTop="@dimen/dp_4"
+        android:layout_marginEnd="@dimen/dp_16"
         android:background="@drawable/ic_double_line"
         app:layout_constraintBottom_toBottomOf="@id/tvTitle"
         app:layout_constraintEnd_toEndOf="parent"
@@ -52,12 +55,14 @@
         android:id="@+id/tvSlogan"
         android:layout_width="0dp"
         android:layout_height="@dimen/dp_130"
+        android:layout_marginStart="@dimen/dp_16"
         android:layout_marginTop="@dimen/dp_24"
+        android:layout_marginEnd="@dimen/dp_16"
         android:layout_marginBottom="24dp"
         android:fontFamily="@font/grotesk_light_font_family"
         android:gravity="center"
         android:includeFontPadding="false"
-        android:text="@string/do_u_have_any_symptoms"
+        android:text="@string/tap_any_symptoms_you_have"
         android:textColor="@color/white"
         app:autoSizeMaxTextSize="@dimen/sp_36"
         app:autoSizeMinTextSize="@dimen/sp_18"
@@ -70,7 +75,9 @@
         android:id="@+id/vDivider1"
         android:layout_width="0dp"
         android:layout_height="1dp"
+        android:layout_marginStart="@dimen/dp_16"
         android:layout_marginTop="@dimen/dp_30"
+        android:layout_marginEnd="@dimen/dp_16"
         android:background="@color/concord"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -80,12 +87,14 @@
         android:id="@+id/rvSymptoms"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:paddingStart="@dimen/dp_8"
         android:paddingTop="@dimen/dp_18"
+        android:paddingEnd="@dimen/dp_8"
         android:paddingBottom="@dimen/dp_18"
         android:scrollbarSize="@dimen/dp_2"
         android:scrollbarThumbVertical="@color/white_aa"
         android:scrollbars="vertical"
-        app:layout_constraintBottom_toTopOf="@id/layoutBack"
+        app:layout_constraintBottom_toTopOf="@id/layoutReportOther"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/vDivider1" />
@@ -94,6 +103,7 @@
         android:id="@+id/layoutBack"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp_16"
         android:clickable="true"
         android:focusable="true"
         android:gravity="center"
@@ -123,6 +133,7 @@
         android:id="@+id/layoutSubmit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/dp_16"
         android:clickable="true"
         android:focusable="true"
         android:gravity="center"
@@ -149,6 +160,17 @@
             app:srcCompat="@drawable/ic_up_stateful" />
 
     </LinearLayout>
+
+    <include
+        android:id="@+id/layoutReportOther"
+        layout="@layout/layout_symptom_footer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="true"
+        app:layout_constraintBottom_toTopOf="@id/layoutSubmit"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <ProgressBar
         android:id="@+id/progressBar"
