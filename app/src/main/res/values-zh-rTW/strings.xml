@@ -188,6 +188,13 @@
     <string name="reporting_your_symptoms_to_your_neighborhood">Reporting your symptoms to your neighborhood…</string>
     <string name="submitting">Submitting</string>
     <string name="learn_how_to_keep_other_safe">Learn how to keep others safe</string>
+    <string name="recommended_covid_behaviors">Recommended COVID-19 Behaviors</string>
+    <string name="tap_any_healthy_behaviors_you_did">Tap any healthy behaviors you did today or add new ones:</string>
+    <string name="recent_behaviors_near_you">Recent behavior near you</string>
+    <string name="report_other_behavior">Report other behavior…</string>
+    <string name="reporting_your_healthy_behaviors">Reporting your healthy behaviors to your neighborhood …</string>
+    <string name="thanks_for_making_your_neighborhood_healthier">Thanks for making your neighborhood healthier!</string>
+    <string name="report_symptoms">Report\nsymptoms</string>
 
 
     <!--    string format-->

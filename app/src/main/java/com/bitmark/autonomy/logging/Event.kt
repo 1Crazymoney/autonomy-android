@@ -56,6 +56,12 @@ enum class Event(val value: String) {
 
     BEHAVIOR_ADDING_ERROR("behavior_adding_error"),
 
+    BEHAVIOR_AUTOCOMPLETE_SEARCHING_ERROR("behavior_autocomplete_searching_error"),
+
+    BEHAVIOR_AUTOCOMPLETE_LISTING_ERROR("behavior_autocomplete_listing_error"),
+
+    BEHAVIOR_METRIC_ERROR("behavior_metric_error"),
+
     AREA_DELETE_ERROR("area_delete_error"),
 
     AREA_RENAME_ERROR("area_rename_error"),

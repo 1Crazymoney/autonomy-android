@@ -15,12 +15,18 @@ data class BehaviorModelView(
 
     val id: String,
 
-    val behavior: String,
+    val name: String,
 
-    val behaviorDes: String
+    val desc: String,
+
+    val type: BehaviorType? = null
 ) : ModelView, Parcelable {
     companion object {
-        fun newInstance(behavior: BehaviorData) =
-            BehaviorModelView(behavior.id, behavior.name, behavior.description)
+        fun newInstance(behavior: BehaviorData, type: BehaviorType? = null) =
+            BehaviorModelView(behavior.id, behavior.name, behavior.description, type)
     }
+}
+
+enum class BehaviorType {
+    OFFICIAL, NEIGHBORHOOD
 }

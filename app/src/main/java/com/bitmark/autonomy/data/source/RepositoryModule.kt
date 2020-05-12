@@ -9,6 +9,7 @@ package com.bitmark.autonomy.data.source
 import android.content.Context
 import com.bitmark.autonomy.data.source.local.AccountLocalDataSource
 import com.bitmark.autonomy.data.source.local.AppLocalDataSource
+import com.bitmark.autonomy.data.source.local.BehaviorLocalDataSource
 import com.bitmark.autonomy.data.source.local.SymptomLocalDataSource
 import com.bitmark.autonomy.data.source.local.api.DatabaseGateway
 import com.bitmark.autonomy.data.source.remote.*
@@ -57,8 +58,9 @@ class RepositoryModule {
     @Singleton
     @Provides
     fun provideBehaviorRepo(
-        remoteDataSource: BehaviorRemoteDataSource
-    ) = BehaviorRepository(remoteDataSource)
+        remoteDataSource: BehaviorRemoteDataSource,
+        localDataSource: BehaviorLocalDataSource
+    ) = BehaviorRepository(remoteDataSource, localDataSource)
 
     @Singleton
     @Provides

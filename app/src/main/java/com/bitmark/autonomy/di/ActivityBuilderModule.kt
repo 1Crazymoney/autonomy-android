@@ -12,8 +12,12 @@ import com.bitmark.autonomy.feature.behavior.BehaviorReportActivity
 import com.bitmark.autonomy.feature.behavior.BehaviorReportModule
 import com.bitmark.autonomy.feature.behavior.add.BehaviorAddingContainerActivity
 import com.bitmark.autonomy.feature.behavior.add.BehaviorAddingContainerModule
+import com.bitmark.autonomy.feature.behavior.add2.BehaviorAdding2Activity
+import com.bitmark.autonomy.feature.behavior.add2.BehaviorAdding2Module
 import com.bitmark.autonomy.feature.behavior.history.BehaviorHistoryActivity
 import com.bitmark.autonomy.feature.behavior.history.BehaviorHistoryModule
+import com.bitmark.autonomy.feature.behavior.metric.BehaviorMetricActivity
+import com.bitmark.autonomy.feature.behavior.metric.BehaviorMetricModule
 import com.bitmark.autonomy.feature.debugmode.DebugModeActivity
 import com.bitmark.autonomy.feature.debugmode.DebugModeModule
 import com.bitmark.autonomy.feature.locationhistory.LocationHistoryActivity
@@ -131,5 +135,13 @@ abstract class ActivityBuilderModule {
     @ContributesAndroidInjector(modules = [SymptomMetricModule::class])
     @ActivityScope
     internal abstract fun bindSymptomMetricActivity(): SymptomMetricActivity
+
+    @ContributesAndroidInjector(modules = [BehaviorAdding2Module::class])
+    @ActivityScope
+    internal abstract fun bindBehaviorAdding2Activity(): BehaviorAdding2Activity
+
+    @ContributesAndroidInjector(modules = [BehaviorMetricModule::class])
+    @ActivityScope
+    internal abstract fun bindBehaviorMetricActivity(): BehaviorMetricActivity
 
 }

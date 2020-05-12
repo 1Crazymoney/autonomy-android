@@ -55,8 +55,8 @@ interface AutonomyApi {
     @POST("api/symptoms")
     fun addSymptom(@Body body: RequestBody): Single<Map<String, String>>
 
-    @GET("api/behaviors")
-    fun listBehavior(@Query("lang") lang: String): Single<Map<String, List<BehaviorData>>>
+    @GET("https://d4f1ab4c-09a8-4d4f-923a-41a6f773e59e.mock.pstmn.io/api/v2/behaviors")
+    fun listBehavior(@Query("lang") lang: String, @Query("all") all: Boolean? = null): Single<Map<String, List<BehaviorData>>>
 
     @POST("api/behaviors/report")
     fun reportBehavior(@Body body: RequestBody): Completable
@@ -114,5 +114,8 @@ interface AutonomyApi {
 
     @GET("https://d4f1ab4c-09a8-4d4f-923a-41a6f773e59e.mock.pstmn.io/api/metrics/symptom")
     fun getSymptomMetric(): Single<SymptomMetricData2>
+
+    @GET("https://d4f1ab4c-09a8-4d4f-923a-41a6f773e59e.mock.pstmn.io/api/metrics/behavior")
+    fun getBehaviorMetric(): Single<BehaviorMetricData2>
 
 }

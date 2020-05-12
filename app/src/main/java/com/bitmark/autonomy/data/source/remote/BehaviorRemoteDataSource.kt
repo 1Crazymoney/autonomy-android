@@ -23,8 +23,23 @@ class BehaviorRemoteDataSource @Inject constructor(
 ) : RemoteDataSource(autonomyApi, rxErrorHandlingComposer) {
 
     fun listBehavior(lang: String) = autonomyApi.listBehavior(lang).map { res ->
-        res["behaviors"] ?: error("invalid response format")
+        val officialSymptoms =
+            res["official_behaviors"]
+                ?: error("invalid response format, do not contains 'official_behaviors' key")
+        val neighborhoodSymptoms = res["neighborhood_behaviors"]
+            ?: error("invalid response format, do not contains 'neighborhood_behaviors' key")
+        Pair(officialSymptoms, neighborhoodSymptoms)
     }.subscribeOn(Schedulers.io())
+
+    fun listAllBehavior(lang: String) =
+        autonomyApi.listBehavior(lang, true).map { res ->
+            val officialSymptoms =
+                res["official_behaviors"]
+                    ?: error("invalid response format, do not contains 'official_behaviors' key")
+            val customizedSymptoms = res["customized_behaviors"]
+                ?: error("invalid response format, do not contains 'customized_behaviors' key")
+            Pair(officialSymptoms, customizedSymptoms)
+        }.subscribeOn(Schedulers.io())
 
     fun reportBehaviors(ids: List<String>): Completable {
         val req = mapOf("behaviors" to ids)
@@ -46,5 +61,7 @@ class BehaviorRemoteDataSource @Inject constructor(
         autonomyApi.listBehaviorHistory(beforeSec, lang, limit).map { res ->
             res["behaviors_history"] ?: error("invalid response")
         }.subscribeOn(Schedulers.io())
+
+    fun getBehaviorMetric() = autonomyApi.getBehaviorMetric().subscribeOn(Schedulers.io())
 
 }

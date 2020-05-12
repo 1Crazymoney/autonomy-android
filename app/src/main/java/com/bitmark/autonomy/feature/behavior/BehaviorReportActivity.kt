@@ -9,22 +9,28 @@ package com.bitmark.autonomy.feature.behavior
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
 import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.bitmark.autonomy.R
 import com.bitmark.autonomy.feature.BaseAppCompatActivity
 import com.bitmark.autonomy.feature.BaseViewModel
 import com.bitmark.autonomy.feature.DialogController
 import com.bitmark.autonomy.feature.Navigator
+import com.bitmark.autonomy.feature.Navigator.Companion.BOTTOM_UP
+import com.bitmark.autonomy.feature.Navigator.Companion.NONE
 import com.bitmark.autonomy.feature.Navigator.Companion.RIGHT_LEFT
-import com.bitmark.autonomy.feature.behavior.add.BehaviorAddingContainerActivity
-import com.bitmark.autonomy.feature.behavior.add.BehaviorAddingFragment
+import com.bitmark.autonomy.feature.behavior.add2.BehaviorAdding2Activity
+import com.bitmark.autonomy.feature.behavior.metric.BehaviorMetricActivity
 import com.bitmark.autonomy.feature.connectivity.ConnectivityHandler
 import com.bitmark.autonomy.logging.Event
 import com.bitmark.autonomy.logging.EventLogger
 import com.bitmark.autonomy.util.ext.*
-import com.bitmark.autonomy.util.view.BottomAlertDialog
+import com.bitmark.autonomy.util.livedata.Resource
+import com.bitmark.autonomy.util.view.BottomProgressDialog
+import com.google.android.flexbox.FlexDirection
+import com.google.android.flexbox.FlexWrap
+import com.google.android.flexbox.FlexboxLayoutManager
+import com.google.android.flexbox.JustifyContent
 import kotlinx.android.synthetic.main.activity_behavior_report.*
 import java.util.*
 import javax.inject.Inject
@@ -55,6 +61,8 @@ class BehaviorReportActivity : BaseAppCompatActivity() {
 
     private val adapter = BehaviorReportRecyclerViewAdapter()
 
+    private val handler = Handler()
+
     override fun layoutRes(): Int = R.layout.activity_behavior_report
 
     override fun viewModel(): BaseViewModel? = viewModel
@@ -73,34 +81,42 @@ class BehaviorReportActivity : BaseAppCompatActivity() {
         adapter.setItemClickListener(object :
             BehaviorReportRecyclerViewAdapter.ItemClickListener {
 
-            override fun onAddNew() {
-                navigator.anim(RIGHT_LEFT).startActivityForResult(
-                    BehaviorAddingContainerActivity::class.java,
-                    ADD_BEHAVIOR_REQUEST_CODE
-                )
-            }
-
-            override fun onChecked() {
+            override fun onSelected() {
                 enableSubmit()
             }
 
-            override fun onUnChecked() {
+            override fun onDeselected() {
                 disableSubmit()
             }
         })
 
-        val layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
+        val layoutManager = FlexboxLayoutManager(this)
+        layoutManager.flexDirection = FlexDirection.ROW
+        layoutManager.justifyContent = JustifyContent.FLEX_START
+        layoutManager.flexWrap = FlexWrap.WRAP
         rvBehaviors.layoutManager = layoutManager
         rvBehaviors.adapter = adapter
 
         layoutSubmit.setSafetyOnclickListener {
             if (blocked) return@setSafetyOnclickListener
-            viewModel.reportBehaviors(adapter.getCheckedBehaviors().map { it!!.id })
+            viewModel.reportBehaviors(adapter.getSelectedBehaviors().map { it!!.id })
         }
 
         layoutBack.setOnClickListener {
             navigator.anim(RIGHT_LEFT).finishActivity()
         }
+
+        layoutReportOther.setSafetyOnclickListener {
+            navigator.anim(BOTTOM_UP).startActivityForResult(
+                BehaviorAdding2Activity::class.java,
+                ADD_BEHAVIOR_REQUEST_CODE
+            )
+        }
+    }
+
+    override fun deinitComponents() {
+        handler.removeCallbacksAndMessages(null)
+        super.deinitComponents()
     }
 
     private fun enableSubmit() {
@@ -122,7 +138,11 @@ class BehaviorReportActivity : BaseAppCompatActivity() {
             when {
                 res.isSuccess() -> {
                     progressBar.gone()
-                    adapter.set(res.data()!!)
+                    val data = res.data()!!
+                    adapter.set(data)
+                    if (!adapter.hasNeighborhoodBehaviors()) {
+                        adapter.addFooter()
+                    }
                 }
 
                 res.isError() -> {
@@ -136,49 +156,69 @@ class BehaviorReportActivity : BaseAppCompatActivity() {
             }
         })
 
-        viewModel.reportBehaviorsLiveData.asLiveData().observe(this, Observer { res ->
-            when {
-                res.isSuccess() -> {
-                    progressBar.gone()
-                    val dialog = BottomAlertDialog(
-                        this,
-                        R.string.reported,
-                        R.string.your_behaviors_have_been_reported,
-                        R.string.thanks_for_taking_the_time_behaviors,
-                        R.string.ok
-                    )
-                    dialog.setOnDismissListener {
-                        navigator.anim(RIGHT_LEFT)
-                            .finishActivityForResult(resultCode = Activity.RESULT_OK)
+        viewModel.reportBehaviorsLiveData.asLiveData()
+            .observe(this, object : Observer<Resource<Any>> {
+
+                lateinit var progressDialog: BottomProgressDialog
+
+                override fun onChanged(res: Resource<Any>) {
+                    when {
+                        res.isSuccess() -> {
+                            handler.postDelayed({
+                                blocked = false
+                                progressDialog.dismiss()
+                                navigator.anim(BOTTOM_UP)
+                                    .startActivity(BehaviorMetricActivity::class.java)
+                                navigator.anim(NONE)
+                                    .finishActivityForResult(resultCode = Activity.RESULT_OK)
+                            }, 1000)
+                        }
+
+                        res.isError() -> {
+                            logger.logError(Event.BEHAVIOR_REPORT_ERROR, res.throwable())
+                            handler.postDelayed({
+                                progressDialog.dismiss()
+                                if (connectivityHandler.isConnected()) {
+                                    dialogController.alert(
+                                        R.string.error,
+                                        R.string.could_not_report_behaviors
+                                    )
+                                } else {
+                                    dialogController.showNoInternetConnection()
+                                }
+                                blocked = false
+                            }, 1000)
+                        }
+
+                        res.isLoading() -> {
+                            blocked = true
+                            progressDialog = BottomProgressDialog(
+                                this@BehaviorReportActivity,
+                                R.string.submitting,
+                                R.string.reporting_your_healthy_behaviors
+                            )
+                            progressDialog.show()
+                        }
                     }
-                    dialog.show()
-                    blocked = false
                 }
 
-                res.isError() -> {
-                    progressBar.gone()
-                    logger.logError(Event.BEHAVIOR_REPORT_ERROR, res.throwable())
-                    if (connectivityHandler.isConnected()) {
-                        dialogController.alert(R.string.error, R.string.could_not_report_behaviors)
-                    } else {
-                        dialogController.showNoInternetConnection()
-                    }
-                    blocked = false
-                }
-
-                res.isLoading() -> {
-                    blocked = true
-                    progressBar.visible()
-                }
-            }
-        })
+            })
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == ADD_BEHAVIOR_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
-            val newBehavior = BehaviorAddingFragment.extractResultData(data)!!
-            adapter.add(newBehavior, checked = true, checkable = false)
+            val newBehavior = BehaviorAdding2Activity.extractData(data)!!
+            if (adapter.isExisting(newBehavior.id)) {
+                adapter.setSelected(newBehavior.id, selected = true, selectable = false)
+            } else {
+                adapter.add(newBehavior, selected = true, selectable = false)
+            }
+
+            if (adapter.hasNeighborhoodBehaviors()) {
+                adapter.removeFooter()
+            }
+            enableSubmit()
         }
     }
 

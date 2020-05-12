@@ -6,12 +6,23 @@
  */
 package com.bitmark.autonomy.data.source
 
+import com.bitmark.autonomy.data.source.local.BehaviorLocalDataSource
 import com.bitmark.autonomy.data.source.remote.BehaviorRemoteDataSource
+import io.reactivex.Maybe
 
 
-class BehaviorRepository(private val remoteDataSource: BehaviorRemoteDataSource) : Repository {
+class BehaviorRepository(
+    private val remoteDataSource: BehaviorRemoteDataSource,
+    private val localDataSource: BehaviorLocalDataSource
+) : Repository {
 
     fun listBehavior(lang: String) = remoteDataSource.listBehavior(lang)
+
+    fun listAllBehavior(lang: String) = Maybe.merge(
+        remoteDataSource.listAllBehavior(lang).flatMapMaybe { t ->
+            localDataSource.saveBehaviors(t).andThen(Maybe.just(t))
+        }, localDataSource.listBehavior().onErrorComplete()
+    )
 
     fun reportBehaviors(ids: List<String>) = remoteDataSource.reportBehaviors(ids)
 
@@ -19,4 +30,6 @@ class BehaviorRepository(private val remoteDataSource: BehaviorRemoteDataSource)
 
     fun listBehaviorHistory(beforeSec: Long? = null, lang: String, limit: Int = 20) =
         remoteDataSource.listBehaviorHistory(beforeSec, lang, limit)
+
+    fun getBehaviorMetric() = remoteDataSource.getBehaviorMetric()
 }

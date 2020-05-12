@@ -19,6 +19,16 @@ data class SymptomMetricData2(
     val community: Metric2
 ) : Data
 
+data class BehaviorMetricData2(
+    @Expose
+    @SerializedName("me")
+    val mine: Metric1,
+
+    @Expose
+    @SerializedName("community")
+    val community: Metric2
+)
+
 data class Metric1(
 
     @Expose

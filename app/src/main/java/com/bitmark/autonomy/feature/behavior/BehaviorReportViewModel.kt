@@ -9,9 +9,11 @@ package com.bitmark.autonomy.feature.behavior
 import androidx.lifecycle.Lifecycle
 import com.bitmark.autonomy.data.source.BehaviorRepository
 import com.bitmark.autonomy.feature.BaseViewModel
+import com.bitmark.autonomy.util.ext.append
 import com.bitmark.autonomy.util.livedata.CompositeLiveData
 import com.bitmark.autonomy.util.livedata.RxLiveDataTransformer
 import com.bitmark.autonomy.util.modelview.BehaviorModelView
+import com.bitmark.autonomy.util.modelview.BehaviorType
 
 
 class BehaviorReportViewModel(
@@ -25,10 +27,12 @@ class BehaviorReportViewModel(
     internal val reportBehaviorsLiveData = CompositeLiveData<Any>()
 
     fun listBehavior(lang: String) {
-        listBehaviorLiveData.add(rxLiveDataTransformer.single(behaviorRepo.listBehavior(lang).map { symptoms ->
-            symptoms.map { s ->
-                BehaviorModelView.newInstance(s)
-            }
+        listBehaviorLiveData.add(rxLiveDataTransformer.single(behaviorRepo.listBehavior(lang).map { p ->
+            val officialBehaviors =
+                p.first.map { s -> BehaviorModelView.newInstance(s, BehaviorType.OFFICIAL) }
+            val neighborhoodBehaviors =
+                p.second.map { s -> BehaviorModelView.newInstance(s, BehaviorType.NEIGHBORHOOD) }
+            officialBehaviors.toMutableList().append(neighborhoodBehaviors)
         }))
     }
 

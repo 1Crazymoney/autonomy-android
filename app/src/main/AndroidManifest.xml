@@ -111,6 +111,14 @@
             android:name=".feature.symptoms.metric.SymptomMetricActivity"
             android:screenOrientation="portrait" />
 
+        <activity
+            android:name=".feature.behavior.add2.BehaviorAdding2Activity"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".feature.behavior.metric.BehaviorMetricActivity"
+            android:screenOrientation="portrait" />
+
         <receiver android:name=".feature.notification.ScheduledNotificationReceiver" />
 
         <meta-data
