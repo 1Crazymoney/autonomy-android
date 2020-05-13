@@ -19,6 +19,7 @@ import com.bitmark.autonomy.feature.Navigator.Companion.BOTTOM_UP
 import com.bitmark.autonomy.feature.Navigator.Companion.NONE
 import com.bitmark.autonomy.feature.Navigator.Companion.RIGHT_LEFT
 import com.bitmark.autonomy.feature.behavior.BehaviorReportActivity
+import com.bitmark.autonomy.feature.guidance.GuidanceActivity
 import com.bitmark.autonomy.logging.Event
 import com.bitmark.autonomy.logging.EventLogger
 import com.bitmark.autonomy.util.ext.*
@@ -60,7 +61,7 @@ class SymptomMetricActivity : BaseAppCompatActivity() {
         super.initComponents()
 
         layoutExtNavigation.setSafetyOnclickListener {
-            // TODO handle later
+            navigator.anim(RIGHT_LEFT).startActivity(GuidanceActivity::class.java)
         }
 
         layoutReportBehavior.setSafetyOnclickListener {

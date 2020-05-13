@@ -8,10 +8,9 @@ package com.bitmark.autonomy.util.ext
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
+import android.graphics.drawable.Drawable
 import android.os.Handler
-import android.util.Log
 import android.util.TypedValue
-import android.view.MotionEvent
 import android.view.View
 import android.view.animation.AccelerateInterpolator
 import android.view.animation.DecelerateInterpolator
@@ -22,8 +21,12 @@ import androidx.annotation.ColorRes
 import androidx.annotation.StringRes
 import androidx.core.content.ContextCompat
 import androidx.core.widget.NestedScrollView
+import com.bitmark.autonomy.R
 import com.bitmark.autonomy.logging.Tracer
-import kotlin.math.abs
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
 
 fun View.gone(withAnim: Boolean = false) {
     if (withAnim) {
@@ -167,3 +170,36 @@ fun View.flip(other: View, duration: Long = 500) {
                 .start()
         }.start()
 }
+
+fun ImageView.load(
+    url: String,
+    success: () -> Unit = {},
+    error: (GlideException?) -> Unit = {},
+    placeholder: Int = R.color.black
+) =
+    Glide.with(context).load(
+        url
+    ).placeholder(placeholder).listener(object :
+        RequestListener<Drawable> {
+        override fun onLoadFailed(
+            e: GlideException?,
+            model: Any?,
+            target: com.bumptech.glide.request.target.Target<Drawable>?,
+            isFirstResource: Boolean
+        ): Boolean {
+            error(e)
+            return false
+        }
+
+        override fun onResourceReady(
+            resource: Drawable?,
+            model: Any?,
+            target: com.bumptech.glide.request.target.Target<Drawable>?,
+            dataSource: DataSource?,
+            isFirstResource: Boolean
+        ): Boolean {
+            success()
+            return false
+        }
+
+    }).into(this)

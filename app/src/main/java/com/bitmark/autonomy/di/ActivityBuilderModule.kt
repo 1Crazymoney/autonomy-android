@@ -20,6 +20,8 @@ import com.bitmark.autonomy.feature.behavior.metric.BehaviorMetricActivity
 import com.bitmark.autonomy.feature.behavior.metric.BehaviorMetricModule
 import com.bitmark.autonomy.feature.debugmode.DebugModeActivity
 import com.bitmark.autonomy.feature.debugmode.DebugModeModule
+import com.bitmark.autonomy.feature.guidance.GuidanceActivity
+import com.bitmark.autonomy.feature.guidance.GuidanceModule
 import com.bitmark.autonomy.feature.locationhistory.LocationHistoryActivity
 import com.bitmark.autonomy.feature.locationhistory.LocationHistoryModule
 import com.bitmark.autonomy.feature.main.MainActivity
@@ -143,5 +145,9 @@ abstract class ActivityBuilderModule {
     @ContributesAndroidInjector(modules = [BehaviorMetricModule::class])
     @ActivityScope
     internal abstract fun bindBehaviorMetricActivity(): BehaviorMetricActivity
+
+    @ContributesAndroidInjector(modules = [GuidanceModule::class])
+    @ActivityScope
+    internal abstract fun bindGuidanceActivity(): GuidanceActivity
 
 }

@@ -125,7 +125,7 @@ fun Navigator.openVideoPlayer(url: String, error: (Throwable) -> Unit) {
     try {
         val intent = Intent(Intent.ACTION_VIEW)
         val uri = Uri.parse(url)
-        intent.setDataAndType(uri, "video/*")
+        intent.data = uri
         startActivity(intent)
     } catch (e: Throwable) {
         error(e)
@@ -168,7 +168,11 @@ fun Navigator.openKeyGuardConfirmation(
     startActivityForResult(intent, requestCode)
 }
 
-fun Navigator.openGoogleMapDirection(context: Context, place: String, error: (Throwable) -> Unit = {}) {
+fun Navigator.openGoogleMapDirection(
+    context: Context,
+    place: String,
+    error: (Throwable) -> Unit = {}
+) {
     try {
         val uri = Uri.parse("google.navigation:q=" + Uri.encode(place))
         val intent = Intent(Intent.ACTION_VIEW, uri)

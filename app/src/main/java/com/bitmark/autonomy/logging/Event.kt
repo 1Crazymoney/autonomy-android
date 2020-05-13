@@ -78,6 +78,8 @@ enum class Event(val value: String) {
 
     FORMULA_DELETE_ERROR("formula_delete_error"),
 
-    DEBUG_INFO_GETTING_ERROR("debug_info_getting_error")
+    DEBUG_INFO_GETTING_ERROR("debug_info_getting_error"),
+
+    VIDEO_PLAYING_ERROR("video_playing_error")
 
 }

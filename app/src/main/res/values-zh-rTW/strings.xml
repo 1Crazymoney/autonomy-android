@@ -195,6 +195,13 @@
     <string name="reporting_your_healthy_behaviors">Reporting your healthy behaviors to your neighborhood …</string>
     <string name="thanks_for_making_your_neighborhood_healthier">Thanks for making your neighborhood healthier!</string>
     <string name="report_symptoms">Report\nsymptoms</string>
+    <string name="how_to_correctly_perform_healthy_behavior">How to correctly perform healthy behaviors:</string>
+    <string name="hand_washing">Hand washing</string>
+    <string name="applying_hand_sanitizer">Applying hand sanitizer</string>
+    <string name="wearing_surgical_mask">Wearing a surgical mask</string>
+    <string name="covering_coughs">Covering coughs</string>
+    <string name="could_not_play_video">Could not play video. Please try again later.</string>
+    <string name="guidance">Guidance</string>
 
 
     <!--    string format-->
