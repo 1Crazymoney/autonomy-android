@@ -34,14 +34,16 @@ class RiskLevelViewModel(
     fun registerAccount(
         account: Account,
         alias: String,
-        riskLevel: String
+        riskLevel: String,
+        timezone: String
     ) {
         registerAccountLiveData.add(
             rxLiveDataTransformer.completable(
                 registerAccountStream(
                     account,
                     alias,
-                    riskLevel
+                    riskLevel,
+                    timezone
                 )
             )
         )
@@ -50,7 +52,8 @@ class RiskLevelViewModel(
     private fun registerAccountStream(
         account: Account,
         alias: String,
-        riskLevel: String
+        riskLevel: String,
+        timezone: String
     ): Completable {
 
         val registerAccountStream = Single.fromCallable {
@@ -64,7 +67,7 @@ class RiskLevelViewModel(
                 val timestamp = t.second
                 val signature = t.third
                 val encPubKey = Hex.HEX.encode(account.encKeyPair.publicKey().toBytes())
-                val metadata = mapOf("risk" to riskLevel)
+                val metadata = mapOf("risk" to riskLevel, "timezone" to timezone)
                 accountRepo.registerServerAccount(
                     timestamp,
                     signature,

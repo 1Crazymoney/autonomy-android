@@ -32,6 +32,7 @@ import com.bitmark.autonomy.feature.notification.NotificationType
 import com.bitmark.autonomy.feature.onboarding.OnboardingContainerActivity
 import com.bitmark.autonomy.logging.Event
 import com.bitmark.autonomy.logging.EventLogger
+import com.bitmark.autonomy.util.DateTimeUtil
 import com.bitmark.autonomy.util.ext.*
 import com.bitmark.sdk.authentication.KeyAuthenticationSpec
 import com.bitmark.sdk.features.Account
@@ -129,7 +130,7 @@ class SplashActivity : BaseAppCompatActivity() {
                     val accountData = res.data()!!
                     if (accountData.isRegistered()) {
                         loadAccount(accountData) { account ->
-                            viewModel.prepareData(account)
+                            viewModel.prepareData(account, DateTimeUtil.getDefaultTimezone())
                         }
                     } else {
                         Intercom.client().registerUnidentifiedUser()

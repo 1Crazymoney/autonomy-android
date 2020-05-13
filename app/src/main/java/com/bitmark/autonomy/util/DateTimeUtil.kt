@@ -16,8 +16,6 @@ class DateTimeUtil {
 
     companion object {
 
-        val DEFAULT_TIME_ZONE = TimeZone.getDefault().id
-
         val ISO8601_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSSSSS'Z'"
 
         val ISO8601_SIMPLE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss'Z'"
@@ -31,6 +29,17 @@ class DateTimeUtil {
         val TIME_FORMAT_1 = "HH:mm"
 
         val TIME_FORMAT_2 = "hh:mm a"
+
+        fun getDefaultTimezoneId(): String = TimeZone.getDefault().id
+
+        fun getDefaultTimezone(): String {
+            val calendar = GregorianCalendar()
+            val timezone = calendar.timeZone
+            val offset =
+                timezone.rawOffset + if (timezone.inDaylightTime(Date())) timezone.dstSavings else 0
+            val gmtOffset = TimeUnit.HOURS.convert(offset.toLong(), TimeUnit.MILLISECONDS)
+            return if (gmtOffset >= 0) "GMT+$gmtOffset" else "GMT$gmtOffset"
+        }
 
         fun stringToString(
             date: String,

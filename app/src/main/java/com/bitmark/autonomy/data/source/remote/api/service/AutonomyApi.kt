@@ -32,7 +32,7 @@ interface AutonomyApi {
     fun getAccountInfo(): Single<Map<String, AccountData>>
 
     @PATCH("api/accounts/me")
-    fun updateMetadata(@Body body: RequestBody): Single<Map<String, AccountData>>
+    fun updateMetadata(@Body body: RequestBody): Completable
 
     @POST("api/helps")
     fun requestHelp(@Body body: RequestHelpRequest): Completable

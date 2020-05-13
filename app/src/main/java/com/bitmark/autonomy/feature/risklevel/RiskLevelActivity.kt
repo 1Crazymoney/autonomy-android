@@ -78,7 +78,7 @@ class RiskLevelActivity : BaseAppCompatActivity() {
                     cbNoRisk.isChecked -> "low"
                     else -> error("incorrect risk level")
                 }
-                viewModel.registerAccount(account, alias, riskLevel)
+                viewModel.registerAccount(account, alias, riskLevel, DateTimeUtil.getDefaultTimezone())
             }
         }
 

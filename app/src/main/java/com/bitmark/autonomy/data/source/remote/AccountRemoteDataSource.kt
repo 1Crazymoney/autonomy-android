@@ -58,11 +58,10 @@ class AccountRemoteDataSource @Inject constructor(
             res["result"] ?: error("invalid response")
         }
 
-    fun updateMetadata(metadata: Map<String, String>): Single<AccountData> {
+    fun updateMetadata(metadata: Map<String, String>): Completable {
         val json = newGsonInstance().toJson(mapOf("metadata" to metadata))
         val reqBody = json.toRequestBody("application/json".toMediaTypeOrNull())
-        return autonomyApi.updateMetadata(reqBody)
-            .map { res -> res["result"] ?: error("invalid response") }.subscribeOn(Schedulers.io())
+        return autonomyApi.updateMetadata(reqBody).subscribeOn(Schedulers.io())
     }
 
 }

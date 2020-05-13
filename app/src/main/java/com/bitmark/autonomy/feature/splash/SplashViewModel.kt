@@ -42,7 +42,7 @@ class SplashViewModel(
         getAppInfoLiveData.add(rxLiveDataTransformer.single(appRepo.getAppInfo()))
     }
 
-    fun prepareData(account: Account) {
+    fun prepareData(account: Account, timezone: String) {
         val registerJwtStream = Single.fromCallable {
             val requester = account.accountNumber
             val timestamp = System.currentTimeMillis().toString()
@@ -53,13 +53,14 @@ class SplashViewModel(
                 accountRepo.registerServerJwt(t.first, t.second, t.third)
             }
 
-        val syncAccountDataStream = accountRepo.syncAccountData().ignoreElement()
-
+        val updateTimezoneStream =
+            accountRepo.updateMetadata(mapOf("timezone" to timezone))
+                .andThen(accountRepo.syncAccountData().ignoreElement())
 
         prepareDataLiveData.add(
             rxLiveDataTransformer.completable(
                 registerJwtStream.andThen(
-                    syncAccountDataStream
+                    updateTimezoneStream
                 )
             )
         )

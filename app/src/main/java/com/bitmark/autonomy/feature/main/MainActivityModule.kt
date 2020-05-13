@@ -6,6 +6,7 @@
  */
 package com.bitmark.autonomy.feature.main
 
+import com.bitmark.autonomy.data.source.AccountRepository
 import com.bitmark.autonomy.data.source.AppRepository
 import com.bitmark.autonomy.data.source.UserRepository
 import com.bitmark.autonomy.di.ActivityScope
@@ -33,12 +34,14 @@ class MainActivityModule {
         activity: MainActivity,
         userRepo: UserRepository,
         appRepo: AppRepository,
+        accountRepo: AccountRepository,
         rxLiveDataTransformer: RxLiveDataTransformer,
         serverAuth: ServerAuthentication
     ) = MainActivityViewModel(
         activity.lifecycle,
         userRepo,
         appRepo,
+        accountRepo,
         rxLiveDataTransformer,
         serverAuth
     )

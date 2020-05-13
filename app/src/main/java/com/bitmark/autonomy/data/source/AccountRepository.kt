@@ -11,7 +11,6 @@ import com.bitmark.autonomy.data.model.mergeWith
 import com.bitmark.autonomy.data.source.local.AccountLocalDataSource
 import com.bitmark.autonomy.data.source.remote.AccountRemoteDataSource
 import io.reactivex.Single
-import io.reactivex.functions.BiFunction
 
 
 class AccountRepository(
@@ -54,14 +53,7 @@ class AccountRepository(
         }
     }
 
-    fun updateMetadata(metadata: Map<String, String>) = Single.zip(
-        remoteDataSource.updateMetadata(metadata),
-        localDataSource.getAccountData(),
-        BiFunction<AccountData, AccountData, AccountData> { remoteAccountData, localAccountData ->
-            remoteAccountData.mergeWith(localAccountData)
-        }).flatMap { accountData ->
-        saveAccountData(accountData).andThen(Single.just(accountData))
-    }
+    fun updateMetadata(metadata: Map<String, String>) = remoteDataSource.updateMetadata(metadata)
 
     fun checkJwtExpired() = localDataSource.checkJwtExpired()
 }

@@ -221,7 +221,7 @@ class RespondHelpActivity : BaseAppCompatActivity() {
                 DateTimeUtil.stringToString(
                     helpRequest.createdAt,
                     newFormat = DateTimeUtil.TIME_FORMAT_1,
-                    newTimezone = DateTimeUtil.DEFAULT_TIME_ZONE
+                    newTimezone = DateTimeUtil.getDefaultTimezoneId()
                 )
             )
         } else {

@@ -59,12 +59,12 @@ class BehaviorHistoryRecyclerAdapter :
                 val date = DateTimeUtil.millisToString(
                     item.timestamp,
                     DateTimeUtil.DATE_FORMAT_2,
-                    outputTimeZone = DateTimeUtil.DEFAULT_TIME_ZONE
+                    outputTimeZone = DateTimeUtil.getDefaultTimezoneId()
                 )
                 val time = DateTimeUtil.millisToString(
                     item.timestamp,
                     DateTimeUtil.TIME_FORMAT_2,
-                    outputTimeZone = DateTimeUtil.DEFAULT_TIME_ZONE
+                    outputTimeZone = DateTimeUtil.getDefaultTimezoneId()
                 ).toLowerCase()
                 val coordinate = "(%f, %f)".format(item.location.lat, item.location.lng)
                 tvPrimary.text = "%s %s".format(

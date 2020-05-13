@@ -7,14 +7,16 @@
 package com.bitmark.autonomy.feature.main
 
 import android.app.Activity
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
 import android.os.Handler
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.viewpager.widget.ViewPager
-import com.bitmark.autonomy.AppLifecycleHandler
 import com.bitmark.autonomy.R
 import com.bitmark.autonomy.feature.*
 import com.bitmark.autonomy.feature.Navigator.Companion.BOTTOM_UP
@@ -24,12 +26,12 @@ import com.bitmark.autonomy.feature.debugmode.DebugModeActivity
 import com.bitmark.autonomy.feature.location.LocationService
 import com.bitmark.autonomy.feature.notification.NotificationId
 import com.bitmark.autonomy.feature.notification.NotificationPayloadType
-import com.bitmark.autonomy.feature.notification.NotificationReceivedHandler
 import com.bitmark.autonomy.feature.profile.ProfileActivity
 import com.bitmark.autonomy.feature.survey.SurveyContainerActivity
 import com.bitmark.autonomy.logging.Event
 import com.bitmark.autonomy.logging.EventLogger
 import com.bitmark.autonomy.util.Constants.MAX_AREA
+import com.bitmark.autonomy.util.DateTimeUtil
 import com.bitmark.autonomy.util.ext.*
 import com.bitmark.autonomy.util.modelview.AreaModelView
 import kotlinx.android.synthetic.main.activity_main.*
@@ -61,9 +63,6 @@ class MainActivity : BaseAppCompatActivity() {
     internal lateinit var locationService: LocationService
 
     @Inject
-    internal lateinit var appLifecycleHandler: AppLifecycleHandler
-
-    @Inject
     internal lateinit var viewModel: MainActivityViewModel
 
     @Inject
@@ -72,14 +71,17 @@ class MainActivity : BaseAppCompatActivity() {
     @Inject
     internal lateinit var dialogController: DialogController
 
-    @Inject
-    internal lateinit var notificationReceivedHandler: NotificationReceivedHandler
-
     private lateinit var adapter: MainViewPagerAdapter
 
     private val handler = Handler()
 
     private var notificationBundle: Bundle? = null
+
+    private val timezoneChangedReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            viewModel.updateTimezone(DateTimeUtil.getDefaultTimezone())
+        }
+    }
 
     private lateinit var areaList: MutableList<AreaModelView>
 
@@ -128,6 +130,16 @@ class MainActivity : BaseAppCompatActivity() {
             handleNotification(notificationBundle!!, adapter.count > 0)
         }
         viewModel.listArea()
+        registerTimezoneChangedReceiver()
+    }
+
+    private fun registerTimezoneChangedReceiver() {
+        val filter = IntentFilter(Intent.ACTION_TIMEZONE_CHANGED)
+        registerReceiver(timezoneChangedReceiver, filter)
+    }
+
+    private fun unregisterTimezoneChangedReceiver() {
+        unregisterReceiver(timezoneChangedReceiver)
     }
 
     private fun handleNotification(notificationBundle: Bundle, dataReady: Boolean) {
@@ -144,6 +156,7 @@ class MainActivity : BaseAppCompatActivity() {
     }
 
     override fun onDestroy() {
+        unregisterTimezoneChangedReceiver()
         handler.removeCallbacksAndMessages(null)
         super.onDestroy()
     }
@@ -227,6 +240,14 @@ class MainActivity : BaseAppCompatActivity() {
 
                 res.isError() -> {
                     logger.logSharedPrefError(res.throwable(), "main check debug mode state error")
+                }
+            }
+        })
+
+        viewModel.updateTimezoneLiveData.asLiveData().observe(this, Observer { res ->
+            when {
+                res.isError() -> {
+                    logger.logError(Event.ACCOUNT_UPDATE_TIMEZONE_ERROR, res.throwable())
                 }
             }
         })
