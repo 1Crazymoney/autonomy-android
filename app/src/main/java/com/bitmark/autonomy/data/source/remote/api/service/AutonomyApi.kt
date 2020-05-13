@@ -112,10 +112,10 @@ interface AutonomyApi {
     @GET("api/debug/{id}")
     fun getDebugInfo(@Path("id") id: String): Single<DebugInfoData>
 
-    @GET("https://d4f1ab4c-09a8-4d4f-923a-41a6f773e59e.mock.pstmn.io/api/metrics/symptom")
+    @GET("api/metrics/symptom")
     fun getSymptomMetric(): Single<SymptomMetricData2>
 
-    @GET("https://d4f1ab4c-09a8-4d4f-923a-41a6f773e59e.mock.pstmn.io/api/metrics/behavior")
+    @GET("api/metrics/behavior")
     fun getBehaviorMetric(): Single<BehaviorMetricData2>
 
 }
