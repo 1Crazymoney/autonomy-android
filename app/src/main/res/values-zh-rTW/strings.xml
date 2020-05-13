@@ -202,6 +202,9 @@
     <string name="covering_coughs">Covering coughs</string>
     <string name="could_not_play_video">Could not play video. Please try again later.</string>
     <string name="guidance">Guidance</string>
+    <string name="how_we_keep_your_data_private">How we keep\nyour data private</string>
+    <string name="api">API</string>
+    <string name="help_keep_autonomy_free">Help keep Autonomy free</string>
 
 
     <!--    string format-->

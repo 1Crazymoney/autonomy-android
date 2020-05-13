@@ -13,6 +13,7 @@ import android.text.Spannable
 import android.text.SpannableString
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
+import android.text.style.UnderlineSpan
 import android.view.View
 import android.widget.Toast
 import androidx.lifecycle.Observer
@@ -25,10 +26,7 @@ import com.bitmark.autonomy.feature.Navigator.Companion.NONE
 import com.bitmark.autonomy.feature.Navigator.Companion.RIGHT_LEFT
 import com.bitmark.autonomy.feature.Navigator.Companion.UP_BOTTOM
 import com.bitmark.autonomy.feature.behavior.BehaviorReportActivity
-import com.bitmark.autonomy.feature.behavior.history.BehaviorHistoryActivity
-import com.bitmark.autonomy.feature.locationhistory.LocationHistoryActivity
 import com.bitmark.autonomy.feature.symptoms.SymptomReportActivity
-import com.bitmark.autonomy.feature.symptoms.history.SymptomHistoryActivity
 import com.bitmark.autonomy.logging.EventLogger
 import com.bitmark.autonomy.util.ext.*
 import kotlinx.android.synthetic.main.activity_profile.*
@@ -85,6 +83,24 @@ class ProfileActivity : BaseAppCompatActivity() {
         tvPP.setLinkTextColor(getColor(R.color.white))
         tvPP.highlightColor = Color.TRANSPARENT
 
+        val howToKeepDataSpan = SpannableString(getString(R.string.how_we_keep_your_data_private))
+        howToKeepDataSpan.setSpan(
+            UnderlineSpan(),
+            0,
+            howToKeepDataSpan.length,
+            Spannable.SPAN_INCLUSIVE_EXCLUSIVE
+        )
+        howToKeepDataSpan.setSpan(object : ClickableSpan() {
+            override fun onClick(widget: View) {
+                // TODO handle later
+            }
+
+        }, 0, howToKeepDataSpan.length, Spannable.SPAN_INCLUSIVE_EXCLUSIVE)
+        tvKeepDataPrivate.text = howToKeepDataSpan
+        tvKeepDataPrivate.movementMethod = LinkMovementMethod.getInstance()
+        tvKeepDataPrivate.setLinkTextColor(getColor(R.color.white))
+        tvKeepDataPrivate.highlightColor = Color.TRANSPARENT
+
         tvVersion.text = BuildConfig.VERSION_NAME
 
         ivBack.setOnClickListener {
@@ -95,20 +111,8 @@ class ProfileActivity : BaseAppCompatActivity() {
             navigator.anim(RIGHT_LEFT).startActivity(SymptomReportActivity::class.java)
         }
 
-        layoutHistorySymptom.setSafetyOnclickListener {
-            navigator.anim(RIGHT_LEFT).startActivity(SymptomHistoryActivity::class.java)
-        }
-
         layoutReportBehavior.setSafetyOnclickListener {
             navigator.anim(RIGHT_LEFT).startActivity(BehaviorReportActivity::class.java)
-        }
-
-        layoutHistoryBehavior.setSafetyOnclickListener {
-            navigator.anim(RIGHT_LEFT).startActivity(BehaviorHistoryActivity::class.java)
-        }
-
-        layoutHistoryLocation.setSafetyOnclickListener {
-            navigator.anim(RIGHT_LEFT).startActivity(LocationHistoryActivity::class.java)
         }
 
         layoutSupport.setSafetyOnclickListener {
