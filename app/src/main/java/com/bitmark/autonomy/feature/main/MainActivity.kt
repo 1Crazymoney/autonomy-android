@@ -190,6 +190,7 @@ class MainActivity : BaseAppCompatActivity() {
 
             override fun onPageSelected(position: Int) {
                 hideKeyBoard()
+                adapter.closeViewSourcePanels()
             }
 
         })

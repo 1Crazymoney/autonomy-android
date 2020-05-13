@@ -174,6 +174,11 @@ class MainFragment : BaseSupportFragment() {
     private fun isViewSourceShowing() =
         ::bottomSheetBehavior.isInitialized && bottomSheetBehavior.state == BottomSheetBehavior.STATE_EXPANDED
 
+    fun closeViewSourcePanel() {
+        if (!isViewSourceShowing()) return
+        bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+    }
+
     override fun initComponents() {
         super.initComponents()
 

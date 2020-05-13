@@ -34,4 +34,8 @@ class MainViewPagerAdapter(fm: FragmentManager) : ViewPagerAdapter(fm), IconPage
             false
         }
     }
+
+    fun closeViewSourcePanels() {
+        fragments.forEach { f -> (f as? MainFragment)?.closeViewSourcePanel() }
+    }
 }
