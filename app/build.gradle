@@ -252,6 +252,8 @@ dependencies {
     implementation 'com.google.android.gms:play-services-location:17.0.0'
     implementation 'com.chauthai.swipereveallayout:swipe-reveal-layout:1.4.1'
     implementation 'com.google.android:flexbox:2.0.1'
+    implementation 'com.android.support:customtabs:23.3.0'
+
 
     // Geocoding
     implementation 'com.google.maps:google-maps-services:0.11.0'

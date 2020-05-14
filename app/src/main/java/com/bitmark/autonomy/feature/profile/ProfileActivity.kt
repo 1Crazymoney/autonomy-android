@@ -26,6 +26,7 @@ import com.bitmark.autonomy.feature.Navigator.Companion.NONE
 import com.bitmark.autonomy.feature.Navigator.Companion.RIGHT_LEFT
 import com.bitmark.autonomy.feature.Navigator.Companion.UP_BOTTOM
 import com.bitmark.autonomy.feature.behavior.BehaviorReportActivity
+import com.bitmark.autonomy.feature.donation.DonationActivity
 import com.bitmark.autonomy.feature.symptoms.SymptomReportActivity
 import com.bitmark.autonomy.logging.EventLogger
 import com.bitmark.autonomy.util.ext.*
@@ -117,6 +118,10 @@ class ProfileActivity : BaseAppCompatActivity() {
 
         layoutSupport.setSafetyOnclickListener {
             navigator.openIntercom()
+        }
+
+        layoutDonate.setSafetyOnclickListener {
+            navigator.anim(RIGHT_LEFT).startActivity(DonationActivity::class.java)
         }
 
         var count = 0

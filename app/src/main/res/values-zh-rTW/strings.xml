@@ -205,6 +205,10 @@
     <string name="how_we_keep_your_data_private">How we keep\nyour data private</string>
     <string name="api">API</string>
     <string name="help_keep_autonomy_free">Help keep Autonomy free</string>
+    <string name="donate">Donate</string>
+    <string name="other_amount">Other amount</string>
+    <string name="if_you_believe_in_autonomy">If you believe in Autonomy, please consider donating:</string>
+    <string name="your_generosity_helps_keep_autonomy">Your generosity helps keep Autonomy free and open for everyone. Every little bit helps.</string>
 
 
     <!--    string format-->

@@ -14,7 +14,9 @@ import android.net.Uri
 import android.provider.MediaStore
 import android.provider.Settings
 import androidx.annotation.StringRes
+import androidx.browser.customtabs.CustomTabsIntent
 import com.bitmark.autonomy.BuildConfig
+import com.bitmark.autonomy.R
 import com.bitmark.autonomy.feature.Navigator
 import com.bitmark.autonomy.feature.Navigator.Companion.NONE
 import com.bitmark.autonomy.util.Constants
@@ -34,6 +36,15 @@ fun Navigator.openBrowser(url: String) {
     } catch (ignore: Throwable) {
 
     }
+}
+
+fun Navigator.openChromeTab(context: Context, url: String) {
+    val builder = CustomTabsIntent.Builder()
+        .setStartAnimations(context, R.anim.slide_right_in, R.anim.slide_left_out)
+        .setExitAnimations(context, R.anim.slide_left_in, R.anim.slide_right_out)
+        .setToolbarColor(context.getColor(R.color.colorPrimary))
+    val intent = builder.build()
+    intent.launchUrl(context, Uri.parse(url))
 }
 
 fun Navigator.Companion.openBrowser(context: Context, url: String) {

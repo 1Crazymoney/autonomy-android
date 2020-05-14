@@ -20,6 +20,8 @@ import com.bitmark.autonomy.feature.behavior.metric.BehaviorMetricActivity
 import com.bitmark.autonomy.feature.behavior.metric.BehaviorMetricModule
 import com.bitmark.autonomy.feature.debugmode.DebugModeActivity
 import com.bitmark.autonomy.feature.debugmode.DebugModeModule
+import com.bitmark.autonomy.feature.donation.DonationActivity
+import com.bitmark.autonomy.feature.donation.DonationModule
 import com.bitmark.autonomy.feature.guidance.GuidanceActivity
 import com.bitmark.autonomy.feature.guidance.GuidanceModule
 import com.bitmark.autonomy.feature.locationhistory.LocationHistoryActivity
@@ -149,5 +151,9 @@ abstract class ActivityBuilderModule {
     @ContributesAndroidInjector(modules = [GuidanceModule::class])
     @ActivityScope
     internal abstract fun bindGuidanceActivity(): GuidanceActivity
+
+    @ContributesAndroidInjector(modules = [DonationModule::class])
+    @ActivityScope
+    internal abstract fun bindDonationActivity(): DonationActivity
 
 }
