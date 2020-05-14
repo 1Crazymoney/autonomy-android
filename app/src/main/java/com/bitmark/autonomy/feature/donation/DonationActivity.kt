@@ -24,7 +24,7 @@ import javax.inject.Inject
 class DonationActivity : BaseAppCompatActivity() {
 
     companion object {
-        private const val PAYPAL_ME = "https://paypal.me/bitmarkautonomy/"
+        private const val PAYPAL_ME = "https://paypal.me/AutonomyByBitmark/"
     }
 
     @Inject
@@ -84,7 +84,7 @@ class DonationActivity : BaseAppCompatActivity() {
         layoutNext.setSafetyOnclickListener {
             val checkedText = layouts.first { it.cb.isChecked }.tv.text.toString()
             val url = if (checkedText.contains("$")) {
-                PAYPAL_ME + checkedText.removePrefix("$")
+                PAYPAL_ME + checkedText.removePrefix("$") + "usd"
             } else {
                 PAYPAL_ME
             }
