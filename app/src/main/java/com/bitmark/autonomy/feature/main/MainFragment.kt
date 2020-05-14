@@ -348,7 +348,7 @@ class MainFragment : BaseSupportFragment() {
 
     private fun openJupyterNotebook() {
         // TODO update later
-        navigator.anim(NONE).openBrowser("https://www.cdc.gov.tw")
+        navigator.anim(NONE).openChromeTab(context!!, "https://www.cdc.gov.tw")
     }
 
     override fun observe() {
