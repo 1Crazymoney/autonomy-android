@@ -6,9 +6,9 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:paddingStart="@dimen/dp_18"
+    android:paddingStart="@dimen/dp_16"
     android:paddingTop="@dimen/dp_8"
-    android:paddingEnd="@dimen/dp_18"
+    android:paddingEnd="@dimen/dp_16"
     android:paddingBottom="@dimen/dp_8"
     tools:background="@color/black">
 

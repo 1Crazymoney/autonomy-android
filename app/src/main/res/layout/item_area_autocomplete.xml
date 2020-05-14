@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:background="@color/black"
     android:orientation="vertical"
-    android:padding="@dimen/dp_14">
+    android:padding="@dimen/dp_16">
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tvName"
