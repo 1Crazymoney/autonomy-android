@@ -182,10 +182,10 @@ class SymptomRecyclerViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>
 
         init {
             with(itemView) {
-                layoutRoot.setOnClickListener {
+                tvSymptom.setOnClickListener {
                     if (!item.selectable!!) return@setOnClickListener
-                    layoutRoot.isSelected = !layoutRoot.isSelected
-                    item.selected = layoutRoot.isSelected
+                    tvSymptom.isSelected = !tvSymptom.isSelected
+                    item.selected = tvSymptom.isSelected
                     onSelectedChangeListener()
                 }
             }
@@ -195,8 +195,8 @@ class SymptomRecyclerViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>
             this.item = item
             with(itemView) {
                 tvSymptom.text = item.symptom!!.name.toLowerCase(Locale.getDefault())
-                layoutRoot.isSelected = item.selected!!
-                layoutRoot.isClickable = item.selectable!!
+                tvSymptom.isSelected = item.selected!!
+                tvSymptom.isClickable = item.selectable!!
             }
         }
     }

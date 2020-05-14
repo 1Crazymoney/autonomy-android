@@ -183,10 +183,10 @@ class BehaviorReportRecyclerViewAdapter :
 
         init {
             with(itemView) {
-                layoutRoot.setOnClickListener {
+                tvBehavior.setOnClickListener {
                     if (!item.selectable!!) return@setOnClickListener
-                    layoutRoot.isSelected = !layoutRoot.isSelected
-                    item.selected = layoutRoot.isSelected
+                    tvBehavior.isSelected = !tvBehavior.isSelected
+                    item.selected = tvBehavior.isSelected
                     onSelectedChangeListener()
                 }
             }
@@ -196,8 +196,8 @@ class BehaviorReportRecyclerViewAdapter :
             this.item = item
             with(itemView) {
                 tvBehavior.text = item.behavior!!.name.toLowerCase(Locale.getDefault())
-                layoutRoot.isSelected = item.selected!!
-                layoutRoot.isClickable = item.selectable!!
+                tvBehavior.isSelected = item.selected!!
+                tvBehavior.isClickable = item.selectable!!
             }
         }
     }
