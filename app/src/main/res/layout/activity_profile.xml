@@ -221,6 +221,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/tvDataLb"
+                    android:fontFamily="@font/grotesk_light_font_family"
                     android:text="@string/how_we_keep_your_data_private"
                     android:textColor="@color/color_white_stateful"
                     android:textSize="@dimen/sp_14" />
