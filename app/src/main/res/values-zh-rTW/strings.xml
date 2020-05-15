@@ -15,9 +15,9 @@
     <string name="autonomy_requires_access_to_the_following">Autonomy需要存取以下項目：</string>
     <string name="done">完成</string>
     <string name="risk_level">風險水平</string>
-    <string name="are_u_at_higher_risk">您屬於新冠肺炎重症的高危險群嗎？</string>
+    <string name="are_u_at_higher_risk">Are you at higher risk for severe illness?</string>
     <string name="yes_im_at_higher_risk">是的，我屬於高危險群</string>
-    <string name="higher_risk_individuals">高危險群目前包含：\n• 65歲以上 \n\n 以及任何有以下健康狀況的人： \n• 高血壓 \n• 心血管疾病 \n• 糖尿病 \n• 慢性呼吸道疾病(例如肺病或氣喘) \n• 癌症</string>
+    <string name="higher_risk_individuals">Higher risk individuals often include:\n• People over age 65\n\nAnd any pre-existing medical conditions, such as:\n• High blood pressure (hypertension)\n• Cardiovascular disease\n• Diabetes\n• Chronic respiratory disease (such as lung disease or asthma)\n• Cancer\n• Obesity\n• Compromised immune system</string>
     <string name="no_im_not_at_higher_risk">不，我不屬於高危險群</string>
     <string name="error">錯誤</string>
     <string name="passcode_pin_required">需要設定設備PIN碼</string>
@@ -93,8 +93,8 @@
     <string name="sorry_u_already_have_a_outstanding_help_request">抱歉，您尚有一項等待中的社群請求。目前系統只支援每位成員提出一項請求。</string>
     <string name="someone_just_signed_up">有人報名了</string>
     <string name="thanks_so_much_for_your_eagerness">非常感謝您願意幫忙，但此項請求已由另外一位社群成員報名達成。</string>
-    <string name="confirmed_cases">確診數</string>
-    <string name="reported_symptoms">通報症狀</string>
+    <string name="confirmed_cases">Confirmed infections</string>
+    <string name="reported_symptoms">Symptoms</string>
     <string name="healthy_behaviors">健康行為</string>
     <string name="population_density">人口密度</string>
     <string name="your_symptoms_have_been_reported">已成功將您的症狀回報給您的社群</string>
@@ -109,9 +109,7 @@
     <string name="washing_hands_thoroughly">徹底使用肥皂與水洗手至少20秒，或是使用含有酒精的手部消毒劑。</string>
     <string name="social_physical_distancing">保持社交距離</string>
     <string name="avoiding_crowds_work_from_home">避免群聚，在家辦公，盡可能與人保持室內至少保持1.8公尺(6英尺)的距離。</string>
-    <string name="fever">發燒</string>
     <string name="body_temp">體溫高於38ºC(100ºF)</string>
-    <string name="dry_cough">乾咳</string>
     <string name="without_mucous">沒有痰或黏液 (嘎嘎作響)</string>
     <string name="add_new_location">新增位置…</string>
     <string name="could_not_rename_area">無法重新命名此區域。請稍後再試。</string>
@@ -209,7 +207,23 @@
     <string name="other_amount">Other amount</string>
     <string name="if_you_believe_in_autonomy">If you believe in Autonomy, please consider donating:</string>
     <string name="your_generosity_helps_keep_autonomy">Your generosity helps keep Autonomy free and open for everyone. Every little bit helps.</string>
+    <string name="now">now</string>
+    <string name="entering_a_high_risk">Entering a high-risk neighborhood</string>
+    <string name="please_wear_a_face_covering">Please wear a face covering, avoid close contact with others, and wash your hands often. Tap if you did this.</string>
+    <string name="your_data_is_always_kept">Your data is always kept 100% confidential. (Even to us.)</string>
+    <string name="wash_your_hands_while_you_are_up">Wash your hands while you’re up!</string>
+    <string name="this_is_great_chance_to_wash_your_hands">This a great chance to wash your hands for at least 20 seconds or apply hand sanitizer. Tap if you did this.</string>
 
+    <!-- array -->
+    <string-array name="symptoms">
+        <item>dry cough</item>
+        <item>fever</item>
+        <item>chills</item>
+        <item>fatigue</item>
+        <item>shortness of breath</item>
+        <item>difficulty breathing</item>
+        <item>loss of sense of taste or smell</item>
+    </string-array>
 
     <!--    string format-->
     <string name="min_ago_format">%1$s 分鐘前</string>

@@ -8,6 +8,7 @@ package com.bitmark.autonomy.feature.onboarding
 
 import android.content.Context
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.widget.LinearLayout
 import androidx.annotation.LayoutRes
 import androidx.fragment.app.Fragment
@@ -19,7 +20,11 @@ import com.bitmark.autonomy.feature.Navigator.Companion.RIGHT_LEFT
 import com.bitmark.autonomy.feature.location.LocationService
 import com.bitmark.autonomy.feature.permission.PermissionActivity
 import com.bitmark.autonomy.feature.risklevel.RiskLevelActivity
+import com.bitmark.autonomy.util.ext.getDimensionPixelSize
 import com.bitmark.autonomy.util.ext.setSafetyOnclickListener
+import com.google.android.flexbox.FlexboxLayout
+import kotlinx.android.synthetic.main.fragment_onboarding_2.*
+import kotlinx.android.synthetic.main.item_symptom.view.*
 import javax.inject.Inject
 
 
@@ -64,6 +69,23 @@ class OnboardingFragment : BaseSupportFragment() {
 
     override fun initComponents() {
         super.initComponents()
+
+        if (layoutId == R.layout.fragment_onboarding_2) {
+            val symptoms = resources.getStringArray(R.array.symptoms)
+            layoutSymptom.removeAllViews()
+            symptoms.forEach { s ->
+                val view = LayoutInflater.from(context).inflate(R.layout.item_symptom, null)
+                view.tvSymptom.text = s
+                val params = FlexboxLayout.LayoutParams(
+                    FlexboxLayout.LayoutParams.WRAP_CONTENT,
+                    FlexboxLayout.LayoutParams.WRAP_CONTENT
+                )
+                val margin = context!!.getDimensionPixelSize(R.dimen.dp_8)
+                params.setMargins(margin, margin, margin, margin)
+                view.layoutParams = params
+                layoutSymptom.addView(view)
+            }
+        }
 
         val btnBack = view!!.findViewById<LinearLayout>(R.id.layoutBack)
         val btnNext = view!!.findViewById<LinearLayout>(R.id.layoutNext)

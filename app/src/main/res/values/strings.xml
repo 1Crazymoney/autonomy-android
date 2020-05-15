@@ -16,9 +16,9 @@
     <string name="autonomy_requires_access_to_the_following">Autonomy requires access to the following:</string>
     <string name="done">Done</string>
     <string name="risk_level">Risk level</string>
-    <string name="are_u_at_higher_risk">Are you at higher risk for severe illness from COVID-19?</string>
+    <string name="are_u_at_higher_risk">Are you at higher risk for severe illness?</string>
     <string name="yes_im_at_higher_risk">Yes, I’m at higher risk</string>
-    <string name="higher_risk_individuals">Higher risk individuals currently include:\n• People over age 65 And anyone with any of the following pre-existing medical conditions:\n• High blood pressure (hypertension)\n• Cardiovascular disease\n• Diabetes\n• Chronic respiratory disease (such as lung disease or asthma)\n• Cancer</string>
+    <string name="higher_risk_individuals">Higher risk individuals often include:\n• People over age 65\n\nAnd any pre-existing medical conditions, such as:\n• High blood pressure (hypertension)\n• Cardiovascular disease\n• Diabetes\n• Chronic respiratory disease (such as lung disease or asthma)\n• Cancer\n• Obesity\n• Compromised immune system</string>
     <string name="no_im_not_at_higher_risk">No, I’m not at higher risk</string>
     <string name="error">Error</string>
     <string name="passcode_pin_required">Device PIN setup is required</string>
@@ -94,8 +94,8 @@
     <string name="sorry_u_already_have_a_outstanding_help_request">Sorry, but you already have an outstanding help request to your community. Currently, our system only supports one request at a time for each community member.</string>
     <string name="someone_just_signed_up">Someone Just Signed Up</string>
     <string name="thanks_so_much_for_your_eagerness">Thanks so much for your eagerness to help out, but another community member just signed up for this request.</string>
-    <string name="confirmed_cases">Confirmed cases</string>
-    <string name="reported_symptoms">Reported symptoms</string>
+    <string name="confirmed_cases">Confirmed infections</string>
+    <string name="reported_symptoms">Symptoms</string>
     <string name="healthy_behaviors">Healthy behaviors</string>
     <string name="population_density">Population density</string>
     <string name="your_symptoms_have_been_reported">Your symptoms have been successfully reported to your community</string>
@@ -110,9 +110,7 @@
     <string name="washing_hands_thoroughly">Washing hands thoroughly with soap and water for at least 20 seconds or applying an alcohol-based hand sanitizer.</string>
     <string name="social_physical_distancing">Social &amp; physical distancing</string>
     <string name="avoiding_crowds_work_from_home">Avoiding crowds, working from home, and maintaining at least 6 feet of distance from others whenever possible.</string>
-    <string name="fever">Fever</string>
     <string name="body_temp">Body temperature above 100ºF (38ºC)</string>
-    <string name="dry_cough">Dry cough</string>
     <string name="without_mucous">Without mucous or phlegm (rattling)</string>
     <string name="add_new_location">Add new location …</string>
     <string name="could_not_rename_area">Could not rename the area. Please try again later.</string>
@@ -210,7 +208,23 @@
     <string name="other_amount">Other amount</string>
     <string name="if_you_believe_in_autonomy">If you believe in Autonomy, please consider donating:</string>
     <string name="your_generosity_helps_keep_autonomy">Your generosity helps keep Autonomy free and open for everyone. Every little bit helps.</string>
+    <string name="now">now</string>
+    <string name="entering_a_high_risk">Entering a high-risk neighborhood</string>
+    <string name="please_wear_a_face_covering">Please wear a face covering, avoid close contact with others, and wash your hands often. Tap if you did this.</string>
+    <string name="your_data_is_always_kept">Your data is always kept 100% confidential. (Even to us.)</string>
+    <string name="wash_your_hands_while_you_are_up">Wash your hands while you’re up!</string>
+    <string name="this_is_great_chance_to_wash_your_hands">This a great chance to wash your hands for at least 20 seconds or apply hand sanitizer. Tap if you did this.</string>
 
+    <!-- array -->
+    <string-array name="symptoms">
+        <item>dry cough</item>
+        <item>fever</item>
+        <item>chills</item>
+        <item>fatigue</item>
+        <item>shortness of breath</item>
+        <item>difficulty breathing</item>
+        <item>loss of sense of taste or smell</item>
+    </string-array>
 
     <!--    string format-->
     <string name="min_ago_format">%1$s min ago</string>

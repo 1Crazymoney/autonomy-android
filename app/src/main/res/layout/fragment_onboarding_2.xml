@@ -91,7 +91,7 @@
         android:fontFamily="@font/grotesk_light_font_family"
         android:gravity="center"
         android:includeFontPadding="false"
-        android:text="@string/your_privacy_get_stronger"
+        android:text="@string/your_data_is_always_kept"
         android:textColor="@color/white"
         app:autoSizeMaxTextSize="@dimen/sp_36"
         app:autoSizeMinTextSize="@dimen/sp_18"
@@ -120,7 +120,9 @@
         android:layout_marginEnd="@dimen/dp_14"
         android:fontFamily="@font/grotesk_light_font_family"
         android:gravity="center"
-        android:text="@string/do_u_have_any_symptoms"
+        android:paddingStart="@dimen/dp_8"
+        android:paddingEnd="@dimen/dp_8"
+        android:text="@string/tap_any_symptoms_you_have"
         android:textColor="@color/white"
         android:textSize="@dimen/sp_24"
         app:layout_constraintEnd_toEndOf="@id/ivPhone"
@@ -139,77 +141,18 @@
         app:layout_constraintStart_toStartOf="@id/ivPhone"
         app:layout_constraintTop_toBottomOf="@id/tvPhoneTitle" />
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/tvSymptom1"
+    <com.google.android.flexbox.FlexboxLayout
+        android:id="@+id/layoutSymptom"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/dp_14"
-        android:fontFamily="@font/grotesk_light_font_family"
-        android:includeFontPadding="false"
-        android:text="@string/fever"
-        android:textColor="@color/white"
-        android:textSize="@dimen/sp_24"
+        android:layout_height="0dp"
+        android:paddingTop="@dimen/dp_16"
+        app:flexDirection="row"
+        app:flexWrap="wrap"
+        app:justifyContent="flex_start"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@id/vDivider"
-        app:layout_constraintStart_toEndOf="@id/ivSymptom1"
-        app:layout_constraintTop_toTopOf="@id/ivSymptom1" />
-
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/tvSymptomDes1"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="2dp"
-        android:fontFamily="@font/grotesk_light_font_family"
-        android:text="@string/body_temp"
-        android:textColor="@color/silver_chalice"
-        android:textSize="@dimen/sp_14"
-        app:layout_constraintEnd_toEndOf="@id/tvSymptom1"
-        app:layout_constraintStart_toStartOf="@id/tvSymptom1"
-        app:layout_constraintTop_toBottomOf="@id/tvSymptom1" />
-
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/ivSymptom1"
-        android:layout_width="@dimen/dp_44"
-        android:layout_height="@dimen/dp_44"
-        android:layout_marginTop="@dimen/dp_28"
         app:layout_constraintStart_toStartOf="@id/vDivider"
-        app:layout_constraintTop_toBottomOf="@id/vDivider"
-        app:srcCompat="@drawable/ic_checked" />
-
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/tvSymptom2"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/dp_14"
-        android:fontFamily="@font/grotesk_light_font_family"
-        android:includeFontPadding="false"
-        android:text="@string/dry_cough"
-        android:textColor="@color/white"
-        android:textSize="@dimen/sp_24"
-        app:layout_constraintEnd_toEndOf="@id/vDivider"
-        app:layout_constraintStart_toEndOf="@id/ivSymptom2"
-        app:layout_constraintTop_toTopOf="@id/ivSymptom2" />
-
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/tvSymptomDes2"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="2dp"
-        android:fontFamily="@font/grotesk_light_font_family"
-        android:text="@string/without_mucous"
-        android:textColor="@color/silver_chalice"
-        android:textSize="@dimen/sp_14"
-        app:layout_constraintEnd_toEndOf="@id/tvSymptom2"
-        app:layout_constraintStart_toStartOf="@id/tvSymptom2"
-        app:layout_constraintTop_toBottomOf="@id/tvSymptom2" />
-
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/ivSymptom2"
-        android:layout_width="@dimen/dp_44"
-        android:layout_height="@dimen/dp_44"
-        android:layout_marginTop="@dimen/dp_16"
-        app:layout_constraintStart_toStartOf="@id/vDivider"
-        app:layout_constraintTop_toBottomOf="@id/tvSymptomDes1"
-        app:srcCompat="@drawable/ic_checked" />
+        app:layout_constraintTop_toBottomOf="@id/vDivider" />
 
     <View
         android:layout_width="0dp"
