@@ -162,7 +162,7 @@ class MainFragment : BaseSupportFragment() {
     override fun onResume() {
         super.onResume()
         if (isMsa0) {
-            viewModel.getCurrentAreaProfile()
+            if (locationService.isPermissionGranted(activity!!)) viewModel.getCurrentAreaProfile()
         } else {
             viewModel.getAreaProfile(areaData!!.id)
         }
