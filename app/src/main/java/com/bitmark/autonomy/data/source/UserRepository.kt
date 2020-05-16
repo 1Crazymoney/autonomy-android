@@ -42,4 +42,6 @@ class UserRepository(private val remoteDataSource: UserRemoteDataSource) : Repos
     fun getDebugInfo() = remoteDataSource.getDebugInfo()
 
     fun getDebugInfo(id: String) = remoteDataSource.getDebugInfo(id)
+
+    fun updateLocation() = remoteDataSource.updateLocation()
 }

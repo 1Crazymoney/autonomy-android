@@ -11,12 +11,14 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.location.Location
 import android.os.Bundle
 import android.os.Handler
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.viewpager.widget.ViewPager
+import com.bitmark.autonomy.AppLifecycleHandler
 import com.bitmark.autonomy.R
 import com.bitmark.autonomy.feature.*
 import com.bitmark.autonomy.feature.Navigator.Companion.BOTTOM_UP
@@ -71,6 +73,9 @@ class MainActivity : BaseAppCompatActivity() {
     @Inject
     internal lateinit var dialogController: DialogController
 
+    @Inject
+    internal lateinit var appLifecycleHandler: AppLifecycleHandler
+
     private lateinit var adapter: MainViewPagerAdapter
 
     private val handler = Handler()
@@ -81,6 +86,18 @@ class MainActivity : BaseAppCompatActivity() {
         override fun onReceive(context: Context?, intent: Intent?) {
             viewModel.updateTimezone(DateTimeUtil.getDefaultTimezone())
         }
+    }
+
+    private val locationChangeListener = object : LocationService.LocationChangedListener {
+        override fun onLocationChanged(l: Location) {
+            if (appLifecycleHandler.isOnForeground()) return
+            viewModel.updateLocation()
+        }
+
+        override fun onPlaceChanged(place: String) {
+            // do nothing
+        }
+
     }
 
     private lateinit var areaList: MutableList<AreaModelView>
@@ -117,11 +134,6 @@ class MainActivity : BaseAppCompatActivity() {
         }
     }
 
-    override fun onStop() {
-        locationService.stop()
-        super.onStop()
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -131,6 +143,10 @@ class MainActivity : BaseAppCompatActivity() {
         }
         viewModel.listArea()
         registerTimezoneChangedReceiver()
+        if (locationService.isPermissionGranted(this)) {
+            startLocationService()
+        }
+        locationService.addLocationChangeListener(locationChangeListener)
     }
 
     private fun registerTimezoneChangedReceiver() {
@@ -156,6 +172,8 @@ class MainActivity : BaseAppCompatActivity() {
     }
 
     override fun onDestroy() {
+        locationService.removeLocationChangeListener(locationChangeListener)
+        locationService.stop()
         unregisterTimezoneChangedReceiver()
         handler.removeCallbacksAndMessages(null)
         super.onDestroy()
@@ -249,6 +267,14 @@ class MainActivity : BaseAppCompatActivity() {
             when {
                 res.isError() -> {
                     logger.logError(Event.ACCOUNT_UPDATE_TIMEZONE_ERROR, res.throwable())
+                }
+            }
+        })
+
+        viewModel.updateLocationLiveData.asLiveData().observe(this, Observer { res ->
+            when {
+                res.isError() -> {
+                    logger.logError(Event.LOCATION_BACKGROUND_UPDATE_ERROR, res.throwable())
                 }
             }
         })

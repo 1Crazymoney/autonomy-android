@@ -80,6 +80,8 @@ enum class Event(val value: String) {
 
     DEBUG_INFO_GETTING_ERROR("debug_info_getting_error"),
 
-    VIDEO_PLAYING_ERROR("video_playing_error")
+    VIDEO_PLAYING_ERROR("video_playing_error"),
+
+    LOCATION_BACKGROUND_UPDATE_ERROR("location_background_update_error")
 
 }

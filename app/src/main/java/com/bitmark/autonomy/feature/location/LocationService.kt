@@ -15,7 +15,6 @@ import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import androidx.fragment.app.FragmentActivity
-import com.bitmark.autonomy.BuildConfig
 import com.bitmark.autonomy.data.source.local.LocationCache
 import com.bitmark.autonomy.data.source.local.apply
 import com.bitmark.autonomy.keymanagement.ApiKeyManager.Companion.API_KEY_MANAGER
@@ -49,9 +48,11 @@ class LocationService(private val context: Context, private val logger: EventLog
 
     private val handler = Handler()
 
-    private var lastReversedLocation: Location? = null
-
     private var lastKnownPlace = ""
+
+    private var started = false
+
+    private var starting = false
 
     private val locationUpdateCallback = object : LocationCallback() {
         override fun onLocationResult(result: LocationResult?) {
@@ -61,17 +62,14 @@ class LocationService(private val context: Context, private val logger: EventLog
                 LocationCache.getInstance().apply(location)
                 Log.d(TAG, "Location changed: (${location.latitude}, ${location.longitude})")
                 notifyLocationChanged(location)
-                if (lastReversedLocation == null || lastReversedLocation!!.distanceTo(location) >= BuildConfig.MIN_REFRESH_DISTANCE) {
-                    val reverseFunc = fun(l: Location) {
-                        reverseGeoCoding(l) { place ->
-                            Log.d(TAG, "place changed: $place")
-                            lastKnownPlace = place
-                            notifyPlaceChanged(place)
-                            lastReversedLocation = l
-                        }
+                val reverseFunc = fun(l: Location) {
+                    reverseGeoCoding(l) { place ->
+                        Log.d(TAG, "place changed: $place")
+                        lastKnownPlace = place
+                        notifyPlaceChanged(place)
                     }
-                    reverseFunc(location)
                 }
+                reverseFunc(location)
             }
         }
     }
@@ -184,19 +182,41 @@ class LocationService(private val context: Context, private val logger: EventLog
         resolvableErrorCallback: (ResolvableApiException) -> Unit
     ) {
         if (!isPermissionGranted(activity)) error("need to request location permission")
+        if (started) {
+            Log.d(TAG, "location request already started before")
+            return
+        }
+        if (starting) {
+            Log.d(TAG, "location request is being started, drop this request")
+            return
+        }
+
+        starting = true
         buildLocationRequest({ req ->
+            Log.d(TAG, "location request started")
+            starting = false
             fusedLocationClient.requestLocationUpdates(
                 req,
                 locationUpdateCallback,
                 Looper.getMainLooper()
             )
-        }, resolvableErrorCallback)
+            started = true
+        }, { e ->
+            starting = false
+            resolvableErrorCallback(e)
+        })
     }
 
     fun stop() {
-        lastReversedLocation = null
+        if (!started) {
+            Log.d(TAG, "location already request stopped before")
+            return
+        }
         handler.removeCallbacksAndMessages(null)
         fusedLocationClient.removeLocationUpdates(locationUpdateCallback)
+        started = false
+        starting = false
+        Log.d(TAG, "location request stopped")
     }
 
     private fun buildLocationRequest(
@@ -204,9 +224,10 @@ class LocationService(private val context: Context, private val logger: EventLog
         resolvableErrorCallback: (ResolvableApiException) -> Unit
     ) {
         val request = LocationRequest.create().apply {
-            interval = 10000 // 10 seconds
-            fastestInterval = 10000 // 10 seconds
+            interval = 20000 // 20 seconds
+            fastestInterval = 20000 // 20 seconds
             priority = LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY
+            smallestDisplacement = 50f // 50 meters
         }
 
         val builder = LocationSettingsRequest.Builder().addLocationRequest(request)

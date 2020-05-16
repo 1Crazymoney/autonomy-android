@@ -141,7 +141,6 @@ android {
             ]
             buildConfigField "String", "AUTONOMY_API_ENDPOINT",
                     "\"https://autonomy.test.bitmark.com\""
-            buildConfigField "Float", "MIN_REFRESH_DISTANCE", "10f"
         }
 
         prd {
@@ -156,7 +155,6 @@ android {
             ]
             buildConfigField "String", "AUTONOMY_API_ENDPOINT",
                     "\"https://autonomy.bitmark.com\""
-            buildConfigField "Float", "MIN_REFRESH_DISTANCE", "50f"
         }
     }
 

@@ -32,6 +32,8 @@ class MainActivityViewModel(
 
     internal val updateTimezoneLiveData = CompositeLiveData<Any>()
 
+    internal val updateLocationLiveData = CompositeLiveData<Any>()
+
     fun listArea() {
         listAreaLiveData.add(rxLiveDataTransformer.single(userRepo.listArea().map { areas ->
             areas.map { a ->
@@ -49,6 +51,14 @@ class MainActivityViewModel(
             rxLiveDataTransformer.completable(
                 accountRepo.updateMetadata(mapOf("timezone" to timezone))
                     .andThen(accountRepo.syncAccountData().ignoreElement())
+            )
+        )
+    }
+
+    fun updateLocation() {
+        updateLocationLiveData.add(
+            rxLiveDataTransformer.completable(
+                userRepo.updateLocation()
             )
         )
     }

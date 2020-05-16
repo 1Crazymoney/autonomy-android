@@ -118,4 +118,7 @@ interface AutonomyApi {
     @GET("api/metrics/behavior")
     fun getBehaviorMetric(): Single<BehaviorMetricData2>
 
+    @HEAD("api/accounts/me")
+    fun updateLocation(): Completable
+
 }

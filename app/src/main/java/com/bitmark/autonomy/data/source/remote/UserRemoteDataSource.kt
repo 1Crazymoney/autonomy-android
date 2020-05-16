@@ -83,4 +83,6 @@ class UserRemoteDataSource @Inject constructor(
     fun getDebugInfo() = autonomyApi.getDebugInfo().subscribeOn(Schedulers.io())
 
     fun getDebugInfo(id: String) = autonomyApi.getDebugInfo(id).subscribeOn(Schedulers.io())
+
+    fun updateLocation() = autonomyApi.updateLocation().subscribeOn(Schedulers.io())
 }
