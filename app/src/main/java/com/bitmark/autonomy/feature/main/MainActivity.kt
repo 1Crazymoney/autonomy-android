@@ -115,16 +115,18 @@ class MainActivity : BaseAppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        locationService.requestPermission(this, grantedCallback = {
-            startLocationService()
-        }, permanentlyDeniedCallback = {
-            dialogController.alert(
-                R.string.access_to_location_required,
-                R.string.autonomy_requires_access_to_your_location
-            ) {
-                navigator.openAppSetting(this)
-            }
-        })
+        if (!locationService.isPermissionGranted(this)) {
+            locationService.requestPermission(this, grantedCallback = {
+                startLocationService()
+            }, permanentlyDeniedCallback = {
+                dialogController.alert(
+                    R.string.access_to_location_required,
+                    R.string.autonomy_requires_access_to_your_location
+                ) {
+                    navigator.openAppSetting(this)
+                }
+            })
+        }
         viewModel.checkDebugModeEnable()
     }
 
@@ -141,12 +143,12 @@ class MainActivity : BaseAppCompatActivity() {
         if (notificationBundle != null) {
             handleNotification(notificationBundle!!, adapter.count > 0)
         }
-        viewModel.listArea()
         registerTimezoneChangedReceiver()
         if (locationService.isPermissionGranted(this)) {
             startLocationService()
         }
         locationService.addLocationChangeListener(locationChangeListener)
+        viewModel.listArea()
     }
 
     private fun registerTimezoneChangedReceiver() {

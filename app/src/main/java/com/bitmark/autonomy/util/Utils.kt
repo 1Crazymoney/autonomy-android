@@ -11,3 +11,5 @@ import android.os.Build
 fun isAboveN() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
 
 fun isAboveO() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
+
+fun isAboveQ() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q

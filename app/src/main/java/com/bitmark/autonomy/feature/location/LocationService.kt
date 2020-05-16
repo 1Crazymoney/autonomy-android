@@ -21,6 +21,7 @@ import com.bitmark.autonomy.keymanagement.ApiKeyManager.Companion.API_KEY_MANAGE
 import com.bitmark.autonomy.logging.Event
 import com.bitmark.autonomy.logging.EventLogger
 import com.bitmark.autonomy.logging.Tracer
+import com.bitmark.autonomy.util.isAboveQ
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.*
 import com.google.maps.GeoApiContext
@@ -36,8 +37,6 @@ class LocationService(private val context: Context, private val logger: EventLog
 
     companion object {
         private const val TAG = "LocationService"
-
-        const val LOCATION_PERMISSION = Manifest.permission.ACCESS_COARSE_LOCATION
     }
 
     private val fusedLocationClient = LocationServices.getFusedLocationProviderClient(context)
@@ -144,7 +143,9 @@ class LocationService(private val context: Context, private val logger: EventLog
         permanentlyDeniedCallback: () -> Unit = {}
     ) {
         val rxPermission = RxPermissions(activity)
-        rxPermission.requestEach(LOCATION_PERMISSION)
+        val permissions = mutableListOf(Manifest.permission.ACCESS_COARSE_LOCATION)
+        if (isAboveQ()) permissions.add(Manifest.permission.ACCESS_BACKGROUND_LOCATION)
+        rxPermission.requestEach(*permissions.toTypedArray())
             .subscribe({ permission ->
                 when {
                     permission.granted -> {
@@ -164,7 +165,7 @@ class LocationService(private val context: Context, private val logger: EventLog
     }
 
     fun isPermissionGranted(activity: FragmentActivity) =
-        RxPermissions(activity).isGranted(LOCATION_PERMISSION)
+        RxPermissions(activity).isGranted(Manifest.permission.ACCESS_COARSE_LOCATION)
 
     private fun getLastKnownLocation(callback: (Location?) -> Unit) {
         fusedLocationClient.lastLocation.addOnSuccessListener { l ->

@@ -127,16 +127,18 @@ class DebugModeActivity : BaseAppCompatActivity(), OnMapReadyCallback {
 
     override fun onStart() {
         super.onStart()
-        locationService.requestPermission(this, grantedCallback = {
-            startLocationService()
-        }, permanentlyDeniedCallback = {
-            dialogController.alert(
-                R.string.access_to_location_required,
-                R.string.autonomy_requires_access_to_your_location
-            ) {
-                navigator.openAppSetting(this)
-            }
-        })
+        if (!locationService.isPermissionGranted(this)) {
+            locationService.requestPermission(this, grantedCallback = {
+                startLocationService()
+            }, permanentlyDeniedCallback = {
+                dialogController.alert(
+                    R.string.access_to_location_required,
+                    R.string.autonomy_requires_access_to_your_location
+                ) {
+                    navigator.openAppSetting(this)
+                }
+            })
+        }
     }
 
     private fun startLocationService() {
