@@ -43,8 +43,10 @@ class SymptomReportActivity : BaseAppCompatActivity() {
 
         private const val SELECTED_SYMPTOMS = "selected_symptoms"
 
-        fun getBundle(selectedSymptoms: ArrayList<String>? = null) = Bundle().apply {
-            if (selectedSymptoms != null) putStringArrayList(SELECTED_SYMPTOMS, selectedSymptoms)
+        fun getBundle(selectedSymptomNames: ArrayList<String>? = null) = Bundle().apply {
+            if (selectedSymptomNames != null) {
+                putStringArrayList(SELECTED_SYMPTOMS, selectedSymptomNames)
+            }
         }
     }
 

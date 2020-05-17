@@ -31,6 +31,8 @@ object NotificationId {
 
     const val ACCOUNT_SYMPTOM_FOLLOW_UP = 0x06
 
+    const val ACCOUNT_SYMPTOM_SPIKE = 0x07
+
 }
 
 object NotificationType {
@@ -44,6 +46,8 @@ object NotificationType {
     const val RISK_LEVEL_CHANGED = "RISK_LEVEL_CHANGED"
 
     const val ACCOUNT_SYMPTOM_FOLLOW_UP = "ACCOUNT_SYMPTOM_FOLLOW_UP"
+
+    const val ACCOUNT_SYMPTOM_SPIKE = "ACCOUNT_SYMPTOM_SPIKE"
 }
 
 // need to be the corresponding string resource name

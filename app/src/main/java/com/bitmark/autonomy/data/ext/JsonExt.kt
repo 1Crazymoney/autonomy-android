@@ -21,7 +21,7 @@ fun newGsonInstance() = Gson().newBuilder().excludeFieldsWithoutExposeAnnotation
 fun JSONArray.toStringArrayList(): ArrayList<String> {
     val result = mutableListOf<String>()
     for (i in 0 until length()) {
-        result.add(getJSONObject(i).toString())
+        result.add(getString(i).toString())
     }
     return ArrayList(result)
 }

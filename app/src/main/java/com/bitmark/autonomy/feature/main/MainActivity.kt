@@ -179,11 +179,11 @@ class MainActivity : BaseAppCompatActivity() {
                 val areaId = notificationBundle.getString(NotificationPayloadType.POI_ID)
                 handler.postDelayed({ showArea(areaId) }, NOTIFICATION_ACTION_DELAY)
             }
-            NotificationId.ACCOUNT_SYMPTOM_FOLLOW_UP -> {
+            NotificationId.ACCOUNT_SYMPTOM_FOLLOW_UP, NotificationId.ACCOUNT_SYMPTOM_SPIKE -> {
                 if (!locationService.isPermissionGranted(this)) return
-                val selectedSymptoms =
+                val symptoms =
                     notificationBundle.getStringArrayList(NotificationPayloadType.SYMPTOMS)
-                val bundle = SymptomReportActivity.getBundle(selectedSymptoms)
+                val bundle = SymptomReportActivity.getBundle(symptoms)
                 navigator.anim(RIGHT_LEFT).startActivity(SymptomReportActivity::class.java, bundle)
             }
         }
