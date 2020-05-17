@@ -173,7 +173,9 @@ class MainActivity : BaseAppCompatActivity() {
     private fun handleNotification(notificationBundle: Bundle, dataReady: Boolean) {
         when (notificationBundle.getInt("notification_id")) {
             NotificationId.SURVEY -> goToSurveyIfSatisfied()
-            NotificationId.CLEAN_AND_DISINFECT -> goToBehaviorMetricIfSatisfied()
+            NotificationId.CLEAN_AND_DISINFECT,
+            NotificationId.BEHAVIOR_REPORT_ON_SELF_HIGH_RISK,
+            NotificationId.BEHAVIOR_REPORT_ON_RISK_AREA -> goToBehaviorMetricIfSatisfied()
             NotificationId.RISK_LEVEL_CHANGED -> {
                 if (!dataReady) return
                 val areaId = notificationBundle.getString(NotificationPayloadType.POI_ID)
