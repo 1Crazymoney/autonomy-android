@@ -24,6 +24,7 @@ import com.bitmark.autonomy.feature.*
 import com.bitmark.autonomy.feature.Navigator.Companion.BOTTOM_UP
 import com.bitmark.autonomy.feature.Navigator.Companion.UP_BOTTOM
 import com.bitmark.autonomy.feature.arealist.AreaListFragment
+import com.bitmark.autonomy.feature.behavior.metric.BehaviorMetricActivity
 import com.bitmark.autonomy.feature.debugmode.DebugModeActivity
 import com.bitmark.autonomy.feature.location.LocationService
 import com.bitmark.autonomy.feature.notification.NotificationId
@@ -109,6 +110,13 @@ class MainActivity : BaseAppCompatActivity() {
         }, NOTIFICATION_ACTION_DELAY)
     }
 
+    private fun goToBehaviorMetricIfSatisfied() {
+        if (!locationService.isPermissionGranted(this)) return
+        handler.postDelayed({
+            navigator.anim(BOTTOM_UP).startActivity(BehaviorMetricActivity::class.java)
+        }, NOTIFICATION_ACTION_DELAY)
+    }
+
     override fun layoutRes(): Int = R.layout.activity_main
 
     override fun viewModel(): BaseViewModel? = viewModel
@@ -163,6 +171,7 @@ class MainActivity : BaseAppCompatActivity() {
     private fun handleNotification(notificationBundle: Bundle, dataReady: Boolean) {
         when (notificationBundle.getInt("notification_id")) {
             NotificationId.SURVEY -> goToSurveyIfSatisfied()
+            NotificationId.CLEAN_AND_DISINFECT -> goToBehaviorMetricIfSatisfied()
             NotificationId.RISK_LEVEL_CHANGED -> {
                 if (!dataReady) return
                 val areaId = notificationBundle.getString(NotificationPayloadType.POI_ID)

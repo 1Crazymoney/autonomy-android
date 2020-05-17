@@ -6,6 +6,8 @@
  */
 package com.bitmark.autonomy.feature.splash
 
+import android.app.AlarmManager
+import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
 import android.text.Spannable
@@ -26,9 +28,7 @@ import com.bitmark.autonomy.feature.Navigator.Companion.FADE_IN
 import com.bitmark.autonomy.feature.Navigator.Companion.NONE
 import com.bitmark.autonomy.feature.Navigator.Companion.RIGHT_LEFT
 import com.bitmark.autonomy.feature.main.MainActivity
-import com.bitmark.autonomy.feature.notification.NotificationId
-import com.bitmark.autonomy.feature.notification.NotificationPayloadType
-import com.bitmark.autonomy.feature.notification.NotificationType
+import com.bitmark.autonomy.feature.notification.*
 import com.bitmark.autonomy.feature.onboarding.OnboardingContainerActivity
 import com.bitmark.autonomy.logging.Event
 import com.bitmark.autonomy.logging.EventLogger
@@ -170,6 +170,7 @@ class SplashActivity : BaseAppCompatActivity() {
                         }
                         notificationBundle.putInt("notification_id", notificationId)
                     }
+                    scheduleNotificationIfNeeded()
                     val bundle = MainActivity.getBundle(notificationBundle)
                     navigator.anim(FADE_IN)
                         .startActivityAsRoot(MainActivity::class.java, bundle)
@@ -180,6 +181,26 @@ class SplashActivity : BaseAppCompatActivity() {
                 }
             }
         })
+    }
+
+    private fun scheduleNotificationIfNeeded() {
+        val bundle = NotificationHelper.buildCleanAndDisinfectNotificationBundle(this)
+        val isActive =
+            ScheduledNotificationReceiver.isActive(this, bundle, NotificationId.CLEAN_AND_DISINFECT)
+        if (isActive) return
+        val pendingIntent = ScheduledNotificationReceiver.getPendingIntent(
+            this,
+            bundle,
+            NotificationId.CLEAN_AND_DISINFECT
+        )
+        val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val triggerAt = DateTimeUtil.calculateGapMillisTo(9)
+        alarmManager.setRepeating(
+            AlarmManager.RTC_WAKEUP,
+            System.currentTimeMillis() + triggerAt,
+            AlarmManager.INTERVAL_DAY,
+            pendingIntent
+        )
     }
 
     private fun showLanding() {

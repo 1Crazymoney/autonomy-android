@@ -213,6 +213,9 @@
     <string name="your_data_is_always_kept">您的資料將永遠的維持100%保密（我們也無法存取）</string>
     <string name="wash_your_hands_while_you_are_up">記得洗手！</string>
     <string name="this_is_great_chance_to_wash_your_hands">現在是您洗手20秒或是使用手部消毒劑的好時機。如果您有做到，請點擊。</string>
+    <string name="clean_and_disinfect">Clean and disinfect surfaces</string>
+    <string name="have_you_cleaned_and_disinfected">Have you cleaned and disinfected frequently touched surfaces today to prevent virus transmission? Tap if you did this.</string>
+
 
     <!-- array -->
     <string-array name="symptoms">

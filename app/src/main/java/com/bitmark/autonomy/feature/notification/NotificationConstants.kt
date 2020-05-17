@@ -25,6 +25,8 @@ object NotificationId {
 
     const val RISK_LEVEL_CHANGED = 0x04
 
+    const val CLEAN_AND_DISINFECT = 0x05
+
 }
 
 object NotificationType {

@@ -226,3 +226,15 @@ fun NotificationHelper.Companion.buildCheckInSurveyNotificationBundle(context: C
         ChannelId.IMPORTANT_ALERT,
         SplashActivity::class.java
     )
+
+fun NotificationHelper.Companion.buildCleanAndDisinfectNotificationBundle(context: Context) =
+    buildNotificationBundle(
+        context,
+        R.string.clean_and_disinfect,
+        R.string.have_you_cleaned_and_disinfected,
+        R.color.colorAccent,
+        NotificationId.CLEAN_AND_DISINFECT,
+        true,
+        ChannelId.IMPORTANT_ALERT,
+        SplashActivity::class.java
+    )

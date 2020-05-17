@@ -27,6 +27,17 @@ class ScheduledNotificationReceiver : BroadcastReceiver() {
                 PendingIntent.FLAG_UPDATE_CURRENT
             )
         }
+
+        fun isActive(context: Context, bundle: Bundle, requestCode: Int): Boolean {
+            val intent = Intent(context, ScheduledNotificationReceiver::class.java)
+            intent.putExtras(bundle)
+            return PendingIntent.getBroadcast(
+                context,
+                requestCode,
+                intent,
+                PendingIntent.FLAG_NO_CREATE
+            ) != null
+        }
     }
 
     override fun onReceive(context: Context?, intent: Intent?) {

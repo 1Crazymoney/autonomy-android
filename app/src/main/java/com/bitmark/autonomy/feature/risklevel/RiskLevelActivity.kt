@@ -78,7 +78,12 @@ class RiskLevelActivity : BaseAppCompatActivity() {
                     cbNoRisk.isChecked -> "low"
                     else -> error("incorrect risk level")
                 }
-                viewModel.registerAccount(account, alias, riskLevel, DateTimeUtil.getDefaultTimezone())
+                viewModel.registerAccount(
+                    account,
+                    alias,
+                    riskLevel,
+                    DateTimeUtil.getDefaultTimezone()
+                )
             }
         }
 
@@ -153,13 +158,13 @@ class RiskLevelActivity : BaseAppCompatActivity() {
         createChannel(this, ChannelId.IMPORTANT_ALERT, true)
         createChannel(this, ChannelId.DEFAULT, false)
 
+        val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+
+        // schedule survey check-in notification randomly
         val randomMillis = DateTimeUtil.randomNextMillisInHourRange(
             NotificationConstants.NOTIFICATION_HOUR_RANGE,
             NotificationConstants.PUSH_COUNT_PER_DAY
         )
-
-        val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
-
         for (triggerMillis in randomMillis) {
             val bundle = NotificationHelper.buildCheckInSurveyNotificationBundle(this)
             val pendingIntent =
@@ -172,6 +177,22 @@ class RiskLevelActivity : BaseAppCompatActivity() {
             )
             Tracer.DEBUG.log(TAG, "push survey notification at: ${Date(triggerMillis)}")
         }
+
+        // schedule clean&disinfect notification at 9am everyday
+        val bundle = NotificationHelper.buildCleanAndDisinfectNotificationBundle(this)
+        val pendingIntent = ScheduledNotificationReceiver.getPendingIntent(
+            this,
+            bundle,
+            NotificationId.CLEAN_AND_DISINFECT
+        )
+        val triggerAt = System.currentTimeMillis() + DateTimeUtil.calculateGapMillisTo(9)
+        alarmManager.setRepeating(
+            AlarmManager.RTC_WAKEUP,
+            triggerAt,
+            AlarmManager.INTERVAL_DAY,
+            pendingIntent
+        )
+        Tracer.DEBUG.log(TAG, "push clean&disinfect notification at: ${Date(triggerAt)}")
     }
 
     private fun enableDone() {
