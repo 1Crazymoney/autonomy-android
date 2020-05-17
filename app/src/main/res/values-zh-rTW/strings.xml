@@ -15,9 +15,9 @@
     <string name="autonomy_requires_access_to_the_following">Autonomy需要存取以下項目：</string>
     <string name="done">完成</string>
     <string name="risk_level">風險水平</string>
-    <string name="are_u_at_higher_risk">Are you at higher risk for severe illness?</string>
+    <string name="are_u_at_higher_risk">您屬於重症高危險群嗎？</string>
     <string name="yes_im_at_higher_risk">是的，我屬於高危險群</string>
-    <string name="higher_risk_individuals">Higher risk individuals often include:\n• People over age 65\n\nAnd any pre-existing medical conditions, such as:\n• High blood pressure (hypertension)\n• Cardiovascular disease\n• Diabetes\n• Chronic respiratory disease (such as lung disease or asthma)\n• Cancer\n• Obesity\n• Compromised immune system</string>
+    <string name="higher_risk_individuals">高危險群通常包含：\n• 65歲以上\n\n 痼疾，例如：\n• 高血壓\n• 心血管疾病\n• 糖尿病\n• 慢性呼吸道疾病（如肺病或氣喘\n• 癌症\n• 過胖\n• 免疫系統受損</string>
     <string name="no_im_not_at_higher_risk">不，我不屬於高危險群</string>
     <string name="error">錯誤</string>
     <string name="passcode_pin_required">需要設定設備PIN碼</string>
@@ -93,8 +93,8 @@
     <string name="sorry_u_already_have_a_outstanding_help_request">抱歉，您尚有一項等待中的社群請求。目前系統只支援每位成員提出一項請求。</string>
     <string name="someone_just_signed_up">有人報名了</string>
     <string name="thanks_so_much_for_your_eagerness">非常感謝您願意幫忙，但此項請求已由另外一位社群成員報名達成。</string>
-    <string name="confirmed_cases">Confirmed infections</string>
-    <string name="reported_symptoms">Symptoms</string>
+    <string name="confirmed_cases">確診數</string>
+    <string name="reported_symptoms">症狀</string>
     <string name="healthy_behaviors">健康行為</string>
     <string name="population_density">人口密度</string>
     <string name="your_symptoms_have_been_reported">已成功將您的症狀回報給您的社群</string>
@@ -172,57 +172,57 @@
     <string name="we_will_forecast_the_public_health">我們將會預測您周圍的公共健康狀況。</string>
     <string name="we_will_help_your_neighborhood">我們會幫助您周圍的人一起變得更健康。</string>
     <string name="debug_mode_is_enabled">除錯模式已啟動</string>
-    <string name="tap_any_symptoms_you_have">Tap any symptoms you have or add new ones:</string>
-    <string name="common_covid_symptoms">Common COVID-19 symptoms</string>
-    <string name="recent_neighborhood_symptoms">Recent neighborhood symptoms</string>
-    <string name="report_other_symptom">Report other symptom …</string>
-    <string name="none">None</string>
-    <string name="thanks_for_sharing_your_symptom">Thanks for sharing your symptoms with your neighborhood!</string>
-    <string name="your_total_for_today">Your total\nfor today</string>
-    <string name="from_yesterday">From yesterday</string>
-    <string name="community_average_for_today">Community average\nfor today</string>
-    <string name="are_u_doing_them_correctly">Are you doing them correctly?</string>
-    <string name="report_behaviors">Report behaviors</string>
-    <string name="reporting_your_symptoms_to_your_neighborhood">Reporting your symptoms to your neighborhood…</string>
-    <string name="submitting">Submitting</string>
-    <string name="learn_how_to_keep_other_safe">Learn how to keep others safe</string>
-    <string name="recommended_covid_behaviors">Recommended COVID-19 Behaviors</string>
-    <string name="tap_any_healthy_behaviors_you_did">Tap any healthy behaviors you did today or add new ones:</string>
-    <string name="recent_behaviors_near_you">Recent behavior near you</string>
-    <string name="report_other_behavior">Report other behavior…</string>
-    <string name="reporting_your_healthy_behaviors">Reporting your healthy behaviors to your neighborhood …</string>
-    <string name="thanks_for_making_your_neighborhood_healthier">Thanks for making your neighborhood healthier!</string>
-    <string name="report_symptoms">Report\nsymptoms</string>
-    <string name="how_to_correctly_perform_healthy_behavior">How to correctly perform healthy behaviors:</string>
-    <string name="hand_washing">Hand washing</string>
-    <string name="applying_hand_sanitizer">Applying hand sanitizer</string>
-    <string name="wearing_surgical_mask">Wearing a surgical mask</string>
-    <string name="covering_coughs">Covering coughs</string>
-    <string name="could_not_play_video">Could not play video. Please try again later.</string>
-    <string name="guidance">Guidance</string>
-    <string name="how_we_keep_your_data_private">How we keep\nyour data private</string>
+    <string name="tap_any_symptoms_you_have">點擊任何您有的症狀，或新增症狀：</string>
+    <string name="common_covid_symptoms">常見新冠肺炎症狀</string>
+    <string name="recent_neighborhood_symptoms">近期周圍社群的症狀</string>
+    <string name="report_other_symptom">回報其他症狀…</string>
+    <string name="none">無</string>
+    <string name="thanks_for_sharing_your_symptom">感謝您分享您的症狀給周圍的社群！</string>
+    <string name="your_total_for_today">您今日的總\n</string>
+    <string name="from_yesterday">從昨天</string>
+    <string name="community_average_for_today">周圍社群今日平均\n</string>
+    <string name="are_u_doing_them_correctly">您的方法正確嗎？</string>
+    <string name="report_behaviors">已回報行為數</string>
+    <string name="reporting_your_symptoms_to_your_neighborhood">正在回報您的症狀至您周圍的社群…</string>
+    <string name="submitting">提交中</string>
+    <string name="learn_how_to_keep_other_safe">學習如何保護他人</string>
+    <string name="recommended_covid_behaviors">新冠肺炎應對行為建議</string>
+    <string name="tap_any_healthy_behaviors_you_did">點擊任何您今天有執行的健康行為或是新增：</string>
+    <string name="recent_behaviors_near_you">你附近的人的行為</string>
+    <string name="report_other_behavior">回報其他行為…</string>
+    <string name="reporting_your_healthy_behaviors">正在回報您的健康行為給您周圍的社群…</string>
+    <string name="thanks_for_making_your_neighborhood_healthier">感謝您讓您周圍的社群更健康！</string>
+    <string name="report_symptoms">回報\n症狀</string>
+    <string name="how_to_correctly_perform_healthy_behavior">如何正確施行健康行為：</string>
+    <string name="hand_washing">洗手</string>
+    <string name="applying_hand_sanitizer">使用手部消毒劑</string>
+    <string name="wearing_surgical_mask">佩戴醫用口罩</string>
+    <string name="covering_coughs">注意咳嗽禮節</string>
+    <string name="could_not_play_video">無法播放影片。請稍後再試。</string>
+    <string name="guidance">指引</string>
+    <string name="how_we_keep_your_data_private">我們如何保護\n您的資料</string>
     <string name="api">API</string>
-    <string name="help_keep_autonomy_free">Help keep Autonomy free</string>
-    <string name="donate">Donate</string>
-    <string name="other_amount">Other amount</string>
-    <string name="if_you_believe_in_autonomy">If you believe in Autonomy, please consider donating:</string>
-    <string name="your_generosity_helps_keep_autonomy">Your generosity helps keep Autonomy free and open for everyone. Every little bit helps.</string>
-    <string name="now">now</string>
-    <string name="entering_a_high_risk">Entering a high-risk neighborhood</string>
-    <string name="please_wear_a_face_covering">Please wear a face covering, avoid close contact with others, and wash your hands often. Tap if you did this.</string>
-    <string name="your_data_is_always_kept">Your data is always kept 100% confidential. (Even to us.)</string>
-    <string name="wash_your_hands_while_you_are_up">Wash your hands while you’re up!</string>
-    <string name="this_is_great_chance_to_wash_your_hands">This a great chance to wash your hands for at least 20 seconds or apply hand sanitizer. Tap if you did this.</string>
+    <string name="help_keep_autonomy_free">協助維護Autonomy的免費服務</string>
+    <string name="donate">捐款</string>
+    <string name="other_amount">其他金額</string>
+    <string name="if_you_believe_in_autonomy">如果您認同Autonomy的理念，請考慮捐款：</string>
+    <string name="your_generosity_helps_keep_autonomy">您的大方貢獻將協助Autonomy可以維持開放給任何人免費地使用。任何金額都有幫助。</string>
+    <string name="now">現在</string>
+    <string name="entering_a_high_risk">您正進入高風險社群中</string>
+    <string name="please_wear_a_face_covering">請遮掩面部，避免近距離接觸他人，並勤洗手。如果您有做到，請點擊。</string>
+    <string name="your_data_is_always_kept">您的資料將永遠的維持100%保密（我們也無法存取）</string>
+    <string name="wash_your_hands_while_you_are_up">記得洗手！</string>
+    <string name="this_is_great_chance_to_wash_your_hands">現在是您洗手20秒或是使用手部消毒劑的好時機。如果您有做到，請點擊。</string>
 
     <!-- array -->
     <string-array name="symptoms">
-        <item>dry cough</item>
-        <item>fever</item>
-        <item>chills</item>
-        <item>fatigue</item>
-        <item>shortness of breath</item>
-        <item>difficulty breathing</item>
-        <item>loss of sense of taste or smell</item>
+        <item>乾咳</item>
+        <item>發燒</item>
+        <item>發寒</item>
+        <item>無力</item>
+        <item>呼吸急促</item>
+        <item>呼吸困難</item>
+        <item>失去味覺或嗅覺</item>
     </string-array>
 
     <!--    string format-->
