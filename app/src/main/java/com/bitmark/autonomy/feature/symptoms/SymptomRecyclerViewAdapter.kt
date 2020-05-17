@@ -74,6 +74,16 @@ class SymptomRecyclerViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>
         notifyDataSetChanged()
     }
 
+    fun setSelected(symptomIds: List<String>) {
+        symptomIds.forEach { id ->
+            val index = items.indexOfFirst { i -> i.type == BODY && i.symptom!!.id == id }
+            if (index != -1) {
+                items[index].selected = true
+                notifyItemChanged(index)
+            }
+        }
+    }
+
     fun addFooter() {
         val pos = items.size
         items.add(Item(FOOTER))

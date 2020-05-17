@@ -13,6 +13,8 @@ object NotificationPayloadType {
     const val HELP_ID = "help_id"
 
     const val POI_ID = "poi_id"
+
+    const val SYMPTOMS = "symptoms"
 }
 
 object NotificationId {
@@ -27,6 +29,8 @@ object NotificationId {
 
     const val CLEAN_AND_DISINFECT = 0x05
 
+    const val ACCOUNT_SYMPTOM_FOLLOW_UP = 0x06
+
 }
 
 object NotificationType {
@@ -38,6 +42,8 @@ object NotificationType {
     const val HELP_REQUEST_EXPIRED = "NOTIFY_HELP_EXPIRED"
 
     const val RISK_LEVEL_CHANGED = "RISK_LEVEL_CHANGED"
+
+    const val ACCOUNT_SYMPTOM_FOLLOW_UP = "ACCOUNT_SYMPTOM_FOLLOW_UP"
 }
 
 // need to be the corresponding string resource name

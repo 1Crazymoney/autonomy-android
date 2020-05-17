@@ -22,6 +22,7 @@ import com.bitmark.autonomy.AppLifecycleHandler
 import com.bitmark.autonomy.R
 import com.bitmark.autonomy.feature.*
 import com.bitmark.autonomy.feature.Navigator.Companion.BOTTOM_UP
+import com.bitmark.autonomy.feature.Navigator.Companion.RIGHT_LEFT
 import com.bitmark.autonomy.feature.Navigator.Companion.UP_BOTTOM
 import com.bitmark.autonomy.feature.arealist.AreaListFragment
 import com.bitmark.autonomy.feature.behavior.metric.BehaviorMetricActivity
@@ -31,6 +32,7 @@ import com.bitmark.autonomy.feature.notification.NotificationId
 import com.bitmark.autonomy.feature.notification.NotificationPayloadType
 import com.bitmark.autonomy.feature.profile.ProfileActivity
 import com.bitmark.autonomy.feature.survey.SurveyContainerActivity
+import com.bitmark.autonomy.feature.symptoms.SymptomReportActivity
 import com.bitmark.autonomy.logging.Event
 import com.bitmark.autonomy.logging.EventLogger
 import com.bitmark.autonomy.util.Constants.MAX_AREA
@@ -176,6 +178,13 @@ class MainActivity : BaseAppCompatActivity() {
                 if (!dataReady) return
                 val areaId = notificationBundle.getString(NotificationPayloadType.POI_ID)
                 handler.postDelayed({ showArea(areaId) }, NOTIFICATION_ACTION_DELAY)
+            }
+            NotificationId.ACCOUNT_SYMPTOM_FOLLOW_UP -> {
+                if (!locationService.isPermissionGranted(this)) return
+                val selectedSymptoms =
+                    notificationBundle.getStringArrayList(NotificationPayloadType.SYMPTOMS)
+                val bundle = SymptomReportActivity.getBundle(selectedSymptoms)
+                navigator.anim(RIGHT_LEFT).startActivity(SymptomReportActivity::class.java, bundle)
             }
         }
         // destroy after already handled

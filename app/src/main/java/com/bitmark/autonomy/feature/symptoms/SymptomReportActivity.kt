@@ -40,6 +40,12 @@ class SymptomReportActivity : BaseAppCompatActivity() {
 
     companion object {
         private const val ADD_SYMPTOM_REQUEST_CODE = 0x07
+
+        private const val SELECTED_SYMPTOMS = "selected_symptoms"
+
+        fun getBundle(selectedSymptoms: ArrayList<String>? = null) = Bundle().apply {
+            if (selectedSymptoms != null) putStringArrayList(SELECTED_SYMPTOMS, selectedSymptoms)
+        }
     }
 
     @Inject
@@ -143,6 +149,10 @@ class SymptomReportActivity : BaseAppCompatActivity() {
                     if (!adapter.hasNeighborhoodSymptom()) {
                         adapter.addFooter()
                     }
+
+                    val selectedSymptoms =
+                        intent?.extras?.getStringArrayList(SELECTED_SYMPTOMS) ?: return@Observer
+                    adapter.setSelected(selectedSymptoms)
                 }
 
                 res.isError() -> {

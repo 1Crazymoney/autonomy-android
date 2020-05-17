@@ -157,6 +157,7 @@ class SplashActivity : BaseAppCompatActivity() {
                                 NotificationType.NEW_HELP_REQUEST -> NotificationId.NEW_HELP_REQUEST
                                 NotificationType.ACCEPTED_HELP_REQUEST -> NotificationId.ACCEPTED_HELP_REQUEST
                                 NotificationType.RISK_LEVEL_CHANGED -> NotificationId.RISK_LEVEL_CHANGED
+                                NotificationType.ACCOUNT_SYMPTOM_FOLLOW_UP -> NotificationId.ACCOUNT_SYMPTOM_FOLLOW_UP
                                 else -> {
                                     logger.logError(
                                         Event.NOTIFICATION_HANDLING_ERROR,
