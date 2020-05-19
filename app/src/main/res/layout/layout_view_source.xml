@@ -1056,7 +1056,7 @@
             android:layout_width="@dimen/dp_90"
             android:layout_height="@dimen/dp_30"
             android:layout_margin="@dimen/dp_16"
-            android:background="@drawable/bg_rect_silver_2"
+            android:background="@drawable/bg_rect_concord"
             android:drawableEnd="@drawable/ic_reset"
             android:drawablePadding="@dimen/dp_4"
             android:fontFamily="@font/ibm_plex_mono_light_font_family"
