@@ -628,7 +628,7 @@ class MainFragment : BaseSupportFragment() {
     private fun showData(profile: AreaProfileModelView) {
         showScore(profile.score.roundToInt())
 
-        tvConfirmedCases.text = profile.confirmed.decimalFormat()
+        tvConfirmedCases.text = profile.confirmed.abbreviate()
         tvConfirmedCasesChange.text = String.format("%.2f%%", abs(profile.confirmedDelta))
         tvConfirmedCasesChange.setTextColorRes(
             when {
@@ -644,7 +644,7 @@ class MainFragment : BaseSupportFragment() {
             ivConfirmedCasesChange.setImageResource(if (profile.confirmedDelta > 0) R.drawable.ic_up_red else R.drawable.ic_down_green)
         }
 
-        tvReportedSymptom.text = profile.symptoms.decimalFormat()
+        tvReportedSymptom.text = profile.symptoms.abbreviate()
         tvReportedSymptomChange.text = String.format("%.2f%%", abs(profile.symptomsDelta))
         tvReportedSymptomChange.setTextColorRes(
             when {
@@ -660,7 +660,7 @@ class MainFragment : BaseSupportFragment() {
             ivReportedSymptomChange.setImageResource(if (profile.symptomsDelta > 0) R.drawable.ic_up_red else R.drawable.ic_down_green)
         }
 
-        tvHealthyBehavior.text = profile.behaviors.decimalFormat()
+        tvHealthyBehavior.text = profile.behaviors.abbreviate()
         tvHealthyBehaviorChange.text = String.format("%.2f%%", abs(profile.behaviorsDelta))
         tvHealthyBehaviorChange.setTextColorRes(
             when {

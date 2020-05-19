@@ -132,12 +132,12 @@
         <receiver android:name=".feature.notification.ScheduledNotificationReceiver" />
 
         <meta-data
-            android:name="com.onesignal.NotificationAccentColor.DEFAULT"
-            android:value="@color/colorAccent" />
-
-        <meta-data
             android:name="com.onesignal.NotificationOpened.DEFAULT"
             android:value="DISABLE" />
+
+        <meta-data
+            android:name="com.onesignal.NotificationAccentColor.DEFAULT"
+            android:value="FF2DC937" />
 
         <meta-data
             android:name="io.sentry.dsn"
