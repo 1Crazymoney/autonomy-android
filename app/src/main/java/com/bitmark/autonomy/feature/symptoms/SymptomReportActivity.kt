@@ -43,9 +43,9 @@ class SymptomReportActivity : BaseAppCompatActivity() {
 
         private const val SELECTED_SYMPTOMS = "selected_symptoms"
 
-        fun getBundle(selectedSymptomNames: ArrayList<String>? = null) = Bundle().apply {
-            if (selectedSymptomNames != null) {
-                putStringArrayList(SELECTED_SYMPTOMS, selectedSymptomNames)
+        fun getBundle(selectedSymptoms: ArrayList<String>? = null) = Bundle().apply {
+            if (selectedSymptoms != null) {
+                putStringArrayList(SELECTED_SYMPTOMS, selectedSymptoms)
             }
         }
     }
@@ -155,6 +155,9 @@ class SymptomReportActivity : BaseAppCompatActivity() {
                     val selectedSymptoms =
                         intent?.extras?.getStringArrayList(SELECTED_SYMPTOMS) ?: return@Observer
                     adapter.setSelected(selectedSymptoms)
+                    if (selectedSymptoms.isNotEmpty()) {
+                        enableSubmit()
+                    }
                 }
 
                 res.isError() -> {

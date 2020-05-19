@@ -16,6 +16,7 @@ import androidx.annotation.ColorRes
 import androidx.annotation.StringRes
 import androidx.core.app.NotificationCompat
 import com.bitmark.autonomy.R
+import com.bitmark.autonomy.feature.main.MainActivity
 import com.bitmark.autonomy.feature.splash.SplashActivity
 import com.bitmark.autonomy.util.ext.getResIdentifier
 import com.bitmark.autonomy.util.ext.getString
@@ -101,7 +102,7 @@ class NotificationHelper {
                 SplashActivity::class.java
             }
             val intent = Intent(context, receiver)
-            intent.putExtra("notification", bundle)
+            intent.putExtra("notification_bundle", bundle)
             intent.putExtra("direct_from_notification", true)
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
             val pendingIntent = PendingIntent.getActivity(
@@ -224,7 +225,7 @@ fun NotificationHelper.Companion.buildCheckInSurveyNotificationBundle(context: C
         NotificationId.SURVEY,
         true,
         ChannelId.IMPORTANT_ALERT,
-        SplashActivity::class.java
+        MainActivity::class.java
     )
 
 fun NotificationHelper.Companion.buildCleanAndDisinfectNotificationBundle(context: Context) =
@@ -236,5 +237,5 @@ fun NotificationHelper.Companion.buildCleanAndDisinfectNotificationBundle(contex
         NotificationId.CLEAN_AND_DISINFECT,
         true,
         ChannelId.IMPORTANT_ALERT,
-        SplashActivity::class.java
+        MainActivity::class.java
     )

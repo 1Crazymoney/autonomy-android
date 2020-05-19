@@ -22,6 +22,7 @@ import com.bitmark.autonomy.AppLifecycleHandler
 import com.bitmark.autonomy.R
 import com.bitmark.autonomy.feature.*
 import com.bitmark.autonomy.feature.Navigator.Companion.BOTTOM_UP
+import com.bitmark.autonomy.feature.Navigator.Companion.FADE_IN
 import com.bitmark.autonomy.feature.Navigator.Companion.RIGHT_LEFT
 import com.bitmark.autonomy.feature.Navigator.Companion.UP_BOTTOM
 import com.bitmark.autonomy.feature.arealist.AreaListFragment
@@ -31,6 +32,7 @@ import com.bitmark.autonomy.feature.location.LocationService
 import com.bitmark.autonomy.feature.notification.NotificationId
 import com.bitmark.autonomy.feature.notification.NotificationPayloadType
 import com.bitmark.autonomy.feature.profile.ProfileActivity
+import com.bitmark.autonomy.feature.splash.SplashActivity
 import com.bitmark.autonomy.feature.survey.SurveyContainerActivity
 import com.bitmark.autonomy.feature.symptoms.SymptomReportActivity
 import com.bitmark.autonomy.logging.Event
@@ -54,10 +56,12 @@ class MainActivity : BaseAppCompatActivity() {
 
         fun getBundle(notificationBundle: Bundle? = null) =
             Bundle().apply {
-                if (notificationBundle != null) putBundle(
-                    NOTIFICATION_BUNDLE,
-                    notificationBundle
-                )
+                if (notificationBundle != null) {
+                    putBundle(
+                        NOTIFICATION_BUNDLE,
+                        notificationBundle
+                    )
+                }
             }
     }
 
@@ -83,7 +87,7 @@ class MainActivity : BaseAppCompatActivity() {
 
     private val handler = Handler()
 
-    private var notificationBundle: Bundle? = null
+    private var notificationHandled = true
 
     private val timezoneChangedReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
@@ -105,18 +109,20 @@ class MainActivity : BaseAppCompatActivity() {
 
     private lateinit var areaList: MutableList<AreaModelView>
 
-    private fun goToSurveyIfSatisfied() {
-        if (!locationService.isPermissionGranted(this)) return
+    private fun goToSurveyIfSatisfied(): Boolean {
+        if (!locationService.isPermissionGranted(this)) return false
         handler.postDelayed({
             navigator.anim(BOTTOM_UP).startActivity(SurveyContainerActivity::class.java)
         }, NOTIFICATION_ACTION_DELAY)
+        return true
     }
 
-    private fun goToBehaviorMetricIfSatisfied() {
-        if (!locationService.isPermissionGranted(this)) return
+    private fun goToBehaviorMetricIfSatisfied(): Boolean {
+        if (!locationService.isPermissionGranted(this)) return false
         handler.postDelayed({
             navigator.anim(BOTTOM_UP).startActivity(BehaviorMetricActivity::class.java)
         }, NOTIFICATION_ACTION_DELAY)
+        return true
     }
 
     override fun layoutRes(): Int = R.layout.activity_main
@@ -128,6 +134,12 @@ class MainActivity : BaseAppCompatActivity() {
         if (!locationService.isPermissionGranted(this)) {
             locationService.requestPermission(this, grantedCallback = {
                 startLocationService()
+
+                // re-handle notification if it has not been handled correctly due to the permission requesting
+                val notificationBundle = intent?.extras?.getBundle(NOTIFICATION_BUNDLE)
+                if (notificationBundle != null && !notificationHandled) {
+                    notificationHandled = handleNotification(notificationBundle, true)
+                }
             }, permanentlyDeniedCallback = {
                 dialogController.alert(
                     R.string.access_to_location_required,
@@ -149,9 +161,17 @@ class MainActivity : BaseAppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        notificationBundle = intent?.extras?.getBundle(NOTIFICATION_BUNDLE)
+        val notificationBundle = intent?.extras?.getBundle(NOTIFICATION_BUNDLE)
         if (notificationBundle != null) {
-            handleNotification(notificationBundle!!, adapter.count > 0)
+            val directFromNotification =
+                intent?.extras?.getBoolean("direct_from_notification") == true
+            if (directFromNotification) {
+                // start app again make sure all related logic handling
+                val bundle = SplashActivity.getBundle(notificationBundle)
+                navigator.anim(FADE_IN).startActivityAsRoot(SplashActivity::class.java, bundle)
+            } else {
+                notificationHandled = handleNotification(notificationBundle, adapter.count > 0)
+            }
         }
         registerTimezoneChangedReceiver()
         if (locationService.isPermissionGranted(this)) {
@@ -159,6 +179,15 @@ class MainActivity : BaseAppCompatActivity() {
         }
         locationService.addLocationChangeListener(locationChangeListener)
         viewModel.listArea()
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        val notificationBundle = intent?.extras?.getBundle(NOTIFICATION_BUNDLE)
+        val directFromNotification = intent?.extras?.getBoolean("direct_from_notification") == true
+        if (notificationBundle != null && directFromNotification) {
+            notificationHandled = handleNotification(notificationBundle, adapter.count > 0)
+        }
     }
 
     private fun registerTimezoneChangedReceiver() {
@@ -170,27 +199,28 @@ class MainActivity : BaseAppCompatActivity() {
         unregisterReceiver(timezoneChangedReceiver)
     }
 
-    private fun handleNotification(notificationBundle: Bundle, dataReady: Boolean) {
-        when (notificationBundle.getInt("notification_id")) {
-            NotificationId.SURVEY -> goToSurveyIfSatisfied()
+    private fun handleNotification(notificationBundle: Bundle, dataReady: Boolean): Boolean {
+        when (val notificationId = notificationBundle.getInt("notification_id")) {
+            NotificationId.SURVEY -> return goToSurveyIfSatisfied()
             NotificationId.CLEAN_AND_DISINFECT,
             NotificationId.BEHAVIOR_REPORT_ON_SELF_HIGH_RISK,
-            NotificationId.BEHAVIOR_REPORT_ON_RISK_AREA -> goToBehaviorMetricIfSatisfied()
+            NotificationId.BEHAVIOR_REPORT_ON_RISK_AREA -> return goToBehaviorMetricIfSatisfied()
             NotificationId.RISK_LEVEL_CHANGED -> {
-                if (!dataReady) return
+                if (!dataReady) return false
                 val areaId = notificationBundle.getString(NotificationPayloadType.POI_ID)
                 handler.postDelayed({ showArea(areaId) }, NOTIFICATION_ACTION_DELAY)
+                return true
             }
             NotificationId.ACCOUNT_SYMPTOM_FOLLOW_UP, NotificationId.ACCOUNT_SYMPTOM_SPIKE -> {
-                if (!locationService.isPermissionGranted(this)) return
+                if (!locationService.isPermissionGranted(this)) return false
                 val symptoms =
                     notificationBundle.getStringArrayList(NotificationPayloadType.SYMPTOMS)
                 val bundle = SymptomReportActivity.getBundle(symptoms)
                 navigator.anim(RIGHT_LEFT).startActivity(SymptomReportActivity::class.java, bundle)
+                return true
             }
+            else -> error("unsupported notification id $notificationId")
         }
-        // destroy after already handled
-        this.notificationBundle = null
     }
 
     override fun onDestroy() {
@@ -205,6 +235,12 @@ class MainActivity : BaseAppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK && requestCode == LOCATION_SETTING_CODE) {
             startLocationService()
+
+            // re-handle notification if it has not been handled correctly due to the location setting correct
+            val notificationBundle = intent?.extras?.getBundle(NOTIFICATION_BUNDLE)
+            if (notificationBundle != null && !notificationHandled) {
+                notificationHandled = handleNotification(notificationBundle, true)
+            }
         }
     }
 
@@ -261,8 +297,11 @@ class MainActivity : BaseAppCompatActivity() {
                     adapter.set(fragments)
                     vp.offscreenPageLimit = MAX_AREA + 2
                     vIndicator.notifyDataSetChanged()
-                    if (notificationBundle != null) {
-                        handleNotification(notificationBundle!!, true)
+
+                    // re-handle notification if it has not been handled correctly since the data is not ready
+                    val notificationBundle = intent?.extras?.getBundle(NOTIFICATION_BUNDLE)
+                    if (notificationBundle != null && !notificationHandled) {
+                        handleNotification(notificationBundle, true)
                     }
                 }
 

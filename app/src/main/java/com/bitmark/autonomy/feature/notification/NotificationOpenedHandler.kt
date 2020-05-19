@@ -10,7 +10,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import com.bitmark.autonomy.data.ext.toStringArrayList
-import com.bitmark.autonomy.feature.splash.SplashActivity
+import com.bitmark.autonomy.feature.main.MainActivity
 import com.onesignal.OSNotificationOpenResult
 import com.onesignal.OneSignal
 import javax.inject.Inject
@@ -37,11 +37,24 @@ class NotificationOpenedHandler @Inject constructor(private val context: Context
                         symptoms.toStringArrayList()
                     )
                 }
+
+                val notificationId = when (notificationType) {
+                    NotificationType.NEW_HELP_REQUEST -> NotificationId.NEW_HELP_REQUEST
+                    NotificationType.ACCEPTED_HELP_REQUEST -> NotificationId.ACCEPTED_HELP_REQUEST
+                    NotificationType.RISK_LEVEL_CHANGED -> NotificationId.RISK_LEVEL_CHANGED
+                    NotificationType.ACCOUNT_SYMPTOM_FOLLOW_UP -> NotificationId.ACCOUNT_SYMPTOM_FOLLOW_UP
+                    NotificationType.ACCOUNT_SYMPTOM_SPIKE -> NotificationId.ACCOUNT_SYMPTOM_SPIKE
+                    NotificationType.BEHAVIOR_REPORT_ON_RISK_AREA -> NotificationId.BEHAVIOR_REPORT_ON_RISK_AREA
+                    NotificationType.BEHAVIOR_REPORT_ON_SELF_HIGH_RISK -> NotificationId.BEHAVIOR_REPORT_ON_SELF_HIGH_RISK
+                    else -> error("unsupported notification type")
+                }
+                putInt("notification_id", notificationId)
             }
         } else null
-        val intent = Intent(context, SplashActivity::class.java)
-        if (bundle != null) intent.putExtra("notification", bundle)
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        val intent = Intent(context, MainActivity::class.java)
+        intent.putExtra("direct_from_notification", true)
+        if (bundle != null) intent.putExtras(MainActivity.getBundle(bundle))
+        intent.flags = Intent.FLAG_ACTIVITY_SINGLE_TOP and Intent.FLAG_ACTIVITY_CLEAR_TOP
         context.startActivity(intent)
     }
 }
