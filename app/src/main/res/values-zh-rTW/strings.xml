@@ -172,13 +172,13 @@
     <string name="we_will_forecast_the_public_health">我們將會預測您周圍的公共健康狀況。</string>
     <string name="we_will_help_your_neighborhood">我們會幫助您周圍的人一起變得更健康。</string>
     <string name="debug_mode_is_enabled">除錯模式已啟動</string>
-    <string name="tap_any_symptoms_you_have">點擊任何您有的症狀，或新增症狀：</string>
+    <string name="tap_any_symptoms_you_have">點選或新增任何您有的症狀：</string>
     <string name="common_covid_symptoms">常見新冠肺炎症狀</string>
     <string name="recent_neighborhood_symptoms">近期周圍社群的症狀</string>
     <string name="report_other_symptom">回報其他症狀…</string>
     <string name="none">無</string>
     <string name="thanks_for_sharing_your_symptom">感謝您分享您的症狀給周圍的社群！</string>
-    <string name="your_total_for_today">您今日的總\n</string>
+    <string name="your_total_for_today">您的今日加總\n</string>
     <string name="from_yesterday">從昨天</string>
     <string name="community_average_for_today">周圍社群今日平均\n</string>
     <string name="are_u_doing_them_correctly">您的方法正確嗎？</string>
@@ -187,7 +187,7 @@
     <string name="submitting">提交中</string>
     <string name="learn_how_to_keep_other_safe">學習如何保護他人</string>
     <string name="recommended_covid_behaviors">新冠肺炎應對行為建議</string>
-    <string name="tap_any_healthy_behaviors_you_did">點擊任何您今天有執行的健康行為或是新增：</string>
+    <string name="tap_any_healthy_behaviors_you_did">點選或新增任何您今天有執行的健康行為：</string>
     <string name="recent_behaviors_near_you">你附近的人的行為</string>
     <string name="report_other_behavior">回報其他行為…</string>
     <string name="reporting_your_healthy_behaviors">正在回報您的健康行為給您周圍的社群…</string>
@@ -213,8 +213,8 @@
     <string name="your_data_is_always_kept">您的資料將永遠的維持100%保密（我們也無法存取）</string>
     <string name="wash_your_hands_while_you_are_up">記得洗手！</string>
     <string name="this_is_great_chance_to_wash_your_hands">現在是您洗手20秒或是使用手部消毒劑的好時機。如果您有做到，請點擊。</string>
-    <string name="clean_and_disinfect">Clean and disinfect surfaces</string>
-    <string name="have_you_cleaned_and_disinfected">Have you cleaned and disinfected frequently touched surfaces today to prevent virus transmission? Tap if you did this.</string>
+    <string name="clean_and_disinfect">清潔並消毒物體表面</string>
+    <string name="have_you_cleaned_and_disinfected">您今天是否有清潔並消毒碰觸過的物體表面？如果有，請點擊。</string>
 
 
     <!-- array -->
