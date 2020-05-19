@@ -440,8 +440,8 @@ class MainFragment : BaseSupportFragment() {
         tvConfirmedCasesYesterday.text = yesterdayConfirms.toString()
         tvConfirmedCasesToday.text = todayConfirms.toString()
 
-        val casesCore = (100f - 5 * (yesterdayConfirms - todayConfirms))
-        val roundedCaseScore = casesCore.roundToInt()
+        val casesCore = (100f - 5 * abs(yesterdayConfirms - todayConfirms))
+        val roundedCaseScore = if (casesCore < 0f) 0 else casesCore.roundToInt()
         tvCasesScore1.text = roundedCaseScore.toString()
         tvCasesScore1.setTextColorRes(toColorRes(roundedCaseScore))
 
@@ -469,6 +469,7 @@ class MainFragment : BaseSupportFragment() {
         var totalSymptomWeight = areaProfile.detail.symptomMetric.totalWeight
         val totalSymptomPeople = areaProfile.detail.symptomMetric.totalPeople
         val totalCustomizedSymptomWeight = areaProfile.detail.symptomMetric.customizedWeight
+        val customizedWeight = areaProfile.detail.symptomMetric.customizedWeight
 
         tvTotalSymptomWeight.text = totalSymptomWeight.toString()
         tvTotalSymptomPeople.text = totalSymptomPeople.toString()
@@ -493,11 +494,11 @@ class MainFragment : BaseSupportFragment() {
                 maxSymptomWeight = layoutSymptoms.children.sumBy { c -> c.sbSymptomWeight.progress }
                 tvMaxWeight.text = maxSymptomWeight.toString()
                 totalSymptomWeight =
-                    areaProfile.detail.symptomMetric.todayData.weightDistribution?.map { entry ->
+                    (areaProfile.detail.symptomMetric.todayData.weightDistribution?.map { entry ->
                         val weight =
                             layoutSymptoms.children.find { c -> c.tag == entry.key }?.sbSymptomWeight?.progress!!
                         weight * entry.value
-                    }?.sum() ?: 0
+                    }?.sum() ?: 0) + customizedWeight
                 tvTotalSymptomWeight.text = totalSymptomWeight.toString()
                 val symptomScore = calculateSymptomScore(
                     totalSymptomWeight,
@@ -509,7 +510,7 @@ class MainFragment : BaseSupportFragment() {
 
                 // calculate total score
                 val score = calculateScore(
-                    casesCore,
+                    if (casesCore < 0f) 0f else casesCore,
                     confirmCoefficient,
                     behaviorScore,
                     behaviorsCoefficient,
@@ -561,7 +562,7 @@ class MainFragment : BaseSupportFragment() {
 
         // calculate total score
         val score = calculateScore(
-            casesCore,
+            if (casesCore < 0f) 0f else casesCore,
             confirmCoefficient,
             behaviorScore,
             behaviorsCoefficient,
