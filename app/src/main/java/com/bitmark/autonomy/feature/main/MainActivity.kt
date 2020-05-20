@@ -22,7 +22,6 @@ import com.bitmark.autonomy.AppLifecycleHandler
 import com.bitmark.autonomy.R
 import com.bitmark.autonomy.feature.*
 import com.bitmark.autonomy.feature.Navigator.Companion.BOTTOM_UP
-import com.bitmark.autonomy.feature.Navigator.Companion.FADE_IN
 import com.bitmark.autonomy.feature.Navigator.Companion.RIGHT_LEFT
 import com.bitmark.autonomy.feature.Navigator.Companion.UP_BOTTOM
 import com.bitmark.autonomy.feature.arealist.AreaListFragment
@@ -52,15 +51,20 @@ class MainActivity : BaseAppCompatActivity() {
 
         private const val NOTIFICATION_BUNDLE = "notification_bundle"
 
+        private const val AREA_LIST = "area_list"
+
         private const val NOTIFICATION_ACTION_DELAY = 500L
 
-        fun getBundle(notificationBundle: Bundle? = null) =
+        fun getBundle(notificationBundle: Bundle? = null, areas: List<AreaModelView>? = null) =
             Bundle().apply {
                 if (notificationBundle != null) {
                     putBundle(
                         NOTIFICATION_BUNDLE,
                         notificationBundle
                     )
+                }
+                if (areas != null) {
+                    putParcelableArrayList(AREA_LIST, ArrayList(areas))
                 }
             }
     }
@@ -138,7 +142,7 @@ class MainActivity : BaseAppCompatActivity() {
                 // re-handle notification if it has not been handled correctly due to the permission requesting
                 val notificationBundle = intent?.extras?.getBundle(NOTIFICATION_BUNDLE)
                 if (notificationBundle != null && !notificationHandled) {
-                    notificationHandled = handleNotification(notificationBundle, true)
+                    notificationHandled = handleNotification(notificationBundle)
                 }
             }, permanentlyDeniedCallback = {
                 dialogController.alert(
@@ -158,35 +162,12 @@ class MainActivity : BaseAppCompatActivity() {
         }
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        val notificationBundle = intent?.extras?.getBundle(NOTIFICATION_BUNDLE)
-        if (notificationBundle != null) {
-            val directFromNotification =
-                intent?.extras?.getBoolean("direct_from_notification") == true
-            if (directFromNotification) {
-                // start app again make sure all related logic handling
-                val bundle = SplashActivity.getBundle(notificationBundle)
-                navigator.anim(FADE_IN).startActivityAsRoot(SplashActivity::class.java, bundle)
-            } else {
-                notificationHandled = handleNotification(notificationBundle, adapter.count > 0)
-            }
-        }
-        registerTimezoneChangedReceiver()
-        if (locationService.isPermissionGranted(this)) {
-            startLocationService()
-        }
-        locationService.addLocationChangeListener(locationChangeListener)
-        viewModel.listArea()
-    }
-
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
         val notificationBundle = intent?.extras?.getBundle(NOTIFICATION_BUNDLE)
         val directFromNotification = intent?.extras?.getBoolean("direct_from_notification") == true
         if (notificationBundle != null && directFromNotification) {
-            notificationHandled = handleNotification(notificationBundle, adapter.count > 0)
+            notificationHandled = handleNotification(notificationBundle)
         }
     }
 
@@ -196,17 +177,19 @@ class MainActivity : BaseAppCompatActivity() {
     }
 
     private fun unregisterTimezoneChangedReceiver() {
-        unregisterReceiver(timezoneChangedReceiver)
+        try {
+            unregisterReceiver(timezoneChangedReceiver)
+        } catch (ignore: Throwable) {
+        }
     }
 
-    private fun handleNotification(notificationBundle: Bundle, dataReady: Boolean): Boolean {
+    private fun handleNotification(notificationBundle: Bundle): Boolean {
         when (val notificationId = notificationBundle.getInt("notification_id")) {
             NotificationId.SURVEY -> return goToSurveyIfSatisfied()
             NotificationId.CLEAN_AND_DISINFECT,
             NotificationId.BEHAVIOR_REPORT_ON_SELF_HIGH_RISK,
             NotificationId.BEHAVIOR_REPORT_ON_RISK_AREA -> return goToBehaviorMetricIfSatisfied()
             NotificationId.RISK_LEVEL_CHANGED -> {
-                if (!dataReady) return false
                 val areaId = notificationBundle.getString(NotificationPayloadType.POI_ID)
                 handler.postDelayed({ showArea(areaId) }, NOTIFICATION_ACTION_DELAY)
                 return true
@@ -223,14 +206,6 @@ class MainActivity : BaseAppCompatActivity() {
         }
     }
 
-    override fun onDestroy() {
-        locationService.removeLocationChangeListener(locationChangeListener)
-        locationService.stop()
-        unregisterTimezoneChangedReceiver()
-        handler.removeCallbacksAndMessages(null)
-        super.onDestroy()
-    }
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK && requestCode == LOCATION_SETTING_CODE) {
@@ -239,7 +214,7 @@ class MainActivity : BaseAppCompatActivity() {
             // re-handle notification if it has not been handled correctly due to the location setting correct
             val notificationBundle = intent?.extras?.getBundle(NOTIFICATION_BUNDLE)
             if (notificationBundle != null && !notificationHandled) {
-                notificationHandled = handleNotification(notificationBundle, true)
+                notificationHandled = handleNotification(notificationBundle)
             }
         }
     }
@@ -247,10 +222,43 @@ class MainActivity : BaseAppCompatActivity() {
     override fun initComponents() {
         super.initComponents()
 
+        // handle notification
+        val notificationBundle = intent?.extras?.getBundle(NOTIFICATION_BUNDLE)
+        if (notificationBundle != null) {
+            val directFromNotification =
+                intent?.extras?.getBoolean("direct_from_notification") == true
+            if (directFromNotification) {
+                // start app again make sure all related logic handling
+                val bundle = SplashActivity.getBundle(notificationBundle)
+                navigator.anim(Navigator.FADE_IN)
+                    .startActivityAsRoot(SplashActivity::class.java, bundle)
+                return
+            } else {
+                notificationHandled = handleNotification(notificationBundle)
+            }
+        }
+
+        // register components
+        registerTimezoneChangedReceiver()
+        if (locationService.isPermissionGranted(this)) {
+            startLocationService()
+        }
+        locationService.addLocationChangeListener(locationChangeListener)
+
+        // init area viewpager
         adapter = MainViewPagerAdapter(supportFragmentManager)
+        areaList = intent?.extras?.getParcelableArrayList<AreaModelView>(AREA_LIST)
+            ?: error("missing area list")
+        val fragments = mutableListOf<Fragment>()
+        fragments.add(MainFragment.newInstance(null))
+        fragments.addAll(areaList.map { a -> MainFragment.newInstance(a) })
+        fragments.add(AreaListFragment.newInstance(ArrayList(areaList)))
+        adapter.set(fragments)
+        vp.offscreenPageLimit = MAX_AREA + 2
         vp.adapter = adapter
         vIndicator.setViewPager(vp)
 
+        // set views listener
         vp.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrollStateChanged(state: Int) {
                 // Do nothing
@@ -283,34 +291,16 @@ class MainActivity : BaseAppCompatActivity() {
 
     }
 
+    override fun deinitComponents() {
+        locationService.removeLocationChangeListener(locationChangeListener)
+        locationService.stop()
+        unregisterTimezoneChangedReceiver()
+        handler.removeCallbacksAndMessages(null)
+        super.deinitComponents()
+    }
+
     override fun observe() {
         super.observe()
-
-        viewModel.listAreaLiveData.asLiveData().observe(this, Observer { res ->
-            when {
-                res.isSuccess() -> {
-                    areaList = res.data()!!.toMutableList()
-                    val fragments = mutableListOf<Fragment>()
-                    fragments.add(MainFragment.newInstance(null))
-                    fragments.addAll(areaList.map { a -> MainFragment.newInstance(a) })
-                    fragments.add(AreaListFragment.newInstance(ArrayList(areaList)))
-                    adapter.set(fragments)
-                    vp.offscreenPageLimit = MAX_AREA + 2
-                    vIndicator.notifyDataSetChanged()
-
-                    // re-handle notification if it has not been handled correctly since the data is not ready
-                    val notificationBundle = intent?.extras?.getBundle(NOTIFICATION_BUNDLE)
-                    if (notificationBundle != null && !notificationHandled) {
-                        handleNotification(notificationBundle, true)
-                    }
-                }
-
-                res.isError() -> {
-                    logger.logError(Event.AREA_LIST_ERROR, res.throwable())
-                    dialogController.unexpectedAlert { navigator.openIntercom(true) }
-                }
-            }
-        })
 
         viewModel.checkDebugModeEnableLiveData.asLiveData().observe(this, Observer { res ->
             when {

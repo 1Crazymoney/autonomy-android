@@ -11,9 +11,11 @@ import com.bitmark.autonomy.data.model.AccountData
 import com.bitmark.autonomy.data.model.AppInfoData
 import com.bitmark.autonomy.data.source.AccountRepository
 import com.bitmark.autonomy.data.source.AppRepository
+import com.bitmark.autonomy.data.source.UserRepository
 import com.bitmark.autonomy.feature.BaseViewModel
 import com.bitmark.autonomy.util.livedata.CompositeLiveData
 import com.bitmark.autonomy.util.livedata.RxLiveDataTransformer
+import com.bitmark.autonomy.util.modelview.AreaModelView
 import com.bitmark.cryptography.crypto.encoder.Hex
 import com.bitmark.cryptography.crypto.encoder.Raw
 import com.bitmark.sdk.features.Account
@@ -25,12 +27,13 @@ class SplashViewModel(
     lifeCycle: Lifecycle,
     private val accountRepo: AccountRepository,
     private val appRepo: AppRepository,
+    private val userRepo: UserRepository,
     private val rxLiveDataTransformer: RxLiveDataTransformer
 ) : BaseViewModel(lifeCycle) {
 
     internal val getAccountDataLiveData = CompositeLiveData<AccountData>()
 
-    internal val prepareDataLiveData = CompositeLiveData<Any>()
+    internal val prepareDataLiveData = CompositeLiveData<List<AreaModelView>>()
 
     internal val getAppInfoLiveData = CompositeLiveData<AppInfoData>()
 
@@ -57,11 +60,13 @@ class SplashViewModel(
             accountRepo.updateMetadata(mapOf("timezone" to timezone))
                 .andThen(accountRepo.syncAccountData().ignoreElement())
 
+        val listAreaStream = userRepo.listArea().map { areas ->
+            areas.map { a -> AreaModelView.newInstance(a) }
+        }
+
         prepareDataLiveData.add(
-            rxLiveDataTransformer.completable(
-                registerJwtStream.andThen(
-                    updateTimezoneStream
-                )
+            rxLiveDataTransformer.single(
+                registerJwtStream.andThen(updateTimezoneStream).andThen(listAreaStream)
             )
         )
     }
