@@ -12,6 +12,7 @@ import com.bitmark.autonomy.feature.BaseViewModel
 import com.bitmark.autonomy.feature.Navigator
 import com.bitmark.autonomy.feature.Navigator.Companion.NONE
 import com.bitmark.autonomy.feature.Navigator.Companion.RIGHT_LEFT
+import com.bitmark.autonomy.util.ChromeCustomTabServiceHandler
 import com.bitmark.autonomy.util.ext.disable
 import com.bitmark.autonomy.util.ext.enable
 import com.bitmark.autonomy.util.ext.openChromeTab
@@ -29,6 +30,9 @@ class DonationActivity : BaseAppCompatActivity() {
 
     @Inject
     internal lateinit var navigator: Navigator
+
+    @Inject
+    internal lateinit var customTabServiceHandler: ChromeCustomTabServiceHandler
 
     override fun layoutRes(): Int = R.layout.activity_donation
 
@@ -90,6 +94,20 @@ class DonationActivity : BaseAppCompatActivity() {
             }
             navigator.anim(NONE).openChromeTab(this, url)
         }
+
+        customTabServiceHandler.setUrls(
+            arrayOf(
+                PAYPAL_ME,
+                PAYPAL_ME + "1usd",
+                PAYPAL_ME + "5usd",
+                PAYPAL_ME + "20usd"
+            )
+        )
+    }
+
+    override fun onStart() {
+        super.onStart()
+        customTabServiceHandler.bind()
     }
 
     private fun enableNext() {

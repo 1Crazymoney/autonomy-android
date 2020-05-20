@@ -35,6 +35,8 @@ import com.bitmark.autonomy.feature.notification.buildCleanAndDisinfectNotificat
 import com.bitmark.autonomy.feature.onboarding.OnboardingContainerActivity
 import com.bitmark.autonomy.logging.Event
 import com.bitmark.autonomy.logging.EventLogger
+import com.bitmark.autonomy.util.ChromeCustomTabServiceHandler
+import com.bitmark.autonomy.util.Constants
 import com.bitmark.autonomy.util.DateTimeUtil
 import com.bitmark.autonomy.util.ext.*
 import com.bitmark.sdk.authentication.KeyAuthenticationSpec
@@ -73,6 +75,9 @@ class SplashActivity : BaseAppCompatActivity() {
     @Inject
     internal lateinit var logger: EventLogger
 
+    @Inject
+    internal lateinit var customTabServiceHandler: ChromeCustomTabServiceHandler
+
     override fun layoutRes(): Int = R.layout.activity_splash
 
     override fun viewModel(): BaseViewModel? = viewModel
@@ -80,6 +85,11 @@ class SplashActivity : BaseAppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel.getAppInfo()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        customTabServiceHandler.bind()
     }
 
     override fun initComponents() {
@@ -113,6 +123,8 @@ class SplashActivity : BaseAppCompatActivity() {
         layoutStart.setSafetyOnclickListener {
             navigator.anim(RIGHT_LEFT).startActivity(OnboardingContainerActivity::class.java)
         }
+
+        customTabServiceHandler.setUrls(arrayOf(Constants.DATA_RIGHTS_URL))
     }
 
     override fun observe() {

@@ -29,6 +29,8 @@ import com.bitmark.autonomy.feature.behavior.BehaviorReportActivity
 import com.bitmark.autonomy.feature.donation.DonationActivity
 import com.bitmark.autonomy.feature.symptoms.SymptomReportActivity
 import com.bitmark.autonomy.logging.EventLogger
+import com.bitmark.autonomy.util.ChromeCustomTabServiceHandler
+import com.bitmark.autonomy.util.Constants
 import com.bitmark.autonomy.util.ext.*
 import kotlinx.android.synthetic.main.activity_profile.*
 import javax.inject.Inject
@@ -44,6 +46,9 @@ class ProfileActivity : BaseAppCompatActivity() {
 
     @Inject
     internal lateinit var logger: EventLogger
+
+    @Inject
+    internal lateinit var customTabServiceHandler: ChromeCustomTabServiceHandler
 
     private var debugModeEnabled = false
 
@@ -71,7 +76,8 @@ class ProfileActivity : BaseAppCompatActivity() {
             object : ClickableSpan() {
                 override fun onClick(widget: View) {
                     // TODO change link later
-                    navigator.anim(NONE).openChromeTab(this@ProfileActivity, "https://bitmark.com")
+                    navigator.anim(NONE)
+                        .openChromeTab(this@ProfileActivity, Constants.DATA_RIGHTS_URL)
                 }
 
             }, startIndex,
@@ -153,6 +159,13 @@ class ProfileActivity : BaseAppCompatActivity() {
             }
         }
 
+        customTabServiceHandler.setUrls(arrayOf(Constants.DATA_RIGHTS_URL))
+
+    }
+
+    override fun onStart() {
+        super.onStart()
+        customTabServiceHandler.bind()
     }
 
     override fun deinitComponents() {
