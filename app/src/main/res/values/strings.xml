@@ -179,7 +179,7 @@
     <string name="report_other_symptom">Report other symptom …</string>
     <string name="none">None</string>
     <string name="thanks_for_sharing_your_symptom">Thanks for sharing your symptoms with your neighborhood!</string>
-    <string name="your_total_for_today">Your total\nfor today</string>
+    <string name="your_total_for_today">Symptoms you\nreported today</string>
     <string name="from_yesterday">From yesterday</string>
     <string name="community_average_for_today">Community average\nfor today</string>
     <string name="are_u_doing_them_correctly">Are you doing them correctly?</string>

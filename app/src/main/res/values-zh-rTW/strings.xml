@@ -178,9 +178,9 @@
     <string name="report_other_symptom">回報其他症狀…</string>
     <string name="none">無</string>
     <string name="thanks_for_sharing_your_symptom">感謝您分享您的症狀給周圍的社群！</string>
-    <string name="your_total_for_today">您的今日加總\n</string>
+    <string name="your_total_for_today">今天回報的症狀數</string>
     <string name="from_yesterday">從昨天</string>
-    <string name="community_average_for_today">周圍社群今日平均\n</string>
+    <string name="community_average_for_today">周圍社群今日平均</string>
     <string name="are_u_doing_them_correctly">您的方法正確嗎？</string>
     <string name="report_behaviors">已回報行為數</string>
     <string name="reporting_your_symptoms_to_your_neighborhood">正在回報您的症狀至您周圍的社群…</string>
