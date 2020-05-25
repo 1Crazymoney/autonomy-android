@@ -12,6 +12,6 @@ object Constants {
 
     const val MAX_AREA = 10
 
-    const val DATA_RIGHTS_URL = "https://bitmark.com"
+    const val DATA_RIGHTS_URL = "https://bitmark.com/privacy"
 
 }

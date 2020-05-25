@@ -106,8 +106,8 @@ class SplashActivity : BaseAppCompatActivity() {
         spannableString.setSpan(
             object : ClickableSpan() {
                 override fun onClick(widget: View) {
-                    // TODO change link later
-                    navigator.anim(NONE).openChromeTab(this@SplashActivity, "https://bitmark.com")
+                    navigator.anim(NONE)
+                        .openChromeTab(this@SplashActivity, Constants.DATA_RIGHTS_URL)
                 }
 
             }, startIndex,

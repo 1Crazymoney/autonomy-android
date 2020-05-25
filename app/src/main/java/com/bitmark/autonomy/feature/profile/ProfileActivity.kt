@@ -75,7 +75,6 @@ class ProfileActivity : BaseAppCompatActivity() {
         spannableString.setSpan(
             object : ClickableSpan() {
                 override fun onClick(widget: View) {
-                    // TODO change link later
                     navigator.anim(NONE)
                         .openChromeTab(this@ProfileActivity, Constants.DATA_RIGHTS_URL)
                 }
