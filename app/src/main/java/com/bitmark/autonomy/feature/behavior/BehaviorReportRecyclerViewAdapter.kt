@@ -50,7 +50,7 @@ class BehaviorReportRecyclerViewAdapter :
 
     fun set(behaviors: List<BehaviorModelView>) {
         items.clear()
-        items.add(Item(HEADER, headerStringRes = R.string.recommended_covid_behaviors))
+        items.add(Item(HEADER, headerStringRes = R.string.recommended_behaviors))
         val officialBehaviors = behaviors.filter { s -> s.type == BehaviorType.OFFICIAL }
         items.addAll(officialBehaviors.map { s ->
             Item(

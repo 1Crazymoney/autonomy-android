@@ -14,6 +14,6 @@
         android:textAllCaps="true"
         android:textColor="@color/silver_2"
         android:textSize="@dimen/sp_14"
-        tools:text="@string/common_covid_symptoms" />
+        tools:text="@string/common_symptoms" />
 
 </LinearLayout>

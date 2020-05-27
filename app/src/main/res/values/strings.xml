@@ -37,7 +37,7 @@
     <string name="survey">Survey</string>
     <string name="how_can_we_help">How can we help?</string>
     <string name="i_have_symptoms">I have symptoms</string>
-    <string name="let_us_if_u_r_currently">Let us if you are currently experiencing any of common COVID-19 symptoms.</string>
+    <string name="let_us_if_u_r_currently">Let us if you are currently experiencing any of common symptoms.</string>
     <string name="i_need_assistance">I need assistance</string>
     <string name="let_people_in_your_local_community">Let people in your local community know that you need help</string>
     <string name="symptoms">Symptoms</string>
@@ -161,7 +161,7 @@
     <string name="total_people">Total people</string>
     <string name="max_score_per_person">Max score\nper person</string>
     <string name="reported_symptoms_score">Reported Symptoms Score</string>
-    <string name="each_reported_symptom_is_given_a_score">Each reported symptom is given a score of 1 to 3, depending on the likelihood of it being a predictor of COVID-19. The overall symptoms score is calculated for all symptoms in a 1km radius. Current symptoms and scores are:</string>
+    <string name="each_reported_symptom_is_given_a_score">Each reported symptom is given a score of 1 to 3, depending on the likelihood of it being a predictor of pandemic. The overall symptoms score is calculated for all symptoms in a 1km radius. Current symptoms and scores are:</string>
     <string name="jupyter_notebook">Jupyter Notebook</string>
     <string name="could_not_reset_formula">Could not reset your customized formula. Please try again later.</string>
     <string name="you_have_not_reported_symptom">You haven’t reported any symptoms yet.</string>
@@ -174,7 +174,7 @@
     <string name="we_will_help_your_neighborhood">We’ll help your neighborhood grow healthier together.</string>
     <string name="debug_mode_is_enabled">Debug Mode is enabled</string>
     <string name="tap_any_symptoms_you_have">Tap any symptoms you have or add new ones:</string>
-    <string name="common_covid_symptoms">Common COVID-19 symptoms</string>
+    <string name="common_symptoms">Common symptoms</string>
     <string name="recent_neighborhood_symptoms">Recent neighborhood symptoms</string>
     <string name="report_other_symptom">Report other symptom …</string>
     <string name="none">None</string>
@@ -187,7 +187,7 @@
     <string name="reporting_your_symptoms_to_your_neighborhood">Reporting your symptoms to your neighborhood…</string>
     <string name="submitting">Submitting</string>
     <string name="learn_how_to_keep_other_safe">Learn how to keep others safe</string>
-    <string name="recommended_covid_behaviors">Recommended COVID-19 Behaviors</string>
+    <string name="recommended_behaviors">Recommended Behaviors</string>
     <string name="tap_any_healthy_behaviors_you_did">Tap any healthy behaviors you did today or add new ones:</string>
     <string name="recent_behaviors_near_you">Recent behavior near you</string>
     <string name="report_other_behavior">Report other behavior…</string>

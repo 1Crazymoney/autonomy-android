@@ -173,7 +173,7 @@
     <string name="we_will_help_your_neighborhood">我們會幫助您周圍的人一起變得更健康。</string>
     <string name="debug_mode_is_enabled">除錯模式已啟動</string>
     <string name="tap_any_symptoms_you_have">點選或新增任何您有的症狀：</string>
-    <string name="common_covid_symptoms">常見新冠肺炎症狀</string>
+    <string name="common_symptoms">常見症狀</string>
     <string name="recent_neighborhood_symptoms">近期周圍社群的症狀</string>
     <string name="report_other_symptom">回報其他症狀…</string>
     <string name="none">無</string>
@@ -186,7 +186,7 @@
     <string name="reporting_your_symptoms_to_your_neighborhood">正在回報您的症狀至您周圍的社群…</string>
     <string name="submitting">提交中</string>
     <string name="learn_how_to_keep_other_safe">學習如何保護他人</string>
-    <string name="recommended_covid_behaviors">新冠肺炎應對行為建議</string>
+    <string name="recommended_behaviors">建議的應對行為</string>
     <string name="tap_any_healthy_behaviors_you_did">點選或新增任何您今天有執行的健康行為：</string>
     <string name="recent_behaviors_near_you">你附近的人的行為</string>
     <string name="report_other_behavior">回報其他行為…</string>

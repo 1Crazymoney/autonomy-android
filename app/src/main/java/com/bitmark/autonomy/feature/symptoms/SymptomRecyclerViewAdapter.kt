@@ -49,7 +49,7 @@ class SymptomRecyclerViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     fun set(symptoms: List<SymptomModelView>) {
         items.clear()
-        items.add(Item(HEADER, headerStringRes = R.string.common_covid_symptoms))
+        items.add(Item(HEADER, headerStringRes = R.string.common_symptoms))
         val officialSymptoms = symptoms.filter { s -> s.type == SymptomType.OFFICIAL }
         items.addAll(officialSymptoms.map { s ->
             Item(
