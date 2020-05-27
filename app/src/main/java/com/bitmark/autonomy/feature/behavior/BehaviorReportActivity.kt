@@ -40,6 +40,14 @@ class BehaviorReportActivity : BaseAppCompatActivity() {
 
     companion object {
         private const val ADD_BEHAVIOR_REQUEST_CODE = 0x08
+
+        private const val SELECTED_BEHAVIORS = "selected_behaviors"
+
+        fun getBundle(selectedBehaviors: ArrayList<String>? = null) = Bundle().apply {
+            if (selectedBehaviors != null) {
+                putStringArrayList(SELECTED_BEHAVIORS, selectedBehaviors)
+            }
+        }
     }
 
     @Inject
@@ -142,6 +150,13 @@ class BehaviorReportActivity : BaseAppCompatActivity() {
                     adapter.set(data)
                     if (!adapter.hasNeighborhoodBehaviors()) {
                         adapter.addFooter()
+                    }
+
+                    val selectedBehaviors =
+                        intent?.extras?.getStringArrayList(SELECTED_BEHAVIORS) ?: return@Observer
+                    adapter.setSelected(selectedBehaviors)
+                    if (selectedBehaviors.isNotEmpty()) {
+                        enableSubmit()
                     }
                 }
 

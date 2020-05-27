@@ -111,6 +111,16 @@ class BehaviorReportRecyclerViewAdapter :
         }
     }
 
+    fun setSelected(behaviorIds: List<String>) {
+        behaviorIds.forEach { id ->
+            val index = items.indexOfFirst { i -> i.type == BODY && i.behavior!!.id == id }
+            if (index != -1) {
+                items[index].selected = true
+                notifyItemChanged(index)
+            }
+        }
+    }
+
     fun getSelectedBehaviors() =
         items.filter { i -> i.type == BODY && i.selected!! }.map { i -> i.behavior }
 

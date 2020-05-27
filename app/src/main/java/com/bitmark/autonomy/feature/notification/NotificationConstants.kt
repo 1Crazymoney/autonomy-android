@@ -15,6 +15,8 @@ object NotificationPayloadType {
     const val POI_ID = "poi_id"
 
     const val SYMPTOMS = "symptoms"
+
+    const val BEHAVIORS = "behaviors"
 }
 
 object NotificationId {

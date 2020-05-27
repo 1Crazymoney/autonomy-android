@@ -25,7 +25,7 @@ import com.bitmark.autonomy.feature.Navigator.Companion.BOTTOM_UP
 import com.bitmark.autonomy.feature.Navigator.Companion.RIGHT_LEFT
 import com.bitmark.autonomy.feature.Navigator.Companion.UP_BOTTOM
 import com.bitmark.autonomy.feature.arealist.AreaListFragment
-import com.bitmark.autonomy.feature.behavior.metric.BehaviorMetricActivity
+import com.bitmark.autonomy.feature.behavior.BehaviorReportActivity
 import com.bitmark.autonomy.feature.debugmode.DebugModeActivity
 import com.bitmark.autonomy.feature.location.LocationService
 import com.bitmark.autonomy.feature.notification.NotificationId
@@ -121,14 +121,6 @@ class MainActivity : BaseAppCompatActivity() {
         return true
     }
 
-    private fun goToBehaviorMetricIfSatisfied(): Boolean {
-        if (!locationService.isPermissionGranted(this)) return false
-        handler.postDelayed({
-            navigator.anim(BOTTOM_UP).startActivity(BehaviorMetricActivity::class.java)
-        }, NOTIFICATION_ACTION_DELAY)
-        return true
-    }
-
     override fun layoutRes(): Int = R.layout.activity_main
 
     override fun viewModel(): BaseViewModel? = viewModel
@@ -186,9 +178,6 @@ class MainActivity : BaseAppCompatActivity() {
     private fun handleNotification(notificationBundle: Bundle): Boolean {
         when (val notificationId = notificationBundle.getInt("notification_id")) {
             NotificationId.SURVEY -> return goToSurveyIfSatisfied()
-            NotificationId.CLEAN_AND_DISINFECT,
-            NotificationId.BEHAVIOR_REPORT_ON_SELF_HIGH_RISK,
-            NotificationId.BEHAVIOR_REPORT_ON_RISK_AREA -> return goToBehaviorMetricIfSatisfied()
             NotificationId.RISK_LEVEL_CHANGED -> {
                 val areaId = notificationBundle.getString(NotificationPayloadType.POI_ID)
                 handler.postDelayed({ showArea(areaId) }, NOTIFICATION_ACTION_DELAY)
@@ -200,6 +189,14 @@ class MainActivity : BaseAppCompatActivity() {
                     notificationBundle.getStringArrayList(NotificationPayloadType.SYMPTOMS)
                 val bundle = SymptomReportActivity.getBundle(symptoms)
                 navigator.anim(RIGHT_LEFT).startActivity(SymptomReportActivity::class.java, bundle)
+                return true
+            }
+            NotificationId.CLEAN_AND_DISINFECT, NotificationId.BEHAVIOR_REPORT_ON_SELF_HIGH_RISK, NotificationId.BEHAVIOR_REPORT_ON_RISK_AREA -> {
+                if (!locationService.isPermissionGranted(this)) return false
+                val behaviors =
+                    notificationBundle.getStringArrayList(NotificationPayloadType.BEHAVIORS)
+                val bundle = BehaviorReportActivity.getBundle(behaviors)
+                navigator.anim(RIGHT_LEFT).startActivity(BehaviorReportActivity::class.java, bundle)
                 return true
             }
             else -> error("unsupported notification id $notificationId")
