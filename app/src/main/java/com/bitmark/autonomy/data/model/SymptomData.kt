@@ -19,9 +19,5 @@ data class SymptomData(
 
     @Expose
     @SerializedName("name")
-    val name: String,
-
-    @Expose
-    @SerializedName("desc")
-    val description: String
+    val name: String
 ) : Data, Parcelable

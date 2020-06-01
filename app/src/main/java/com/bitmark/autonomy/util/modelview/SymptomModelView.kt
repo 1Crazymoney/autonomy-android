@@ -17,14 +17,12 @@ data class SymptomModelView(
 
     val name: String,
 
-    val desc: String,
-
     val type: SymptomType? = null
 
 ) : ModelView, Parcelable {
     companion object {
         fun newInstance(symptom: SymptomData, type: SymptomType? = null) =
-            SymptomModelView(symptom.id, symptom.name, symptom.description, type)
+            SymptomModelView(symptom.id, symptom.name, type)
     }
 }
 

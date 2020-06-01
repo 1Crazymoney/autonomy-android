@@ -63,7 +63,7 @@ class SymptomAdding2ViewModel(
                 symptomRepo.addSymptom(
                     name,
                     ""
-                ).map { id -> SymptomModelView(id, name, "", SymptomType.NEIGHBORHOOD) })
+                ).map { id -> SymptomModelView(id, name, SymptomType.NEIGHBORHOOD) })
         )
     }
 }

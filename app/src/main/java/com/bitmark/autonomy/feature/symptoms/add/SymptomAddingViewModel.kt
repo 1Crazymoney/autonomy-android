@@ -29,7 +29,7 @@ class SymptomAddingViewModel(
                     newSymptomData.title,
                     newSymptomData.description
                 ).map { id ->
-                    SymptomModelView(id, newSymptomData.title, newSymptomData.description)
+                    SymptomModelView(id, newSymptomData.title)
                 })
         )
     }
