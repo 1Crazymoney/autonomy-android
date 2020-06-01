@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black"
+    android:orientation="vertical">
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp_16"
+        android:layout_marginTop="@dimen/dp_44"
+        android:layout_marginEnd="@dimen/dp_16"
+        android:fontFamily="@font/grotesk_light_font_family"
+        android:includeFontPadding="false"
+        android:text="@string/recovery_key"
+        android:textColor="@color/white"
+        android:textSize="@dimen/sp_24"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvMsg"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/dp_40"
+        android:layout_marginBottom="@dimen/dp_40"
+        android:fontFamily="@font/grotesk_light_font_family"
+        android:includeFontPadding="false"
+        android:scrollbars="vertical"
+        android:text="@string/your_recovery_key_allows_you"
+        android:textColor="@color/white"
+        android:textSize="@dimen/sp_18"
+        app:layout_constraintBottom_toTopOf="@id/layoutBack"
+        app:layout_constraintEnd_toEndOf="@id/tvTitle"
+        app:layout_constraintStart_toStartOf="@id/tvTitle"
+        app:layout_constraintTop_toBottomOf="@id/tvTitle" />
+
+    <LinearLayout
+        android:id="@+id/layoutBack"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp_16"
+        android:layout_marginBottom="@dimen/dp_16"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingTop="@dimen/dp_8"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="@dimen/dp_44"
+            android:layout_height="@dimen/dp_44"
+            app:srcCompat="@drawable/ic_back_stateful" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_12"
+            android:fontFamily="@font/domaine_sans"
+            android:text="@string/back"
+            android:textAllCaps="true"
+            android:textColor="@color/color_white_stateful"
+            android:textSize="@dimen/sp_24" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layoutNext"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/dp_16"
+        android:layout_marginBottom="@dimen/dp_16"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingTop="@dimen/dp_8"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvFinish"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/domaine_sans"
+            android:text="@string/next"
+            android:textAllCaps="true"
+            android:textColor="@color/color_white_stateful"
+            android:textSize="@dimen/sp_24" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/ivFinish"
+            android:layout_width="@dimen/dp_44"
+            android:layout_height="@dimen/dp_44"
+            android:layout_marginStart="@dimen/dp_12"
+            app:srcCompat="@drawable/ic_next_stateful" />
+
+    </LinearLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -34,6 +34,8 @@ import com.bitmark.autonomy.feature.permission.PermissionActivity
 import com.bitmark.autonomy.feature.permission.PermissionModule
 import com.bitmark.autonomy.feature.profile.ProfileActivity
 import com.bitmark.autonomy.feature.profile.ProfileModule
+import com.bitmark.autonomy.feature.recovery.RecoveryContainerActivity
+import com.bitmark.autonomy.feature.recovery.RecoveryContainerModule
 import com.bitmark.autonomy.feature.requesthelp.RequestHelpContainerActivity
 import com.bitmark.autonomy.feature.requesthelp.RequestHelpContainerModule
 import com.bitmark.autonomy.feature.respondhelp.RespondHelpActivity
@@ -155,5 +157,9 @@ abstract class ActivityBuilderModule {
     @ContributesAndroidInjector(modules = [DonationModule::class])
     @ActivityScope
     internal abstract fun bindDonationActivity(): DonationActivity
+
+    @ContributesAndroidInjector(modules = [RecoveryContainerModule::class])
+    @ActivityScope
+    internal abstract fun bindRecoveryKeyContainerActivity(): RecoveryContainerActivity
 
 }

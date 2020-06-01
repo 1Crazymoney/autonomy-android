@@ -27,6 +27,7 @@ import com.bitmark.autonomy.feature.Navigator.Companion.RIGHT_LEFT
 import com.bitmark.autonomy.feature.Navigator.Companion.UP_BOTTOM
 import com.bitmark.autonomy.feature.behavior.BehaviorReportActivity
 import com.bitmark.autonomy.feature.donation.DonationActivity
+import com.bitmark.autonomy.feature.recovery.RecoveryContainerActivity
 import com.bitmark.autonomy.feature.symptoms.SymptomReportActivity
 import com.bitmark.autonomy.logging.EventLogger
 import com.bitmark.autonomy.util.ChromeCustomTabServiceHandler
@@ -127,6 +128,10 @@ class ProfileActivity : BaseAppCompatActivity() {
 
         layoutDonate.setSafetyOnclickListener {
             navigator.anim(RIGHT_LEFT).startActivity(DonationActivity::class.java)
+        }
+
+        layoutRecoveryKey.setSafetyOnclickListener {
+            navigator.anim(RIGHT_LEFT).startActivity(RecoveryContainerActivity::class.java)
         }
 
         var count = 0

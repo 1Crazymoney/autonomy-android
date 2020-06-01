@@ -145,7 +145,7 @@
     <string name="export">Export</string>
     <string name="security">Security</string>
     <string name="sign_out">Sign out</string>
-    <string name="recovery_key">Recovery Key</string>
+    <string name="recovery_key">Recovery key</string>
     <string name="support">Support</string>
     <string name="faq">FAQ</string>
     <string name="contact">Contact</string>
@@ -216,6 +216,8 @@
     <string name="this_is_great_chance_to_wash_your_hands">This is a great chance to wash your hands for at least 20 seconds or apply hand sanitizer. Tap if you did this.</string>
     <string name="clean_and_disinfect">Clean and disinfect surfaces</string>
     <string name="have_you_cleaned_and_disinfected">Have you cleaned and disinfected frequently touched surfaces today to prevent virus transmission? Tap if you did this.</string>
+    <string name="write_down_the_following_word">Write down the following words in order:</string>
+    <string name="your_recovery_key_allows_you">Your recovery key allows you to fully recover your Autonomy account even if your device is lost or damaged. It is the only way to recover your account. Autonomy does not have access to your recovery key or store it anywhere for you.\n\nPlease make sure you are in a safe location then write down your recovery key on a piece of paper and keep it safe.</string>
 
 
     <!-- array -->
@@ -239,6 +241,7 @@
     <string name="date_time_format">%1$s at %2$s</string>
     <string name="tap_times_to_enable_debug_mode">Tap more %1$d times to enable Debug Mode</string>
     <string name="tap_time_to_enable_debug_mode">Tap more %1$d time to enable Debug Mode</string>
+    <string name="word_of_format">Word %1$d of %2$d</string>
 
     <string name="default_channel">Default Channel</string>
     <string name="important_alert">Important Alert</string>

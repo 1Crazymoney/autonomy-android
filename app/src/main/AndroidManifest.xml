@@ -128,6 +128,9 @@
         <activity
             android:name=".feature.donation.DonationActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".feature.recovery.RecoveryContainerActivity"
+            android:screenOrientation="portrait" />
 
         <receiver android:name=".feature.notification.ScheduledNotificationReceiver" />
 

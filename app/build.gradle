@@ -233,8 +233,8 @@ dependencies {
     implementation 'org.slf4j:slf4j-nop:1.7.28'
 
     // Bitmark SDK
-    implementation 'com.bitmark.sdk:android-sdk:2.1.0'
-    implementation 'com.bitmark.sdk:api-service:2.1.0'
+    implementation 'com.bitmark.sdk:android-sdk:2.3.0-SNAPSHOT'
+    implementation 'com.bitmark.sdk:api-service:2.2.0'
     implementation 'com.bitmark.sdk:cryptography:1.6.0'
 
     implementation('com.onesignal:OneSignal:3.12.7') {
@@ -251,6 +251,7 @@ dependencies {
     implementation 'com.chauthai.swipereveallayout:swipe-reveal-layout:1.4.1'
     implementation 'com.google.android:flexbox:2.0.1'
     implementation 'com.android.support:customtabs:23.3.0'
+    implementation 'com.yarolegovich:discrete-scrollview:1.4.9'
 
 
     // Geocoding

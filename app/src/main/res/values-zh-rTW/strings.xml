@@ -215,6 +215,8 @@
     <string name="this_is_great_chance_to_wash_your_hands">現在是您洗手20秒或是使用手部消毒劑的好時機。如果您有做到，請點擊。</string>
     <string name="clean_and_disinfect">清潔並消毒物體表面</string>
     <string name="have_you_cleaned_and_disinfected">您今天是否有清潔並消毒碰觸過的物體表面？如果有，請點擊。</string>
+    <string name="write_down_the_following_word">Write down the following words in order:</string>
+    <string name="your_recovery_key_allows_you">Your recovery key allows you to fully recover your Autonomy account even if your device is lost or damaged. It is the only way to recover your account. Autonomy does not have access to your recovery key or store it anywhere for you.\n\nPlease make sure you are in a safe location then write down your recovery key on a piece of paper and keep it safe.</string>
 
 
     <!-- array -->
@@ -238,6 +240,7 @@
     <string name="date_time_format">%1$s %2$s</string>
     <string name="tap_times_to_enable_debug_mode">再點擊 %1$d 次以啟動除錯模式</string>
     <string name="tap_time_to_enable_debug_mode">再點擊 %1$d 次以啟動除錯模式</string>
+    <string name="word_of_format">Word %1$d of %2$d</string>
 
 
     <string name="default_channel">預設頻道</string>

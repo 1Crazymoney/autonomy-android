@@ -14,6 +14,10 @@ import com.bitmark.autonomy.feature.main.MainFragment
 import com.bitmark.autonomy.feature.main.MainFragmentModule
 import com.bitmark.autonomy.feature.onboarding.OnboardingFragment
 import com.bitmark.autonomy.feature.onboarding.OnboardingModule
+import com.bitmark.autonomy.feature.recovery.access.RecoveryAccessFragment
+import com.bitmark.autonomy.feature.recovery.access.RecoveryAccessModule
+import com.bitmark.autonomy.feature.recovery.notice.RecoveryNoticeFragment
+import com.bitmark.autonomy.feature.recovery.notice.RecoveryNoticeModule
 import com.bitmark.autonomy.feature.requesthelp.detail.RequestHelpDetailFragment
 import com.bitmark.autonomy.feature.requesthelp.detail.RequestHelpDetailModule
 import com.bitmark.autonomy.feature.requesthelp.list.RequestHelpListFragment
@@ -71,4 +75,12 @@ abstract class FragmentBuilderModule {
     @ContributesAndroidInjector(modules = [BehaviorAddingModule::class])
     @FragmentScope
     internal abstract fun bindBehaviorAddingFragment(): BehaviorAddingFragment
+
+    @ContributesAndroidInjector(modules = [RecoveryNoticeModule::class])
+    @FragmentScope
+    internal abstract fun bindRecoveryKeyNoticeFragment(): RecoveryNoticeFragment
+
+    @ContributesAndroidInjector(modules = [RecoveryAccessModule::class])
+    @FragmentScope
+    internal abstract fun bindRecoveryKeyAccessFragment(): RecoveryAccessFragment
 }
