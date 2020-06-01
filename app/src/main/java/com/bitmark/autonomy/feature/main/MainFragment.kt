@@ -7,26 +7,31 @@
 package com.bitmark.autonomy.feature.main
 
 import android.content.Context
+import android.graphics.Color
+import android.graphics.Typeface
 import android.location.Location
 import android.os.Bundle
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.method.LinkMovementMethod
+import android.text.style.ClickableSpan
+import android.text.style.StyleSpan
+import android.text.style.UnderlineSpan
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewTreeObserver
-import android.widget.LinearLayout
 import android.widget.SeekBar
-import androidx.core.view.children
 import androidx.lifecycle.Observer
 import com.bitmark.autonomy.R
 import com.bitmark.autonomy.feature.BaseSupportFragment
 import com.bitmark.autonomy.feature.BaseViewModel
 import com.bitmark.autonomy.feature.DialogController
 import com.bitmark.autonomy.feature.Navigator
-import com.bitmark.autonomy.feature.Navigator.Companion.NONE
 import com.bitmark.autonomy.feature.connectivity.ConnectivityHandler
 import com.bitmark.autonomy.feature.location.LocationService
 import com.bitmark.autonomy.logging.Event
 import com.bitmark.autonomy.logging.EventLogger
+import com.bitmark.autonomy.util.ChromeCustomTabServiceHandler
 import com.bitmark.autonomy.util.ext.*
 import com.bitmark.autonomy.util.modelview.AreaModelView
 import com.bitmark.autonomy.util.modelview.AreaProfileModelView
@@ -36,7 +41,6 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import kotlinx.android.synthetic.main.fragment_main.*
 import kotlinx.android.synthetic.main.layout_area_info.*
 import kotlinx.android.synthetic.main.layout_view_source.*
-import kotlinx.android.synthetic.main.layout_view_source_symptom.view.*
 import java.util.*
 import javax.inject.Inject
 import kotlin.math.abs
@@ -46,6 +50,11 @@ import kotlin.math.roundToInt
 class MainFragment : BaseSupportFragment() {
 
     companion object {
+
+        private const val BMRK_JUPYTER_NOTEBOOK =
+            "https://nbviewer.jupyter.org/github/bitmark-inc/autonomy-api/blob/master/share/jupyter/autonomyFormula.ipynb"
+
+        private const val CORONA_DATA_SCRAPER_PROJECT = "https://coronadatascraper.com"
 
         private const val AREA_DATA = "area_data"
 
@@ -78,6 +87,9 @@ class MainFragment : BaseSupportFragment() {
 
     @Inject
     internal lateinit var connectivityHandler: ConnectivityHandler
+
+    @Inject
+    internal lateinit var customTabServiceHandler: ChromeCustomTabServiceHandler
 
     private lateinit var areaProfile: AreaProfileModelView
 
@@ -159,6 +171,11 @@ class MainFragment : BaseSupportFragment() {
         outState.putBoolean(MSA_0, isMsa0)
     }
 
+    override fun onStart() {
+        super.onStart()
+        customTabServiceHandler.bind()
+    }
+
     override fun onResume() {
         super.onResume()
         if (isMsa0) {
@@ -181,6 +198,75 @@ class MainFragment : BaseSupportFragment() {
 
     override fun initComponents() {
         super.initComponents()
+
+        val desc = getString(R.string.the_autonomy_score_is_a_normalized_score)
+        val spannableString = SpannableString(desc)
+        val underlineText1 = getString(R.string.corona_data_scraper_project)
+        var startIndex = desc.indexOf(underlineText1)
+        if (startIndex != -1) {
+            spannableString.setSpan(
+                UnderlineSpan(),
+                startIndex,
+                startIndex + underlineText1.length,
+                Spannable.SPAN_INCLUSIVE_EXCLUSIVE
+            )
+            spannableString.setSpan(
+                object : ClickableSpan() {
+                    override fun onClick(widget: View) {
+                        navigator.openChromeTab(context!!, CORONA_DATA_SCRAPER_PROJECT)
+                    }
+
+                }, startIndex,
+                startIndex + underlineText1.length,
+                Spannable.SPAN_INCLUSIVE_EXCLUSIVE
+            )
+        }
+
+        val underlineText2 = getString(R.string.autonomy_score_jupyter_notebook)
+        startIndex = desc.indexOf(underlineText2)
+        if (startIndex != -1) {
+            spannableString.setSpan(
+                UnderlineSpan(),
+                startIndex,
+                startIndex + underlineText2.length,
+                Spannable.SPAN_INCLUSIVE_EXCLUSIVE
+            )
+            spannableString.setSpan(
+                object : ClickableSpan() {
+                    override fun onClick(widget: View) {
+                        navigator.openChromeTab(context!!, BMRK_JUPYTER_NOTEBOOK)
+                    }
+
+                }, startIndex,
+                startIndex + underlineText2.length,
+                Spannable.SPAN_INCLUSIVE_EXCLUSIVE
+            )
+        }
+
+        arrayOf(
+            R.string.autonomy_score,
+            R.string.daily_confirmed_infectious_disease,
+            R.string.symptoms_score,
+            R.string.behaviors_score
+        ).forEach { res ->
+            val boldText = getString(res)
+            val i = desc.indexOf(boldText)
+            if (i != 1) {
+                spannableString.setSpan(
+                    StyleSpan(Typeface.BOLD),
+                    i,
+                    i + boldText.length,
+                    Spannable.SPAN_INCLUSIVE_EXCLUSIVE
+                )
+            }
+        }
+
+
+        tvDesc.text = spannableString
+        tvDesc.movementMethod = LinkMovementMethod.getInstance()
+        tvDesc.setLinkTextColor(context!!.getColor(R.color.black))
+        tvDesc.highlightColor = Color.TRANSPARENT
+
 
         if (areaData != null) {
             tvLocation.text = areaData!!.alias
@@ -239,34 +325,16 @@ class MainFragment : BaseSupportFragment() {
         sbBehaviorsWeight.setOnSeekBarChangeListener(seekBarChangeListener)
         sbSymptomsWeight.setOnSeekBarChangeListener(seekBarChangeListener)
 
-        val formulaClickListener: (View?) -> Unit = { _ -> openJupyterNotebook() }
-
-        tvConfirmedCasesYesterday.setSafetyOnclickListener(formulaClickListener)
-        tvConfirmedCasesToday.setSafetyOnclickListener(formulaClickListener)
-        tvBehaviorTotal.setSafetyOnclickListener(formulaClickListener)
-        tvTotalBehaviorPeople.setSafetyOnclickListener(formulaClickListener)
-        tvMaxScore.setSafetyOnclickListener(formulaClickListener)
-        tvTotalCustomizedBehavior.setSafetyOnclickListener(formulaClickListener)
-        tvTotalSymptomWeight.setSafetyOnclickListener(formulaClickListener)
-        tvTotalSymptomPeople.setSafetyOnclickListener(formulaClickListener)
-        tvTotalCustomizedSymptom.setSafetyOnclickListener(formulaClickListener)
-        tvMaxWeight.setSafetyOnclickListener(formulaClickListener)
-
         tvReset.setSafetyOnclickListener {
             if (blocked) return@setSafetyOnclickListener
             viewModel.deleteFormula(Locale.getDefault().displayName)
         }
 
-        tvJupyterNotebook.setSafetyOnclickListener(formulaClickListener)
+        tvJupyterNotebook.setSafetyOnclickListener {
+            navigator.openChromeTab(context!!, BMRK_JUPYTER_NOTEBOOK)
+        }
 
-
-        /*layoutRiskLevel.setSafetyOnclickListener {
-            it?.flip(layoutAreaInfo, 400)
-        }*/
-
-        /*layoutAreaInfo.setSafetyOnclickListener {
-            it?.flip(layoutRiskLevel, 400)
-        }*/
+        customTabServiceHandler.setUrls(arrayOf(BMRK_JUPYTER_NOTEBOOK, CORONA_DATA_SCRAPER_PROJECT))
 
     }
 
@@ -346,11 +414,6 @@ class MainFragment : BaseSupportFragment() {
         })
     }
 
-    private fun openJupyterNotebook() {
-        // TODO update later
-        navigator.anim(NONE).openChromeTab(context!!, "https://www.cdc.gov.tw")
-    }
-
     override fun observe() {
         super.observe()
 
@@ -416,6 +479,12 @@ class MainFragment : BaseSupportFragment() {
 
         viewModel.updateFormulaLiveData.asLiveData().observe(this, Observer { res ->
             when {
+
+                res.isSuccess() -> {
+                    formula.isDefault = false
+                    showFormula(areaProfile, formula)
+                }
+
                 res.isError() -> {
                     logger.logError(Event.FORMULA_UPDATE_ERROR, res.throwable())
                 }
@@ -424,6 +493,11 @@ class MainFragment : BaseSupportFragment() {
     }
 
     private fun showFormula(areaProfile: AreaProfileModelView, formula: FormulaModelView) {
+        if (formula.isDefault) {
+            tvReset.disable()
+        } else {
+            tvReset.enable()
+        }
         val confirmCoefficient = formula.coefficient.confirms
         val behaviorsCoefficient = formula.coefficient.behaviors
         val symptomCoefficient = formula.coefficient.symptoms
@@ -434,130 +508,17 @@ class MainFragment : BaseSupportFragment() {
         tvBehaviorsWeight.text = String.format("%.2f", behaviorsCoefficient)
         tvSymptomsWeight.text = String.format("%.2f", symptomCoefficient)
 
-        // confirmed cases score
-        val yesterdayConfirms = areaProfile.detail.confirmMetric.yesterday
-        val todayConfirms = areaProfile.detail.confirmMetric.today
-        tvConfirmedCasesYesterday.text = yesterdayConfirms.toString()
-        tvConfirmedCasesToday.text = todayConfirms.toString()
-
-        val casesCore = (100f - 5 * abs(yesterdayConfirms - todayConfirms))
+        // cases score
+        val casesCore = areaProfile.detail.confirmMetric.score
         val roundedCaseScore = if (casesCore < 0f) 0 else casesCore.roundToInt()
-        tvCasesScore1.text = roundedCaseScore.toString()
-        tvCasesScore1.setTextColorRes(toColorRes(roundedCaseScore))
+        showCasesScore(roundedCaseScore)
 
         // behavior score
-        val totalBehaviors = areaProfile.detail.behaviorMetric.totalBehaviors
-        val totalBehaviorPeople = areaProfile.detail.behaviorMetric.totalPeople
-        val maxBehaviorScorePerPerson = areaProfile.detail.behaviorMetric.maxScorePerPerson
-        val totalCustomizedBehavior = areaProfile.detail.behaviorMetric.totalCustomized
-
-        tvBehaviorTotal.text = totalBehaviors.toString()
-        tvTotalBehaviorPeople.text = totalBehaviorPeople.toString()
-        tvMaxScore.text = maxBehaviorScorePerPerson.toString()
-        tvTotalCustomizedBehavior.text = totalCustomizedBehavior.toString()
-
-        val behaviorScore = calculateBehaviorScore(
-            totalBehaviors,
-            totalBehaviorPeople,
-            maxBehaviorScorePerPerson,
-            totalCustomizedBehavior
-        )
+        val behaviorScore = areaProfile.detail.behaviorMetric.score
         showBehaviorScore(behaviorScore.roundToInt())
 
         // symptom score
-        var maxSymptomWeight = formula.coefficient.symptomWeights.sumBy { s -> s.weight }
-        var totalSymptomWeight = areaProfile.detail.symptomMetric.totalWeight
-        val totalSymptomPeople = areaProfile.detail.symptomMetric.totalPeople
-        val totalCustomizedSymptomWeight = areaProfile.detail.symptomMetric.customizedWeight
-        val customizedWeight = areaProfile.detail.symptomMetric.customizedWeight
-
-        tvTotalSymptomWeight.text = totalSymptomWeight.toString()
-        tvTotalSymptomPeople.text = totalSymptomPeople.toString()
-        tvMaxWeight.text = maxSymptomWeight.toString()
-        tvTotalCustomizedSymptom.text = totalCustomizedSymptomWeight.toString()
-
-        val symptomSeekBarChangeListener = object : SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(
-                seekBar: SeekBar?,
-                progress: Int,
-                fromUser: Boolean
-            ) {
-                val tag = seekBar!!.tag
-                val symptomId = tag.toString().replace("sb_", "")
-                formula.coefficient.symptomWeights.find { s -> "sb_${s.symptom.id}" == tag }
-                    ?.weight = progress
-                val tvSymptomWeight =
-                    layoutSymptoms.children.find { c -> c.tag == symptomId }?.tvSymptomWeight
-                tvSymptomWeight?.text = progress.toString()
-
-                // adjust symptom score
-                maxSymptomWeight = layoutSymptoms.children.sumBy { c -> c.sbSymptomWeight.progress }
-                tvMaxWeight.text = maxSymptomWeight.toString()
-                totalSymptomWeight =
-                    (areaProfile.detail.symptomMetric.todayData.weightDistribution?.map { entry ->
-                        val weight =
-                            layoutSymptoms.children.find { c -> c.tag == entry.key }?.sbSymptomWeight?.progress!!
-                        weight * entry.value
-                    }?.sum() ?: 0) + customizedWeight
-                tvTotalSymptomWeight.text = totalSymptomWeight.toString()
-                val symptomScore = calculateSymptomScore(
-                    totalSymptomWeight,
-                    totalSymptomPeople,
-                    maxSymptomWeight,
-                    totalCustomizedSymptomWeight
-                )
-                showSymptomScore(symptomScore.roundToInt())
-
-                // calculate total score
-                val score = calculateScore(
-                    if (casesCore < 0f) 0f else casesCore,
-                    confirmCoefficient,
-                    behaviorScore,
-                    behaviorsCoefficient,
-                    symptomScore,
-                    symptomCoefficient
-                ).roundToInt()
-                tvScoreViewSource.text = score.toString()
-                tvScoreViewSource.setTextColorRes(toColorRes(score))
-                showScore(score)
-            }
-
-            override fun onStartTrackingTouch(seekBar: SeekBar?) {
-                // do nothing
-            }
-
-            override fun onStopTrackingTouch(seekBar: SeekBar?) {
-                viewModel.updateFormula(formula)
-            }
-
-        }
-
-        // dynamically add symptom seekbars
-        layoutSymptoms.removeAllViews()
-        for (symptomWeight in formula.coefficient.symptomWeights) {
-            val view =
-                LayoutInflater.from(context).inflate(R.layout.layout_view_source_symptom, null)
-            view.tvSymptomName.text = String.format("%s =", symptomWeight.symptom.name)
-            view.tvSymptomWeight.text = symptomWeight.weight.toString()
-            view.sbSymptomWeight.progress = symptomWeight.weight
-            view.sbSymptomWeight.setOnSeekBarChangeListener(symptomSeekBarChangeListener)
-            view.tag = symptomWeight.symptom.id
-            view.sbSymptomWeight.tag = "sb_${symptomWeight.symptom.id}"
-            val params = LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
-            )
-            params.setMargins(0, context!!.getDimensionPixelSize(R.dimen.dp_6), 0, 0)
-            view.layoutParams = params
-            layoutSymptoms.addView(view)
-        }
-
-        val symptomScore = calculateSymptomScore(
-            totalSymptomWeight,
-            totalSymptomPeople,
-            maxSymptomWeight,
-            totalCustomizedSymptomWeight
-        )
+        val symptomScore = areaProfile.detail.symptomMetric.score
         showSymptomScore(symptomScore.roundToInt())
 
         // calculate total score
@@ -584,40 +545,19 @@ class MainFragment : BaseSupportFragment() {
     ) =
         (casesCore * confirmCoefficient + behaviorScore * behaviorsCoefficient + symptomScore * symptomCoefficient)
 
-    private fun calculateBehaviorScore(
-        totalBehaviors: Int,
-        totalBehaviorPeople: Int,
-        maxBehaviorScorePerPerson: Int,
-        totalCustomizedBehavior: Int
-    ) = if (totalBehaviorPeople == 0 || maxBehaviorScorePerPerson == 0) {
-        100f * totalCustomizedBehavior
-    } else {
-        100f * (totalBehaviors / ((totalBehaviorPeople * maxBehaviorScorePerPerson) + totalCustomizedBehavior).toFloat())
+    private fun showCasesScore(score: Int) {
+        tvCasesScore1.text = score.toString()
+        tvCasesScore1.setTextColorRes(toColorRes(score))
     }
 
     private fun showBehaviorScore(score: Int) {
         tvBehaviorsScore1.text = score.toString()
         tvBehaviorsScore1.setTextColorRes(toColorRes(score))
-        tvBehaviorsScore2.text = score.toString()
-        tvBehaviorsScore2.setTextColorRes(toColorRes(score))
-    }
-
-    private fun calculateSymptomScore(
-        totalSymptomWeight: Int,
-        totalSymptomPeople: Int,
-        maxSymptomWeight: Int,
-        totalCustomizedSymptomWeight: Int
-    ) = if (totalSymptomPeople == 0 || maxSymptomWeight == 0) {
-        100f * (1 - totalCustomizedSymptomWeight)
-    } else {
-        100 * (1 - (totalSymptomWeight / ((totalSymptomPeople * maxSymptomWeight).toFloat() + totalCustomizedSymptomWeight)))
     }
 
     private fun showSymptomScore(score: Int) {
         tvSymptomsScore1.text = score.toString()
         tvSymptomsScore1.setTextColorRes(toColorRes(score))
-        tvSymptomsScore2.text = score.toString()
-        tvSymptomsScore2.setTextColorRes(toColorRes(score))
     }
 
     private fun showScore(score: Int) {

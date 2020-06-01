@@ -63,36 +63,15 @@ data class AreaProfileDetailData(
 
 @Parcelize
 data class ConfirmMetricData(
-    @Expose
-    @SerializedName("yesterday")
-    val yesterday: Int,
-
-    @Expose
-    @SerializedName("today")
-    val today: Int,
 
     @Expose
     @SerializedName("score")
     val score: Float
+
 ) : Data, Parcelable
 
 @Parcelize
 data class BehaviorMetricData(
-    @Expose
-    @SerializedName("behavior_total")
-    val totalBehaviors: Int,
-
-    @Expose
-    @SerializedName("total_people")
-    val totalPeople: Int,
-
-    @Expose
-    @SerializedName("max_score_per_person")
-    val maxScorePerPerson: Int,
-
-    @Expose
-    @SerializedName("behavior_customized_total")
-    val totalCustomized: Int,
 
     @Expose
     @SerializedName("score")
@@ -104,51 +83,7 @@ data class BehaviorMetricData(
 data class SymptomMetricData(
 
     @Expose
-    @SerializedName("total_weight")
-    val totalWeight: Int,
-
-    @Expose
-    @SerializedName("total_people")
-    val totalPeople: Int,
-
-    @Expose
-    @SerializedName("custom_symptom_count")
-    val customSymptomCount: Int,
-
-    @Expose
-    @SerializedName("customized_weight")
-    val customizedWeight: Int,
-
-    @Expose
-    @SerializedName("max_weight")
-    val maxWeight: Int,
-
-    @Expose
     @SerializedName("score")
-    val score: Float,
-
-    @Expose
-    @SerializedName("today_data")
-    val todayData: SymptomTodayData
+    val score: Float
 
 ) : Data, Parcelable
-
-@Parcelize
-data class SymptomTodayData(
-    @Expose
-    @SerializedName("user_count")
-    val userCount: Int,
-
-    @Expose
-    @SerializedName("official_count")
-    val officialCount: Int,
-
-    @Expose
-    @SerializedName("customized_count")
-    val customizedCount: Int,
-
-    @Expose
-    @SerializedName("weight_distribution")
-    val weightDistribution: Map<String, Int>?
-) : Data, Parcelable
-

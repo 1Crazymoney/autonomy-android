@@ -15,7 +15,7 @@ import kotlinx.android.parcel.Parcelize
 data class FormulaModelView(
     val coefficient: CoefficientData,
 
-    val isDefault: Boolean
+    var isDefault: Boolean
 ) : ModelView, Parcelable {
     companion object {
         fun newInstance(data: FormulaData) =

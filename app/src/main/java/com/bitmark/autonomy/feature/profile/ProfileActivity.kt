@@ -15,6 +15,7 @@ import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.text.style.UnderlineSpan
 import android.view.View
+import android.widget.TextView
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import com.bitmark.autonomy.BuildConfig
@@ -85,7 +86,7 @@ class ProfileActivity : BaseAppCompatActivity() {
             Spannable.SPAN_INCLUSIVE_EXCLUSIVE
         )
 
-        tvPP.text = spannableString
+        tvPP.setText(spannableString, TextView.BufferType.SPANNABLE)
         tvPP.movementMethod = LinkMovementMethod.getInstance()
         tvPP.setLinkTextColor(getColor(R.color.white))
         tvPP.highlightColor = Color.TRANSPARENT
