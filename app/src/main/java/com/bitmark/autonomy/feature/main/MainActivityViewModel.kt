@@ -8,6 +8,7 @@ package com.bitmark.autonomy.feature.main
 
 import androidx.lifecycle.Lifecycle
 import com.bitmark.autonomy.data.source.AccountRepository
+import com.bitmark.autonomy.data.source.AppRepository
 import com.bitmark.autonomy.data.source.UserRepository
 import com.bitmark.autonomy.feature.BaseViewModel
 import com.bitmark.autonomy.feature.auth.ServerAuthentication
@@ -19,11 +20,14 @@ import io.reactivex.Single
 
 class MainActivityViewModel(
     lifecycle: Lifecycle,
+    private val appRepo: AppRepository,
     private val userRepo: UserRepository,
     private val accountRepo: AccountRepository,
     private val rxLiveDataTransformer: RxLiveDataTransformer,
     private val serverAuth: ServerAuthentication
 ) : BaseViewModel(lifecycle) {
+
+    internal val checkDebugModeEnableLiveData = CompositeLiveData<Boolean>()
 
     internal val updateTimezoneLiveData = CompositeLiveData<Any>()
 
@@ -36,6 +40,10 @@ class MainActivityViewModel(
     internal val getCurrentAreaScoreLiveData = CompositeLiveData<Float>()
 
     internal val listAreaLiveData = CompositeLiveData<List<AreaModelView>>()
+
+    fun checkDebugModeEnable() {
+        checkDebugModeEnableLiveData.add(rxLiveDataTransformer.single(appRepo.checkDebugModeEnable()))
+    }
 
     fun rename(id: String, name: String) {
         renameAreaLiveData.add(

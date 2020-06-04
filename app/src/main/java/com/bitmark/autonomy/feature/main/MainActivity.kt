@@ -28,9 +28,11 @@ import com.bitmark.autonomy.feature.Navigator.Companion.RIGHT_LEFT
 import com.bitmark.autonomy.feature.areasearch.AreaSearchActivity
 import com.bitmark.autonomy.feature.behavior.BehaviorReportActivity
 import com.bitmark.autonomy.feature.connectivity.ConnectivityHandler
+import com.bitmark.autonomy.feature.debugmode.DebugModeActivity
 import com.bitmark.autonomy.feature.location.LocationService
 import com.bitmark.autonomy.feature.notification.NotificationId
 import com.bitmark.autonomy.feature.notification.NotificationPayloadType
+import com.bitmark.autonomy.feature.profile.ProfileActivity
 import com.bitmark.autonomy.feature.splash.SplashActivity
 import com.bitmark.autonomy.feature.symptoms.SymptomReportActivity
 import com.bitmark.autonomy.logging.Event
@@ -189,6 +191,7 @@ class MainActivity : BaseAppCompatActivity() {
                 }
             })
         }
+        viewModel.checkDebugModeEnable()
         viewModel.listArea()
     }
 
@@ -312,6 +315,16 @@ class MainActivity : BaseAppCompatActivity() {
             navigator.anim(BOTTOM_UP)
                 .startActivityForResult(AreaSearchActivity::class.java, SEARCH_REQUEST_CODE)
         }
+
+        ivMenu.setSafetyOnclickListener {
+            navigator.anim(Navigator.UP_BOTTOM).startActivity(ProfileActivity::class.java)
+        }
+
+        ivDebug.setSafetyOnclickListener {
+            if (!this::areaList.isInitialized) return@setSafetyOnclickListener
+            val bundle = DebugModeActivity.getBundle(areaList)
+            navigator.anim(BOTTOM_UP).startActivity(DebugModeActivity::class.java, bundle)
+        }
     }
 
     override fun deinitComponents() {
@@ -421,6 +434,22 @@ class MainActivity : BaseAppCompatActivity() {
 
                 res.isLoading() -> {
                     progressBar.visible()
+                }
+            }
+        })
+
+        viewModel.checkDebugModeEnableLiveData.asLiveData().observe(this, Observer { res ->
+            when {
+                res.isSuccess() -> {
+                    if (res.data()!!) {
+                        ivDebug.visible()
+                    } else {
+                        ivDebug.invisible()
+                    }
+                }
+
+                res.isError() -> {
+                    logger.logSharedPrefError(res.throwable(), "main check debug mode state error")
                 }
             }
         })

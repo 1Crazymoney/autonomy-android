@@ -15,25 +15,53 @@
         android:scrollbarThumbVertical="@color/white_aa"
         android:scrollbars="vertical">
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:focusable="true"
             android:focusableInTouchMode="true"
-            android:orientation="vertical"
-            android:paddingTop="@dimen/dp_16">
+            android:orientation="vertical">
 
-            <include layout="@layout/layout_area_header" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/ivMenu"
+                android:layout_width="@dimen/dp_44"
+                android:layout_height="@dimen/dp_44"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="@dimen/dp_4"
+                android:paddingStart="@dimen/dp_14"
+                android:paddingTop="@dimen/dp_16"
+                android:paddingEnd="@dimen/dp_14"
+                android:paddingBottom="@dimen/dp_16"
+                app:srcCompat="@drawable/ic_menu_stateful" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/ivDebug"
+                android:layout_width="@dimen/dp_44"
+                android:layout_height="@dimen/dp_44"
+                android:layout_marginTop="@dimen/dp_4"
+                android:padding="@dimen/dp_10"
+                android:visibility="invisible"
+                app:srcCompat="@drawable/ic_setting_stateful"
+                tools:visibility="visible" />
+
+            <include
+                android:id="@+id/layoutHeader"
+                layout="@layout/layout_area_header"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_16" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvAreas"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_below="@id/layoutHeader"
                 android:paddingStart="@dimen/dp_8"
                 android:paddingEnd="@dimen/dp_8"
                 android:paddingBottom="@dimen/dp_16" />
 
-        </LinearLayout>
+        </RelativeLayout>
 
     </androidx.core.widget.NestedScrollView>
 

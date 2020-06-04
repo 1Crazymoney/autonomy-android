@@ -7,6 +7,7 @@
 package com.bitmark.autonomy.feature.main
 
 import com.bitmark.autonomy.data.source.AccountRepository
+import com.bitmark.autonomy.data.source.AppRepository
 import com.bitmark.autonomy.data.source.UserRepository
 import com.bitmark.autonomy.di.ActivityScope
 import com.bitmark.autonomy.feature.DialogController
@@ -31,12 +32,14 @@ class MainActivityModule {
     @ActivityScope
     fun provideVM(
         activity: MainActivity,
+        appRepo: AppRepository,
         userRepo: UserRepository,
         accountRepo: AccountRepository,
         rxLiveDataTransformer: RxLiveDataTransformer,
         serverAuth: ServerAuthentication
     ) = MainActivityViewModel(
         activity.lifecycle,
+        appRepo,
         userRepo,
         accountRepo,
         rxLiveDataTransformer,
