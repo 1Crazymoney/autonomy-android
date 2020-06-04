@@ -1,39 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/layoutRootFooter"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="@dimen/dp_60"
+    android:background="@color/shark"
     android:orientation="horizontal"
     android:paddingStart="@dimen/dp_16"
-    android:paddingTop="@dimen/dp_8"
-    android:paddingEnd="@dimen/dp_16"
-    android:paddingBottom="@dimen/dp_8"
-    android:background="@color/shark">
+    android:paddingEnd="@dimen/dp_16">
 
     <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/tvSymptomFooter"
-        android:layout_width="@dimen/dp_30"
-        android:layout_height="@dimen/dp_30"
+        android:id="@+id/ivSearch"
+        android:layout_width="@dimen/dp_16"
+        android:layout_height="@dimen/dp_16"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_add_silver_2"
-        tools:checked="true" />
+        app:srcCompat="@drawable/ic_search" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/dp_10"
+        android:layout_marginStart="@dimen/dp_16"
+        android:layout_marginEnd="@dimen/dp_16"
         android:fontFamily="@font/grotesk_light_font_family"
         android:includeFontPadding="false"
         android:text="@string/report_other_symptom"
         android:textColor="@color/color_silver_2_stateful"
         android:textSize="@dimen/sp_18"
-        app:layout_constraintBottom_toBottomOf="@id/tvSymptomFooter"
+        app:layout_constraintBottom_toBottomOf="@id/ivSearch"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/tvSymptomFooter"
-        app:layout_constraintTop_toTopOf="@id/tvSymptomFooter" />
+        app:layout_constraintStart_toEndOf="@id/ivSearch"
+        app:layout_constraintTop_toTopOf="@id/ivSearch" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
