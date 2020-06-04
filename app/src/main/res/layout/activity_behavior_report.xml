@@ -165,7 +165,7 @@
         android:id="@+id/layoutReportOther"
         layout="@layout/layout_behavior_footer"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/dp_60"
         android:clickable="true"
         android:focusable="true"
         app:layout_constraintBottom_toTopOf="@id/layoutSubmit"

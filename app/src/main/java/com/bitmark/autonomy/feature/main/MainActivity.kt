@@ -425,6 +425,7 @@ class MainActivity : BaseAppCompatActivity() {
                     progressBar.gone()
                     areaList = res.data()!!.toMutableList()
                     adapter.set(areaList)
+                    setAddAreaVisible(adapter.itemCount < MAX_AREA)
                 }
 
                 res.isError() -> {
