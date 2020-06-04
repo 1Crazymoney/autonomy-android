@@ -14,25 +14,24 @@ import android.content.IntentFilter
 import android.location.Location
 import android.os.Bundle
 import android.os.Handler
-import android.view.View
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.viewpager.widget.ViewPager
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.SimpleItemAnimator
 import com.bitmark.autonomy.AppLifecycleHandler
 import com.bitmark.autonomy.R
-import com.bitmark.autonomy.feature.*
+import com.bitmark.autonomy.feature.BaseAppCompatActivity
+import com.bitmark.autonomy.feature.BaseViewModel
+import com.bitmark.autonomy.feature.DialogController
+import com.bitmark.autonomy.feature.Navigator
 import com.bitmark.autonomy.feature.Navigator.Companion.BOTTOM_UP
 import com.bitmark.autonomy.feature.Navigator.Companion.RIGHT_LEFT
-import com.bitmark.autonomy.feature.Navigator.Companion.UP_BOTTOM
-import com.bitmark.autonomy.feature.arealist.AreaListFragment
+import com.bitmark.autonomy.feature.areasearch.AreaSearchActivity
 import com.bitmark.autonomy.feature.behavior.BehaviorReportActivity
-import com.bitmark.autonomy.feature.debugmode.DebugModeActivity
+import com.bitmark.autonomy.feature.connectivity.ConnectivityHandler
 import com.bitmark.autonomy.feature.location.LocationService
 import com.bitmark.autonomy.feature.notification.NotificationId
 import com.bitmark.autonomy.feature.notification.NotificationPayloadType
-import com.bitmark.autonomy.feature.profile.ProfileActivity
 import com.bitmark.autonomy.feature.splash.SplashActivity
-import com.bitmark.autonomy.feature.survey.SurveyContainerActivity
 import com.bitmark.autonomy.feature.symptoms.SymptomReportActivity
 import com.bitmark.autonomy.logging.Event
 import com.bitmark.autonomy.logging.EventLogger
@@ -41,7 +40,9 @@ import com.bitmark.autonomy.util.DateTimeUtil
 import com.bitmark.autonomy.util.ext.*
 import com.bitmark.autonomy.util.modelview.AreaModelView
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.layout_area_header.*
 import javax.inject.Inject
+import kotlin.math.roundToInt
 
 class MainActivity : BaseAppCompatActivity() {
 
@@ -51,9 +52,11 @@ class MainActivity : BaseAppCompatActivity() {
 
         private const val NOTIFICATION_BUNDLE = "notification_bundle"
 
-        private const val AREA_LIST = "area_list"
-
         private const val NOTIFICATION_ACTION_DELAY = 500L
+
+        private const val SEARCH_REQUEST_CODE = 0x1A
+
+        private const val AREA_LIST = "area_list"
 
         fun getBundle(notificationBundle: Bundle? = null, areas: List<AreaModelView>? = null) =
             Bundle().apply {
@@ -73,7 +76,7 @@ class MainActivity : BaseAppCompatActivity() {
     internal lateinit var navigator: Navigator
 
     @Inject
-    internal lateinit var locationService: LocationService
+    internal lateinit var dialogController: DialogController
 
     @Inject
     internal lateinit var viewModel: MainActivityViewModel
@@ -82,16 +85,19 @@ class MainActivity : BaseAppCompatActivity() {
     internal lateinit var logger: EventLogger
 
     @Inject
-    internal lateinit var dialogController: DialogController
+    internal lateinit var connectivityHandler: ConnectivityHandler
+
+    @Inject
+    internal lateinit var locationService: LocationService
 
     @Inject
     internal lateinit var appLifecycleHandler: AppLifecycleHandler
 
-    private lateinit var adapter: MainViewPagerAdapter
-
     private val handler = Handler()
 
     private var notificationHandled = true
+
+    private var currentAreaReady = false
 
     private val timezoneChangedReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
@@ -101,8 +107,12 @@ class MainActivity : BaseAppCompatActivity() {
 
     private val locationChangeListener = object : LocationService.LocationChangedListener {
         override fun onLocationChanged(l: Location) {
-            if (appLifecycleHandler.isOnForeground()) return
-            viewModel.updateLocation()
+            if (!appLifecycleHandler.isOnForeground()) {
+                viewModel.updateLocation()
+            }
+            if (!currentAreaReady) {
+                viewModel.getCurrentAreaProfile()
+            }
         }
 
         override fun onPlaceChanged(place: String) {
@@ -113,17 +123,59 @@ class MainActivity : BaseAppCompatActivity() {
 
     private lateinit var areaList: MutableList<AreaModelView>
 
-    private fun goToSurveyIfSatisfied(): Boolean {
-        if (!locationService.isPermissionGranted(this)) return false
-        handler.postDelayed({
-            navigator.anim(BOTTOM_UP).startActivity(SurveyContainerActivity::class.java)
-        }, NOTIFICATION_ACTION_DELAY)
-        return true
+    private val adapter = AreaListRecyclerViewAdapter()
+
+    private val actionListener = object : AreaListRecyclerViewAdapter.ActionListener {
+
+        override fun onAreaDeleteClicked(id: String) {
+            tvEditing.invisible()
+            viewModel.delete(id)
+        }
+
+        override fun onAreaEditClicked(id: String) {
+            adapter.setEditable(id, true)
+            tvEditing.visible()
+            Handler().postDelayed({
+                showKeyBoard()
+            }, 200)
+
+            var keyBoardShowing = true
+            detectKeyBoardState({ showing ->
+                keyBoardShowing = showing
+                // scroll to target pos
+                val pos = adapter.getPos(id)
+                if (pos != -1) {
+                    rvAreas.smoothScrollToPosition(pos)
+                }
+                if (keyBoardShowing) return@detectKeyBoardState
+                adapter.clearEditing()
+                tvEditing.invisible()
+                setAddAreaVisible(adapter.itemCount < MAX_AREA)
+            }, { !keyBoardShowing })
+
+        }
+
+        override fun onAreaClicked(id: String?) {
+            showArea(id)
+        }
+
+        override fun onDone(id: String, oldAlias: String, newAlias: String) {
+            hideKeyBoard()
+            tvEditing.invisible()
+            adapter.setEditable(id, false)
+            if (oldAlias == newAlias || newAlias.isEmpty()) {
+                adapter.updateAlias(id, oldAlias)
+            } else {
+                viewModel.rename(id, newAlias)
+            }
+
+        }
+
     }
 
-    override fun layoutRes(): Int = R.layout.activity_main
-
     override fun viewModel(): BaseViewModel? = viewModel
+
+    override fun layoutRes(): Int = R.layout.activity_main
 
     override fun onStart() {
         super.onStart()
@@ -145,7 +197,6 @@ class MainActivity : BaseAppCompatActivity() {
                 }
             })
         }
-        viewModel.checkDebugModeEnable()
     }
 
     private fun startLocationService() {
@@ -177,7 +228,6 @@ class MainActivity : BaseAppCompatActivity() {
 
     private fun handleNotification(notificationBundle: Bundle): Boolean {
         when (val notificationId = notificationBundle.getInt("notification_id")) {
-            NotificationId.SURVEY -> return goToSurveyIfSatisfied()
             NotificationId.RISK_LEVEL_CHANGED -> {
                 val areaId = notificationBundle.getString(NotificationPayloadType.POI_ID)
                 handler.postDelayed({ showArea(areaId) }, NOTIFICATION_ACTION_DELAY)
@@ -205,19 +255,33 @@ class MainActivity : BaseAppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == Activity.RESULT_OK && requestCode == LOCATION_SETTING_CODE) {
-            startLocationService()
+        if (resultCode == Activity.RESULT_OK) {
+            when (requestCode) {
+                LOCATION_SETTING_CODE -> {
+                    startLocationService()
 
-            // re-handle notification if it has not been handled correctly due to the location setting correct
-            val notificationBundle = intent?.extras?.getBundle(NOTIFICATION_BUNDLE)
-            if (notificationBundle != null && !notificationHandled) {
-                notificationHandled = handleNotification(notificationBundle)
+                    // re-handle notification if it has not been handled correctly due to the location setting correct
+                    val notificationBundle = intent?.extras?.getBundle(NOTIFICATION_BUNDLE)
+                    if (notificationBundle != null && !notificationHandled) {
+                        notificationHandled = handleNotification(notificationBundle)
+                    }
+                }
+
+                SEARCH_REQUEST_CODE -> {
+                    val area = AreaSearchActivity.extractResultData(data!!)
+                    val existing = areaList.find { a -> a.location == area.location } != null
+                    if (existing) return
+                    areaList.add(area)
+                    adapter.add(area)
+                    setAddAreaVisible(adapter.itemCount < MAX_AREA)
+                }
             }
         }
     }
 
     override fun initComponents() {
         super.initComponents()
+
 
         // handle notification
         val notificationBundle = intent?.extras?.getBundle(NOTIFICATION_BUNDLE)
@@ -242,50 +306,27 @@ class MainActivity : BaseAppCompatActivity() {
         }
         locationService.addLocationChangeListener(locationChangeListener)
 
-        // init area viewpager
-        adapter = MainViewPagerAdapter(supportFragmentManager)
-        areaList = intent?.extras?.getParcelableArrayList<AreaModelView>(AREA_LIST)
-            ?: error("missing area list")
-        val fragments = mutableListOf<Fragment>()
-        fragments.add(MainFragment.newInstance(null))
-        fragments.addAll(areaList.map { a -> MainFragment.newInstance(a) })
-        fragments.add(AreaListFragment.newInstance(ArrayList(areaList)))
-        adapter.set(fragments)
-        vp.offscreenPageLimit = MAX_AREA + 2
-        vp.adapter = adapter
-        vIndicator.setViewPager(vp)
-
-        // set views listener
-        vp.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
-            override fun onPageScrollStateChanged(state: Int) {
-                // Do nothing
-            }
-
-            override fun onPageScrolled(
-                position: Int,
-                positionOffset: Float,
-                positionOffsetPixels: Int
-            ) {
-                // Do nothing
-            }
-
-            override fun onPageSelected(position: Int) {
-                hideKeyBoard()
-                adapter.closeViewSourcePanels()
-            }
-
-        })
-
-        ivMenu.setSafetyOnclickListener {
-            navigator.anim(UP_BOTTOM).startActivity(ProfileActivity::class.java)
+        if (!this::areaList.isInitialized) {
+            areaList =
+                intent?.extras?.getParcelableArrayList<AreaModelView>(AREA_LIST)?.toMutableList()
+                    ?: error("missing area array")
         }
 
-        ivDebug.setSafetyOnclickListener {
-            if (!isAreaListReady()) return@setSafetyOnclickListener
-            val bundle = DebugModeActivity.getBundle(areaList)
-            navigator.anim(BOTTOM_UP).startActivity(DebugModeActivity::class.java, bundle)
-        }
 
+        val layoutManager = GridLayoutManager(this, 3)
+        rvAreas.layoutManager = layoutManager
+        setCurrentAreaScore(null)
+        adapter.set(areaList)
+        rvAreas.adapter = adapter
+        rvAreas.isNestedScrollingEnabled = false
+        (rvAreas.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
+        adapter.setActionListener(actionListener)
+        setAddAreaVisible(adapter.itemCount < MAX_AREA)
+
+        layoutAddArea.setSafetyOnclickListener {
+            navigator.anim(BOTTOM_UP)
+                .startActivityForResult(AreaSearchActivity::class.java, SEARCH_REQUEST_CODE)
+        }
     }
 
     override fun deinitComponents() {
@@ -299,14 +340,55 @@ class MainActivity : BaseAppCompatActivity() {
     override fun observe() {
         super.observe()
 
-        viewModel.checkDebugModeEnableLiveData.asLiveData().observe(this, Observer { res ->
+        viewModel.deleteAreaLiveData.asLiveData().observe(this, Observer { res ->
             when {
                 res.isSuccess() -> {
-                    ivDebug.visibility = if (res.data()!!) View.VISIBLE else View.INVISIBLE
+                    progressBar.gone()
+                    val id = res.data()!!
+                    areaList.removeAll { a -> a.id == id }
+                    adapter.remove(id)
+                    setAddAreaVisible(adapter.itemCount < MAX_AREA)
                 }
 
                 res.isError() -> {
-                    logger.logSharedPrefError(res.throwable(), "main check debug mode state error")
+                    progressBar.gone()
+                    logger.logError(Event.AREA_DELETE_ERROR, res.throwable())
+                    if (connectivityHandler.isConnected()) {
+                        dialogController.alert(R.string.error, R.string.could_not_delete_area)
+                    } else {
+                        dialogController.showNoInternetConnection()
+                    }
+                }
+
+                res.isLoading() -> {
+                    progressBar.visible()
+                }
+            }
+        })
+
+        viewModel.renameAreaLiveData.asLiveData().observe(this, Observer { res ->
+            when {
+                res.isSuccess() -> {
+                    progressBar.gone()
+                    val data = res.data()!!
+                    val id = data.first
+                    val alias = data.second
+                    areaList.find { a -> a.id == id }?.alias = alias
+                    adapter.updateAlias(id, alias)
+                }
+
+                res.isError() -> {
+                    progressBar.gone()
+                    logger.logError(Event.AREA_RENAME_ERROR, res.throwable())
+                    if (connectivityHandler.isConnected()) {
+                        dialogController.alert(R.string.error, R.string.could_not_rename_area)
+                    } else {
+                        dialogController.showNoInternetConnection()
+                    }
+                }
+
+                res.isLoading() -> {
+                    progressBar.visible()
                 }
             }
         })
@@ -326,59 +408,47 @@ class MainActivity : BaseAppCompatActivity() {
                 }
             }
         })
-    }
 
-    private fun isAreaListReady() = ::areaList.isInitialized
+        viewModel.getCurrentAreaScoreLiveData.asLiveData().observe(this, Observer { res ->
+            when {
+                res.isSuccess() -> {
+                    progressBar.gone()
+                    setCurrentAreaScore(res.data()!!)
+                    currentAreaReady = true
+                }
 
-    fun moveArea(fromPos: Int, toPos: Int) {
-        adapter.move(fromPos, toPos)
-        areaList.move(fromPos - 1, toPos - 1)
-    }
+                res.isError() -> {
+                    progressBar.gone()
+                    logger.logError(Event.AREA_PROFILE_GETTING_ERROR, res.throwable())
+                }
 
-    fun removeArea(id: String) {
-        val fIndex = adapter.indexOfAreaFragment(id)
-        if (fIndex != -1) {
-            adapter.remove(fIndex)
-            vIndicator.notifyDataSetChanged()
-            val aIndex = areaList.indexOfFirst { a -> a.id == id }
-            if (aIndex != -1) {
-                areaList.removeAt(aIndex)
+                res.isLoading() -> {
+                    progressBar.visible()
+                }
             }
-        }
+        })
     }
 
-    fun addArea(area: AreaModelView) {
-        val existing = adapter.indexOfAreaFragment(area.id) != -1
-        if (existing) return
-        if (adapter.add(adapter.count - 1, MainFragment.newInstance(area))) {
-            vIndicator.notifyDataSetChanged()
-            vp.setCurrentItem(adapter.count - 1, false)
-            areaList.add(area)
-        }
-    }
-
-    fun showArea(id: String?) {
-        if (id == null) {
-            vp.setCurrentItem(0, false)
+    fun setAddAreaVisible(visible: Boolean) {
+        if (visible) {
+            layoutAddArea.visible()
         } else {
-            val index = adapter.indexOfAreaFragment(id)
-            if (index > 0) {
-                vp.setCurrentItem(index, false)
-            }
+            layoutAddArea.invisible()
         }
     }
 
-    fun updateAreaAlias(id: String, alias: String) {
-        adapter.updateAreaAlias(id, alias)
-        areaList.find { a -> a.id == id }?.alias = alias
+    private fun setCurrentAreaScore(score: Float?) {
+        if (score == null) {
+            ivHeaderScore.setImageResource(R.drawable.triangle_000)
+            tvHeaderScore.text = "?"
+        } else {
+            val roundedScore = score.roundToInt()
+            ivHeaderScore.setImageResource("triangle_%03d".format(if (roundedScore > 100) 100 else roundedScore))
+            tvHeaderScore.text = roundedScore.toString()
+        }
     }
 
-    override fun onBackPressed() {
-        val currentFragment = adapter.currentFragment as? BehaviorComponent
-        if ((currentFragment as? MainFragment)?.isMsa0 == true && !currentFragment.onBackPressed())
-            super.onBackPressed()
-        else if (currentFragment?.onBackPressed() == false) {
-            vp.setCurrentItem(0, true)
-        }
+    private fun showArea(id: String?) {
+        // TODO navigate to corresponding screen
     }
 }

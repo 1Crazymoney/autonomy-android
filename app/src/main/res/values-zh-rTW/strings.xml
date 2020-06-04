@@ -225,6 +225,9 @@
     <string name="symptoms_score">症狀分數</string>
     <string name="behaviors_score">行為分數</string>
     <string name="weight_coefficient">權重係數</string>
+    <string name="you">You</string>
+    <string name="add_neighborhood_or_business">Add neighborhood or business …</string>
+    <string name="assign_an_alias_delete">Assign an alias, delete, or tap Done to save</string>
 
     <!-- array -->
     <string-array name="symptoms">

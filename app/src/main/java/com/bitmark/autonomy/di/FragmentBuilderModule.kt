@@ -6,8 +6,6 @@
  */
 package com.bitmark.autonomy.di
 
-import com.bitmark.autonomy.feature.arealist.AreaListFragment
-import com.bitmark.autonomy.feature.arealist.AreaListModule
 import com.bitmark.autonomy.feature.behavior.add.BehaviorAddingFragment
 import com.bitmark.autonomy.feature.behavior.add.BehaviorAddingModule
 import com.bitmark.autonomy.feature.main.MainFragment
@@ -63,10 +61,6 @@ abstract class FragmentBuilderModule {
     @ContributesAndroidInjector(modules = [MainFragmentModule::class])
     @FragmentScope
     internal abstract fun bindMainFragment(): MainFragment
-
-    @ContributesAndroidInjector(modules = [AreaListModule::class])
-    @FragmentScope
-    internal abstract fun bindAreaListFragment(): AreaListFragment
 
     @ContributesAndroidInjector(modules = [SymptomAddingModule::class])
     @FragmentScope

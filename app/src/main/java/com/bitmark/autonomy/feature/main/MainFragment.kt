@@ -181,7 +181,7 @@ class MainFragment : BaseSupportFragment() {
         if (isMsa0) {
             if (locationService.isPermissionGranted(activity!!)) viewModel.getCurrentAreaProfile()
         } else {
-            viewModel.getAreaProfile(areaData!!.id)
+            viewModel.getAreaProfile(areaData!!.id!!)
         }
         if (isViewSourceShowing()) {
             viewModel.getFormula(Locale.getDefault().langCountry())

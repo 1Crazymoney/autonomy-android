@@ -28,13 +28,6 @@ data class AreaModelView(
     }
 }
 
-fun toDrawableRes(value: Int) = when {
-    value == 0 -> R.drawable.ic_circle_mine_shaft_2
-    value < 34 -> R.drawable.ic_circle_red
-    value < 67 -> R.drawable.ic_circle_yellow
-    else -> R.drawable.ic_circle_green
-}
-
 fun toColorRes(value: Int) = when {
     value == 0 -> R.color.mine_shaft_2
     value < 34 -> R.color.persian_red
