@@ -12,6 +12,7 @@ import android.os.Bundle
 import android.os.Handler
 import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bitmark.autonomy.R
@@ -65,6 +66,10 @@ class AreaSearchActivity : BaseAppCompatActivity() {
 
     private var blocked = false
 
+    private var searchText = ""
+
+    private val adapter = AreaAutoCompleteRecyclerViewAdapter()
+
     override fun layoutRes(): Int = R.layout.activity_area_search
 
     override fun viewModel(): BaseViewModel? = viewModel
@@ -73,8 +78,10 @@ class AreaSearchActivity : BaseAppCompatActivity() {
         super.initComponents()
 
         val layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
-        val adapter = AreaAutoCompleteRecyclerViewAdapter()
         rvPlaces.layoutManager = layoutManager
+        val itemDecoration = DividerItemDecoration(this, RecyclerView.VERTICAL)
+        itemDecoration.setDrawable(getDrawable(R.drawable.bg_divider)!!)
+        rvPlaces.addItemDecoration(itemDecoration)
         rvPlaces.adapter = adapter
 
         adapter.setItemClickListener(object :
@@ -103,13 +110,24 @@ class AreaSearchActivity : BaseAppCompatActivity() {
         edtName.doOnTextChanged { text, _, _, _ ->
             if (blocked) return@doOnTextChanged
             handler.removeCallbacksAndMessages(null)
-            val searchText = text.toString()
-            handler.postDelayed({
-                locationService.search(searchText,
-                    { places ->
-                        adapter.set(places, searchText)
-                    })
-            }, 500)
+            searchText = text.toString()
+            if (searchText.isEmpty()) {
+                adapter.clear()
+                tvInstruction.gone()
+            } else {
+                handler.postDelayed({
+                    locationService.search(searchText,
+                        { places ->
+                            if (places.isEmpty()) {
+                                adapter.clear()
+                                tvInstruction.gone()
+                            } else {
+                                viewModel.listScore(places)
+                            }
+                        })
+                }, 500)
+            }
+
         }
 
         ivExit.setOnClickListener {
@@ -147,6 +165,26 @@ class AreaSearchActivity : BaseAppCompatActivity() {
                         dialogController.showNoInternetConnection()
                     }
                     blocked = false
+                }
+
+                res.isLoading() -> {
+                    blocked = true
+                    progressBar.visible()
+                }
+            }
+        })
+
+        viewModel.listScoreLiveData.asLiveData().observe(this, Observer { res ->
+            when {
+                res.isSuccess() -> {
+                    progressBar.gone()
+                    tvInstruction.visible()
+                    adapter.set(res.data()!!, searchText)
+                    blocked = false
+                }
+
+                res.isError() -> {
+                    progressBar.gone()
                 }
 
                 res.isLoading() -> {

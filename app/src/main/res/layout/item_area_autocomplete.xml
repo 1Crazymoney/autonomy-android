@@ -1,36 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/layoutRoot"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/black"
+    android:background="@color/mine_shaft_2"
     android:orientation="vertical"
     android:padding="@dimen/dp_16">
 
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/ivScore"
+        android:layout_width="@dimen/dp_60"
+        android:layout_height="@dimen/dp_60"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tvName"
+        tools:src="@drawable/ic_circle_green" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvScore"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/ibm_plex_mono_light_font_family"
+        android:textColor="@color/white"
+        android:textSize="@dimen/sp_24"
+        app:layout_constraintBottom_toBottomOf="@id/ivScore"
+        app:layout_constraintEnd_toEndOf="@id/ivScore"
+        app:layout_constraintStart_toStartOf="@id/ivScore"
+        app:layout_constraintTop_toTopOf="@id/ivScore"
+        tools:text="67" />
+
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tvName"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp_16"
         android:ellipsize="end"
         android:fontFamily="@font/grotesk_light_font_family"
         android:includeFontPadding="false"
         android:maxLines="1"
         android:textColor="@color/color_silver_2_stateful"
         android:textSize="@dimen/sp_16"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/ivScore"
+        app:layout_constraintTop_toTopOf="parent"
         tools:text="Songshan Airport" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tvDesc"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp_8"
-        android:ellipsize="end"
         android:fontFamily="@font/grotesk_light_font_family"
         android:includeFontPadding="false"
-        android:maxLines="1"
         android:textColor="@color/color_silver_2_stateful"
-        android:textSize="@dimen/sp_14"
-        tools:text="Section 4, Bade Road, Songshan District, Taipei City" />
+        android:textSize="@dimen/sp_12"
+        app:layout_constraintEnd_toEndOf="@id/tvName"
+        app:layout_constraintStart_toStartOf="@id/tvName"
+        app:layout_constraintTop_toBottomOf="@id/tvName"
+        tools:text="Section 4, Bade Road, Songshan District, Taipei City Section 4, Bade Road, Songshan District, Taipei City Section 4, Bade Road, Songshan District, Taipei City Section 4, Bade Road, Songshan District, Taipei City" />
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

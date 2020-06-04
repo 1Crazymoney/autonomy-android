@@ -6,6 +6,7 @@
  */
 package com.bitmark.autonomy.feature.areasearch
 
+import com.bitmark.autonomy.data.source.AppRepository
 import com.bitmark.autonomy.data.source.UserRepository
 import com.bitmark.autonomy.di.ActivityScope
 import com.bitmark.autonomy.feature.DialogController
@@ -30,10 +31,12 @@ class AreaSearchModule {
     fun provideVM(
         activity: AreaSearchActivity,
         userRepo: UserRepository,
+        appRepo: AppRepository,
         rxLiveDataTransformer: RxLiveDataTransformer
     ) = AreaSearchViewModel(
         activity.lifecycle,
         userRepo,
+        appRepo,
         rxLiveDataTransformer
     )
 

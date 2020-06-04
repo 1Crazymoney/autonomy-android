@@ -410,7 +410,8 @@ class MainActivity : BaseAppCompatActivity() {
             when {
                 res.isSuccess() -> {
                     progressBar.gone()
-                    adapter.set(res.data()!!)
+                    areaList = res.data()!!.toMutableList()
+                    adapter.set(areaList)
                 }
 
                 res.isError() -> {

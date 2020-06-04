@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bitmark.autonomy.R
 import com.bitmark.autonomy.feature.location.PlaceAutoComplete
 import kotlinx.android.synthetic.main.item_area_autocomplete.view.*
+import kotlin.math.roundToInt
 
 
 class AreaAutoCompleteRecyclerViewAdapter :
@@ -31,7 +32,20 @@ class AreaAutoCompleteRecyclerViewAdapter :
     fun set(places: List<PlaceAutoComplete>, searchText: String) {
         this.searchText = searchText
         this.items.clear()
-        this.items.addAll(places.map { p -> Item(p.id, p.primaryText, p.secondaryText, p.desc) })
+        this.items.addAll(places.map { p ->
+            Item(
+                p.id,
+                p.primaryText,
+                p.secondaryText,
+                p.desc,
+                p.score
+            )
+        })
+        notifyDataSetChanged()
+    }
+
+    fun clear() {
+        this.items.clear()
         notifyDataSetChanged()
     }
 
@@ -84,6 +98,21 @@ class AreaAutoCompleteRecyclerViewAdapter :
                 }
                 tvName.text = spannableString
                 tvDesc.text = item.secondaryText
+                if (item.score == null) {
+                    ivScore.setImageResource(R.drawable.ic_circle_mine_shaft_2)
+                    tvScore.text = "?"
+                } else {
+                    val roundedScore = item.score.roundToInt()
+                    ivScore.setImageResource(
+                        when {
+                            roundedScore == 0 -> R.drawable.ic_circle_mine_shaft_2
+                            roundedScore < 34 -> R.drawable.ic_circle_red
+                            roundedScore < 67 -> R.drawable.ic_circle_yellow
+                            else -> R.drawable.ic_circle_green
+                        }
+                    )
+                    tvScore.text = roundedScore.toString()
+                }
             }
         }
     }
@@ -96,6 +125,7 @@ class AreaAutoCompleteRecyclerViewAdapter :
         val id: String,
         val primaryText: String,
         val secondaryText: String,
-        val desc: String
+        val desc: String,
+        val score: Float?
     )
 }

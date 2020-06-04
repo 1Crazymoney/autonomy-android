@@ -121,4 +121,7 @@ interface AutonomyApi {
     @HEAD("api/accounts/me")
     fun updateLocation(): Completable
 
+    @POST("https://d4f1ab4c-09a8-4d4f-923a-41a6f773e59e.mock.pstmn.io/api/scores")
+    fun listScore(@Body body: RequestBody): Single<Map<String, Array<Float>>>
+
 }

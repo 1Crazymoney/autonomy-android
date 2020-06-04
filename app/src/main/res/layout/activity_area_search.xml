@@ -5,8 +5,18 @@
     android:id="@+id/layoutRootFooter"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/black"
+    android:background="@color/mine_shaft_2"
     android:orientation="vertical">
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/ivSearch"
+        android:layout_width="@dimen/dp_16"
+        android:layout_height="@dimen/dp_16"
+        android:layout_marginStart="@dimen/dp_16"
+        app:layout_constraintBottom_toBottomOf="@id/ivExit"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/ivExit"
+        app:srcCompat="@drawable/ic_search" />
 
     <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/edtName"
@@ -16,23 +26,25 @@
         android:layout_marginEnd="@dimen/dp_16"
         android:background="@null"
         android:fontFamily="@font/grotesk_light_font_family"
-        android:hint="@string/add_new_location"
+        android:hint="@string/enter_name_or_address"
         android:inputType="textCapSentences"
         android:maxLines="1"
         android:textColor="@color/white"
         android:textColorHint="@color/concord"
         android:textCursorDrawable="@drawable/bg_cursor"
-        android:textSize="@dimen/sp_24"
+        android:textSize="@dimen/sp_18"
         app:layout_constraintBottom_toBottomOf="@id/ivExit"
         app:layout_constraintEnd_toStartOf="@id/ivExit"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@id/ivSearch"
         app:layout_constraintTop_toTopOf="@id/ivExit" />
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/ivExit"
-        android:layout_width="@dimen/dp_80"
-        android:layout_height="@dimen/dp_80"
+        android:layout_width="@dimen/dp_40"
+        android:layout_height="@dimen/dp_40"
+        android:layout_marginTop="@dimen/dp_10"
         android:layout_marginEnd="@dimen/dp_4"
+        android:padding="@dimen/dp_4"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_exit_stateful" />
@@ -42,24 +54,39 @@
         android:layout_width="0dp"
         android:layout_height="1dp"
         android:layout_marginStart="@dimen/dp_16"
+        android:layout_marginTop="@dimen/dp_10"
         android:layout_marginEnd="@dimen/dp_16"
         android:background="@color/concord"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/ivExit" />
 
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvInstruction"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_8"
+        android:fontFamily="@font/grotesk_light_font_family"
+        android:text="@string/tap_place_to_add_it"
+        android:textColor="@color/silver_2"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/vDivider"
+        tools:visibility="visible" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvPlaces"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="@dimen/dp_14"
+        android:layout_marginTop="@dimen/dp_8"
         android:scrollbarSize="@dimen/dp_2"
         android:scrollbarThumbVertical="@color/white_aa"
         android:scrollbars="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/vDivider" />
+        app:layout_constraintTop_toBottomOf="@id/tvInstruction" />
 
     <ProgressBar
         android:id="@+id/progressBar"

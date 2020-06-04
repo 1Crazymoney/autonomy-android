@@ -20,4 +20,6 @@ class AppRepository(
     fun checkDebugModeEnable() = localDataSource.checkDebugModeEnable()
 
     fun saveDebugModeState(enable: Boolean) = localDataSource.saveDebugModeState(enable)
+
+    fun listScore(addresses: List<String>) = remoteDataSource.listScore(addresses)
 }

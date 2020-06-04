@@ -228,6 +228,8 @@
     <string name="you">You</string>
     <string name="add_neighborhood_or_business">Add neighborhood or business …</string>
     <string name="assign_an_alias_delete">Assign an alias, delete, or tap Done to save</string>
+    <string name="enter_name_or_address">Enter name or address …</string>
+    <string name="tap_place_to_add_it">Tap a place to add it to your monitoring screen</string>
 
     <!-- array -->
     <string-array name="symptoms">
