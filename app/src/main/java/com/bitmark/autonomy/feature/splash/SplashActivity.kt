@@ -178,10 +178,9 @@ class SplashActivity : BaseAppCompatActivity() {
         viewModel.prepareDataLiveData.asLiveData().observe(this, Observer { res ->
             when {
                 res.isSuccess() -> {
-                    val areas = res.data()!!
                     val notificationBundle = intent?.extras?.getBundle(NOTIFICATION_BUNDLE)
                     scheduleNotificationIfNeeded()
-                    val bundle = MainActivity.getBundle(notificationBundle, areas)
+                    val bundle = MainActivity.getBundle(notificationBundle)
                     navigator.anim(FADE_IN)
                         .startActivityAsRoot(MainActivity::class.java, bundle)
                 }

@@ -13,6 +13,7 @@ import com.bitmark.autonomy.feature.BaseViewModel
 import com.bitmark.autonomy.feature.auth.ServerAuthentication
 import com.bitmark.autonomy.util.livedata.CompositeLiveData
 import com.bitmark.autonomy.util.livedata.RxLiveDataTransformer
+import com.bitmark.autonomy.util.modelview.AreaModelView
 import io.reactivex.Single
 
 
@@ -33,6 +34,8 @@ class MainActivityViewModel(
     internal val deleteAreaLiveData = CompositeLiveData<String>()
 
     internal val getCurrentAreaScoreLiveData = CompositeLiveData<Float>()
+
+    internal val listAreaLiveData = CompositeLiveData<List<AreaModelView>>()
 
     fun rename(id: String, name: String) {
         renameAreaLiveData.add(
@@ -73,12 +76,19 @@ class MainActivityViewModel(
         )
     }
 
-    fun getCurrentAreaProfile() {
+    fun getCurrentAreaScore() {
         getCurrentAreaScoreLiveData.add(
             rxLiveDataTransformer.single(
                 userRepo.getCurrentAreaProfile().map { profile ->
                     profile.score
                 })
+        )
+    }
+
+    fun listArea() {
+        listAreaLiveData.add(
+            rxLiveDataTransformer.single(userRepo.listArea()
+                .map { areas -> areas.map { a -> AreaModelView.newInstance(a) } })
         )
     }
 

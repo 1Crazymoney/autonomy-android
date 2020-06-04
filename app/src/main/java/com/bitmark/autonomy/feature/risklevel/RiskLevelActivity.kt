@@ -126,7 +126,7 @@ class RiskLevelActivity : BaseAppCompatActivity() {
                 res.isSuccess() -> {
                     progressBar.gone()
                     scheduleNotification()
-                    val bundle = MainActivity.getBundle(areas = listOf())
+                    val bundle = MainActivity.getBundle()
                     navigator.anim(FADE_IN).startActivityAsRoot(MainActivity::class.java, bundle)
                     blocked = false
                 }

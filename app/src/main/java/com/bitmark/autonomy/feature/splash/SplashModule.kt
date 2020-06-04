@@ -8,7 +8,6 @@ package com.bitmark.autonomy.feature.splash
 
 import com.bitmark.autonomy.data.source.AccountRepository
 import com.bitmark.autonomy.data.source.AppRepository
-import com.bitmark.autonomy.data.source.UserRepository
 import com.bitmark.autonomy.di.ActivityScope
 import com.bitmark.autonomy.feature.DialogController
 import com.bitmark.autonomy.feature.Navigator
@@ -25,9 +24,8 @@ class SplashModule {
         activity: SplashActivity,
         accountRepo: AccountRepository,
         appRepo: AppRepository,
-        userRepo: UserRepository,
         rxLiveDataTransformer: RxLiveDataTransformer
-    ) = SplashViewModel(activity.lifecycle, accountRepo, appRepo, userRepo, rxLiveDataTransformer)
+    ) = SplashViewModel(activity.lifecycle, accountRepo, appRepo, rxLiveDataTransformer)
 
     @ActivityScope
     @Provides

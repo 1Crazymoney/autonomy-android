@@ -42,7 +42,7 @@
         app:layout_constraintEnd_toEndOf="@id/ivHeaderScore"
         app:layout_constraintStart_toStartOf="@id/ivHeaderScore"
         app:layout_constraintTop_toTopOf="@id/ivHeaderScore"
-        tools:text="68" />
+        tools:text="681" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:layout_width="wrap_content"

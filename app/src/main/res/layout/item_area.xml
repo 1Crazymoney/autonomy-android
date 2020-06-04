@@ -67,7 +67,7 @@
         android:gravity="center"
         android:includeFontPadding="false"
         android:textColor="@color/white"
-        android:textSize="@dimen/sp_24"
+        android:textSize="@dimen/sp_20"
         app:layout_constraintBottom_toBottomOf="@id/ivScore"
         app:layout_constraintEnd_toEndOf="@id/ivScore"
         app:layout_constraintStart_toStartOf="@id/ivScore"

@@ -56,18 +56,13 @@ class MainActivity : BaseAppCompatActivity() {
 
         private const val SEARCH_REQUEST_CODE = 0x1A
 
-        private const val AREA_LIST = "area_list"
-
-        fun getBundle(notificationBundle: Bundle? = null, areas: List<AreaModelView>? = null) =
+        fun getBundle(notificationBundle: Bundle? = null) =
             Bundle().apply {
                 if (notificationBundle != null) {
                     putBundle(
                         NOTIFICATION_BUNDLE,
                         notificationBundle
                     )
-                }
-                if (areas != null) {
-                    putParcelableArrayList(AREA_LIST, ArrayList(areas))
                 }
             }
     }
@@ -97,8 +92,6 @@ class MainActivity : BaseAppCompatActivity() {
 
     private var notificationHandled = true
 
-    private var currentAreaReady = false
-
     private val timezoneChangedReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             viewModel.updateTimezone(DateTimeUtil.getDefaultTimezone())
@@ -110,9 +103,7 @@ class MainActivity : BaseAppCompatActivity() {
             if (!appLifecycleHandler.isOnForeground()) {
                 viewModel.updateLocation()
             }
-            if (!currentAreaReady) {
-                viewModel.getCurrentAreaProfile()
-            }
+            viewModel.getCurrentAreaScore()
         }
 
         override fun onPlaceChanged(place: String) {
@@ -198,6 +189,7 @@ class MainActivity : BaseAppCompatActivity() {
                 }
             })
         }
+        viewModel.listArea()
     }
 
     private fun startLocationService() {
@@ -307,17 +299,9 @@ class MainActivity : BaseAppCompatActivity() {
         }
         locationService.addLocationChangeListener(locationChangeListener)
 
-        if (!this::areaList.isInitialized) {
-            areaList =
-                intent?.extras?.getParcelableArrayList<AreaModelView>(AREA_LIST)?.toMutableList()
-                    ?: error("missing area array")
-        }
-
-
         val layoutManager = GridLayoutManager(this, 3)
         rvAreas.layoutManager = layoutManager
         setCurrentAreaScore(null)
-        adapter.set(areaList)
         rvAreas.adapter = adapter
         rvAreas.isNestedScrollingEnabled = false
         (rvAreas.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
@@ -413,14 +397,25 @@ class MainActivity : BaseAppCompatActivity() {
         viewModel.getCurrentAreaScoreLiveData.asLiveData().observe(this, Observer { res ->
             when {
                 res.isSuccess() -> {
-                    progressBar.gone()
                     setCurrentAreaScore(res.data()!!)
-                    currentAreaReady = true
                 }
 
                 res.isError() -> {
-                    progressBar.gone()
                     logger.logError(Event.AREA_PROFILE_GETTING_ERROR, res.throwable())
+                }
+            }
+        })
+
+        viewModel.listAreaLiveData.asLiveData().observe(this, Observer { res ->
+            when {
+                res.isSuccess() -> {
+                    progressBar.gone()
+                    adapter.set(res.data()!!)
+                }
+
+                res.isError() -> {
+                    logger.logError(Event.AREA_LIST_ERROR, res.throwable())
+                    progressBar.gone()
                 }
 
                 res.isLoading() -> {
