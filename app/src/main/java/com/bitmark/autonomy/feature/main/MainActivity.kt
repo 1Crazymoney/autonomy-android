@@ -128,13 +128,14 @@ class MainActivity : BaseAppCompatActivity() {
     private val actionListener = object : AreaListRecyclerViewAdapter.ActionListener {
 
         override fun onAreaDeleteClicked(id: String) {
-            tvEditing.invisible()
+            hideKeyBoard()
+            setEditingVisible(false)
             viewModel.delete(id)
         }
 
         override fun onAreaEditClicked(id: String) {
             adapter.setEditable(id, true)
-            tvEditing.visible()
+            setEditingVisible(true)
             Handler().postDelayed({
                 showKeyBoard()
             }, 200)
@@ -149,7 +150,7 @@ class MainActivity : BaseAppCompatActivity() {
                 }
                 if (keyBoardShowing) return@detectKeyBoardState
                 adapter.clearEditing()
-                tvEditing.invisible()
+                setEditingVisible(false)
                 setAddAreaVisible(adapter.itemCount < MAX_AREA)
             }, { !keyBoardShowing })
 
@@ -161,7 +162,7 @@ class MainActivity : BaseAppCompatActivity() {
 
         override fun onDone(id: String, oldAlias: String, newAlias: String) {
             hideKeyBoard()
-            tvEditing.invisible()
+            setEditingVisible(false)
             adapter.setEditable(id, false)
             if (oldAlias == newAlias || newAlias.isEmpty()) {
                 adapter.updateAlias(id, oldAlias)
@@ -431,9 +432,21 @@ class MainActivity : BaseAppCompatActivity() {
 
     fun setAddAreaVisible(visible: Boolean) {
         if (visible) {
+            layoutBottom.visible()
             layoutAddArea.visible()
+            tvEditing.gone()
         } else {
-            layoutAddArea.invisible()
+            layoutBottom.gone()
+        }
+    }
+
+    fun setEditingVisible(visible: Boolean) {
+        if (visible) {
+            layoutBottom.visible()
+            tvEditing.visible()
+            layoutAddArea.gone()
+        } else {
+            layoutBottom.gone()
         }
     }
 
