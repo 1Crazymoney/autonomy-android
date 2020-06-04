@@ -185,6 +185,7 @@ class AreaSearchActivity : BaseAppCompatActivity() {
 
                 res.isError() -> {
                     progressBar.gone()
+                    blocked = false
                 }
 
                 res.isLoading() -> {
