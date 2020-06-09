@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:id="@+id/layoutContent"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_44"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="@dimen/dp_8"
+            android:layout_toStartOf="@id/rb"
+            android:ellipsize="end"
+            android:fontFamily="@font/grotesk_light_font_family"
+            android:gravity="start|center_vertical"
+            android:includeFontPadding="false"
+            android:maxLines="2"
+            android:textAllCaps="true"
+            android:textColor="@color/white"
+            android:textSize="@dimen/sp_14"
+            tools:text="low-glycemic index (LOW-GI) food" />
+
+        <com.willy.ratingbar.ScaleRatingBar
+            android:id="@+id/rb"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            app:srb_clickable="true"
+            app:srb_drawableEmpty="@drawable/bg_circle_mine_shaft"
+            app:srb_drawableFilled="@drawable/bg_circle_green"
+            app:srb_isIndicator="false"
+            app:srb_numStars="5"
+            app:srb_rating="3.0"
+            app:srb_scrollable="false"
+            app:srb_starHeight="@dimen/dp_16"
+            app:srb_starPadding="@dimen/dp_8"
+            app:srb_starWidth="@dimen/dp_16"
+            app:srb_stepSize="1.0" />
+
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@id/layoutContent"
+        android:background="@color/mine_shaft_2" />
+
+</RelativeLayout>

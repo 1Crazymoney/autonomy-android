@@ -106,9 +106,9 @@ class AreaAutoCompleteRecyclerViewAdapter :
                     ivScore.setImageResource(
                         when {
                             roundedScore == 0 -> R.drawable.ic_circle_mine_shaft_2
-                            roundedScore < 34 -> R.drawable.ic_circle_red
-                            roundedScore < 67 -> R.drawable.ic_circle_yellow
-                            else -> R.drawable.ic_circle_green
+                            roundedScore < 34 -> R.drawable.ic_circle_red_png
+                            roundedScore < 67 -> R.drawable.ic_circle_yellow_png
+                            else -> R.drawable.ic_circle_green_png
                         }
                     )
                     tvScore.text = roundedScore.toString()

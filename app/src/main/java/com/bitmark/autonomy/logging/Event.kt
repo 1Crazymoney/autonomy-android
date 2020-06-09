@@ -82,6 +82,10 @@ enum class Event(val value: String) {
 
     VIDEO_PLAYING_ERROR("video_playing_error"),
 
-    LOCATION_BACKGROUND_UPDATE_ERROR("location_background_update_error")
+    LOCATION_BACKGROUND_UPDATE_ERROR("location_background_update_error"),
+
+    RESOURCE_RATING_LISTING_ERROR("resource_rating_listing_error"),
+
+    RESOURCE_RATING_UPDATING_ERROR("resource_rating_updating_error")
 
 }

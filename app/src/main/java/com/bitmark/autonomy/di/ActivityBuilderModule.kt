@@ -36,6 +36,8 @@ import com.bitmark.autonomy.feature.permission.PermissionActivity
 import com.bitmark.autonomy.feature.permission.PermissionModule
 import com.bitmark.autonomy.feature.profile.ProfileActivity
 import com.bitmark.autonomy.feature.profile.ProfileModule
+import com.bitmark.autonomy.feature.rating.ResourceRatingActivity
+import com.bitmark.autonomy.feature.rating.ResourceRatingModule
 import com.bitmark.autonomy.feature.recovery.RecoveryContainerActivity
 import com.bitmark.autonomy.feature.recovery.RecoveryContainerModule
 import com.bitmark.autonomy.feature.requesthelp.RequestHelpContainerActivity
@@ -167,5 +169,9 @@ abstract class ActivityBuilderModule {
     @ContributesAndroidInjector(modules = [AutonomyProfileModule::class])
     @ActivityScope
     internal abstract fun bindAutonomyProfileActivity(): AutonomyProfileActivity
+
+    @ContributesAndroidInjector(modules = [ResourceRatingModule::class])
+    @ActivityScope
+    internal abstract fun bindRatingActivity(): ResourceRatingActivity
 
 }

@@ -7,6 +7,7 @@
 package com.bitmark.autonomy.data.source
 
 import com.bitmark.autonomy.data.model.CoefficientData
+import com.bitmark.autonomy.data.model.ResourceRatingData
 import com.bitmark.autonomy.data.source.remote.UserRemoteDataSource
 
 
@@ -44,4 +45,9 @@ class UserRepository(private val remoteDataSource: UserRemoteDataSource) : Repos
     fun getDebugInfo(id: String) = remoteDataSource.getDebugInfo(id)
 
     fun updateLocation() = remoteDataSource.updateLocation()
+
+    fun listResourceRating(poiId: String) = remoteDataSource.listResourceRating(poiId)
+
+    fun updateResourceRatings(ratings: List<ResourceRatingData>) =
+        remoteDataSource.updateResourceRatings(ratings)
 }

@@ -240,6 +240,10 @@
     <string name="add_rating">Add rating</string>
     <string name="view_your_rating">View your rating</string>
     <string name="address">Address</string>
+    <string name="your_ratings_will_ne_anonymously">Your ratings will be anonymously pooled with others for this place.\n\nTap to rate health resources provided by this place or add others:</string>
+    <string name="add_resource">Add resource</string>
+    <string name="could_not_submit_your_rating">Could not report your rating. Please try again later.</string>
+    <string name="report_your_ratings">Reporting your ratings for this place …</string>
 
     <!-- array -->
     <string-array name="symptoms">

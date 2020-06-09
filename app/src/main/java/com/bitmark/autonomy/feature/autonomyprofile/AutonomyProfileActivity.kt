@@ -17,6 +17,7 @@ import com.bitmark.autonomy.feature.DialogController
 import com.bitmark.autonomy.feature.Navigator
 import com.bitmark.autonomy.feature.Navigator.Companion.RIGHT_LEFT
 import com.bitmark.autonomy.feature.connectivity.ConnectivityHandler
+import com.bitmark.autonomy.feature.rating.ResourceRatingActivity
 import com.bitmark.autonomy.logging.Event
 import com.bitmark.autonomy.logging.EventLogger
 import com.bitmark.autonomy.util.ext.*
@@ -129,7 +130,9 @@ class AutonomyProfileActivity : BaseAppCompatActivity() {
                 if (index == 0) {
                     // TODO more records
                 } else {
-                    // TODO navigate rating
+                    val bundle = ResourceRatingActivity.getBundle(areaData!!.id)
+                    navigator.anim(RIGHT_LEFT)
+                        .startActivity(ResourceRatingActivity::class.java, bundle)
                 }
             }
 

@@ -136,6 +136,10 @@
             android:name=".feature.autonomyprofile.AutonomyProfileActivity"
             android:screenOrientation="portrait" />
 
+        <activity
+            android:name=".feature.rating.ResourceRatingActivity"
+            android:screenOrientation="portrait" />
+
         <receiver android:name=".feature.notification.ScheduledNotificationReceiver" />
 
         <meta-data
