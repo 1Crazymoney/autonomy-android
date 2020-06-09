@@ -8,8 +8,6 @@ package com.bitmark.autonomy.di
 
 import com.bitmark.autonomy.feature.behavior.add.BehaviorAddingFragment
 import com.bitmark.autonomy.feature.behavior.add.BehaviorAddingModule
-import com.bitmark.autonomy.feature.main.MainFragment
-import com.bitmark.autonomy.feature.main.MainFragmentModule
 import com.bitmark.autonomy.feature.onboarding.OnboardingFragment
 import com.bitmark.autonomy.feature.onboarding.OnboardingModule
 import com.bitmark.autonomy.feature.recovery.access.RecoveryAccessFragment
@@ -57,10 +55,6 @@ abstract class FragmentBuilderModule {
     @ContributesAndroidInjector(modules = [RequestHelpReviewModule::class])
     @FragmentScope
     internal abstract fun bindRequestHelpReviewFragment(): RequestHelpReviewFragment
-
-    @ContributesAndroidInjector(modules = [MainFragmentModule::class])
-    @FragmentScope
-    internal abstract fun bindMainFragment(): MainFragment
 
     @ContributesAndroidInjector(modules = [SymptomAddingModule::class])
     @FragmentScope

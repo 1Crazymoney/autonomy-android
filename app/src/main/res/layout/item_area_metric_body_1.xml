@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:id="@+id/layoutContent"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_44"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:weightSum="1">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvBody11"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:ellipsize="end"
+            android:fontFamily="@font/grotesk_light_font_family"
+            android:gravity="start|center_vertical"
+            android:includeFontPadding="false"
+            android:maxLines="2"
+            android:textAllCaps="true"
+            android:textColor="@color/white"
+            android:textSize="@dimen/sp_14"
+            tools:text="low-glycemic index (LOW-GI) food" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvBody12"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.25"
+            android:ellipsize="end"
+            android:fontFamily="@font/ibm_plex_mono_light_font_family"
+            android:gravity="end"
+            android:includeFontPadding="false"
+            android:textAllCaps="true"
+            android:textSize="@dimen/sp_14"
+            tools:text="4.5"
+            tools:textColor="@color/apple" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvBody13"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.25"
+            android:ellipsize="end"
+            android:fontFamily="@font/ibm_plex_mono_light_font_family"
+            android:gravity="end"
+            android:includeFontPadding="false"
+            android:textAllCaps="true"
+            android:textColor="@color/white"
+            android:textSize="@dimen/sp_14"
+            tools:text="5,673,123" />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@id/layoutContent"
+        android:background="@color/mine_shaft_2" />
+
+</RelativeLayout>

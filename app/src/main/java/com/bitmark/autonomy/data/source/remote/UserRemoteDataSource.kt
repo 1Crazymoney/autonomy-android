@@ -50,9 +50,9 @@ class UserRemoteDataSource @Inject constructor(
         return autonomyApi.renameArea(id, reqBody).subscribeOn(Schedulers.io())
     }
 
-    fun getCurrentAreaProfile() = autonomyApi.getCurrentAreaProfile().subscribeOn(Schedulers.io())
+    fun getYourAutonomyProfile() = autonomyApi.getYourAutonomyProfile().subscribeOn(Schedulers.io())
 
-    fun getAreaProfile(id: String) = autonomyApi.getAreaProfile(id).subscribeOn(Schedulers.io())
+    fun getAutonomyProfile(id: String) = autonomyApi.getAutonomyProfile(id).subscribeOn(Schedulers.io())
 
     fun listLocationHistory(beforeSec: Long?, limit: Int) =
         autonomyApi.listLocationHistory(beforeSec, limit).map { res ->

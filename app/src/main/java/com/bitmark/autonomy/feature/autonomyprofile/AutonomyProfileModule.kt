@@ -4,10 +4,10 @@
  * Use of this source code is governed by an ISC
  * license that can be found in the LICENSE file.
  */
-package com.bitmark.autonomy.feature.main
+package com.bitmark.autonomy.feature.autonomyprofile
 
 import com.bitmark.autonomy.data.source.UserRepository
-import com.bitmark.autonomy.di.FragmentScope
+import com.bitmark.autonomy.di.ActivityScope
 import com.bitmark.autonomy.feature.DialogController
 import com.bitmark.autonomy.feature.Navigator
 import com.bitmark.autonomy.util.livedata.RxLiveDataTransformer
@@ -15,24 +15,24 @@ import dagger.Module
 import dagger.Provides
 
 @Module
-class MainFragmentModule {
+class AutonomyProfileModule {
 
     @Provides
-    @FragmentScope
-    fun provideNav(fragment: MainFragment) = Navigator(fragment)
+    @ActivityScope
+    fun provideNav(activity: AutonomyProfileActivity) = Navigator(activity)
 
     @Provides
-    @FragmentScope
-    fun provideDialogController(fragment: MainFragment) = DialogController(fragment.activity!!)
+    @ActivityScope
+    fun provideDialogController(activity: AutonomyProfileActivity) = DialogController(activity)
 
     @Provides
-    @FragmentScope
+    @ActivityScope
     fun provideVM(
-        fragment: MainFragment,
+        activity: AutonomyProfileActivity,
         userRepo: UserRepository,
         rxLiveDataTransformer: RxLiveDataTransformer
-    ) = MainFragmentViewModel(
-        fragment.lifecycle,
+    ) = AutonomyProfileViewModel(
+        activity.lifecycle,
         userRepo,
         rxLiveDataTransformer
     )

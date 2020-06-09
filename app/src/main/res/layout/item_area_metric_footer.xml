@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingTop="@dimen/dp_16"
+    android:paddingBottom="@dimen/dp_16">
+
+    <LinearLayout
+        android:id="@+id/layoutAction1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="start|center_vertical"
+        android:orientation="horizontal">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/ivAction1"
+            android:layout_width="@dimen/dp_16"
+            android:layout_height="@dimen/dp_16"
+            tools:src="@drawable/ic_down" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvAction1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_6"
+            android:fontFamily="@font/grotesk_light_font_family"
+            android:includeFontPadding="false"
+            android:textAllCaps="true"
+            android:textColor="@color/color_white_stateful"
+            android:textSize="@dimen/sp_14"
+            tools:text="More" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layoutAction2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:gravity="end|center_vertical"
+        android:orientation="horizontal">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvAction2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/dp_6"
+            android:fontFamily="@font/grotesk_light_font_family"
+            android:includeFontPadding="false"
+            android:textAllCaps="true"
+            android:textColor="@color/color_white_stateful"
+            android:textSize="@dimen/sp_14"
+            tools:text="Add Rating" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/ivAction2"
+            android:layout_width="@dimen/dp_16"
+            android:layout_height="@dimen/dp_16"
+            tools:src="@drawable/ic_add" />
+
+    </LinearLayout>
+
+</RelativeLayout>

@@ -6,13 +6,13 @@
  */
 package com.bitmark.autonomy.util.modelview
 
-import com.bitmark.autonomy.data.model.AreaProfileData
+import com.bitmark.autonomy.data.model.AutonomyProfileData
 import com.bitmark.autonomy.data.model.DebugInfoData
 import com.bitmark.autonomy.data.model.Location
 
 
 data class DebugInfoModelView(
-    val metric: AreaProfileData,
+    val metric: AutonomyProfileData,
 
     val users: Int,
 

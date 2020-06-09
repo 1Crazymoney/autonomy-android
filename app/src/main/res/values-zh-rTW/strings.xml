@@ -230,6 +230,16 @@
     <string name="assign_an_alias_delete">Assign an alias, delete, or tap Done to save</string>
     <string name="enter_name_or_address">Enter name or address …</string>
     <string name="tap_place_to_add_it">Tap a place to add it to your monitoring screen</string>
+    <string name="active_cases">Active cases</string>
+    <string name="neighborhood">Neighborhood</string>
+    <string name="report_card">Report card</string>
+    <string name="resource">Resource</string>
+    <string name="score_0_5">Score (0–5)</string>
+    <string name="ratings">Ratings</string>
+    <string name="more">More</string>
+    <string name="add_rating">Add rating</string>
+    <string name="view_your_rating">View your rating</string>
+    <string name="address">Address</string>
 
     <!-- array -->
     <string-array name="symptoms">

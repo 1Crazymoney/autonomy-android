@@ -26,6 +26,7 @@ import com.bitmark.autonomy.feature.Navigator
 import com.bitmark.autonomy.feature.Navigator.Companion.BOTTOM_UP
 import com.bitmark.autonomy.feature.Navigator.Companion.RIGHT_LEFT
 import com.bitmark.autonomy.feature.areasearch.AreaSearchActivity
+import com.bitmark.autonomy.feature.autonomyprofile.AutonomyProfileActivity
 import com.bitmark.autonomy.feature.behavior.BehaviorReportActivity
 import com.bitmark.autonomy.feature.connectivity.ConnectivityHandler
 import com.bitmark.autonomy.feature.debugmode.DebugModeActivity
@@ -105,7 +106,7 @@ class MainActivity : BaseAppCompatActivity() {
             if (!appLifecycleHandler.isOnForeground()) {
                 viewModel.updateLocation()
             }
-            viewModel.getCurrentAreaScore()
+            viewModel.getYourAutonomyScore()
         }
 
         override fun onPlaceChanged(place: String) {
@@ -325,6 +326,10 @@ class MainActivity : BaseAppCompatActivity() {
             val bundle = DebugModeActivity.getBundle(areaList)
             navigator.anim(BOTTOM_UP).startActivity(DebugModeActivity::class.java, bundle)
         }
+
+        ivHeaderScore.setSafetyOnclickListener {
+            navigator.anim(RIGHT_LEFT).startActivity(AutonomyProfileActivity::class.java)
+        }
     }
 
     override fun deinitComponents() {
@@ -488,6 +493,10 @@ class MainActivity : BaseAppCompatActivity() {
     }
 
     private fun showArea(id: String?) {
-        // TODO navigate to corresponding screen
+        val area = areaList.find { a -> a.id == id }
+        if (area != null) {
+            val bundle = AutonomyProfileActivity.getBundle(area)
+            navigator.anim(RIGHT_LEFT).startActivity(AutonomyProfileActivity::class.java, bundle)
+        }
     }
 }

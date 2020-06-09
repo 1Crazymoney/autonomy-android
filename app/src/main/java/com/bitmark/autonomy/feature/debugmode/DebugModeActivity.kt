@@ -89,7 +89,7 @@ class DebugModeActivity : BaseAppCompatActivity(), OnMapReadyCallback {
             lastKnownLocation = Location(l.latitude, l.longitude)
             if (isMapReady()) {
                 moveCamera(googleMap, lastKnownLocation)
-                viewModel.getDebugInfo(lastKnownLocation)
+                //viewModel.getDebugInfo(lastKnownLocation)
                 if (!msa1Loaded) {
                     areaList.forEach { a -> viewModel.getDebugInfo(a) }
                 }
@@ -215,7 +215,7 @@ class DebugModeActivity : BaseAppCompatActivity(), OnMapReadyCallback {
             component.second.remove()
         }
         val latLng = LatLng(debugInfo.location.lat, debugInfo.location.lng)
-        val roundedScore = debugInfo.metric.score.roundToInt()
+        val roundedScore = debugInfo.metric.neighborProfile.score.roundToInt()
         val strokeColorRes = toColorRes(roundedScore)
         val fillColorRes = toOpacityColorRes(roundedScore)
         val circleOptions = CircleOptions()
@@ -232,21 +232,21 @@ class DebugModeActivity : BaseAppCompatActivity(), OnMapReadyCallback {
         markerView.tvCoordinate.text =
             String.format("coordinate: %s", debugInfo.location.toString())
         markerView.tvMetricScore.text =
-            String.format("score: %d", debugInfo.metric.score.roundToInt())
+            String.format("score: %d", debugInfo.metric.neighborProfile.score.roundToInt())
         markerView.tvMetricConfirm.text = String.format(
             "24h_confirmed_count/delta: %d/%.2f%%",
-            debugInfo.metric.confirmed,
-            debugInfo.metric.confirmedDelta
+            debugInfo.metric.neighborProfile.confirm,
+            debugInfo.metric.neighborProfile.confirmDelta
         )
         markerView.tvMetricSymptom.text = String.format(
             "24h_symptom_count/delta: %d/%.2f%%",
-            debugInfo.metric.symptoms,
-            debugInfo.metric.symptomsDelta
+            debugInfo.metric.neighborProfile.symptoms,
+            debugInfo.metric.neighborProfile.symptomsDelta
         )
         markerView.tvMetricBehavior.text = String.format(
             "24h_behavior_count/delta: %d/%.2f%%",
-            debugInfo.metric.behaviors,
-            debugInfo.metric.behaviorsDelta
+            debugInfo.metric.neighborProfile.behaviors,
+            debugInfo.metric.neighborProfile.behaviorsDelta
         )
         markerView.tvUserCount.text = String.format("user_count: %d", debugInfo.users)
         markerView.tvAqi.text = String.format("aqi: %d", debugInfo.aqi)

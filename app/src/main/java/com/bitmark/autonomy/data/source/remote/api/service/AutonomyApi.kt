@@ -79,11 +79,11 @@ interface AutonomyApi {
     @PUT("api/points-of-interest/order")
     fun reorderArea(@Body body: RequestBody): Completable
 
-    @GET("api/area_profile/")
-    fun getCurrentAreaProfile(): Single<AreaProfileData>
+    @GET("https://d4f1ab4c-09a8-4d4f-923a-41a6f773e59e.mock.pstmn.io/api/autonomy_profile/me")
+    fun getYourAutonomyProfile(): Single<AutonomyProfileData>
 
-    @GET("api/area_profile/{id}")
-    fun getAreaProfile(@Path("id") id: String): Single<AreaProfileData>
+    @GET("https://d4f1ab4c-09a8-4d4f-923a-41a6f773e59e.mock.pstmn.io/api/autonomy_profile/{id}")
+    fun getAutonomyProfile(@Path("id") id: String): Single<AutonomyProfileData>
 
     @PATCH("api/points-of-interest/{id}")
     fun renameArea(@Path("id") id: String, @Body body: RequestBody): Completable

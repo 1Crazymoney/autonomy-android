@@ -25,9 +25,9 @@ class UserRepository(private val remoteDataSource: UserRemoteDataSource) : Repos
 
     fun rename(id: String, name: String) = remoteDataSource.rename(id, name)
 
-    fun getCurrentAreaProfile() = remoteDataSource.getCurrentAreaProfile()
+    fun getYourAutonomyProfile() = remoteDataSource.getYourAutonomyProfile()
 
-    fun getAreaProfile(id: String) = remoteDataSource.getAreaProfile(id)
+    fun getAutonomyProfile(id: String) = remoteDataSource.getAutonomyProfile(id)
 
     fun listLocationHistory(beforeSec: Long? = null, limit: Int = 20) =
         remoteDataSource.listLocationHistory(beforeSec, limit)

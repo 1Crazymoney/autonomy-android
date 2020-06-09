@@ -8,6 +8,8 @@ package com.bitmark.autonomy.di
 
 import com.bitmark.autonomy.feature.areasearch.AreaSearchActivity
 import com.bitmark.autonomy.feature.areasearch.AreaSearchModule
+import com.bitmark.autonomy.feature.autonomyprofile.AutonomyProfileActivity
+import com.bitmark.autonomy.feature.autonomyprofile.AutonomyProfileModule
 import com.bitmark.autonomy.feature.behavior.BehaviorReportActivity
 import com.bitmark.autonomy.feature.behavior.BehaviorReportModule
 import com.bitmark.autonomy.feature.behavior.add.BehaviorAddingContainerActivity
@@ -161,5 +163,9 @@ abstract class ActivityBuilderModule {
     @ContributesAndroidInjector(modules = [RecoveryContainerModule::class])
     @ActivityScope
     internal abstract fun bindRecoveryKeyContainerActivity(): RecoveryContainerActivity
+
+    @ContributesAndroidInjector(modules = [AutonomyProfileModule::class])
+    @ActivityScope
+    internal abstract fun bindAutonomyProfileActivity(): AutonomyProfileActivity
 
 }

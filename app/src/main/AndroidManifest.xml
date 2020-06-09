@@ -132,6 +132,10 @@
             android:name=".feature.recovery.RecoveryContainerActivity"
             android:screenOrientation="portrait" />
 
+        <activity
+            android:name=".feature.autonomyprofile.AutonomyProfileActivity"
+            android:screenOrientation="portrait" />
+
         <receiver android:name=".feature.notification.ScheduledNotificationReceiver" />
 
         <meta-data

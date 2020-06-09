@@ -84,11 +84,11 @@ class MainActivityViewModel(
         )
     }
 
-    fun getCurrentAreaScore() {
+    fun getYourAutonomyScore() {
         getCurrentAreaScoreLiveData.add(
             rxLiveDataTransformer.single(
-                userRepo.getCurrentAreaProfile().map { profile ->
-                    profile.score
+                userRepo.getYourAutonomyProfile().map { profile ->
+                    profile.individualProfile!!.score
                 })
         )
     }

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:paddingTop="@dimen/dp_16"
+    android:weightSum="1">
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvSubHeader1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.5"
+        android:fontFamily="@font/domaine_sans"
+        android:gravity="start"
+        android:includeFontPadding="false"
+        android:textAllCaps="true"
+        android:textColor="@color/silver_2"
+        android:textSize="@dimen/sp_10"
+        tools:text="Resource" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvSubHeader2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.25"
+        android:fontFamily="@font/domaine_sans"
+        android:gravity="end"
+        android:includeFontPadding="false"
+        android:textAllCaps="true"
+        android:textColor="@color/silver_2"
+        android:textSize="@dimen/sp_10"
+        tools:text="SCORE (0-5)" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvSubHeader3"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.25"
+        android:fontFamily="@font/domaine_sans"
+        android:gravity="end"
+        android:includeFontPadding="false"
+        android:textAllCaps="true"
+        android:textColor="@color/silver_2"
+        android:textSize="@dimen/sp_10"
+        tools:text="ratings" />
+
+</LinearLayout>
