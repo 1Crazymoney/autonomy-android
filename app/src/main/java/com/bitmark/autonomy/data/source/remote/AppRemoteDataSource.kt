@@ -25,7 +25,7 @@ class AppRemoteDataSource @Inject constructor(
         res["information"] ?: error("invalid response")
     }.subscribeOn(Schedulers.io())
 
-    fun listScore(addresses: List<String>): Single<Array<Float>> {
+    fun listScore(addresses: List<String>): Single<Array<Float?>> {
         val addressArray = addresses.map { a -> mapOf("address" to a) }
         val reqMap = mapOf("places" to addressArray)
         val reqBody =

@@ -9,12 +9,15 @@ package com.bitmark.autonomy.data.model
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
-data class ResourceRatingData(
+
+data class ResourceData(
     @Expose
-    @SerializedName("resource")
-    val resource: ResourceData,
+    @SerializedName("id")
+    val id: String,
 
     @Expose
-    @SerializedName("score")
-    val score: Int
+    @SerializedName("name")
+    val name: String
 ) : Data
+
+

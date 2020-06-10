@@ -99,13 +99,13 @@ class AreaAutoCompleteRecyclerViewAdapter :
                 tvName.text = spannableString
                 tvDesc.text = item.secondaryText
                 if (item.score == null) {
-                    ivScore.setImageResource(R.drawable.ic_circle_mine_shaft_2)
+                    ivScore.setImageResource(R.drawable.ic_circle_black)
                     tvScore.text = "?"
                 } else {
                     val roundedScore = item.score.roundToInt()
                     ivScore.setImageResource(
                         when {
-                            roundedScore == 0 -> R.drawable.ic_circle_mine_shaft_2
+                            roundedScore == 0 -> R.drawable.ic_circle_black
                             roundedScore < 34 -> R.drawable.ic_circle_red_png
                             roundedScore < 67 -> R.drawable.ic_circle_yellow_png
                             else -> R.drawable.ic_circle_green_png

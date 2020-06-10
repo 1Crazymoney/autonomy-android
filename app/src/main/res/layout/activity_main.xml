@@ -105,7 +105,7 @@
                 android:layout_marginStart="@dimen/dp_16"
                 android:layout_marginEnd="@dimen/dp_16"
                 android:fontFamily="@font/grotesk_light_font_family"
-                android:text="@string/add_neighborhood_or_business"
+                android:text="@string/enter_name_or_address"
                 android:textColor="@color/color_concord_stateful"
                 android:textSize="@dimen/sp_18"
                 app:layout_constraintBottom_toBottomOf="parent"

@@ -98,7 +98,7 @@ class ResourceRatingAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             this.item = item
             with(itemView) {
                 val data = item.data!!
-                tvName.text = data.name
+                tvName.text = data.resource.name
                 val rbBg = getRatingBarBgRes(data.score)
                 rb.setFilledDrawableRes(rbBg)
                 rb.rating = item.data.score.toFloat()

@@ -37,15 +37,14 @@
             android:layout_centerVertical="true"
             app:srb_clickable="true"
             app:srb_drawableEmpty="@drawable/bg_circle_mine_shaft"
-            app:srb_drawableFilled="@drawable/bg_circle_green"
             app:srb_isIndicator="false"
             app:srb_numStars="5"
-            app:srb_rating="3.0"
             app:srb_scrollable="false"
             app:srb_starHeight="@dimen/dp_16"
             app:srb_starPadding="@dimen/dp_8"
             app:srb_starWidth="@dimen/dp_16"
-            app:srb_stepSize="1.0" />
+            app:srb_stepSize="1.0"
+            tools:srb_drawableFilled="@drawable/bg_circle_green" />
 
     </RelativeLayout>
 

@@ -6,14 +6,15 @@
  */
 package com.bitmark.autonomy.util.modelview
 
+import com.bitmark.autonomy.data.model.ResourceData
 import com.bitmark.autonomy.data.model.ResourceRatingData
 
 
-data class ResourceRatingModelView(val id: String, val name: String, var score: Int) : ModelView {
+data class ResourceRatingModelView(val resource: ResourceData, var score: Int) : ModelView {
     companion object {
         fun newInstance(rating: ResourceRatingData) =
-            ResourceRatingModelView(rating.id, rating.name, rating.score)
+            ResourceRatingModelView(rating.resource, rating.score)
     }
 }
 
-fun ResourceRatingModelView.toResData() = ResourceRatingData(id, name, score)
+fun ResourceRatingModelView.toResData() = ResourceRatingData(resource, score)

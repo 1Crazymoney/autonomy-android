@@ -355,8 +355,8 @@ class AutonomyProfileMetricAdapter : RecyclerView.Adapter<RecyclerView.ViewHolde
                 tvBody12.setTextColorRes(
                     when {
                         data.score == 0f -> R.color.mine_shaft_2
-                        data.score < 2f -> R.color.persian_red
-                        data.score < 4f -> R.color.gold_tip
+                        data.score <= 1.6f -> R.color.persian_red
+                        data.score <= 3.3f -> R.color.gold_tip
                         else -> R.color.apple
                     }
                 )

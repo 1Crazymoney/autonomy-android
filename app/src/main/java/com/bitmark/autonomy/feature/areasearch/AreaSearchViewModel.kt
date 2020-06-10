@@ -43,7 +43,7 @@ class AreaSearchViewModel(
     fun listScore(places: List<PlaceAutoComplete>) {
         listScoreLiveData.add(
             rxLiveDataTransformer.single(
-                appRepo.listScore(places.map { p -> p.desc }).map { scores ->
+                appRepo.listScore(places.map { p -> p.secondaryText }).map { scores ->
                     scores.forEachIndexed { i, s -> places[i].score = s }
                     places
                 }

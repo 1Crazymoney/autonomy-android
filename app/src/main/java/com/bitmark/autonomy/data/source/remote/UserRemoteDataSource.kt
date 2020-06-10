@@ -95,7 +95,12 @@ class UserRemoteDataSource @Inject constructor(
 
     fun updateResourceRatings(ratings: List<ResourceRatingData>): Completable {
         val map =
-            mapOf("ratings" to ratings.map { res -> mapOf("resource_id" to res.id, "score" to res.score) })
+            mapOf("ratings" to ratings.map { res ->
+                mapOf(
+                    "resource" to mapOf("id" to res.resource.id),
+                    "score" to res.score
+                )
+            })
         val json = newGsonInstance().toJson(map)
         val reqBody = json.toRequestBody("application/json".toMediaTypeOrNull())
         return autonomyApi.updateResourceRatings(reqBody).subscribeOn(Schedulers.io())
