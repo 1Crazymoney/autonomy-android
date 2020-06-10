@@ -30,10 +30,13 @@ class AutonomyProfileViewModel(
         )
     }
 
-    fun getAutonomyProfile(id: String) {
+    fun getAutonomyProfile(id: String, allResources: Boolean = false) {
         getAreaProfileLiveData.add(
             rxLiveDataTransformer.single(
-                userRepo.getAutonomyProfile(id).map { a -> AutonomyProfileModelView.newInstance(a) }
+                userRepo.getAutonomyProfile(
+                    id,
+                    allResources
+                ).map { a -> AutonomyProfileModelView.newInstance(a) }
             )
         )
     }

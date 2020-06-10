@@ -18,6 +18,7 @@ import com.bitmark.autonomy.util.modelview.AutonomyProfileModelView
 import kotlinx.android.synthetic.main.item_area_metric_body_1.view.*
 import kotlinx.android.synthetic.main.item_area_metric_body_2.view.*
 import kotlinx.android.synthetic.main.item_area_metric_footer.view.*
+import kotlinx.android.synthetic.main.item_area_metric_guidance.view.*
 import kotlinx.android.synthetic.main.item_area_metric_header.view.*
 import kotlinx.android.synthetic.main.item_area_metric_sub_header.view.*
 import kotlin.math.abs
@@ -32,6 +33,7 @@ class AutonomyProfileMetricAdapter : RecyclerView.Adapter<RecyclerView.ViewHolde
         private const val BODY_NEIGHBOR = 0x03
         private const val BODY_RESOURCE = 0x04
         private const val FOOTER = 0x05
+        private const val GUIDANCE = 0x06
     }
 
     private val items = mutableListOf<Item>()
@@ -67,34 +69,59 @@ class AutonomyProfileMetricAdapter : RecyclerView.Adapter<RecyclerView.ViewHolde
             } else if (data.resources != null) {
                 // add resource report section
                 add(Item(HEADER, R.string.report_card))
-                add(
-                    Item(
-                        SUB_HEADER,
-                        subHeaderRes = listOf(
-                            R.string.resource,
-                            R.string.score_0_5,
-                            R.string.ratings
+                if (data.resources.isEmpty()) {
+                    add(
+                        Item(
+                            GUIDANCE,
+                            guidanceRes = R.string.you_can_be_the_first_to_add_resources
                         )
                     )
-                )
-                addAll(data.resources.map { res ->
-                    Item(
-                        BODY_RESOURCE,
-                        resourceData = ItemResource(res.name, res.score, res.ratings)
-                    )
-                })
-                add(
-                    Item(
-                        FOOTER,
-                        footers = listOf(
-                            ItemFooter(R.drawable.ic_down_stateful, R.string.more),
-                            ItemFooter(
-                                R.drawable.ic_add_stateful,
-                                if (data.rating!!) R.string.view_your_rating else R.string.add_rating
+                    add(
+                        Item(
+                            FOOTER,
+                            footers = listOf(
+                                ItemFooter(-1, -1, false),
+                                ItemFooter(
+                                    R.drawable.ic_add_stateful,
+                                    R.string.add_resource
+                                )
                             )
                         )
                     )
-                )
+                } else {
+                    add(
+                        Item(
+                            SUB_HEADER,
+                            subHeaderRes = listOf(
+                                R.string.resource,
+                                R.string.score_0_5,
+                                R.string.ratings
+                            )
+                        )
+                    )
+                    addAll(data.resources.map { res ->
+                        Item(
+                            BODY_RESOURCE,
+                            resourceData = ItemResource(res.name, res.score, res.ratings)
+                        )
+                    })
+                    add(
+                        Item(
+                            FOOTER,
+                            footers = listOf(
+                                ItemFooter(
+                                    R.drawable.ic_down_stateful,
+                                    R.string.more,
+                                    data.resources.size > 10
+                                ),
+                                ItemFooter(
+                                    R.drawable.ic_add_stateful,
+                                    if (data.rating!!) R.string.view_your_rating else R.string.add_rating
+                                )
+                            )
+                        )
+                    )
+                }
             }
 
             // add neighbor section
@@ -174,6 +201,13 @@ class AutonomyProfileMetricAdapter : RecyclerView.Adapter<RecyclerView.ViewHolde
                     false
                 ), actionListener
             )
+            GUIDANCE -> GuidanceVH(
+                LayoutInflater.from(parent.context).inflate(
+                    R.layout.item_area_metric_guidance,
+                    parent,
+                    false
+                )
+            )
             else -> error("unsupported viewType: $viewType")
         }
     }
@@ -185,13 +219,15 @@ class AutonomyProfileMetricAdapter : RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        val item = items[position]
         when (holder) {
-            is HeaderVH -> holder.bind(items[position])
-            is SubHeaderVH -> holder.bind(items[position])
-            is BodyYouVH -> holder.bind(items[position])
-            is BodyNeighborVH -> holder.bind(items[position])
-            is BodyResourceVH -> holder.bind(items[position])
-            is FooterVH -> holder.bind(items[position])
+            is HeaderVH -> holder.bind(item)
+            is SubHeaderVH -> holder.bind(item)
+            is BodyYouVH -> holder.bind(item)
+            is BodyNeighborVH -> holder.bind(item)
+            is BodyResourceVH -> holder.bind(item)
+            is FooterVH -> holder.bind(item)
+            is GuidanceVH -> holder.bind(item)
             else -> error("unsupported holder")
         }
     }
@@ -370,11 +406,11 @@ class AutonomyProfileMetricAdapter : RecyclerView.Adapter<RecyclerView.ViewHolde
         init {
             with(itemView) {
                 layoutAction1.setSafetyOnclickListener {
-                    listener?.onFooterClick(0)
+                    listener?.onFooterClick(layoutAction1.tvAction1.text.toString())
                 }
 
                 layoutAction2.setSafetyOnclickListener {
-                    listener?.onFooterClick(1)
+                    listener?.onFooterClick(layoutAction2.tvAction2.text.toString())
                 }
             }
         }
@@ -382,10 +418,30 @@ class AutonomyProfileMetricAdapter : RecyclerView.Adapter<RecyclerView.ViewHolde
         fun bind(item: Item) {
             if (item.footers!!.size != 2) error("only support 2 footer actions")
             with(itemView) {
-                ivAction1.setImageResource(item.footers[0].iconRes)
-                ivAction2.setImageResource(item.footers[1].iconRes)
-                tvAction1.setText(item.footers[0].stringRes)
-                tvAction2.setText(item.footers[1].stringRes)
+                arrayOf(
+                    Pair(ivAction1, tvAction1),
+                    Pair(ivAction2, tvAction2)
+                ).forEachIndexed { i, p ->
+                    val f = item.footers[i]
+                    if (f.iconRes != -1) p.first.setImageResource(f.iconRes)
+                    if (f.stringRes != -1) p.second.setText(f.stringRes)
+                    if (f.visible) {
+                        p.first.visible()
+                        p.second.visible()
+                    } else {
+                        p.first.invisible()
+                        p.second.invisible()
+                    }
+                }
+            }
+        }
+    }
+
+    class GuidanceVH(view: View) : RecyclerView.ViewHolder(view) {
+
+        fun bind(item: Item) {
+            with(itemView) {
+                tvGuidance.setText(item.guidanceRes!!)
             }
         }
     }
@@ -397,10 +453,11 @@ class AutonomyProfileMetricAdapter : RecyclerView.Adapter<RecyclerView.ViewHolde
         val footers: List<ItemFooter>? = null,
         val yourData: ItemYou? = null,
         val neighborData: ItemNeighbor? = null,
-        val resourceData: ItemResource? = null
+        val resourceData: ItemResource? = null,
+        @StringRes val guidanceRes: Int? = null
     )
 
-    data class ItemFooter(@DrawableRes val iconRes: Int, @StringRes val stringRes: Int)
+    data class ItemFooter(@DrawableRes val iconRes: Int, @StringRes val stringRes: Int, var visible: Boolean = true)
 
     data class ItemYou(
         val symptoms: Int? = null,
@@ -421,6 +478,6 @@ class AutonomyProfileMetricAdapter : RecyclerView.Adapter<RecyclerView.ViewHolde
     data class ItemResource(val text: String, val score: Float, val ratings: Int)
 
     interface ActionListener {
-        fun onFooterClick(index: Int)
+        fun onFooterClick(label: String)
     }
 }

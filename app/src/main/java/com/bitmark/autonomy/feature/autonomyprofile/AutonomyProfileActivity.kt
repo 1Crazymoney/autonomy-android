@@ -126,13 +126,18 @@ class AutonomyProfileActivity : BaseAppCompatActivity() {
         }
 
         adapter.setActionListener(object : AutonomyProfileMetricAdapter.ActionListener {
-            override fun onFooterClick(index: Int) {
-                if (index == 0) {
-                    // TODO more records
-                } else {
-                    val bundle = ResourceRatingActivity.getBundle(areaData!!.id)
-                    navigator.anim(RIGHT_LEFT)
-                        .startActivity(ResourceRatingActivity::class.java, bundle)
+            override fun onFooterClick(label: String) {
+                when (label) {
+                    getString(R.string.more) -> viewModel.getAutonomyProfile(areaData!!.id, true)
+                    getString(R.string.view_your_rating), getString(R.string.add_rating) -> {
+                        val bundle = ResourceRatingActivity.getBundle(areaData!!.id)
+                        navigator.anim(RIGHT_LEFT)
+                            .startActivity(ResourceRatingActivity::class.java, bundle)
+                    }
+                    getString(R.string.add_resource) -> {
+                        // TODO goto add resource
+                    }
+                    else -> error("unsupported action")
                 }
             }
 
@@ -210,6 +215,7 @@ class AutonomyProfileActivity : BaseAppCompatActivity() {
 
         showScore(profile.autonomyScore.roundToInt(), profile.autonomyScoreDelta)
         adapter.set(profile)
+
     }
 
     override fun onBackPressed() {
