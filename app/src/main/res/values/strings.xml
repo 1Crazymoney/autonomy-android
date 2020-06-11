@@ -246,6 +246,10 @@
     <string name="could_not_submit_your_rating">Could not report your rating. Please try again later.</string>
     <string name="report_your_ratings">Reporting your ratings for this place …</string>
     <string name="you_can_be_the_first_to_add_resources">You can be the first to add resources provided by this place by tapping below.</string>
+    <string name="add_resources">Add resources</string>
+    <string name="your_resource_suggestions_will_be_anonymously">Your resource suggestions will be anonymously pooled with others for this place.\n\nTap any health-promoting resources this place provides:</string>
+    <string name="important_resources_for_this_neighborhood">Important resources for this neighborhood</string>
+    <string name="suggest_other_resource">Suggest other resource …</string>
 
     <!-- array -->
     <string-array name="symptoms">

@@ -7,17 +7,17 @@
 package com.bitmark.autonomy.feature.rating
 
 import androidx.lifecycle.Lifecycle
-import com.bitmark.autonomy.data.source.UserRepository
+import com.bitmark.autonomy.data.source.ResourceRepository
 import com.bitmark.autonomy.feature.BaseViewModel
 import com.bitmark.autonomy.util.livedata.CompositeLiveData
 import com.bitmark.autonomy.util.livedata.RxLiveDataTransformer
 import com.bitmark.autonomy.util.modelview.ResourceRatingModelView
-import com.bitmark.autonomy.util.modelview.toResData
+import com.bitmark.autonomy.util.modelview.toResourceRatingData
 
 
 class ResourceRatingViewModel(
     lifecycle: Lifecycle,
-    private val userRepo: UserRepository,
+    private val resourceRepo: ResourceRepository,
     val rxLiveDataTransformer: RxLiveDataTransformer
 ) : BaseViewModel(lifecycle) {
 
@@ -28,7 +28,7 @@ class ResourceRatingViewModel(
     fun listResourceRating(poiId: String) {
         listResourceRatingLiveData.add(
             rxLiveDataTransformer.single(
-                userRepo.listResourceRating(
+                resourceRepo.listResourceRating(
                     poiId
                 ).map { ratings -> ratings.map { r -> ResourceRatingModelView.newInstance(r) } })
         )
@@ -37,8 +37,8 @@ class ResourceRatingViewModel(
     fun updateResourceRatings(ratings: List<ResourceRatingModelView>) {
         updateResourceRatingsLiveData.add(
             rxLiveDataTransformer.completable(
-                userRepo.updateResourceRatings(
-                    ratings.map { r -> r.toResData() })
+                resourceRepo.updateResourceRatings(
+                    ratings.map { r -> r.toResourceRatingData() })
             )
         )
     }

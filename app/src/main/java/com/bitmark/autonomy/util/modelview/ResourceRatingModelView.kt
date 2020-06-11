@@ -14,7 +14,10 @@ data class ResourceRatingModelView(val resource: ResourceData, var score: Int) :
     companion object {
         fun newInstance(rating: ResourceRatingData) =
             ResourceRatingModelView(rating.resource, rating.score)
+
+        fun newInstance(resource: ResourceModelView) =
+            ResourceRatingModelView(resource.toResourceData(), 0)
     }
 }
 
-fun ResourceRatingModelView.toResData() = ResourceRatingData(resource, score)
+fun ResourceRatingModelView.toResourceRatingData() = ResourceRatingData(resource, score)

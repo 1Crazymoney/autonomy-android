@@ -130,4 +130,10 @@ interface AutonomyApi {
     @PUT("https://d4f1ab4c-09a8-4d4f-923a-41a6f773e59e.mock.pstmn.io/api/points-of-interest/{poi_id}/resource-rating")
     fun updateResourceRatings(@Body body: RequestBody): Completable
 
+    @GET("https://d4f1ab4c-09a8-4d4f-923a-41a6f773e59e.mock.pstmn.io/api/points-of-interest/{poi_id}/resources")
+    fun listResource(@Path("poi_id") poiId: String, @Query("lang") lang: String, @Query("important") important: Boolean): Single<Map<String, List<ResourceData>>>
+
+    @POST("https://d4f1ab4c-09a8-4d4f-923a-41a6f773e59e.mock.pstmn.io/api/points-of-interest/{poi_id}/resources")
+    fun addResources(@Path("poi_id") poiId: String, @Body body: RequestBody): Single<Map<String, List<ResourceData>>>
+
 }

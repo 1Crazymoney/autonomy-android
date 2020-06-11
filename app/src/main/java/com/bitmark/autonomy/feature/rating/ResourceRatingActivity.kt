@@ -6,6 +6,8 @@
  */
 package com.bitmark.autonomy.feature.rating
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import androidx.lifecycle.Observer
@@ -16,7 +18,9 @@ import com.bitmark.autonomy.feature.BaseAppCompatActivity
 import com.bitmark.autonomy.feature.BaseViewModel
 import com.bitmark.autonomy.feature.DialogController
 import com.bitmark.autonomy.feature.Navigator
+import com.bitmark.autonomy.feature.Navigator.Companion.NONE
 import com.bitmark.autonomy.feature.Navigator.Companion.RIGHT_LEFT
+import com.bitmark.autonomy.feature.addresource.select.SelectResourceActivity
 import com.bitmark.autonomy.feature.connectivity.ConnectivityHandler
 import com.bitmark.autonomy.logging.Event
 import com.bitmark.autonomy.logging.EventLogger
@@ -25,6 +29,7 @@ import com.bitmark.autonomy.util.ext.setSafetyOnclickListener
 import com.bitmark.autonomy.util.ext.showNoInternetConnection
 import com.bitmark.autonomy.util.ext.visible
 import com.bitmark.autonomy.util.livedata.Resource
+import com.bitmark.autonomy.util.modelview.ResourceRatingModelView
 import com.bitmark.autonomy.util.view.BottomProgressDialog
 import kotlinx.android.synthetic.main.activity_resource_rating.*
 import javax.inject.Inject
@@ -35,7 +40,14 @@ class ResourceRatingActivity : BaseAppCompatActivity() {
     companion object {
         private const val POI_ID = "poi_id"
 
-        fun getBundle(poiId: String) = Bundle().apply { putString(POI_ID, poiId) }
+        private const val GO_TO_SELECT_RESOURCE = "go_to_select_resource"
+
+        private const val SELECT_RESOURCE_REQUEST_CODE = 0xAB
+
+        fun getBundle(poiId: String, goToAddResource: Boolean = false) = Bundle().apply {
+            putString(POI_ID, poiId)
+            putBoolean(GO_TO_SELECT_RESOURCE, goToAddResource)
+        }
     }
 
     @Inject
@@ -59,14 +71,24 @@ class ResourceRatingActivity : BaseAppCompatActivity() {
 
     private val adapter = ResourceRatingAdapter()
 
+    private var directlyGoToSelectResource = false
+
+    private lateinit var poiId: String
+
     override fun layoutRes(): Int = R.layout.activity_resource_rating
 
     override fun viewModel(): BaseViewModel? = viewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val poiId = intent?.extras?.getString(POI_ID) ?: error("missing poi_id")
+        poiId = intent?.extras?.getString(POI_ID) ?: error("missing poi_id")
         viewModel.listResourceRating(poiId)
+        directlyGoToSelectResource =
+            intent?.extras?.getBoolean(GO_TO_SELECT_RESOURCE)
+                ?: error("missing go_to_select_resource")
+        if (directlyGoToSelectResource) {
+            goToSelectResource(poiId)
+        }
     }
 
     override fun initComponents() {
@@ -79,7 +101,7 @@ class ResourceRatingActivity : BaseAppCompatActivity() {
 
         adapter.setActionListener(object : ResourceRatingAdapter.ActionListener {
             override fun onAddResourceClicked() {
-                // TODO go to add resource
+                goToSelectResource(poiId)
             }
 
         })
@@ -106,7 +128,8 @@ class ResourceRatingActivity : BaseAppCompatActivity() {
             when {
                 res.isSuccess() -> {
                     progressBar.gone()
-                    adapter.set(res.data()!!)
+                    val data = res.data()!!
+                    adapter.addToTop(data, true)
                 }
 
                 res.isError() -> {
@@ -164,5 +187,31 @@ class ResourceRatingActivity : BaseAppCompatActivity() {
                 }
 
             })
+    }
+
+    private fun goToSelectResource(poiId: String) {
+        val bundle = SelectResourceActivity.getBundle(poiId)
+        navigator.anim(RIGHT_LEFT)
+            .startActivityForResult(
+                SelectResourceActivity::class.java,
+                SELECT_RESOURCE_REQUEST_CODE,
+                bundle
+            )
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == SELECT_RESOURCE_REQUEST_CODE) {
+            if (resultCode == Activity.RESULT_OK) {
+                val resources = SelectResourceActivity.extractBundle(data)!!.map { r ->
+                    ResourceRatingModelView.newInstance(r)
+                }
+                handler.postDelayed({
+                    adapter.addToLast(resources, true)
+                }, 100)
+            } else if (directlyGoToSelectResource) {
+                navigator.anim(NONE).finishActivity()
+            }
+        }
     }
 }

@@ -135,7 +135,9 @@ class AutonomyProfileActivity : BaseAppCompatActivity() {
                             .startActivity(ResourceRatingActivity::class.java, bundle)
                     }
                     getString(R.string.add_resource) -> {
-                        // TODO goto add resource
+                        val bundle = ResourceRatingActivity.getBundle(areaData!!.id, true)
+                        navigator.anim(RIGHT_LEFT)
+                            .startActivity(ResourceRatingActivity::class.java, bundle)
                     }
                     else -> error("unsupported action")
                 }

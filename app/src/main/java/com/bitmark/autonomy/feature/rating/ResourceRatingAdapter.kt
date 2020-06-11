@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bitmark.autonomy.R
+import com.bitmark.autonomy.util.ext.removeWhen
 import com.bitmark.autonomy.util.ext.setSafetyOnclickListener
 import com.bitmark.autonomy.util.modelview.ResourceRatingModelView
 import kotlinx.android.synthetic.main.item_resource_rating.view.*
@@ -41,6 +42,29 @@ class ResourceRatingAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         }
         notifyDataSetChanged()
     }
+
+    fun addToLast(data: List<ResourceRatingModelView>, unique: Boolean = false) {
+        add(data, itemCount - 1, unique)
+    }
+
+    fun addToTop(data: List<ResourceRatingModelView>, unique: Boolean = false) {
+        add(data, 0, unique)
+    }
+
+    private fun add(data: List<ResourceRatingModelView>, pos: Int, unique: Boolean) {
+        if (isEmpty()) {
+            set(data)
+        } else {
+            val clone = data.toMutableList()
+            if (unique) {
+                clone.removeWhen { d -> items.firstOrNull { it.type == BODY && it.data!!.resource.id == d.resource.id } != null }
+            }
+            items.addAll(pos, clone.map { d -> Item(BODY, d) })
+            notifyItemRangeInserted(pos, clone.size)
+        }
+    }
+
+    fun isEmpty() = items.count { i -> i.type == BODY } == 0
 
     fun getResourceRatings() = items.filter { i -> i.type == BODY }.map { i -> i.data!! }
 

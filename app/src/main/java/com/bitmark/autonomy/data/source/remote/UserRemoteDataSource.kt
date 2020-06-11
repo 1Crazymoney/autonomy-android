@@ -9,7 +9,6 @@ package com.bitmark.autonomy.data.source.remote
 import com.bitmark.autonomy.data.ext.newGsonInstance
 import com.bitmark.autonomy.data.model.CoefficientData
 import com.bitmark.autonomy.data.model.Location
-import com.bitmark.autonomy.data.model.ResourceRatingData
 import com.bitmark.autonomy.data.source.remote.api.middleware.RxErrorHandlingComposer
 import com.bitmark.autonomy.data.source.remote.api.request.AddAreaRequest
 import com.bitmark.autonomy.data.source.remote.api.request.UpdateProfileFormulaRequest
@@ -87,22 +86,4 @@ class UserRemoteDataSource @Inject constructor(
     fun getDebugInfo(id: String) = autonomyApi.getDebugInfo(id).subscribeOn(Schedulers.io())
 
     fun updateLocation() = autonomyApi.updateLocation().subscribeOn(Schedulers.io())
-
-    fun listResourceRating(poiId: String) =
-        autonomyApi.listResourceRating(poiId).map { res ->
-            res["ratings"] ?: error("invalid response")
-        }.subscribeOn(Schedulers.io())
-
-    fun updateResourceRatings(ratings: List<ResourceRatingData>): Completable {
-        val map =
-            mapOf("ratings" to ratings.map { res ->
-                mapOf(
-                    "resource" to mapOf("id" to res.resource.id),
-                    "score" to res.score
-                )
-            })
-        val json = newGsonInstance().toJson(map)
-        val reqBody = json.toRequestBody("application/json".toMediaTypeOrNull())
-        return autonomyApi.updateResourceRatings(reqBody).subscribeOn(Schedulers.io())
-    }
 }

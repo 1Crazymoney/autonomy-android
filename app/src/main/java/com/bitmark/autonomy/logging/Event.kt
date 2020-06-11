@@ -86,6 +86,14 @@ enum class Event(val value: String) {
 
     RESOURCE_RATING_LISTING_ERROR("resource_rating_listing_error"),
 
-    RESOURCE_RATING_UPDATING_ERROR("resource_rating_updating_error")
+    RESOURCE_RATING_UPDATING_ERROR("resource_rating_updating_error"),
+
+    RESOURCE_ADDING_ERROR("resource_adding_error"),
+
+    RESOURCE_AUTOCOMPLETE_LISTING_ERROR("resource_autocomplete_listing_error"),
+
+    RESOURCE_LISTING_ERROR("resource_listing_error"),
+
+    RESOURCE_AUTOCOMPLETE_SEARCHING_ERROR("resource_autocomplete_searching_error"),
 
 }

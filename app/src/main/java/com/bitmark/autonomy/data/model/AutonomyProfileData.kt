@@ -20,9 +20,8 @@ data class AutonomyProfileData(
     @SerializedName("alias")
     val alias: String?,
 
-    // TODO change later
     @Expose
-    @SerializedName("addess")
+    @SerializedName("address")
     val address: String?,
 
     @Expose

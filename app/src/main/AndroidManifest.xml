@@ -140,6 +140,14 @@
             android:name=".feature.rating.ResourceRatingActivity"
             android:screenOrientation="portrait" />
 
+        <activity
+            android:name=".feature.addresource.add.AddResourceActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".feature.addresource.select.SelectResourceActivity"
+            android:screenOrientation="portrait" />
+
         <receiver android:name=".feature.notification.ScheduledNotificationReceiver" />
 
         <meta-data

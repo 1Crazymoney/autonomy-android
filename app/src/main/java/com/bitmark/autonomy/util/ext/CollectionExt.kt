@@ -47,3 +47,16 @@ fun <T> List<T>.move(fromPos: Int, toPos: Int) {
         }
     }
 }
+
+fun <E> MutableCollection<E>.removeWhen(filter: (E) -> Boolean): Boolean {
+    Objects.requireNonNull(filter)
+    var removed = false
+    val each = iterator()
+    while (each.hasNext()) {
+        if (filter(each.next())) {
+            each.remove()
+            removed = true
+        }
+    }
+    return removed
+}

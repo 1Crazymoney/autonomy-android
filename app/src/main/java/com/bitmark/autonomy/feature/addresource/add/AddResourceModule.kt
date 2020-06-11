@@ -4,7 +4,7 @@
  * Use of this source code is governed by an ISC
  * license that can be found in the LICENSE file.
  */
-package com.bitmark.autonomy.feature.rating
+package com.bitmark.autonomy.feature.addresource.add
 
 import com.bitmark.autonomy.data.source.ResourceRepository
 import com.bitmark.autonomy.di.ActivityScope
@@ -15,21 +15,21 @@ import dagger.Module
 import dagger.Provides
 
 @Module
-class ResourceRatingModule {
+class AddResourceModule {
 
-    @ActivityScope
     @Provides
-    fun provideNav(activity: ResourceRatingActivity) = Navigator(activity)
+    @ActivityScope
+    fun provideNav(activity: AddResourceActivity) = Navigator(activity)
 
-    @ActivityScope
     @Provides
+    @ActivityScope
+    fun provideDialogController(activity: AddResourceActivity) = DialogController(activity)
+
+    @Provides
+    @ActivityScope
     fun provideVM(
-        activity: ResourceRatingActivity,
+        activity: AddResourceActivity,
         resourceRepo: ResourceRepository,
         rxLiveDataTransformer: RxLiveDataTransformer
-    ) = ResourceRatingViewModel(activity.lifecycle, resourceRepo, rxLiveDataTransformer)
-
-    @ActivityScope
-    @Provides
-    fun provideDialogController(activity: ResourceRatingActivity) = DialogController(activity)
+    ) = AddResourceViewModel(activity.lifecycle, resourceRepo, rxLiveDataTransformer)
 }

@@ -7,10 +7,7 @@
 package com.bitmark.autonomy.data.source
 
 import android.content.Context
-import com.bitmark.autonomy.data.source.local.AccountLocalDataSource
-import com.bitmark.autonomy.data.source.local.AppLocalDataSource
-import com.bitmark.autonomy.data.source.local.BehaviorLocalDataSource
-import com.bitmark.autonomy.data.source.local.SymptomLocalDataSource
+import com.bitmark.autonomy.data.source.local.*
 import com.bitmark.autonomy.data.source.local.api.DatabaseGateway
 import com.bitmark.autonomy.data.source.remote.*
 import dagger.Module
@@ -61,6 +58,13 @@ class RepositoryModule {
         remoteDataSource: BehaviorRemoteDataSource,
         localDataSource: BehaviorLocalDataSource
     ) = BehaviorRepository(remoteDataSource, localDataSource)
+
+    @Singleton
+    @Provides
+    fun provideResourceRepo(
+        remoteDataSource: ResourceRemoteDataSource,
+        localDataSource: ResourceLocalDataSource
+    ) = ResourceRepository(remoteDataSource, localDataSource)
 
     @Singleton
     @Provides

@@ -6,6 +6,10 @@
  */
 package com.bitmark.autonomy.di
 
+import com.bitmark.autonomy.feature.addresource.add.AddResourceActivity
+import com.bitmark.autonomy.feature.addresource.add.AddResourceModule
+import com.bitmark.autonomy.feature.addresource.select.SelectResourceActivity
+import com.bitmark.autonomy.feature.addresource.select.SelectResourceModule
 import com.bitmark.autonomy.feature.areasearch.AreaSearchActivity
 import com.bitmark.autonomy.feature.areasearch.AreaSearchModule
 import com.bitmark.autonomy.feature.autonomyprofile.AutonomyProfileActivity
@@ -173,5 +177,13 @@ abstract class ActivityBuilderModule {
     @ContributesAndroidInjector(modules = [ResourceRatingModule::class])
     @ActivityScope
     internal abstract fun bindRatingActivity(): ResourceRatingActivity
+
+    @ContributesAndroidInjector(modules = [AddResourceModule::class])
+    @ActivityScope
+    internal abstract fun bindAddResourceActivity(): AddResourceActivity
+
+    @ContributesAndroidInjector(modules = [SelectResourceModule::class])
+    @ActivityScope
+    internal abstract fun bindSelectResourceActivity(): SelectResourceActivity
 
 }
