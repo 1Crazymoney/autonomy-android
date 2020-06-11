@@ -25,11 +25,12 @@ class ResourceRatingViewModel(
 
     internal val updateResourceRatingsLiveData = CompositeLiveData<Any>()
 
-    fun listResourceRating(poiId: String) {
+    fun listResourceRating(poiId: String, lang: String) {
         listResourceRatingLiveData.add(
             rxLiveDataTransformer.single(
                 resourceRepo.listResourceRating(
-                    poiId
+                    poiId,
+                    lang
                 ).map { ratings -> ratings.map { r -> ResourceRatingModelView.newInstance(r) } })
         )
     }

@@ -24,8 +24,8 @@ class ResourceRemoteDataSource @Inject constructor(
     rxErrorHandlingComposer: RxErrorHandlingComposer
 ) : RemoteDataSource(autonomyApi, rxErrorHandlingComposer) {
 
-    fun listResourceRating(poiId: String) =
-        autonomyApi.listResourceRating(poiId).map { res ->
+    fun listResourceRating(poiId: String, lang: String) =
+        autonomyApi.listResourceRating(poiId, lang).map { res ->
             res["ratings"] ?: error("invalid response")
         }.subscribeOn(Schedulers.io())
 

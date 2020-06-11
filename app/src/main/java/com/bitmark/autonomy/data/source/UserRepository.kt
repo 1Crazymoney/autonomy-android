@@ -27,8 +27,8 @@ class UserRepository(private val remoteDataSource: UserRemoteDataSource) : Repos
 
     fun getYourAutonomyProfile() = remoteDataSource.getYourAutonomyProfile()
 
-    fun getAutonomyProfile(id: String, allResource: Boolean = false) =
-        remoteDataSource.getAutonomyProfile(id, allResource)
+    fun getAutonomyProfile(id: String, allResource: Boolean = false, lang: String) =
+        remoteDataSource.getAutonomyProfile(id, allResource, lang)
 
     fun listLocationHistory(beforeSec: Long? = null, limit: Int = 20) =
         remoteDataSource.listLocationHistory(beforeSec, limit)

@@ -24,14 +24,12 @@ import com.bitmark.autonomy.feature.addresource.select.SelectResourceActivity
 import com.bitmark.autonomy.feature.connectivity.ConnectivityHandler
 import com.bitmark.autonomy.logging.Event
 import com.bitmark.autonomy.logging.EventLogger
-import com.bitmark.autonomy.util.ext.gone
-import com.bitmark.autonomy.util.ext.setSafetyOnclickListener
-import com.bitmark.autonomy.util.ext.showNoInternetConnection
-import com.bitmark.autonomy.util.ext.visible
+import com.bitmark.autonomy.util.ext.*
 import com.bitmark.autonomy.util.livedata.Resource
 import com.bitmark.autonomy.util.modelview.ResourceRatingModelView
 import com.bitmark.autonomy.util.view.BottomProgressDialog
 import kotlinx.android.synthetic.main.activity_resource_rating.*
+import java.util.*
 import javax.inject.Inject
 
 
@@ -82,7 +80,7 @@ class ResourceRatingActivity : BaseAppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         poiId = intent?.extras?.getString(POI_ID) ?: error("missing poi_id")
-        viewModel.listResourceRating(poiId)
+        viewModel.listResourceRating(poiId, Locale.getDefault().langCountry())
         directlyGoToSelectResource =
             intent?.extras?.getBoolean(GO_TO_SELECT_RESOURCE)
                 ?: error("missing go_to_select_resource")

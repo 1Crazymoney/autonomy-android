@@ -24,6 +24,7 @@ import com.bitmark.autonomy.util.ext.*
 import com.bitmark.autonomy.util.modelview.AreaModelView
 import com.bitmark.autonomy.util.modelview.AutonomyProfileModelView
 import kotlinx.android.synthetic.main.activity_autonomy_profile.*
+import java.util.*
 import javax.inject.Inject
 import kotlin.math.abs
 import kotlin.math.roundToInt
@@ -100,7 +101,7 @@ class AutonomyProfileActivity : BaseAppCompatActivity() {
         if (isMsa0) {
             viewModel.getYourAutonomyProfile()
         } else {
-            viewModel.getAutonomyProfile(areaData!!.id)
+            viewModel.getAutonomyProfile(areaData!!.id, lang = Locale.getDefault().langCountry())
         }
     }
 
@@ -128,7 +129,11 @@ class AutonomyProfileActivity : BaseAppCompatActivity() {
         adapter.setActionListener(object : AutonomyProfileMetricAdapter.ActionListener {
             override fun onFooterClick(label: String) {
                 when (label) {
-                    getString(R.string.more) -> viewModel.getAutonomyProfile(areaData!!.id, true)
+                    getString(R.string.more) -> viewModel.getAutonomyProfile(
+                        areaData!!.id,
+                        true,
+                        Locale.getDefault().langCountry()
+                    )
                     getString(R.string.view_your_rating), getString(R.string.add_rating) -> {
                         val bundle = ResourceRatingActivity.getBundle(areaData!!.id)
                         navigator.anim(RIGHT_LEFT)

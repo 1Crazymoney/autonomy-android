@@ -52,8 +52,8 @@ class UserRemoteDataSource @Inject constructor(
 
     fun getYourAutonomyProfile() = autonomyApi.getYourAutonomyProfile().subscribeOn(Schedulers.io())
 
-    fun getAutonomyProfile(id: String, allResources: Boolean) =
-        autonomyApi.getAutonomyProfile(id, allResources).subscribeOn(Schedulers.io())
+    fun getAutonomyProfile(id: String, allResources: Boolean, lang: String) =
+        autonomyApi.getAutonomyProfile(id, allResources, lang).subscribeOn(Schedulers.io())
 
     fun listLocationHistory(beforeSec: Long?, limit: Int) =
         autonomyApi.listLocationHistory(beforeSec, limit).map { res ->

@@ -83,7 +83,11 @@ interface AutonomyApi {
     fun getYourAutonomyProfile(): Single<AutonomyProfileData>
 
     @GET("https://d4f1ab4c-09a8-4d4f-923a-41a6f773e59e.mock.pstmn.io/api/autonomy_profile/{id}")
-    fun getAutonomyProfile(@Path("id") id: String, @Query("all_resources") allResources: Boolean): Single<AutonomyProfileData>
+    fun getAutonomyProfile(
+        @Path("id") id: String, @Query("all_resources") allResources: Boolean, @Query(
+            "lang"
+        ) lang: String
+    ): Single<AutonomyProfileData>
 
     @PATCH("api/points-of-interest/{id}")
     fun renameArea(@Path("id") id: String, @Body body: RequestBody): Completable
@@ -125,7 +129,7 @@ interface AutonomyApi {
     fun listScore(@Body body: RequestBody): Single<Map<String, Array<Float?>>>
 
     @GET("https://d4f1ab4c-09a8-4d4f-923a-41a6f773e59e.mock.pstmn.io/api/points-of-interest/{poi_id}/resource-rating")
-    fun listResourceRating(@Path("poi_id") poiId: String): Single<Map<String, List<ResourceRatingData>>>
+    fun listResourceRating(@Path("poi_id") poiId: String, @Query("lang") lang: String): Single<Map<String, List<ResourceRatingData>>>
 
     @PUT("https://d4f1ab4c-09a8-4d4f-923a-41a6f773e59e.mock.pstmn.io/api/points-of-interest/{poi_id}/resource-rating")
     fun updateResourceRatings(@Body body: RequestBody): Completable

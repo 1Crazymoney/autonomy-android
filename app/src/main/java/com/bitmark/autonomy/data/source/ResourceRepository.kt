@@ -17,7 +17,8 @@ class ResourceRepository(
     private val localDataSource: ResourceLocalDataSource
 ) : Repository {
 
-    fun listResourceRating(poiId: String) = remoteDataSource.listResourceRating(poiId)
+    fun listResourceRating(poiId: String, lang: String) =
+        remoteDataSource.listResourceRating(poiId, lang)
 
     fun updateResourceRatings(ratings: List<ResourceRatingData>) =
         remoteDataSource.updateResourceRatings(ratings)
