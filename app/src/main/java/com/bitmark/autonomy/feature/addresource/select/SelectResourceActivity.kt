@@ -9,6 +9,7 @@ package com.bitmark.autonomy.feature.addresource.select
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
 import androidx.lifecycle.Observer
 import com.bitmark.autonomy.R
 import com.bitmark.autonomy.feature.BaseAppCompatActivity
@@ -22,7 +23,9 @@ import com.bitmark.autonomy.feature.connectivity.ConnectivityHandler
 import com.bitmark.autonomy.logging.Event
 import com.bitmark.autonomy.logging.EventLogger
 import com.bitmark.autonomy.util.ext.*
+import com.bitmark.autonomy.util.livedata.Resource
 import com.bitmark.autonomy.util.modelview.ResourceModelView
+import com.bitmark.autonomy.util.view.BottomProgressDialog
 import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayoutManager
@@ -30,7 +33,6 @@ import com.google.android.flexbox.JustifyContent
 import kotlinx.android.synthetic.main.activity_select_resource.*
 import java.util.*
 import javax.inject.Inject
-import kotlin.collections.ArrayList
 
 
 class SelectResourceActivity : BaseAppCompatActivity() {
@@ -66,6 +68,8 @@ class SelectResourceActivity : BaseAppCompatActivity() {
     private lateinit var poiId: String
 
     private lateinit var resources: List<ResourceModelView>
+
+    private val handler = Handler()
 
     private val adapter = ResourceAdapter()
 
@@ -128,6 +132,11 @@ class SelectResourceActivity : BaseAppCompatActivity() {
         }
     }
 
+    override fun deinitComponents() {
+        handler.removeCallbacksAndMessages(null)
+        super.deinitComponents()
+    }
+
     override fun observe() {
         super.observe()
 
@@ -153,40 +162,58 @@ class SelectResourceActivity : BaseAppCompatActivity() {
             }
         })
 
-        viewModel.addNewResourceLiveData.asLiveData().observe(this, Observer { res ->
-            when {
-                res.isSuccess() -> {
-                    progressBar.gone()
-                    val intent = Intent().apply {
-                        val bundle = Bundle().apply {
-                            putParcelableArrayList(
-                                SELECTED_RESOURCES,
-                                ArrayList(res.data()!!)
-                            )
+        viewModel.addNewResourceLiveData.asLiveData()
+            .observe(this, object : Observer<Resource<List<ResourceModelView>>> {
+
+                lateinit var progressDialog: BottomProgressDialog
+
+                override fun onChanged(res: Resource<List<ResourceModelView>>) {
+                    when {
+                        res.isSuccess() -> {
+                            handler.postDelayed({
+                                progressDialog.dismiss()
+                                val intent = Intent().apply {
+                                    val bundle = Bundle().apply {
+                                        putParcelableArrayList(
+                                            SELECTED_RESOURCES,
+                                            ArrayList(res.data()!!)
+                                        )
+                                    }
+                                    putExtras(bundle)
+                                }
+                                navigator.anim(RIGHT_LEFT).finishActivityForResult(intent)
+                                blocked = false
+                            }, 1000)
                         }
-                        putExtras(bundle)
-                    }
-                    navigator.anim(RIGHT_LEFT).finishActivityForResult(intent)
-                    blocked = false
-                }
 
-                res.isLoading() -> {
-                    blocked = true
-                    progressBar.visible()
-                }
+                        res.isLoading() -> {
+                            blocked = true
+                            progressDialog = BottomProgressDialog(
+                                this@SelectResourceActivity,
+                                R.string.submitting,
+                                R.string.adding_your_resources_for_this_place
+                            )
+                            progressDialog.show()
+                        }
 
-                res.isError() -> {
-                    progressBar.gone()
-                    logger.logError(Event.RESOURCE_ADDING_ERROR, res.throwable())
-                    if (connectivityHandler.isConnected()) {
-                        dialogController.alert(R.string.error, R.string.could_not_add_new_behavior)
-                    } else {
-                        dialogController.showNoInternetConnection()
+                        res.isError() -> {
+                            logger.logError(Event.RESOURCE_ADDING_ERROR, res.throwable())
+                            handler.postDelayed({
+                                progressDialog.dismiss()
+                                if (connectivityHandler.isConnected()) {
+                                    dialogController.alert(
+                                        R.string.error,
+                                        R.string.could_not_add_new_behavior
+                                    )
+                                } else {
+                                    dialogController.showNoInternetConnection()
+                                }
+                                blocked = false
+                            }, 1000)
+                        }
                     }
-                    blocked = false
                 }
-            }
-        })
+            })
     }
 
     private fun enableSubmit() {
