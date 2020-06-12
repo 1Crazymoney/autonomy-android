@@ -94,7 +94,6 @@ class ResourceRatingActivity : BaseAppCompatActivity() {
 
         val layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
         rv.layoutManager = layoutManager
-        rv.isNestedScrollingEnabled = false
         rv.adapter = adapter
 
         adapter.setActionListener(object : ResourceRatingAdapter.ActionListener {
