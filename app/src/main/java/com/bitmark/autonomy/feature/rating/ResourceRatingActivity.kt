@@ -211,4 +211,9 @@ class ResourceRatingActivity : BaseAppCompatActivity() {
             }
         }
     }
+
+    override fun onBackPressed() {
+        navigator.anim(RIGHT_LEFT).finishActivity()
+        super.onBackPressed()
+    }
 }
