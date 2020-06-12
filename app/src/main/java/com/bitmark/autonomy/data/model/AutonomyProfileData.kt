@@ -79,7 +79,11 @@ data class ConfirmMetricData(
 
     @Expose
     @SerializedName("score")
-    val score: Float
+    val score: Float,
+
+    @Expose
+    @SerializedName("score_yesterday")
+    val scoreYesterday: Float
 
 ) : Data, Parcelable
 
@@ -88,7 +92,11 @@ data class BehaviorMetricData(
 
     @Expose
     @SerializedName("score")
-    val score: Float
+    val score: Float,
+
+    @Expose
+    @SerializedName("score_yesterday")
+    val scoreYesterday: Float
 
 ) : Data, Parcelable
 
@@ -97,20 +105,38 @@ data class SymptomMetricData(
 
     @Expose
     @SerializedName("score")
-    val score: Float
+    val score: Float,
+
+    @Expose
+    @SerializedName("score_yesterday")
+    val scoreYesterday: Float
 
 ) : Data, Parcelable
 
 @Parcelize
 data class IndividualProfile(
+    @Expose
+    @SerializedName("score")
     val score: Float,
 
+    @Expose
+    @SerializedName("score_yesterday")
+    val scoreYesterday: Float,
+
+    @Expose
+    @SerializedName("symptoms")
     val symptoms: Int,
 
+    @Expose
+    @SerializedName("symptoms_delta")
     val symptomsDelta: Float,
 
+    @Expose
+    @SerializedName("behavior")
     val behaviors: Int,
 
+    @Expose
+    @SerializedName("behavior_delta")
     val behaviorsDelta: Float
 ) : Data, Parcelable
 

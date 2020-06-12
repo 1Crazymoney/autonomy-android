@@ -80,7 +80,7 @@ interface AutonomyApi {
     @PUT("api/points-of-interest/order")
     fun reorderArea(@Body body: RequestBody): Completable
 
-    @GET("https://d4f1ab4c-09a8-4d4f-923a-41a6f773e59e.mock.pstmn.io/api/autonomy_profile/me")
+    @GET("api/autonomy_profile/me")
     fun getYourAutonomyProfile(): Single<AutonomyProfileData>
 
     @GET("https://d4f1ab4c-09a8-4d4f-923a-41a6f773e59e.mock.pstmn.io/api/autonomy_profile/{id}")
@@ -126,7 +126,7 @@ interface AutonomyApi {
     @HEAD("api/accounts/me")
     fun updateLocation(): Completable
 
-    @POST("https://d4f1ab4c-09a8-4d4f-923a-41a6f773e59e.mock.pstmn.io/api/scores")
+    @POST("api/scores")
     fun listScore(@Body body: RequestBody): Single<Map<String, Array<Float?>>>
 
     @GET("https://d4f1ab4c-09a8-4d4f-923a-41a6f773e59e.mock.pstmn.io/api/points-of-interest/{poi_id}/resource-rating")
@@ -135,10 +135,10 @@ interface AutonomyApi {
     @PUT("https://d4f1ab4c-09a8-4d4f-923a-41a6f773e59e.mock.pstmn.io/api/points-of-interest/{poi_id}/resource-rating")
     fun updateResourceRatings(@Body body: RequestBody): Completable
 
-    @GET("https://d4f1ab4c-09a8-4d4f-923a-41a6f773e59e.mock.pstmn.io/api/points-of-interest/{poi_id}/resources")
+    @GET("api/points-of-interest/{poi_id}/resources")
     fun listResource(@Path("poi_id") poiId: String, @Query("lang") lang: String, @Query("important") important: Boolean): Single<Map<String, List<ResourceData>>>
 
-    @POST("https://d4f1ab4c-09a8-4d4f-923a-41a6f773e59e.mock.pstmn.io/api/points-of-interest/{poi_id}/resources")
+    @POST("api/points-of-interest/{poi_id}/resources")
     fun addResources(@Path("poi_id") poiId: String, @Body body: RequestBody): Single<Map<String, List<ResourceData>>>
 
 }
