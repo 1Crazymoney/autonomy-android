@@ -112,7 +112,7 @@ class AutonomyProfileMetricAdapter : RecyclerView.Adapter<RecyclerView.ViewHolde
                                 ItemFooter(
                                     R.drawable.ic_down_stateful,
                                     R.string.more,
-                                    data.resources.size > 10
+                                    data.hasMoreResources!!
                                 ),
                                 ItemFooter(
                                     R.drawable.ic_add_stateful,

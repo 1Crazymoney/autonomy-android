@@ -23,6 +23,8 @@ data class AutonomyProfileModelView(
 
     val location: Location?,
 
+    val hasMoreResources: Boolean?,
+
     val autonomyScore: Float,
 
     val autonomyScoreDelta: Float,
@@ -41,6 +43,7 @@ data class AutonomyProfileModelView(
             autonomyProfile.address,
             autonomyProfile.rating,
             autonomyProfile.location,
+            autonomyProfile.hasMoreResource,
             autonomyProfile.autonomyScore,
             autonomyProfile.autonomyScoreDelta,
             autonomyProfile.individualProfile,

@@ -33,6 +33,10 @@ data class AutonomyProfileData(
     val location: Location?,
 
     @Expose
+    @SerializedName("has_more_resources")
+    val hasMoreResource: Boolean?,
+
+    @Expose
     @SerializedName("autonomy_score")
     val autonomyScore: Float,
 
