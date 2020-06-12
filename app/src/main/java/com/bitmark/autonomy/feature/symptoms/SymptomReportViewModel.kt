@@ -12,6 +12,7 @@ import com.bitmark.autonomy.feature.BaseViewModel
 import com.bitmark.autonomy.util.ext.append
 import com.bitmark.autonomy.util.livedata.CompositeLiveData
 import com.bitmark.autonomy.util.livedata.RxLiveDataTransformer
+import com.bitmark.autonomy.util.modelview.InstitutionModelView
 import com.bitmark.autonomy.util.modelview.SymptomModelView
 import com.bitmark.autonomy.util.modelview.SymptomType
 
@@ -23,7 +24,8 @@ class SymptomReportViewModel(
 
     internal val listSymptomLiveData = CompositeLiveData<List<SymptomModelView>>()
 
-    internal val reportSymptomLiveData = CompositeLiveData<Any>()
+    internal val reportSymptomLiveData =
+        CompositeLiveData<Pair<List<InstitutionModelView>, Boolean>>()
 
     fun listSymptom(lang: String) {
         listSymptomLiveData.add(rxLiveDataTransformer.single(symptomRepo.listSymptom(lang).map { p ->
@@ -37,10 +39,12 @@ class SymptomReportViewModel(
 
     fun reportSymptoms(symptomIds: List<String>) {
         reportSymptomLiveData.add(
-            rxLiveDataTransformer.completable(
+            rxLiveDataTransformer.single(
                 symptomRepo.reportSymptom(
                     symptomIds
-                )
+                ).map { res ->
+                    Pair(res.institutions.map { i -> InstitutionModelView.newInstance(i) }, res.official > 0)
+                }
             )
         )
     }

@@ -8,8 +8,8 @@ package com.bitmark.autonomy.data.source.remote
 
 import com.bitmark.autonomy.data.ext.newGsonInstance
 import com.bitmark.autonomy.data.source.remote.api.middleware.RxErrorHandlingComposer
+import com.bitmark.autonomy.data.source.remote.api.response.ReportSymptomReponse
 import com.bitmark.autonomy.data.source.remote.api.service.AutonomyApi
-import io.reactivex.Completable
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -43,7 +43,7 @@ class SymptomRemoteDataSource @Inject constructor(
         Pair(officialSymptoms, neighborhoodSymptoms)
     }.subscribeOn(Schedulers.io())
 
-    fun reportSymptom(ids: List<String>): Completable {
+    fun reportSymptom(ids: List<String>): Single<ReportSymptomReponse> {
         val req = mapOf("symptoms" to ids)
         val reqBody =
             newGsonInstance().toJson(req).toRequestBody("application/json".toMediaTypeOrNull())

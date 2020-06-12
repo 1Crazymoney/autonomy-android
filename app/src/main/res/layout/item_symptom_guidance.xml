@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="@dimen/dp_16">
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/dp_16"
+        android:fontFamily="@font/grotesk_light_font_family"
+        android:includeFontPadding="false"
+        android:textColor="@color/white"
+        android:textSize="@dimen/sp_16"
+        app:layout_constraintEnd_toEndOf="@id/tvAddress"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Hospital Name (County) — branch information" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvDistance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/grotesk_light_font_family"
+        android:includeFontPadding="false"
+        android:textColor="@color/white"
+        android:textSize="@dimen/sp_16"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="1.2km" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvAddress"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/dp_16"
+        android:fontFamily="@font/grotesk_light_font_family"
+        android:textColor="@color/silver_2"
+        app:layout_constraintBottom_toBottomOf="@id/ivPhoneCall"
+        app:layout_constraintEnd_toStartOf="@id/ivPhoneCall"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/ivPhoneCall"
+        tools:text="123 Fourth St, Alphaville, BT, USA, 123 Fourth St, Alphaville, BT, USA" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/ivDirect"
+        android:layout_width="@dimen/dp_30"
+        android:layout_height="@dimen/dp_30"
+        android:layout_marginTop="@dimen/dp_8"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvName"
+        app:srcCompat="@drawable/ic_direct_gray" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/ivPhoneCall"
+        android:layout_width="@dimen/dp_30"
+        android:layout_height="@dimen/dp_30"
+        android:layout_marginEnd="@dimen/dp_16"
+        app:layout_constraintBottom_toBottomOf="@id/ivDirect"
+        app:layout_constraintEnd_toStartOf="@id/ivDirect"
+        app:layout_constraintTop_toTopOf="@id/ivDirect"
+        app:srcCompat="@drawable/ic_phone_call_stateful" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

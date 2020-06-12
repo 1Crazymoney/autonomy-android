@@ -21,11 +21,13 @@ import com.bitmark.autonomy.feature.Navigator.Companion.NONE
 import com.bitmark.autonomy.feature.Navigator.Companion.RIGHT_LEFT
 import com.bitmark.autonomy.feature.connectivity.ConnectivityHandler
 import com.bitmark.autonomy.feature.symptoms.add2.SymptomAdding2Activity
+import com.bitmark.autonomy.feature.symptoms.guidance.SymptomGuidanceActivity
 import com.bitmark.autonomy.feature.symptoms.metric.SymptomMetricActivity
 import com.bitmark.autonomy.logging.Event
 import com.bitmark.autonomy.logging.EventLogger
 import com.bitmark.autonomy.util.ext.*
 import com.bitmark.autonomy.util.livedata.Resource
+import com.bitmark.autonomy.util.modelview.InstitutionModelView
 import com.bitmark.autonomy.util.view.BottomProgressDialog
 import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexWrap
@@ -172,18 +174,25 @@ class SymptomReportActivity : BaseAppCompatActivity() {
         })
 
         viewModel.reportSymptomLiveData.asLiveData()
-            .observe(this, object : Observer<Resource<Any>> {
+            .observe(this, object : Observer<Resource<Pair<List<InstitutionModelView>, Boolean>>> {
 
                 lateinit var progressDialog: BottomProgressDialog
 
-                override fun onChanged(res: Resource<Any>) {
+                override fun onChanged(res: Resource<Pair<List<InstitutionModelView>, Boolean>>) {
                     when {
                         res.isSuccess() -> {
                             handler.postDelayed({
                                 blocked = false
                                 progressDialog.dismiss()
-                                navigator.anim(BOTTOM_UP)
-                                    .startActivity(SymptomMetricActivity::class.java)
+                                val data = res.data()!!
+                                if (data.second) {
+                                    val bundle = SymptomGuidanceActivity.getBundle(data.first)
+                                    navigator.anim(BOTTOM_UP)
+                                        .startActivity(SymptomGuidanceActivity::class.java, bundle)
+                                } else {
+                                    navigator.anim(BOTTOM_UP)
+                                        .startActivity(SymptomMetricActivity::class.java)
+                                }
                                 navigator.anim(NONE)
                                     .finishActivityForResult(resultCode = Activity.RESULT_OK)
                             }, 1000)

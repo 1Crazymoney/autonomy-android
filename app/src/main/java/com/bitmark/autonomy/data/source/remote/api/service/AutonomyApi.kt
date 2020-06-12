@@ -11,6 +11,7 @@ import com.bitmark.autonomy.data.source.remote.api.request.AddAreaRequest
 import com.bitmark.autonomy.data.source.remote.api.request.RegisterAccountRequest
 import com.bitmark.autonomy.data.source.remote.api.request.RegisterJwtRequest
 import com.bitmark.autonomy.data.source.remote.api.request.RequestHelpRequest
+import com.bitmark.autonomy.data.source.remote.api.response.ReportSymptomReponse
 import io.reactivex.Completable
 import io.reactivex.Single
 import okhttp3.RequestBody
@@ -49,8 +50,8 @@ interface AutonomyApi {
     @GET("api/v2/symptoms")
     fun listSymptom(@Query("lang") lang: String, @Query("all") all: Boolean? = null): Single<Map<String, List<SymptomData>>>
 
-    @POST("api/symptoms/report")
-    fun reportSymptoms(@Body body: RequestBody): Completable
+    @POST("https://d4f1ab4c-09a8-4d4f-923a-41a6f773e59e.mock.pstmn.io/api/symptoms/report")
+    fun reportSymptoms(@Body body: RequestBody): Single<ReportSymptomReponse>
 
     @POST("api/symptoms")
     fun addSymptom(@Body body: RequestBody): Single<Map<String, String>>

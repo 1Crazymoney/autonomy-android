@@ -198,3 +198,8 @@ fun Navigator.openGoogleMapDirection(
     }
 }
 
+fun Navigator.openPhoneCall(number: String) {
+    val intent = Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", number, null))
+    startActivity(intent)
+}
+

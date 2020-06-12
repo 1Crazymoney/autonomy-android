@@ -60,6 +60,8 @@ import com.bitmark.autonomy.feature.symptoms.add.SymptomAddingContainerActivity
 import com.bitmark.autonomy.feature.symptoms.add.SymptomAddingContainerModule
 import com.bitmark.autonomy.feature.symptoms.add2.SymptomAdding2Activity
 import com.bitmark.autonomy.feature.symptoms.add2.SymptomAdding2Module
+import com.bitmark.autonomy.feature.symptoms.guidance.SymptomGuidanceActivity
+import com.bitmark.autonomy.feature.symptoms.guidance.SymptomGuidanceModule
 import com.bitmark.autonomy.feature.symptoms.history.SymptomHistoryActivity
 import com.bitmark.autonomy.feature.symptoms.history.SymptomHistoryModule
 import com.bitmark.autonomy.feature.symptoms.metric.SymptomMetricActivity
@@ -185,5 +187,9 @@ abstract class ActivityBuilderModule {
     @ContributesAndroidInjector(modules = [SelectResourceModule::class])
     @ActivityScope
     internal abstract fun bindSelectResourceActivity(): SelectResourceActivity
+
+    @ContributesAndroidInjector(modules = [SymptomGuidanceModule::class])
+    @ActivityScope
+    internal abstract fun bindSymptomGuidanceActivity(): SymptomGuidanceActivity
 
 }
