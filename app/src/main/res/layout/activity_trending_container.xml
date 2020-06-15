@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingTop="@dimen/dp_16"
+    android:paddingBottom="@dimen/dp_16">
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvTitle"
+        android:layout_width="@dimen/dp_105"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/domaine_sans"
+        android:gravity="center"
+        android:textAllCaps="true"
+        android:textColor="@color/silver_2"
+        android:textSize="@dimen/sp_14"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="@string/app_name" />
+
+    <View
+        android:id="@+id/vToolbar1"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/dp_3"
+        android:layout_marginStart="@dimen/dp_16"
+        android:layout_marginTop="@dimen/dp_4"
+        android:layout_marginEnd="@dimen/dp_4"
+        android:background="@drawable/ic_double_line"
+        app:layout_constraintBottom_toBottomOf="@id/tvTitle"
+        app:layout_constraintEnd_toStartOf="@id/tvTitle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tvTitle"
+        tools:visibility="visible" />
+
+    <View
+        android:id="@+id/vToolbar2"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/dp_3"
+        android:layout_marginStart="@dimen/dp_4"
+        android:layout_marginTop="@dimen/dp_4"
+        android:layout_marginEnd="@dimen/dp_16"
+        android:background="@drawable/ic_double_line"
+        app:layout_constraintBottom_toBottomOf="@id/tvTitle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/tvTitle"
+        app:layout_constraintTop_toTopOf="@id/tvTitle"
+        tools:visibility="visible" />
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tabLayout"
+        android:layout_width="@dimen/dp_220"
+        android:layout_height="@dimen/dp_30"
+        android:layout_marginTop="@dimen/dp_12"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvTitle"
+        app:tabBackground="@drawable/bg_black_stateful_2"
+        app:tabGravity="fill"
+        app:tabIndicator="@null"
+        app:tabSelectedTextColor="@color/white"
+        app:tabTextAppearance="@style/TabLayout"
+        app:tabTextColor="@color/white" />
+
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/vp"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/dp_16"
+        app:layout_constraintBottom_toTopOf="@id/layoutAction"
+        app:layout_constraintTop_toBottomOf="@id/tabLayout" />
+
+    <LinearLayout
+        android:id="@+id/layoutBack"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp_16"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingTop="@dimen/dp_8"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="@dimen/dp_44"
+            android:layout_height="@dimen/dp_44"
+            app:srcCompat="@drawable/ic_back_stateful" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_12"
+            android:fontFamily="@font/domaine_sans"
+            android:text="@string/back"
+            android:textAllCaps="true"
+            android:textColor="@color/color_white_stateful"
+            android:textSize="@dimen/sp_24" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layoutAction"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/dp_16"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingTop="@dimen/dp_8"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvAction"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/domaine_sans"
+            android:textAllCaps="true"
+            android:textColor="@color/color_white_stateful"
+            android:textSize="@dimen/sp_24"
+            tools:text="@string/view_on_jupyter" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/ivAction"
+            android:layout_width="@dimen/dp_44"
+            android:layout_height="@dimen/dp_44"
+            android:layout_marginStart="@dimen/dp_12"
+            app:srcCompat="@drawable/ic_up_stateful" />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

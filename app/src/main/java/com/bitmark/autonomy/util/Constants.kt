@@ -14,4 +14,9 @@ object Constants {
 
     const val DATA_RIGHTS_URL = "https://bitmark.com/privacy"
 
+    const val CORONA_DATA_URL = "https://coronadatascraper.com"
+
+    const val JUPYTER_NOTEBOOK_URL =
+        "https://nbviewer.jupyter.org/github/bitmark-inc/autonomy-api/blob/master/share/jupyter/autonomyFormula.ipynb"
+
 }

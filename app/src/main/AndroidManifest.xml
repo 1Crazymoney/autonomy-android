@@ -152,6 +152,10 @@
             android:name=".feature.symptoms.guidance.SymptomGuidanceActivity"
             android:screenOrientation="portrait" />
 
+        <activity
+            android:name=".feature.trending.TrendingContainerActivity"
+            android:screenOrientation="portrait" />
+
         <receiver android:name=".feature.notification.ScheduledNotificationReceiver" />
 
         <meta-data

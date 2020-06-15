@@ -1,66 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layoutRootBody1"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="@dimen/dp_44">
 
-    <LinearLayout
-        android:id="@+id/layoutContent"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_44"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:weightSum="1">
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvBody11"
+        android:layout_width="@dimen/dp_180"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.5"
+        android:ellipsize="end"
+        android:fontFamily="@font/grotesk_light_font_family"
+        android:gravity="start|center_vertical"
+        android:includeFontPadding="false"
+        android:maxLines="2"
+        android:textAllCaps="true"
+        android:textColor="@color/color_white_stateful"
+        android:textSize="@dimen/sp_14"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="low-glycemic index (LOW-GI) food" />
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tvBody11"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.5"
-            android:ellipsize="end"
-            android:fontFamily="@font/grotesk_light_font_family"
-            android:gravity="start|center_vertical"
-            android:includeFontPadding="false"
-            android:maxLines="2"
-            android:textAllCaps="true"
-            android:textColor="@color/white"
-            android:textSize="@dimen/sp_14"
-            tools:text="low-glycemic index (LOW-GI) food" />
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvBody12"
+        android:layout_width="@dimen/dp_60"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp_8"
+        android:layout_weight="0.25"
+        android:ellipsize="end"
+        android:fontFamily="@font/ibm_plex_mono_light_font_family"
+        android:gravity="end"
+        android:includeFontPadding="false"
+        android:textAllCaps="true"
+        android:textSize="@dimen/sp_14"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/tvBody11"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="4.5"
+        tools:textColor="@color/apple" />
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tvBody12"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.25"
-            android:ellipsize="end"
-            android:fontFamily="@font/ibm_plex_mono_light_font_family"
-            android:gravity="end"
-            android:includeFontPadding="false"
-            android:textAllCaps="true"
-            android:textSize="@dimen/sp_14"
-            tools:text="4.5"
-            tools:textColor="@color/apple" />
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tvBody13"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.25"
-            android:ellipsize="end"
-            android:fontFamily="@font/ibm_plex_mono_light_font_family"
-            android:gravity="end"
-            android:includeFontPadding="false"
-            android:textAllCaps="true"
-            android:textColor="@color/white"
-            android:textSize="@dimen/sp_14"
-            tools:text="5,673,123" />
-
-    </LinearLayout>
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvBody13"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp_8"
+        android:layout_weight="0.25"
+        android:ellipsize="end"
+        android:fontFamily="@font/ibm_plex_mono_light_font_family"
+        android:gravity="end"
+        android:includeFontPadding="false"
+        android:textAllCaps="true"
+        android:textColor="@color/color_white_stateful"
+        android:textSize="@dimen/sp_14"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/tvBody12"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="5,673,123" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_below="@id/layoutContent"
-        android:background="@color/mine_shaft_2" />
+        android:background="@color/mine_shaft_2"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
-</RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

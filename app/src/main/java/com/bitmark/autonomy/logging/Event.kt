@@ -96,4 +96,6 @@ enum class Event(val value: String) {
 
     RESOURCE_AUTOCOMPLETE_SEARCHING_ERROR("resource_autocomplete_searching_error"),
 
+    TRENDING_LOADING_ERROR("trending_loading_error")
+
 }

@@ -8,6 +8,7 @@ package com.bitmark.autonomy.util
 
 import android.content.Context
 import com.bitmark.autonomy.R
+import com.bitmark.autonomy.feature.trending.Period
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -25,6 +26,14 @@ class DateTimeUtil {
         val DATE_FORMAT_1 = "yyyy MMM dd"
 
         val DATE_FORMAT_2 = "MMM dd"
+
+        val DATE_FORMAT_3 = "dd"
+
+        val DATE_FORMAT_4 = "MMM"
+
+        val DATE_FORMAT_5 = "yyyy MMM"
+
+        val DATE_FORMAT_6 = "yyyy"
 
         val TIME_FORMAT_1 = "HH:mm"
 
@@ -123,6 +132,103 @@ class DateTimeUtil {
             return dateToString(calendar.time, format, outputTimeZone)
         }
 
+        fun getStartOfThisWeekMillis(timezone: String = "UTC") =
+            getStartOfWeekMillis(Calendar.getInstance().timeInMillis, 0, timezone)
+
+        fun getStartOfWeekMillis(thisWeekMillis: Long, gap: Int, timezone: String = "UTC"): Long {
+            val calendar = Calendar.getInstance(TimeZone.getTimeZone(timezone))
+            calendar.timeInMillis = thisWeekMillis
+            calendar.add(Calendar.DAY_OF_YEAR, gap * 7)
+            calendar.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY)
+            val startOfSunday = getStartOfDate(calendar)
+            return startOfSunday.timeInMillis
+        }
+
+        fun getStartOfDate(calendar: Calendar): Calendar {
+            calendar.set(Calendar.HOUR_OF_DAY, 0)
+            calendar.set(Calendar.MINUTE, 0)
+            calendar.set(Calendar.SECOND, 0)
+            calendar.set(Calendar.MILLISECOND, 0)
+            return calendar
+        }
+
+        fun getStartOfThisYearMillis(timezone: String = "UTC"): Long =
+            getStartOfYearMillis(Calendar.getInstance().timeInMillis, 0, timezone)
+
+        fun getStartOfYearMillis(thisYearMillis: Long, gap: Int, timezone: String = "UTC"): Long {
+            val calendar = Calendar.getInstance(TimeZone.getTimeZone(timezone))
+            calendar.timeInMillis = thisYearMillis
+            calendar.set(Calendar.DAY_OF_YEAR, 1)
+            calendar.add(Calendar.YEAR, gap)
+            val startOfYear = getStartOfDate(calendar)
+            return startOfYear.timeInMillis
+        }
+
+        fun getStartOfThisMonthMillis(timezone: String = "UTC") =
+            getStartOfMonthMillis(Calendar.getInstance().timeInMillis, 0, timezone)
+
+        fun getStartOfMonthMillis(thisMonthMillis: Long, gap: Int, timezone: String = "UTC"): Long {
+            val calendar = Calendar.getInstance(TimeZone.getTimeZone(timezone))
+            calendar.timeInMillis = thisMonthMillis
+            calendar.set(Calendar.DAY_OF_MONTH, 1)
+            calendar.add(Calendar.MONTH, gap)
+            val startOfYear = getStartOfDate(calendar)
+            return startOfYear.timeInMillis
+        }
+
+        fun getDateRangeOfWeek(
+            weekMillis: Long,
+            timezone: String = "UTC"
+        ) = Pair(
+            Date(getStartOfWeekMillis(weekMillis, 0, timezone)),
+            Date(getEndOfWeekMillis(weekMillis, timezone))
+        )
+
+        fun getEndOfWeekMillis(millis: Long, timezone: String = "UTC"): Long {
+            val calendar = Calendar.getInstance(TimeZone.getTimeZone(timezone))
+            calendar.timeInMillis = millis
+            calendar.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY)
+            calendar.add(Calendar.WEEK_OF_YEAR, 1)
+            calendar.add(Calendar.DAY_OF_YEAR, -1)
+            return getEndOfDate(calendar).timeInMillis
+        }
+
+        fun getEndOfYearMillis(millis: Long, timezone: String = "UTC"): Long {
+            val nextYearMillis = getStartOfYearMillis(millis, 1, timezone)
+            val calendar = Calendar.getInstance(TimeZone.getTimeZone(timezone))
+            calendar.timeInMillis = nextYearMillis
+            calendar.add(Calendar.DAY_OF_YEAR, -1)
+            return getEndOfDate(calendar).timeInMillis
+        }
+
+        fun getEndOfMonthMillis(millis: Long, timezone: String = "UTC"): Long {
+            val nextMonthMillis = getStartOfMonthMillis(millis, 1, timezone)
+            val calendar = Calendar.getInstance(TimeZone.getTimeZone(timezone))
+            calendar.timeInMillis = nextMonthMillis
+            calendar.add(Calendar.DAY_OF_YEAR, -1)
+            return getEndOfDate(calendar).timeInMillis
+        }
+
+        fun getEndOfDate(calendar: Calendar): Calendar {
+            calendar.set(Calendar.HOUR_OF_DAY, 23)
+            calendar.set(Calendar.MINUTE, 59)
+            calendar.set(Calendar.SECOND, 59)
+            calendar.set(Calendar.MILLISECOND, 999)
+            return calendar
+        }
+
+        fun getYear(date: Date, timezone: String = "UTC"): Int {
+            val calendar = Calendar.getInstance(TimeZone.getTimeZone(timezone))
+            calendar.time = date
+            return calendar.get(Calendar.YEAR)
+        }
+
+        fun getMonth(date: Date, timezone: String = "UTC"): Int {
+            val calendar = Calendar.getInstance(TimeZone.getTimeZone(timezone))
+            calendar.time = date
+            return calendar.get(Calendar.MONTH)
+        }
+
     }
 }
 
@@ -162,58 +268,24 @@ fun DateTimeUtil.Companion.formatAgo(context: Context, dateString: String): Stri
 
 }
 
-fun DateTimeUtil.Companion.randomNextMillisInHourRange(
-    range: IntRange,
-    num: Int,
-    minRandomGap: Long = TimeUnit.HOURS.toMillis(1)
-): List<Long> {
-    if (range.first < 0 || range.last < 0 || range.first > 23 || range.last > 23 || range.first >= range.last) {
-        error("invalid hour range")
-    }
-    val currentHour = getCurrentHour()
-    val firstCal = Calendar.getInstance()
-    firstCal.set(Calendar.HOUR_OF_DAY, range.first)
-    firstCal.set(Calendar.MINUTE, 0)
-    firstCal.set(Calendar.SECOND, 0)
-    firstCal.set(Calendar.MILLISECOND, 0)
-    val lastCal = Calendar.getInstance()
-    lastCal.set(Calendar.MINUTE, 0)
-    lastCal.set(Calendar.SECOND, 0)
-    lastCal.set(Calendar.MILLISECOND, 0)
-    lastCal.set(Calendar.HOUR_OF_DAY, range.last)
-
-    if (range.last < currentHour) {
-        firstCal.add(Calendar.DATE, 1)
-        lastCal.add(Calendar.DATE, 1)
-    } else if (range.first < currentHour) {
-        firstCal.set(Calendar.HOUR_OF_DAY, currentHour)
-    }
-
-    var firstMillis = firstCal.timeInMillis
-    val lastMillis = lastCal.timeInMillis
-    val gap = (lastMillis - firstMillis) / num
-
-    val result = mutableListOf<Long>()
-    for (i in 0 until num) {
-        val nextFirstMillis = firstMillis + gap
-
-        var value = (firstMillis..nextFirstMillis).random()
-
-        if (gap < minRandomGap) {
-            result.add(value)
-            break
-        } else {
-            if (result.isNotEmpty()) {
-                val lastValue = result.last()
-                while (value - lastValue < minRandomGap) {
-                    value = (firstMillis..nextFirstMillis).random()
-                }
-            }
-            result.add(value)
-            firstMillis = nextFirstMillis
-            if (firstMillis >= lastMillis) break
+fun DateTimeUtil.Companion.formatPeriod(
+    period: Int,
+    startedTimeMillis: Long,
+    timezone: String = "UTC"
+): String {
+    val calendar = Calendar.getInstance(TimeZone.getTimeZone(timezone))
+    calendar.timeInMillis = startedTimeMillis
+    return when (period) {
+        Period.WEEK -> {
+            val range = getDateRangeOfWeek(startedTimeMillis)
+            "%s %s-%s".format(
+                dateToString(range.first, DATE_FORMAT_4, timezone),
+                dateToString(range.first, DATE_FORMAT_3, timezone),
+                dateToString(range.second, DATE_FORMAT_3, timezone)
+            )
         }
+        Period.MONTH -> dateToString(calendar.time, DATE_FORMAT_5, timezone)
+        Period.YEAR -> dateToString(calendar.time, DATE_FORMAT_6, timezone)
+        else -> error("unsupported period")
     }
-
-    return result
 }

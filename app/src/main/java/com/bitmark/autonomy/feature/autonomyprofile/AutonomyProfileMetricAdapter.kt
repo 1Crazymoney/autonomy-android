@@ -178,14 +178,16 @@ class AutonomyProfileMetricAdapter : RecyclerView.Adapter<RecyclerView.ViewHolde
                     R.layout.item_area_metric_body_2,
                     parent,
                     false
-                )
+                ),
+                actionListener
             )
             BODY_NEIGHBOR -> BodyNeighborVH(
                 LayoutInflater.from(parent.context).inflate(
                     R.layout.item_area_metric_body_2,
                     parent,
                     false
-                )
+                ),
+                actionListener
             )
             BODY_RESOURCE -> BodyResourceVH(
                 LayoutInflater.from(parent.context).inflate(
@@ -253,9 +255,20 @@ class AutonomyProfileMetricAdapter : RecyclerView.Adapter<RecyclerView.ViewHolde
         }
     }
 
-    class BodyYouVH(view: View) : RecyclerView.ViewHolder(view) {
+    class BodyYouVH(view: View, actionListener: ActionListener?) : RecyclerView.ViewHolder(view) {
+
+        private lateinit var item: Item
+
+        init {
+            with(itemView) {
+                layoutRootBody2.setSafetyOnclickListener {
+                    actionListener?.onItemClick(item)
+                }
+            }
+        }
 
         fun bind(item: Item) {
+            this.item = item
             with(itemView) {
                 val data = item.yourData!!
                 if (data.symptoms != null) {
@@ -264,16 +277,16 @@ class AutonomyProfileMetricAdapter : RecyclerView.Adapter<RecyclerView.ViewHolde
                     tvBody23.text = String.format("%.2f%%", abs(data.symptomDelta!!))
                     when {
                         data.symptomDelta == 0f -> {
-                            tvBody23.setTextColorRes(R.color.mine_shaft_2)
+                            tvBody23.setTextColorStateList(R.color.mine_shaft_2)
                             ivBody21.invisible()
                         }
                         data.symptomDelta < 0f -> {
-                            tvBody23.setTextColorRes(R.color.apple)
+                            tvBody23.setTextColorStateList(R.color.color_apple_stateful)
                             ivBody21.visible()
                             ivBody21.setImageResource(R.drawable.ic_down_green)
                         }
                         else -> {
-                            tvBody23.setTextColorRes(R.color.persian_red)
+                            tvBody23.setTextColorStateList(R.color.color_persian_red_stateful)
                             ivBody21.visible()
                             ivBody21.setImageResource(R.drawable.ic_up_red)
                         }
@@ -285,16 +298,16 @@ class AutonomyProfileMetricAdapter : RecyclerView.Adapter<RecyclerView.ViewHolde
                     tvBody23.text = String.format("%.2f%%", abs(data.behaviorsDelta!!))
                     when {
                         data.behaviorsDelta == 0f -> {
-                            tvBody23.setTextColorRes(R.color.mine_shaft_2)
+                            tvBody23.setTextColorStateList(R.color.mine_shaft_2)
                             ivBody21.invisible()
                         }
                         data.behaviorsDelta < 0f -> {
-                            tvBody23.setTextColorRes(R.color.persian_red)
+                            tvBody23.setTextColorStateList(R.color.color_persian_red_stateful)
                             ivBody21.visible()
                             ivBody21.setImageResource(R.drawable.ic_down_red)
                         }
                         else -> {
-                            tvBody23.setTextColorRes(R.color.apple)
+                            tvBody23.setTextColorStateList(R.color.color_apple_stateful)
                             ivBody21.visible()
                             ivBody21.setImageResource(R.drawable.ic_up_green)
                         }
@@ -304,9 +317,21 @@ class AutonomyProfileMetricAdapter : RecyclerView.Adapter<RecyclerView.ViewHolde
         }
     }
 
-    class BodyNeighborVH(view: View) : RecyclerView.ViewHolder(view) {
+    class BodyNeighborVH(view: View, actionListener: ActionListener?) :
+        RecyclerView.ViewHolder(view) {
+
+        private lateinit var item: Item
+
+        init {
+            with(itemView) {
+                layoutRootBody2.setSafetyOnclickListener {
+                    actionListener?.onItemClick(item)
+                }
+            }
+        }
 
         fun bind(item: Item) {
+            this.item = item
             with(itemView) {
                 val data = item.neighborData!!
                 when {
@@ -316,16 +341,16 @@ class AutonomyProfileMetricAdapter : RecyclerView.Adapter<RecyclerView.ViewHolde
                         tvBody23.text = String.format("%.2f%%", abs(data.symptomDelta!!))
                         when {
                             data.symptomDelta == 0f -> {
-                                tvBody23.setTextColorRes(R.color.mine_shaft_2)
+                                tvBody23.setTextColorStateList(R.color.mine_shaft_2)
                                 ivBody21.invisible()
                             }
                             data.symptomDelta < 0f -> {
-                                tvBody23.setTextColorRes(R.color.apple)
+                                tvBody23.setTextColorStateList(R.color.color_apple_stateful)
                                 ivBody21.visible()
                                 ivBody21.setImageResource(R.drawable.ic_down_green)
                             }
                             else -> {
-                                tvBody23.setTextColorRes(R.color.persian_red)
+                                tvBody23.setTextColorStateList(R.color.color_persian_red_stateful)
                                 ivBody21.visible()
                                 ivBody21.setImageResource(R.drawable.ic_up_red)
                             }
@@ -338,16 +363,16 @@ class AutonomyProfileMetricAdapter : RecyclerView.Adapter<RecyclerView.ViewHolde
                         tvBody23.text = String.format("%.2f%%", abs(data.behaviorsDelta!!))
                         when {
                             data.behaviorsDelta == 0f -> {
-                                tvBody23.setTextColorRes(R.color.mine_shaft_2)
+                                tvBody23.setTextColorStateList(R.color.mine_shaft_2)
                                 ivBody21.invisible()
                             }
                             data.behaviorsDelta < 0f -> {
-                                tvBody23.setTextColorRes(R.color.persian_red)
+                                tvBody23.setTextColorStateList(R.color.color_persian_red_stateful)
                                 ivBody21.visible()
                                 ivBody21.setImageResource(R.drawable.ic_down_red)
                             }
                             else -> {
-                                tvBody23.setTextColorRes(R.color.apple)
+                                tvBody23.setTextColorStateList(R.color.color_apple_stateful)
                                 ivBody21.visible()
                                 ivBody21.setImageResource(R.drawable.ic_up_green)
                             }
@@ -360,16 +385,16 @@ class AutonomyProfileMetricAdapter : RecyclerView.Adapter<RecyclerView.ViewHolde
                         tvBody23.text = String.format("%.2f%%", abs(data.confirmDelta!!))
                         when {
                             data.confirmDelta == 0f -> {
-                                tvBody23.setTextColorRes(R.color.mine_shaft_2)
+                                tvBody23.setTextColorStateList(R.color.mine_shaft_2)
                                 ivBody21.invisible()
                             }
                             data.confirmDelta < 0f -> {
-                                tvBody23.setTextColorRes(R.color.apple)
+                                tvBody23.setTextColorStateList(R.color.color_apple_stateful)
                                 ivBody21.visible()
                                 ivBody21.setImageResource(R.drawable.ic_down_green)
                             }
                             else -> {
-                                tvBody23.setTextColorRes(R.color.persian_red)
+                                tvBody23.setTextColorStateList(R.color.color_persian_red_stateful)
                                 ivBody21.visible()
                                 ivBody21.setImageResource(R.drawable.ic_up_red)
                             }
@@ -479,5 +504,7 @@ class AutonomyProfileMetricAdapter : RecyclerView.Adapter<RecyclerView.ViewHolde
 
     interface ActionListener {
         fun onFooterClick(label: String)
+
+        fun onItemClick(item: Item)
     }
 }

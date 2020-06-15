@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:scrollbarSize="@dimen/dp_2"
+    android:scrollbarThumbVertical="@color/white_aa"
+    android:scrollbars="vertical">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingTop="@dimen/dp_16"
+        android:paddingBottom="@dimen/dp_48">
+
+        <View
+            android:id="@+id/vDivider1"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginStart="@dimen/dp_16"
+            android:layout_marginEnd="@dimen/dp_16"
+            android:background="@color/concord"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/ivPrev"
+            android:layout_width="@dimen/dp_24"
+            android:layout_height="@dimen/dp_22"
+            android:layout_marginStart="@dimen/dp_16"
+            android:clickable="true"
+            android:focusable="true"
+            android:padding="@dimen/dp_6"
+            app:layout_constraintBottom_toBottomOf="@id/tvTime"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tvTime"
+            app:srcCompat="@drawable/ic_nav_previous_stateful" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/ivNext"
+            android:layout_width="@dimen/dp_24"
+            android:layout_height="@dimen/dp_22"
+            android:layout_marginEnd="@dimen/dp_16"
+            android:clickable="true"
+            android:focusable="true"
+            android:padding="@dimen/dp_6"
+            app:layout_constraintBottom_toBottomOf="@id/tvTime"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tvTime"
+            app:srcCompat="@drawable/ic_nav_next_stateful" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_16"
+            android:fontFamily="@font/grotesk_light_font_family"
+            android:includeFontPadding="false"
+            android:textAllCaps="true"
+            android:textColor="@color/white"
+            android:textSize="@dimen/sp_14"
+            app:layout_constraintEnd_toStartOf="@id/ivNext"
+            app:layout_constraintStart_toEndOf="@id/ivPrev"
+            app:layout_constraintTop_toBottomOf="@id/vDivider1"
+            tools:text="May 24-30" />
+
+        <View
+            android:id="@+id/vDivider2"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginStart="@dimen/dp_16"
+            android:layout_marginTop="@dimen/dp_16"
+            android:layout_marginEnd="@dimen/dp_16"
+            android:background="@color/concord"
+            app:layout_constraintTop_toBottomOf="@id/tvTime" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvGraph"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_240"
+            android:fontFamily="@font/grotesk_light_font_family"
+            android:gravity="center"
+            android:padding="@dimen/dp_24"
+            android:textColor="@color/concord"
+            android:textSize="@dimen/sp_18"
+            app:layout_constraintTop_toBottomOf="@id/vDivider2"
+            tools:text="@string/graph_coming_soon" />
+
+        <View
+            android:id="@+id/vDivider3"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginStart="@dimen/dp_16"
+            android:layout_marginTop="@dimen/dp_16"
+            android:layout_marginEnd="@dimen/dp_16"
+            android:background="@color/concord"
+            app:layout_constraintTop_toBottomOf="@id/tvGraph" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_56"
+            app:layout_constraintTop_toBottomOf="@id/vDivider3" />
+
+        <View
+            android:id="@+id/vDivider4"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginStart="@dimen/dp_16"
+            android:layout_marginTop="@dimen/dp_24"
+            android:layout_marginEnd="@dimen/dp_16"
+            android:background="@color/concord"
+            app:layout_constraintTop_toBottomOf="@id/rv" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvDesc1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_16"
+            android:layout_marginTop="@dimen/dp_44"
+            android:layout_marginEnd="@dimen/dp_16"
+            android:fontFamily="@font/domaine_sans"
+            android:text="@string/how_the_autonomy_score_computed"
+            android:textAllCaps="true"
+            android:textColor="@color/silver_2"
+            android:textSize="@dimen/sp_18"
+            app:layout_constraintTop_toBottomOf="@id/vDivider4" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvDesc2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_16"
+            android:layout_marginTop="@dimen/dp_30"
+            android:layout_marginEnd="@dimen/dp_16"
+            android:fontFamily="@font/grotesk_light_font_family"
+            android:text="@string/the_autonomy_score_is_a_normalized_score"
+            android:textColor="@color/silver_2"
+            android:textSize="@dimen/sp_14"
+            app:layout_constraintTop_toBottomOf="@id/tvDesc1" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>

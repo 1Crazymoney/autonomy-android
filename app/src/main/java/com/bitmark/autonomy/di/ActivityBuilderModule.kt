@@ -66,6 +66,8 @@ import com.bitmark.autonomy.feature.symptoms.history.SymptomHistoryActivity
 import com.bitmark.autonomy.feature.symptoms.history.SymptomHistoryModule
 import com.bitmark.autonomy.feature.symptoms.metric.SymptomMetricActivity
 import com.bitmark.autonomy.feature.symptoms.metric.SymptomMetricModule
+import com.bitmark.autonomy.feature.trending.TrendingContainerActivity
+import com.bitmark.autonomy.feature.trending.TrendingContainerModule
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
@@ -191,5 +193,9 @@ abstract class ActivityBuilderModule {
     @ContributesAndroidInjector(modules = [SymptomGuidanceModule::class])
     @ActivityScope
     internal abstract fun bindSymptomGuidanceActivity(): SymptomGuidanceActivity
+
+    @ContributesAndroidInjector(modules = [TrendingContainerModule::class])
+    @ActivityScope
+    internal abstract fun bindTrendingContainerActivity(): TrendingContainerActivity
 
 }

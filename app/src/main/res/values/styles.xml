@@ -30,4 +30,10 @@
         <item name="android:thumbTint">@color/white</item>
     </style>
 
+    <style name="TabLayout" parent="@android:style/TextAppearance.Widget.TabWidget">
+        <item name="android:fontFamily">@font/domaine_sans</item>
+        <item name="android:textSize">@dimen/sp_12</item>
+        <item name="android:textAllCaps">true</item>
+    </style>
+
 </resources>

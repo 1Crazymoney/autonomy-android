@@ -104,6 +104,10 @@ fun TextView.setTextColorRes(@ColorRes id: Int) {
     this.setTextColor(ContextCompat.getColor(context, id))
 }
 
+fun TextView.setTextColorStateList(@ColorRes id: Int) {
+    this.setTextColor(ContextCompat.getColorStateList(context, id))
+}
+
 fun WebView.evaluateJs(script: String?, success: () -> Unit = {}, error: () -> Unit = {}) {
     evaluateJavascript(script) { result ->
         if (result.contains("error", true)) {

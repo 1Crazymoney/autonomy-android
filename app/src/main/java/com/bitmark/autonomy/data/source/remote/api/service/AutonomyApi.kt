@@ -141,4 +141,11 @@ interface AutonomyApi {
     @POST("api/points-of-interest/{poi_id}/resources")
     fun addResources(@Path("poi_id") poiId: String, @Body body: RequestBody): Single<Map<String, List<ResourceData>>>
 
+    @GET("api/report-items")
+    fun listReportItem(
+        @Query("scope") scope: String, @Query("type") type: String,
+        @Query("start") start: Long, @Query("end") end: Long,
+        @Query("lang") lang: String, @Query("poi_id") poiId: String?
+    ): Single<Map<String, List<ReportItemData>>>
+
 }

@@ -11,6 +11,8 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bitmark.autonomy.R
+import com.bitmark.autonomy.data.model.ReportScope
+import com.bitmark.autonomy.data.model.ReportType
 import com.bitmark.autonomy.feature.BaseAppCompatActivity
 import com.bitmark.autonomy.feature.BaseViewModel
 import com.bitmark.autonomy.feature.DialogController
@@ -18,6 +20,7 @@ import com.bitmark.autonomy.feature.Navigator
 import com.bitmark.autonomy.feature.Navigator.Companion.RIGHT_LEFT
 import com.bitmark.autonomy.feature.connectivity.ConnectivityHandler
 import com.bitmark.autonomy.feature.rating.ResourceRatingActivity
+import com.bitmark.autonomy.feature.trending.TrendingContainerActivity
 import com.bitmark.autonomy.logging.Event
 import com.bitmark.autonomy.logging.EventLogger
 import com.bitmark.autonomy.util.ext.*
@@ -127,6 +130,32 @@ class AutonomyProfileActivity : BaseAppCompatActivity() {
         }
 
         adapter.setActionListener(object : AutonomyProfileMetricAdapter.ActionListener {
+
+            override fun onItemClick(item: AutonomyProfileMetricAdapter.Item) {
+                val type =
+                    if (item.yourData?.symptoms != null || item.neighborData?.symptoms != null) {
+                        ReportType.SYMPTOM.value
+                    } else if (item.yourData?.behaviors != null || item.neighborData?.behaviors != null) {
+                        ReportType.BEHAVIOR.value
+                    } else if (item.neighborData?.confirm != null) {
+                        ReportType.CASE.value
+                    } else {
+                        error("invalid handling")
+                    }
+
+                val bundle = if (isMsa0) {
+                    val scope =
+                        if (item.yourData != null) ReportScope.INDIVIDUAL.value else ReportScope.NEIGHBORHOOD.value
+                    TrendingContainerActivity.getBundle(type, scope)
+                } else {
+                    val scope = ReportScope.POI.value
+                    TrendingContainerActivity.getBundle(type, scope, areaData!!.id)
+                }
+
+                navigator.anim(RIGHT_LEFT)
+                    .startActivity(TrendingContainerActivity::class.java, bundle)
+            }
+
             override fun onFooterClick(label: String) {
                 when (label) {
                     getString(R.string.more) -> viewModel.getAutonomyProfile(
@@ -151,7 +180,19 @@ class AutonomyProfileActivity : BaseAppCompatActivity() {
         })
 
         ivScore.setSafetyOnclickListener {
-            // TODO go to trending
+            val bundle = if (isMsa0) {
+                TrendingContainerActivity.getBundle(
+                    ReportType.SCORE.value,
+                    ReportScope.INDIVIDUAL.value
+                )
+            } else {
+                TrendingContainerActivity.getBundle(
+                    ReportType.SCORE.value,
+                    ReportScope.POI.value,
+                    areaData!!.id
+                )
+            }
+            navigator.anim(RIGHT_LEFT).startActivity(TrendingContainerActivity::class.java, bundle)
         }
 
         ivDirection.setSafetyOnclickListener {

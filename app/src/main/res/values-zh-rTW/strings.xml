@@ -252,6 +252,14 @@
     <string name="at_least_one_of_the_symptoms">At least one of the symptoms you reported is a common COVID-19 symptom.</string>
     <string name="to_protect_the_health_of_you">To protect the health of you and your neighborhood, the Taiwan CDC encourages you to get tested for COVID-19 as soon as possible at one of the following testing centers:</string>
     <string name="adding_your_resources_for_this_place">Adding your resources for this place …</string>
+    <string name="graph_coming_soon">Graphs coming soon</string>
+    <string name="how_the_autonomy_score_computed">How the Autonomy score is computed</string>
+    <string name="week">Week</string>
+    <string name="month">Month</string>
+    <string name="year">Year</string>
+    <string name="view_on_jupyter">View on\nJupyter</string>
+    <string name="cases">Cases</string>
+    <string name="sorry_we_currently_dont_have_active_cases">Sorry, we currently don’t have active cases data for this location. We’re working hard to support more regions.</string>
 
     <!-- array -->
     <string-array name="symptoms">

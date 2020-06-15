@@ -26,6 +26,8 @@ import com.bitmark.autonomy.feature.survey.checkin.SurveyCheckin2Fragment
 import com.bitmark.autonomy.feature.survey.checkin.SurveyCheckin2Module
 import com.bitmark.autonomy.feature.symptoms.add.SymptomAddingFragment
 import com.bitmark.autonomy.feature.symptoms.add.SymptomAddingModule
+import com.bitmark.autonomy.feature.trending.TrendingFragment
+import com.bitmark.autonomy.feature.trending.TrendingModule
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
@@ -71,4 +73,8 @@ abstract class FragmentBuilderModule {
     @ContributesAndroidInjector(modules = [RecoveryAccessModule::class])
     @FragmentScope
     internal abstract fun bindRecoveryKeyAccessFragment(): RecoveryAccessFragment
+
+    @ContributesAndroidInjector(modules = [TrendingModule::class])
+    @FragmentScope
+    internal abstract fun bindTrendingFragment(): TrendingFragment
 }

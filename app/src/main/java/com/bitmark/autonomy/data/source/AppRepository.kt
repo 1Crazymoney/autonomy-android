@@ -22,4 +22,13 @@ class AppRepository(
     fun saveDebugModeState(enable: Boolean) = localDataSource.saveDebugModeState(enable)
 
     fun listScore(addresses: List<String>) = remoteDataSource.listScore(addresses)
+
+    fun listReportItem(
+        scope: String,
+        type: String,
+        start: Long,
+        end: Long,
+        lang: String,
+        poiId: String? = null
+    ) = remoteDataSource.listReportItem(scope, type, start, end, lang, poiId)
 }

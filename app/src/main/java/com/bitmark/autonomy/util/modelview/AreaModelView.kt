@@ -11,6 +11,8 @@ import com.bitmark.autonomy.R
 import com.bitmark.autonomy.data.model.AreaData
 import com.bitmark.autonomy.data.model.Location
 import kotlinx.android.parcel.Parcelize
+import kotlin.math.abs
+import kotlin.math.roundToInt
 
 @Parcelize
 data class AreaModelView(
@@ -40,4 +42,9 @@ fun toOpacityColorRes(value: Int) = when {
     value < 34 -> R.color.persian_red_40
     value < 67 -> R.color.gold_tip_40
     else -> R.color.apple_40
+}
+
+fun formatDelta(delta: Float): String {
+    val absDelta = abs(delta)
+    return if (absDelta >= 100f) "%d%%".format(absDelta.roundToInt()) else "%.02f%%".format(absDelta)
 }
