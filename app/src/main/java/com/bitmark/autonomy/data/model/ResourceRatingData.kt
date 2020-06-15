@@ -6,9 +6,12 @@
  */
 package com.bitmark.autonomy.data.model
 
+import android.os.Parcelable
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
+import kotlinx.android.parcel.Parcelize
 
+@Parcelize
 data class ResourceRatingData(
     @Expose
     @SerializedName("resource")
@@ -16,5 +19,9 @@ data class ResourceRatingData(
 
     @Expose
     @SerializedName("score")
-    val score: Int
-) : Data
+    val score: Float,
+
+    @Expose
+    @SerializedName("ratings")
+    val ratings: Int
+) : Data, Parcelable

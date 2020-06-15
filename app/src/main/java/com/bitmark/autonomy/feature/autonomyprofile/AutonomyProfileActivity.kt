@@ -180,19 +180,15 @@ class AutonomyProfileActivity : BaseAppCompatActivity() {
         })
 
         ivScore.setSafetyOnclickListener {
-            val bundle = if (isMsa0) {
-                TrendingContainerActivity.getBundle(
-                    ReportType.SCORE.value,
-                    ReportScope.INDIVIDUAL.value
-                )
-            } else {
-                TrendingContainerActivity.getBundle(
-                    ReportType.SCORE.value,
-                    ReportScope.POI.value,
-                    areaData!!.id
-                )
-            }
-            navigator.anim(RIGHT_LEFT).startActivity(TrendingContainerActivity::class.java, bundle)
+            handleScoreClicked()
+        }
+
+        tvScore.setSafetyOnclickListener {
+            handleScoreClicked()
+        }
+
+        layoutDelta.setSafetyOnclickListener {
+            handleScoreClicked()
         }
 
         ivDirection.setSafetyOnclickListener {
@@ -203,6 +199,22 @@ class AutonomyProfileActivity : BaseAppCompatActivity() {
             navigator.anim(RIGHT_LEFT).finishActivity()
         }
 
+    }
+
+    private fun handleScoreClicked() {
+        val bundle = if (isMsa0) {
+            TrendingContainerActivity.getBundle(
+                ReportType.SCORE.value,
+                ReportScope.INDIVIDUAL.value
+            )
+        } else {
+            TrendingContainerActivity.getBundle(
+                ReportType.SCORE.value,
+                ReportScope.POI.value,
+                areaData!!.id
+            )
+        }
+        navigator.anim(RIGHT_LEFT).startActivity(TrendingContainerActivity::class.java, bundle)
     }
 
     override fun observe() {
@@ -236,18 +248,18 @@ class AutonomyProfileActivity : BaseAppCompatActivity() {
         when {
             scoreDelta == 0f -> {
                 ivDelta.invisible()
-                tvDelta.setTextColorRes(R.color.mine_shaft_2)
+                tvDelta.setTextColorRes(R.color.concord)
             }
 
             scoreDelta < 0f -> {
                 ivDelta.visible()
-                tvDelta.setTextColorRes(R.color.persian_red)
+                tvDelta.setTextColorStateList(R.color.color_persian_red_stateful)
                 ivDelta.setImageResource(R.drawable.ic_down_red)
             }
 
             else -> {
                 ivDelta.visible()
-                tvDelta.setTextColorRes(R.color.apple)
+                tvDelta.setTextColorStateList(R.color.color_apple_stateful)
                 ivDelta.setImageResource(R.drawable.ic_up_green)
             }
         }

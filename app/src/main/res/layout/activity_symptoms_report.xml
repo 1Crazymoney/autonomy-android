@@ -54,7 +54,7 @@
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tvSlogan"
         android:layout_width="0dp"
-        android:layout_height="@dimen/dp_130"
+        android:layout_height="@dimen/dp_180"
         android:layout_marginStart="@dimen/dp_16"
         android:layout_marginTop="@dimen/dp_24"
         android:layout_marginEnd="@dimen/dp_16"

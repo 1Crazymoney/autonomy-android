@@ -102,7 +102,7 @@ class AutonomyProfileMetricAdapter : RecyclerView.Adapter<RecyclerView.ViewHolde
                     addAll(data.resources.map { res ->
                         Item(
                             BODY_RESOURCE,
-                            resourceData = ItemResource(res.name, res.score, res.ratings)
+                            resourceData = ItemResource(res.resource.name, res.score, res.ratings)
                         )
                     })
                     add(
@@ -277,7 +277,7 @@ class AutonomyProfileMetricAdapter : RecyclerView.Adapter<RecyclerView.ViewHolde
                     tvBody23.text = formatDelta(data.symptomDelta!!)
                     when {
                         data.symptomDelta == 0f -> {
-                            tvBody23.setTextColorStateList(R.color.mine_shaft_2)
+                            tvBody23.setTextColorStateList(R.color.concord)
                             ivBody21.invisible()
                         }
                         data.symptomDelta < 0f -> {
@@ -298,7 +298,7 @@ class AutonomyProfileMetricAdapter : RecyclerView.Adapter<RecyclerView.ViewHolde
                     tvBody23.text = formatDelta(data.behaviorsDelta!!)
                     when {
                         data.behaviorsDelta == 0f -> {
-                            tvBody23.setTextColorStateList(R.color.mine_shaft_2)
+                            tvBody23.setTextColorStateList(R.color.concord)
                             ivBody21.invisible()
                         }
                         data.behaviorsDelta < 0f -> {
@@ -341,7 +341,7 @@ class AutonomyProfileMetricAdapter : RecyclerView.Adapter<RecyclerView.ViewHolde
                         tvBody23.text = formatDelta(data.symptomDelta!!)
                         when {
                             data.symptomDelta == 0f -> {
-                                tvBody23.setTextColorStateList(R.color.mine_shaft_2)
+                                tvBody23.setTextColorStateList(R.color.concord)
                                 ivBody21.invisible()
                             }
                             data.symptomDelta < 0f -> {
@@ -363,7 +363,7 @@ class AutonomyProfileMetricAdapter : RecyclerView.Adapter<RecyclerView.ViewHolde
                         tvBody23.text = formatDelta(data.behaviorsDelta!!)
                         when {
                             data.behaviorsDelta == 0f -> {
-                                tvBody23.setTextColorStateList(R.color.mine_shaft_2)
+                                tvBody23.setTextColorStateList(R.color.concord)
                                 ivBody21.invisible()
                             }
                             data.behaviorsDelta < 0f -> {
@@ -385,7 +385,7 @@ class AutonomyProfileMetricAdapter : RecyclerView.Adapter<RecyclerView.ViewHolde
                         tvBody23.text = formatDelta(data.confirmDelta!!)
                         when {
                             data.confirmDelta == 0f -> {
-                                tvBody23.setTextColorStateList(R.color.mine_shaft_2)
+                                tvBody23.setTextColorStateList(R.color.concord)
                                 ivBody21.invisible()
                             }
                             data.confirmDelta < 0f -> {
@@ -412,10 +412,10 @@ class AutonomyProfileMetricAdapter : RecyclerView.Adapter<RecyclerView.ViewHolde
             val data = item.resourceData!!
             with(itemView) {
                 tvBody11.text = data.text
-                tvBody12.text = String.format("%.1f", data.score)
+                tvBody12.text = if (data.score == 0f) "--" else String.format("%.1f", data.score)
                 tvBody12.setTextColorRes(
                     when {
-                        data.score == 0f -> R.color.mine_shaft_2
+                        data.score == 0f -> R.color.white
                         data.score <= 1.6f -> R.color.persian_red
                         data.score <= 3.3f -> R.color.gold_tip
                         else -> R.color.apple

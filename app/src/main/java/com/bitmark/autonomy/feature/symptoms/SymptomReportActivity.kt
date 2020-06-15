@@ -185,7 +185,8 @@ class SymptomReportActivity : BaseAppCompatActivity() {
                                 blocked = false
                                 progressDialog.dismiss()
                                 val data = res.data()!!
-                                if (data.second) {
+                                val institutions = data.first
+                                if (institutions.isNotEmpty() && data.second) {
                                     val bundle = SymptomGuidanceActivity.getBundle(data.first)
                                     navigator.anim(BOTTOM_UP)
                                         .startActivity(SymptomGuidanceActivity::class.java, bundle)

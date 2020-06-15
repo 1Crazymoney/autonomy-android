@@ -106,7 +106,6 @@ class MainActivity : BaseAppCompatActivity() {
             if (!appLifecycleHandler.isOnForeground()) {
                 viewModel.updateLocation()
             }
-            viewModel.getYourAutonomyScore()
         }
 
         override fun onPlaceChanged(place: String) {
@@ -193,6 +192,7 @@ class MainActivity : BaseAppCompatActivity() {
             })
         }
         viewModel.checkDebugModeEnable()
+        viewModel.getYourAutonomyScore()
         viewModel.listArea()
     }
 

@@ -173,7 +173,7 @@
     <string name="we_will_forecast_the_public_health">We’ll forecast the public health of your neighborhood.</string>
     <string name="we_will_help_your_neighborhood">We’ll help your neighborhood grow healthier together.</string>
     <string name="debug_mode_is_enabled">Debug Mode is enabled</string>
-    <string name="tap_any_symptoms_you_have">Tap any symptoms you have or add new ones:</string>
+    <string name="tap_any_symptoms_you_have">Your symptoms will be anonymously pooled with others in this neighborhood.\n\nTap any symptoms you are experiencing or add new ones:</string>
     <string name="common_symptoms">Common symptoms</string>
     <string name="recent_neighborhood_symptoms">Recent neighborhood symptoms</string>
     <string name="report_other_symptom">Report other symptom …</string>
@@ -188,7 +188,7 @@
     <string name="submitting">Submitting</string>
     <string name="learn_how_to_keep_other_safe">Learn how to keep others safe</string>
     <string name="recommended_behaviors">Recommended Behaviors</string>
-    <string name="tap_any_healthy_behaviors_you_did">Tap any healthy behaviors you did today or add new ones:</string>
+    <string name="tap_any_healthy_behaviors_you_did">Your behaviors will be anonymously pooled with others in this neighborhood.\n\nTap any healthy behaviors you did today or add new ones:</string>
     <string name="recent_behaviors_near_you">Recent behavior near you</string>
     <string name="report_other_behavior">Report other behavior…</string>
     <string name="reporting_your_healthy_behaviors">Reporting your healthy behaviors to your neighborhood …</string>

@@ -50,7 +50,7 @@ interface AutonomyApi {
     @GET("api/v2/symptoms")
     fun listSymptom(@Query("lang") lang: String, @Query("all") all: Boolean? = null): Single<Map<String, List<SymptomData>>>
 
-    @POST("https://d4f1ab4c-09a8-4d4f-923a-41a6f773e59e.mock.pstmn.io/api/symptoms/report")
+    @POST("api/symptoms/report")
     fun reportSymptoms(@Body body: RequestBody): Single<ReportSymptomReponse>
 
     @POST("api/symptoms")
@@ -83,7 +83,7 @@ interface AutonomyApi {
     @GET("api/autonomy_profile/me")
     fun getYourAutonomyProfile(): Single<AutonomyProfileData>
 
-    @GET("https://d4f1ab4c-09a8-4d4f-923a-41a6f773e59e.mock.pstmn.io/api/autonomy_profile/{id}")
+    @GET("api/autonomy_profile/{id}")
     fun getAutonomyProfile(
         @Path("id") id: String, @Query("all_resources") allResources: Boolean, @Query(
             "lang"
@@ -129,11 +129,11 @@ interface AutonomyApi {
     @POST("api/scores")
     fun listScore(@Body body: RequestBody): Single<Map<String, Array<Float?>>>
 
-    @GET("https://d4f1ab4c-09a8-4d4f-923a-41a6f773e59e.mock.pstmn.io/api/points-of-interest/{poi_id}/resource-rating")
+    @GET("api/points-of-interest/{poi_id}/resource-ratings")
     fun listResourceRating(@Path("poi_id") poiId: String, @Query("lang") lang: String): Single<Map<String, List<ResourceRatingData>>>
 
-    @PUT("https://d4f1ab4c-09a8-4d4f-923a-41a6f773e59e.mock.pstmn.io/api/points-of-interest/{poi_id}/resource-rating")
-    fun updateResourceRatings(@Body body: RequestBody): Completable
+    @PUT("api/points-of-interest/{poi_id}/resource-ratings")
+    fun updateResourceRatings(@Path("poi_id") poiId: String, @Body body: RequestBody): Completable
 
     @GET("api/points-of-interest/{poi_id}/resources")
     fun listResource(@Path("poi_id") poiId: String, @Query("lang") lang: String, @Query("important") important: Boolean): Single<Map<String, List<ResourceData>>>

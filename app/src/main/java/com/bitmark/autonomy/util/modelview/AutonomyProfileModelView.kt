@@ -33,7 +33,7 @@ data class AutonomyProfileModelView(
 
     val neighborProfile: NeighborProfile,
 
-    val resources: List<Resource>?
+    val resources: List<ResourceRatingData>?
 
 ) : ModelView, Parcelable {
     companion object {

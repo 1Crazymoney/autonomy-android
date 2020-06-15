@@ -6,10 +6,12 @@
  */
 package com.bitmark.autonomy.data.model
 
+import android.os.Parcelable
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
+import kotlinx.android.parcel.Parcelize
 
-
+@Parcelize
 data class ResourceData(
     @Expose
     @SerializedName("id")
@@ -18,6 +20,6 @@ data class ResourceData(
     @Expose
     @SerializedName("name")
     val name: String
-) : Data
+) : Data, Parcelable
 
 

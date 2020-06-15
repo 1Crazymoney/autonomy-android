@@ -54,7 +54,7 @@ data class AutonomyProfileData(
 
     @Expose
     @SerializedName("resources")
-    val resources: List<Resource>?
+    val resources: List<ResourceRatingData>?
 
 ) : Data
 
@@ -124,11 +124,11 @@ data class IndividualProfile(
     val scoreYesterday: Float,
 
     @Expose
-    @SerializedName("symptoms")
+    @SerializedName("symptom")
     val symptoms: Int,
 
     @Expose
-    @SerializedName("symptoms_delta")
+    @SerializedName("symptom_delta")
     val symptomsDelta: Float,
 
     @Expose
@@ -156,11 +156,11 @@ data class NeighborProfile(
     val confirmDelta: Float,
 
     @Expose
-    @SerializedName("symptoms")
+    @SerializedName("symptom")
     val symptoms: Int,
 
     @Expose
-    @SerializedName("symptoms_delta")
+    @SerializedName("symptom_delta")
     val symptomsDelta: Float,
 
     @Expose
@@ -175,20 +175,4 @@ data class NeighborProfile(
     @SerializedName("details")
     val detail: NeighborProfileDetailData?
 
-) : Data, Parcelable
-
-
-@Parcelize
-data class Resource(
-    @Expose
-    @SerializedName("name")
-    val name: String,
-
-    @Expose
-    @SerializedName("score")
-    val score: Float,
-
-    @Expose
-    @SerializedName("ratings")
-    val ratings: Int
 ) : Data, Parcelable

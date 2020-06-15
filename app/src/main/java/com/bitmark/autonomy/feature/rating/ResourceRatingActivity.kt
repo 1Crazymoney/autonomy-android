@@ -109,7 +109,7 @@ class ResourceRatingActivity : BaseAppCompatActivity() {
 
         layoutSubmit.setSafetyOnclickListener {
             if (blocked) return@setSafetyOnclickListener
-            viewModel.updateResourceRatings(adapter.getResourceRatings())
+            viewModel.updateResourceRatings(poiId, adapter.getResourceRatings())
         }
     }
 

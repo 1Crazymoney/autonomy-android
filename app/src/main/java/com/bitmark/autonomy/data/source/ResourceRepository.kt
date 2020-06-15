@@ -20,8 +20,8 @@ class ResourceRepository(
     fun listResourceRating(poiId: String, lang: String) =
         remoteDataSource.listResourceRating(poiId, lang)
 
-    fun updateResourceRatings(ratings: List<ResourceRatingData>) =
-        remoteDataSource.updateResourceRatings(ratings)
+    fun updateResourceRatings(poiId: String, ratings: List<ResourceRatingData>) =
+        remoteDataSource.updateResourceRatings(poiId, ratings)
 
     fun listImportantResource(poiId: String, lang: String) =
         remoteDataSource.listResource(poiId, lang, true)

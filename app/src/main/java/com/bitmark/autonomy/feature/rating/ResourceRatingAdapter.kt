@@ -111,7 +111,7 @@ class ResourceRatingAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         init {
             with(itemView) {
                 rb.setOnRatingChangeListener { _, rating, _ ->
-                    item.data!!.score = rating.toInt()
+                    item.data!!.score = rating
                     val rbBg = getRatingBarBgRes(rating.toInt())
                     rb.setFilledDrawableRes(rbBg)
                 }
@@ -123,9 +123,9 @@ class ResourceRatingAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             with(itemView) {
                 val data = item.data!!
                 tvName.text = data.resource.name
-                val rbBg = getRatingBarBgRes(data.score)
+                val rbBg = getRatingBarBgRes(data.score.toInt())
                 rb.setFilledDrawableRes(rbBg)
-                rb.rating = item.data.score.toFloat()
+                rb.rating = item.data.score
             }
         }
 

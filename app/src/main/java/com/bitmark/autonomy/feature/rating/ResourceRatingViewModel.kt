@@ -35,10 +35,10 @@ class ResourceRatingViewModel(
         )
     }
 
-    fun updateResourceRatings(ratings: List<ResourceRatingModelView>) {
+    fun updateResourceRatings(poiId: String, ratings: List<ResourceRatingModelView>) {
         updateResourceRatingsLiveData.add(
             rxLiveDataTransformer.completable(
-                resourceRepo.updateResourceRatings(
+                resourceRepo.updateResourceRatings(poiId,
                     ratings.map { r -> r.toResourceRatingData() })
             )
         )

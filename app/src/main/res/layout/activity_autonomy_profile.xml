@@ -65,7 +65,7 @@
                 android:fontFamily="@font/ibm_plex_mono_light_font_family"
                 android:includeFontPadding="false"
                 android:text="-"
-                android:textColor="@color/white"
+                android:textColor="@color/color_white_stateful"
                 android:textSize="@dimen/sp_64"
                 app:layout_constraintBottom_toBottomOf="@id/ivScore"
                 app:layout_constraintEnd_toEndOf="@id/ivScore"
@@ -74,6 +74,7 @@
                 tools:text="341" />
 
             <LinearLayout
+                android:id="@+id/layoutDelta"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"

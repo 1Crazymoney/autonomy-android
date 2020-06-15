@@ -66,7 +66,7 @@ class TrendingRecyclerViewAdapter : RecyclerView.Adapter<TrendingRecyclerViewAda
                             when {
                                 scoreDelta == 0f -> {
                                     ivDelta.invisible()
-                                    tvDelta.setTextColorRes(R.color.mine_shaft_2)
+                                    tvDelta.setTextColorRes(R.color.concord)
                                 }
 
                                 scoreDelta < 0f -> {
@@ -89,7 +89,7 @@ class TrendingRecyclerViewAdapter : RecyclerView.Adapter<TrendingRecyclerViewAda
                             val delta = item.changeRate
                             when {
                                 delta == 0f -> {
-                                    tvDelta.setTextColorRes(R.color.mine_shaft_2)
+                                    tvDelta.setTextColorRes(R.color.concord)
                                     ivDelta.invisible()
                                 }
                                 delta < 0f -> {
@@ -111,7 +111,7 @@ class TrendingRecyclerViewAdapter : RecyclerView.Adapter<TrendingRecyclerViewAda
                             val behaviorDelta = item.changeRate
                             when {
                                 behaviorDelta == 0f -> {
-                                    tvDelta.setTextColorRes(R.color.mine_shaft_2)
+                                    tvDelta.setTextColorRes(R.color.concord)
                                     ivDelta.invisible()
                                 }
                                 behaviorDelta < 0f -> {
@@ -131,7 +131,7 @@ class TrendingRecyclerViewAdapter : RecyclerView.Adapter<TrendingRecyclerViewAda
                     }
                 } else {
                     tvDelta.text = "0.00%"
-                    tvDelta.setTextColorRes(R.color.mine_shaft_2)
+                    tvDelta.setTextColorRes(R.color.concord)
                     tvValue.text = "--"
                     tvValue.setTextColorRes(R.color.white)
                 }

@@ -29,17 +29,17 @@ class ResourceRemoteDataSource @Inject constructor(
             res["ratings"] ?: error("invalid response")
         }.subscribeOn(Schedulers.io())
 
-    fun updateResourceRatings(ratings: List<ResourceRatingData>): Completable {
+    fun updateResourceRatings(poiId: String, ratings: List<ResourceRatingData>): Completable {
         val map =
             mapOf("ratings" to ratings.map { res ->
                 mapOf(
                     "resource" to mapOf("id" to res.resource.id),
-                    "score" to res.score
+                    "score" to res.score.toInt()
                 )
             })
         val json = newGsonInstance().toJson(map)
         val reqBody = json.toRequestBody("application/json".toMediaTypeOrNull())
-        return autonomyApi.updateResourceRatings(reqBody).subscribeOn(Schedulers.io())
+        return autonomyApi.updateResourceRatings(poiId, reqBody).subscribeOn(Schedulers.io())
     }
 
     fun listResource(poiId: String, lang: String, important: Boolean = false) =
