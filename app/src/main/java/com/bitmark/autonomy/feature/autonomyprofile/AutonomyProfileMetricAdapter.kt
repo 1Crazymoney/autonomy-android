@@ -15,13 +15,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bitmark.autonomy.R
 import com.bitmark.autonomy.util.ext.*
 import com.bitmark.autonomy.util.modelview.AutonomyProfileModelView
+import com.bitmark.autonomy.util.modelview.formatDelta
 import kotlinx.android.synthetic.main.item_area_metric_body_1.view.*
 import kotlinx.android.synthetic.main.item_area_metric_body_2.view.*
 import kotlinx.android.synthetic.main.item_area_metric_footer.view.*
 import kotlinx.android.synthetic.main.item_area_metric_guidance.view.*
 import kotlinx.android.synthetic.main.item_area_metric_header.view.*
 import kotlinx.android.synthetic.main.item_area_metric_sub_header.view.*
-import kotlin.math.abs
 
 
 class AutonomyProfileMetricAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -274,7 +274,7 @@ class AutonomyProfileMetricAdapter : RecyclerView.Adapter<RecyclerView.ViewHolde
                 if (data.symptoms != null) {
                     tvBody21.setText(R.string.symptoms)
                     tvBody22.text = data.symptoms.toString()
-                    tvBody23.text = String.format("%.2f%%", abs(data.symptomDelta!!))
+                    tvBody23.text = formatDelta(data.symptomDelta!!)
                     when {
                         data.symptomDelta == 0f -> {
                             tvBody23.setTextColorStateList(R.color.mine_shaft_2)
@@ -295,7 +295,7 @@ class AutonomyProfileMetricAdapter : RecyclerView.Adapter<RecyclerView.ViewHolde
                 } else if (data.behaviors != null) {
                     tvBody21.setText(R.string.healthy_behaviors)
                     tvBody22.text = data.behaviors.toString()
-                    tvBody23.text = String.format("%.2f%%", abs(data.behaviorsDelta!!))
+                    tvBody23.text = formatDelta(data.behaviorsDelta!!)
                     when {
                         data.behaviorsDelta == 0f -> {
                             tvBody23.setTextColorStateList(R.color.mine_shaft_2)
@@ -338,7 +338,7 @@ class AutonomyProfileMetricAdapter : RecyclerView.Adapter<RecyclerView.ViewHolde
                     data.symptoms != null -> {
                         tvBody21.setText(R.string.symptoms)
                         tvBody22.text = data.symptoms.toString()
-                        tvBody23.text = String.format("%.2f%%", abs(data.symptomDelta!!))
+                        tvBody23.text = formatDelta(data.symptomDelta!!)
                         when {
                             data.symptomDelta == 0f -> {
                                 tvBody23.setTextColorStateList(R.color.mine_shaft_2)
@@ -360,7 +360,7 @@ class AutonomyProfileMetricAdapter : RecyclerView.Adapter<RecyclerView.ViewHolde
                     data.behaviors != null -> {
                         tvBody21.setText(R.string.healthy_behaviors)
                         tvBody22.text = data.behaviors.toString()
-                        tvBody23.text = String.format("%.2f%%", abs(data.behaviorsDelta!!))
+                        tvBody23.text = formatDelta(data.behaviorsDelta!!)
                         when {
                             data.behaviorsDelta == 0f -> {
                                 tvBody23.setTextColorStateList(R.color.mine_shaft_2)
@@ -382,7 +382,7 @@ class AutonomyProfileMetricAdapter : RecyclerView.Adapter<RecyclerView.ViewHolde
 
                         tvBody21.setText(R.string.active_cases)
                         tvBody22.text = data.confirm.toString()
-                        tvBody23.text = String.format("%.2f%%", abs(data.confirmDelta!!))
+                        tvBody23.text = formatDelta(data.confirmDelta!!)
                         when {
                             data.confirmDelta == 0f -> {
                                 tvBody23.setTextColorStateList(R.color.mine_shaft_2)
@@ -421,7 +421,7 @@ class AutonomyProfileMetricAdapter : RecyclerView.Adapter<RecyclerView.ViewHolde
                         else -> R.color.apple
                     }
                 )
-                tvBody13.text = data.ratings.decimalFormat()
+                tvBody13.text = data.ratings.abbreviate()
             }
         }
     }
