@@ -183,6 +183,7 @@ class TrendingFragment : BaseSupportFragment() {
         rv.layoutManager = layoutManager
         val itemDecoration = DividerItemDecorator(getDrawable(context!!, R.drawable.bg_divider)!!)
         rv.addItemDecoration(itemDecoration)
+        rv.isNestedScrollingEnabled = false
         rv.adapter = adapter
 
         ivNext.isEnabled = currentStartedAtSec != getStartOfPeriodSec(period)

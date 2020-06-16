@@ -97,11 +97,11 @@ class AddResourceActivity : BaseAppCompatActivity() {
         edtName.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 hideKeyBoard()
-                val name = edtName.text.toString()
+                val name = edtName.text.toString().trim()
                 if (name.isEmpty()) {
                     false
                 } else {
-                    finishWithResult(ResourceModelView(null, name.trim()))
+                    finishWithResult(ResourceModelView(null, name))
                     true
                 }
             } else false

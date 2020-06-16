@@ -134,13 +134,13 @@
                     android:layout_marginEnd="@dimen/dp_8"
                     android:ellipsize="end"
                     android:fontFamily="@font/grotesk_light_font_family"
-                    android:maxLines="1"
+                    android:maxLines="2"
                     android:textColor="@color/white"
                     android:textSize="@dimen/sp_18"
                     app:layout_constraintEnd_toStartOf="@id/ivDirection"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tvAddressLb"
-                    tools:text="123 Fourth St, Alphaville, BT, USA " />
+                    tools:text="123 Fourth St, Alphaville, BT, USA 123 Fourth St, Alphaville, BT, USA " />
 
                 <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/ivDirection"

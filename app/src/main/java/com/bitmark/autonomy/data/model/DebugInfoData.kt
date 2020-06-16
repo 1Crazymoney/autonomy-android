@@ -14,7 +14,7 @@ data class DebugInfoData(
 
     @Expose
     @SerializedName("metrics")
-    val metric: AutonomyProfileData,
+    val metric: NeighborProfile,
 
     @Expose
     @SerializedName("users")

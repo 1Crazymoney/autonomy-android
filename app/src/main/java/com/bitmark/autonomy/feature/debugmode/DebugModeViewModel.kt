@@ -27,8 +27,8 @@ class DebugModeViewModel(
     fun getDebugInfo(area: AreaModelView) {
         getDebugInfoLiveData.add(
             rxLiveDataTransformer.single(
-                userRepo.getDebugInfo(area.id!!).map { info ->
-                    DebugInfoModelView.newInstance(info, area.location!!, area.id)
+                userRepo.getDebugInfo(area.id).map { info ->
+                    DebugInfoModelView.newInstance(info, area.location, area.id)
                 })
         )
     }
