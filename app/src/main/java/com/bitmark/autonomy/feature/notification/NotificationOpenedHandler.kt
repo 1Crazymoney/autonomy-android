@@ -63,6 +63,11 @@ class NotificationOpenedHandler @Inject constructor(private val context: Context
         intent.putExtra("direct_from_notification", true)
         if (bundle != null) intent.putExtras(MainActivity.getBundle(bundle))
         intent.flags = Intent.FLAG_ACTIVITY_SINGLE_TOP and Intent.FLAG_ACTIVITY_CLEAR_TOP
-        context.startActivity(intent)
+        try {
+            context.startActivity(intent)
+        } catch (e: RuntimeException) {
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            context.startActivity(intent)
+        }
     }
 }

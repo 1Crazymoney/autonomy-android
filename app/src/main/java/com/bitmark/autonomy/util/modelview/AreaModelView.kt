@@ -46,5 +46,9 @@ fun toOpacityColorRes(value: Int) = when {
 
 fun formatDelta(delta: Float): String {
     val absDelta = abs(delta)
-    return if (absDelta >= 100f) "%d%%".format(absDelta.roundToInt()) else "%.02f%%".format(absDelta)
+    return when {
+        absDelta >= 1000f -> "%d%%".format(absDelta.roundToInt())
+        absDelta >= 100f -> "%.01f%%".format(absDelta)
+        else -> "%.02f%%".format(absDelta)
+    }
 }
