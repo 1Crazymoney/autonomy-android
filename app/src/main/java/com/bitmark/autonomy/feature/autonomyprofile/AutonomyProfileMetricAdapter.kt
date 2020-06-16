@@ -94,7 +94,7 @@ class AutonomyProfileMetricAdapter : RecyclerView.Adapter<RecyclerView.ViewHolde
                             SUB_HEADER,
                             subHeaderRes = listOf(
                                 R.string.resource,
-                                R.string.score_0_5,
+                                R.string.score_1_5,
                                 R.string.ratings
                             )
                         )

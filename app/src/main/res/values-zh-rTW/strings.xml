@@ -234,7 +234,7 @@
     <string name="neighborhood">鄰近社區</string>
     <string name="report_card">通報卡</string>
     <string name="resource">資源</string>
-    <string name="score_0_5">分數 (0–5)</string>
+    <string name="score_1_5">分數 (1–5)</string>
     <string name="ratings">評分</string>
     <string name="more">更多</string>
     <string name="add_rating">新增評分</string>
@@ -242,7 +242,7 @@
     <string name="address">地址</string>
     <string name="your_ratings_will_ne_anonymously">您的評分將會與周圍社群的其他人一起匿名加入資料池中。\n\n請點擊來為此位置的資源評分，或新增資源項目：</string>
     <string name="add_resource">新增資源</string>
-    <string name="could_not_submit_your_rating">Could not report your rating. Please try again later.</string>
+    <string name="could_not_submit_your_rating">無法回報您的評分。請稍後再試。</string>
     <string name="report_your_ratings">正在回報您對此位置的評分…</string>
     <string name="you_can_be_the_first_to_add_resources">您可以點擊下方並成為第一位為此位置新增資源的人。</string>
     <string name="add_resources">Add resources</string>

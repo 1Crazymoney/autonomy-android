@@ -235,7 +235,7 @@
     <string name="neighborhood">Neighborhood</string>
     <string name="report_card">Report card</string>
     <string name="resource">Resource</string>
-    <string name="score_0_5">Score (0–5)</string>
+    <string name="score_1_5">Score (1–5)</string>
     <string name="ratings">Ratings</string>
     <string name="more">More</string>
     <string name="add_rating">Add rating</string>
