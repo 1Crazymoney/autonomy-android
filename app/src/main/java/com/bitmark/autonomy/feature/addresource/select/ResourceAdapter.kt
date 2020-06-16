@@ -90,10 +90,15 @@ class ResourceAdapter :
     }
 
     fun isExisting(resource: ResourceModelView) =
-        items.indexOfFirst { i -> i.type == BODY && (i.resource?.id == resource.id || i.resource?.name == resource.name) } != -1
+        items.indexOfFirst { i -> i.type == BODY && ((resource.id != null && i.resource?.id == resource.id) || (resource.id == null && i.resource?.name == resource.name)) } != -1
 
-    fun setSelected(resource: ResourceModelView, selected: Boolean = true, selectable: Boolean = true) {
-        val index = items.indexOfFirst { i -> i.type == BODY && (i.resource?.id == resource.id || i.resource?.name == resource.name) }
+    fun setSelected(
+        resource: ResourceModelView,
+        selected: Boolean = true,
+        selectable: Boolean = true
+    ) {
+        val index =
+            items.indexOfFirst { i -> i.type == BODY && ((resource.id != null && i.resource?.id == resource.id) || (resource.id == null && i.resource?.name == resource.name)) }
         if (index != -1) {
             val item = items[index]
             item.selected = selected

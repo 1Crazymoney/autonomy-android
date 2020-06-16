@@ -195,4 +195,9 @@ class AreaSearchActivity : BaseAppCompatActivity() {
             }
         })
     }
+
+    override fun onBackPressed() {
+        navigator.anim(BOTTOM_UP).finishActivity()
+        super.onBackPressed()
+    }
 }

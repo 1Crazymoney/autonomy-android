@@ -9,7 +9,7 @@
     android:clickable="true"
     android:focusable="true"
     android:orientation="vertical"
-    android:paddingTop="@dimen/dp_16">
+    android:paddingTop="@dimen/dp_28">
 
     <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/edtName"
@@ -53,7 +53,6 @@
         android:layout_height="0dp"
         android:adjustViewBounds="true"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.466"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:src="@drawable/triangle_011" />
@@ -63,7 +62,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp_30"
-        android:fontFamily="@font/domaine_sans"
+        android:fontFamily="@font/ibm_plex_mono_light_font_family"
         android:gravity="center"
         android:includeFontPadding="false"
         android:textColor="@color/white"
