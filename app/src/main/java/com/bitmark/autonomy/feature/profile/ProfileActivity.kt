@@ -6,6 +6,7 @@
  */
 package com.bitmark.autonomy.feature.profile
 
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
@@ -29,6 +30,7 @@ import com.bitmark.autonomy.feature.Navigator.Companion.UP_BOTTOM
 import com.bitmark.autonomy.feature.behavior.BehaviorReportActivity
 import com.bitmark.autonomy.feature.donation.DonationActivity
 import com.bitmark.autonomy.feature.recovery.RecoveryContainerActivity
+import com.bitmark.autonomy.feature.signout.SignOutContainerActivity
 import com.bitmark.autonomy.feature.symptoms.SymptomReportActivity
 import com.bitmark.autonomy.logging.EventLogger
 import com.bitmark.autonomy.util.ChromeCustomTabServiceHandler
@@ -39,6 +41,10 @@ import javax.inject.Inject
 
 
 class ProfileActivity : BaseAppCompatActivity() {
+
+    companion object {
+        private const val SIGN_OUT_REQUEST_CODE = 0x01
+    }
 
     @Inject
     internal lateinit var navigator: Navigator
@@ -132,7 +138,12 @@ class ProfileActivity : BaseAppCompatActivity() {
         }
 
         layoutRecoveryKey.setSafetyOnclickListener {
-            navigator.anim(RIGHT_LEFT).startActivity(RecoveryContainerActivity::class.java)
+            goToRecoveryKey()
+        }
+
+        layoutSignOut.setSafetyOnclickListener {
+            navigator.anim(RIGHT_LEFT)
+                .startActivityForResult(SignOutContainerActivity::class.java, SIGN_OUT_REQUEST_CODE)
         }
 
         var count = 0
@@ -207,6 +218,17 @@ class ProfileActivity : BaseAppCompatActivity() {
                 }
             }
         })
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == RESULT_OK && requestCode == SIGN_OUT_REQUEST_CODE) {
+            goToRecoveryKey()
+        }
+    }
+
+    private fun goToRecoveryKey() {
+        navigator.anim(RIGHT_LEFT).startActivity(RecoveryContainerActivity::class.java)
     }
 
     override fun onBackPressed() {

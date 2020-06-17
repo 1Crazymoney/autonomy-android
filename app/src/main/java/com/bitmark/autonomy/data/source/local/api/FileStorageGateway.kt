@@ -46,9 +46,24 @@ class FileStorageGateway internal constructor(private val context: Context) {
         return file.listFiles()?.toList() ?: listOf()
     }
 
+    fun listFiles(dirPath: String, prefix: String): List<File> {
+        val dir = File(dirPath)
+        if (!dir.isDirectory) error("dirPath is not a directory path")
+        return dir.listFiles { f -> f.name.startsWith(prefix) }?.toList()
+            ?: error("unexpected occurred")
+    }
+
     fun delete(path: String): Boolean {
         val file = File(path)
         if (!file.exists()) return true
         return if (file.isDirectory) file.deleteRecursively() else file.delete()
+    }
+
+    fun delete(dirPath: String, prefix: String): Boolean {
+        val files = listFiles(dirPath, prefix)
+        if (files.isEmpty()) return true
+        var result = true
+        files.forEach { f -> result = result && delete(f.absolutePath) }
+        return result
     }
 }

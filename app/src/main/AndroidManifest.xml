@@ -156,6 +156,10 @@
             android:name=".feature.trending.TrendingContainerActivity"
             android:screenOrientation="portrait" />
 
+        <activity
+            android:name=".feature.signout.SignOutContainerActivity"
+            android:screenOrientation="portrait" />
+
         <receiver android:name=".feature.notification.ScheduledNotificationReceiver" />
 
         <meta-data

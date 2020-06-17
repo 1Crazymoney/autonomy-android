@@ -50,6 +50,8 @@ import com.bitmark.autonomy.feature.respondhelp.RespondHelpActivity
 import com.bitmark.autonomy.feature.respondhelp.RespondHelpModule
 import com.bitmark.autonomy.feature.risklevel.RiskLevelActivity
 import com.bitmark.autonomy.feature.risklevel.RiskLevelModule
+import com.bitmark.autonomy.feature.signout.SignOutContainerActivity
+import com.bitmark.autonomy.feature.signout.SignOutContainerModule
 import com.bitmark.autonomy.feature.splash.SplashActivity
 import com.bitmark.autonomy.feature.splash.SplashModule
 import com.bitmark.autonomy.feature.survey.SurveyContainerActivity
@@ -197,5 +199,9 @@ abstract class ActivityBuilderModule {
     @ContributesAndroidInjector(modules = [TrendingContainerModule::class])
     @ActivityScope
     internal abstract fun bindTrendingContainerActivity(): TrendingContainerActivity
+
+    @ContributesAndroidInjector(modules = [SignOutContainerModule::class])
+    @ActivityScope
+    internal abstract fun bindSignOutContainerActivity(): SignOutContainerActivity
 
 }

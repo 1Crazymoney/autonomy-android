@@ -20,6 +20,10 @@ import com.bitmark.autonomy.feature.requesthelp.list.RequestHelpListFragment
 import com.bitmark.autonomy.feature.requesthelp.list.RequestHelpListModule
 import com.bitmark.autonomy.feature.requesthelp.review.RequestHelpReviewFragment
 import com.bitmark.autonomy.feature.requesthelp.review.RequestHelpReviewModule
+import com.bitmark.autonomy.feature.signout.notice.SignOutNoticeFragment
+import com.bitmark.autonomy.feature.signout.notice.SignOutNoticeModule
+import com.bitmark.autonomy.feature.signout.signout.SignOutFragment
+import com.bitmark.autonomy.feature.signout.signout.SignOutModule
 import com.bitmark.autonomy.feature.survey.checkin.SurveyCheckin1Fragment
 import com.bitmark.autonomy.feature.survey.checkin.SurveyCheckin1Module
 import com.bitmark.autonomy.feature.survey.checkin.SurveyCheckin2Fragment
@@ -77,4 +81,12 @@ abstract class FragmentBuilderModule {
     @ContributesAndroidInjector(modules = [TrendingModule::class])
     @FragmentScope
     internal abstract fun bindTrendingFragment(): TrendingFragment
+
+    @ContributesAndroidInjector(modules = [SignOutNoticeModule::class])
+    @FragmentScope
+    internal abstract fun bindSignOutNoticeFragment(): SignOutNoticeFragment
+
+    @ContributesAndroidInjector(modules = [SignOutModule::class])
+    @FragmentScope
+    internal abstract fun bindSignOutFragment(): SignOutFragment
 }

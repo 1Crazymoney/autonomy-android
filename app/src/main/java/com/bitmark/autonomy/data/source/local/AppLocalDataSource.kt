@@ -9,6 +9,7 @@ package com.bitmark.autonomy.data.source.local
 import com.bitmark.autonomy.data.source.local.api.DatabaseApi
 import com.bitmark.autonomy.data.source.local.api.FileStorageApi
 import com.bitmark.autonomy.data.source.local.api.SharedPrefApi
+import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 
@@ -28,4 +29,15 @@ class AppLocalDataSource @Inject constructor(
     fun saveDebugModeState(enable: Boolean) = sharedPrefApi.rxCompletable { sharedPrefGateway ->
         sharedPrefGateway.put(SharedPrefApi.DEBUG_MODE, enable)
     }
+
+    fun deleteSharePref() = sharedPrefApi.rxCompletable { sharedPrefGateway ->
+        sharedPrefGateway.clear()
+    }.subscribeOn(Schedulers.io())
+
+    fun deleteCache() = fileStorageApi.rxCompletable { fileStorageGateway ->
+        fileStorageGateway.delete(fileStorageGateway.filesDir().absolutePath, "cached_resources")
+        fileStorageGateway.delete(fileStorageGateway.filesDir().absolutePath, "cached_symptom")
+        fileStorageGateway.delete(fileStorageGateway.filesDir().absolutePath, "cached_behavior")
+        Jwt.getInstance().clear()
+    }.subscribeOn(Schedulers.io())
 }

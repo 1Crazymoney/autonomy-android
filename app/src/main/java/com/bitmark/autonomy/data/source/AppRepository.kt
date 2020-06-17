@@ -8,6 +8,7 @@ package com.bitmark.autonomy.data.source
 
 import com.bitmark.autonomy.data.source.local.AppLocalDataSource
 import com.bitmark.autonomy.data.source.remote.AppRemoteDataSource
+import io.reactivex.Completable
 
 
 class AppRepository(
@@ -31,4 +32,7 @@ class AppRepository(
         lang: String,
         poiId: String? = null
     ) = remoteDataSource.listReportItem(scope, type, start, end, lang, poiId)
+
+    fun deleteAppData() =
+        Completable.mergeArray(localDataSource.deleteCache(), localDataSource.deleteSharePref())
 }

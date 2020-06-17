@@ -18,6 +18,8 @@ enum class Event(val value: String) {
 
     ACCOUNT_UPDATE_TIMEZONE_ERROR("account_update_timezone_error"),
 
+    ACCOUNT_SIGN_OUT_ERROR("account_sign_out_error"),
+
     APP_GET_INFO_ERROR("app_get_info_error"),
 
     SHARE_PREF_ERROR("shared_pref_error"),
