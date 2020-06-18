@@ -33,6 +33,7 @@ import com.bitmark.autonomy.feature.notification.NotificationId
 import com.bitmark.autonomy.feature.notification.ScheduledNotificationReceiver
 import com.bitmark.autonomy.feature.notification.buildCleanAndDisinfectNotificationBundle
 import com.bitmark.autonomy.feature.onboarding.OnboardingContainerActivity
+import com.bitmark.autonomy.feature.signin.SignInActivity
 import com.bitmark.autonomy.logging.Event
 import com.bitmark.autonomy.logging.EventLogger
 import com.bitmark.autonomy.util.ChromeCustomTabServiceHandler
@@ -97,28 +98,52 @@ class SplashActivity : BaseAppCompatActivity() {
 
         hideLanding()
 
-        val privacyString = getString(R.string.we_protect_your_digital_rights)
-        val spannableString = SpannableString(privacyString)
-        val ppString = getString(R.string.digital_rights)
+        val protectDataRightString = getString(R.string.we_protect_your_digital_rights)
+        val dataRightSpannableString = SpannableString(protectDataRightString)
+        val dataRightString = getString(R.string.digital_rights)
 
-        val startIndex = privacyString.indexOf(ppString)
-        val endIndex = startIndex + ppString.length
-        spannableString.setSpan(
-            object : ClickableSpan() {
-                override fun onClick(widget: View) {
-                    navigator.anim(NONE)
-                        .openChromeTab(this@SplashActivity, Constants.DATA_RIGHTS_URL)
-                }
+        var startIndex = protectDataRightString.indexOf(dataRightString)
+        if (startIndex != -1) {
+            dataRightSpannableString.setSpan(
+                object : ClickableSpan() {
+                    override fun onClick(widget: View) {
+                        navigator.anim(NONE)
+                            .openChromeTab(this@SplashActivity, Constants.DATA_RIGHTS_URL)
+                    }
 
-            }, startIndex,
-            endIndex,
-            Spannable.SPAN_INCLUSIVE_EXCLUSIVE
-        )
+                }, startIndex,
+                startIndex + dataRightString.length,
+                Spannable.SPAN_INCLUSIVE_EXCLUSIVE
+            )
+        }
 
-        tvPP.text = spannableString
-        tvPP.movementMethod = LinkMovementMethod.getInstance()
-        tvPP.setLinkTextColor(getColor(R.color.white))
-        tvPP.highlightColor = Color.TRANSPARENT
+        tvDataRight.text = dataRightSpannableString
+        tvDataRight.movementMethod = LinkMovementMethod.getInstance()
+        tvDataRight.setLinkTextColor(getColor(R.color.concord))
+        tvDataRight.highlightColor = Color.TRANSPARENT
+
+        val signInText = getString(R.string.or_sign_back_in)
+        val signInSpannableString = SpannableString(signInText)
+        val subSignInText = getString(R.string.sign_back_in)
+
+        startIndex = signInText.indexOf(subSignInText)
+        if (startIndex != -1) {
+            signInSpannableString.setSpan(
+                object : ClickableSpan() {
+                    override fun onClick(widget: View) {
+                        navigator.anim(RIGHT_LEFT).startActivity(SignInActivity::class.java)
+                    }
+
+                }, startIndex,
+                startIndex + subSignInText.length,
+                Spannable.SPAN_INCLUSIVE_EXCLUSIVE
+            )
+        }
+
+        tvSingIn.text = signInSpannableString
+        tvSingIn.movementMethod = LinkMovementMethod.getInstance()
+        tvSingIn.setLinkTextColor(getColor(R.color.concord))
+        tvSingIn.highlightColor = Color.TRANSPARENT
 
         layoutStart.setSafetyOnclickListener {
             navigator.anim(RIGHT_LEFT).startActivity(OnboardingContainerActivity::class.java)
@@ -216,8 +241,9 @@ class SplashActivity : BaseAppCompatActivity() {
         vToolbar1.visible()
         vToolbar2.visible()
         tvTitle.visible()
-        tvPP.visible()
+        tvDataRight.visible()
         layoutStart.visible()
+        tvSingIn.visible()
         ivSecureByBm.invisible()
     }
 
@@ -225,8 +251,9 @@ class SplashActivity : BaseAppCompatActivity() {
         vToolbar1.invisible()
         vToolbar2.invisible()
         tvTitle.invisible()
-        tvPP.invisible()
+        tvDataRight.invisible()
         layoutStart.invisible()
+        tvSingIn.invisible()
         ivSecureByBm.visible()
     }
 

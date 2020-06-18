@@ -273,6 +273,14 @@
     <string name="account_is_not_accessible">Account is not accessible</string>
     <string name="sorry_you_have_changed_or_removed">You have been logged out of your Bitmark account to protect your security because you removed or changed your fingerprint.</string>
     <string name="enter_your_recovery_key_here">Enter your recovery key here …</string>
+    <string name="could_not_sign_in">Could not sign you in. Please try again later.</string>
+    <string name="sign_in">Sign in</string>
+    <string name="signing_in">Signing in</string>
+    <string name="please_wait_while_we_sign_you_in">Please wait while we sign you in to Autonomy and recover your account …</string>
+    <string name="or_sign_back_in">Or sign back in »</string>
+    <string name="sign_back_in">sign back in »</string>
+    <string name="welcome_back_to_sign_in">Welcome back! To sign in, please enter your 13-word recovery key:</string>
+    <string name="you_are_unable_to_sign_in">You are unable to sign in because you entered an incorrect recovery key. Please double check your recovery key and try again.</string>
 
     <!-- array -->
     <string-array name="symptoms">

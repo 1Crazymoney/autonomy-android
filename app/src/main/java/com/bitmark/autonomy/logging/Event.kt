@@ -20,6 +20,8 @@ enum class Event(val value: String) {
 
     ACCOUNT_SIGN_OUT_ERROR("account_sign_out_error"),
 
+    ACCOUNT_SIGNIN_ERROR("account_sign_in_error"),
+
     APP_GET_INFO_ERROR("app_get_info_error"),
 
     SHARE_PREF_ERROR("shared_pref_error"),

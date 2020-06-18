@@ -160,6 +160,10 @@
             android:name=".feature.signout.SignOutContainerActivity"
             android:screenOrientation="portrait" />
 
+        <activity
+            android:name=".feature.signin.SignInActivity"
+            android:screenOrientation="portrait" />
+
         <receiver android:name=".feature.notification.ScheduledNotificationReceiver" />
 
         <meta-data

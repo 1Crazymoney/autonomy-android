@@ -260,6 +260,26 @@
     <string name="view_on_jupyter">在Jupyter\n上檢視</string>
     <string name="cases">確診</string>
     <string name="sorry_we_currently_dont_have_active_cases">抱歉，我們目前沒有此位置的在院病例數。我們正在努力擴大支援更多地區。</string>
+    <string name="when_you_sign_out_you_will_need">When you sign out, you will need your 13-word recovery key to unlock your data vault on this device again.\n\nTo ensure that you have recorded your recovery key correctly, you will be asked to enter it before you can sign out. If you haven’t already written down your recovery key, please do so now.</string>
+    <string name="please_do_so_now">please do so now</string>
+    <string name="enter_your_13_words">Enter your 13-word recovery key:</string>
+    <string name="incorrect_recovery_key">Incorrect recovery key</string>
+    <string name="you_are_unable_to_sign_out">You are unable to sign out because you entered an incorrect recovery key for your account. Please try again or double check your recovery key.</string>
+    <string name="signing_out">Signing out</string>
+    <string name="please_wait_while_we_sign_you_out">Please wait while we sign you out of Autonomy …</string>
+    <string name="check_key">Check key</string>
+    <string name="try_again">Try again</string>
+    <string name="account_is_not_accessible">Account is not accessible</string>
+    <string name="sorry_you_have_changed_or_removed">You have been logged out of your Bitmark account to protect your security because you removed or changed your fingerprint.</string>
+    <string name="enter_your_recovery_key_here">Enter your recovery key here …</string>
+    <string name="could_not_sign_in">Could not sign you in. Please try again later.</string>
+    <string name="sign_in">Sign in</string>
+    <string name="signing_in">Signing in</string>
+    <string name="please_wait_while_we_sign_you_in">Please wait while we sign you in to Autonomy and recover your account …</string>
+    <string name="or_sign_back_in">Or sign back in »</string>
+    <string name="sign_back_in">sign back in »</string>
+    <string name="welcome_back_to_sign_in">Welcome back! To sign in, please enter your 13-word recovery key:</string>
+    <string name="you_are_unable_to_sign_in">You are unable to sign in because you entered an incorrect recovery key. Please double check your recovery key and try again.</string>
 
     <!-- array -->
     <string-array name="symptoms">
