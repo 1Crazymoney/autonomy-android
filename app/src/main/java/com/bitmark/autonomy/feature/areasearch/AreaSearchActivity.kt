@@ -6,7 +6,6 @@
  */
 package com.bitmark.autonomy.feature.areasearch
 
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
@@ -21,16 +20,19 @@ import com.bitmark.autonomy.feature.BaseViewModel
 import com.bitmark.autonomy.feature.DialogController
 import com.bitmark.autonomy.feature.Navigator
 import com.bitmark.autonomy.feature.Navigator.Companion.BOTTOM_UP
+import com.bitmark.autonomy.feature.areasearch.AreaAutoCompleteRecyclerViewAdapter.Companion.RESOURCE_PLACE
 import com.bitmark.autonomy.feature.connectivity.ConnectivityHandler
 import com.bitmark.autonomy.feature.location.LocationService
+import com.bitmark.autonomy.feature.location.PlaceAutoComplete
 import com.bitmark.autonomy.logging.Event
 import com.bitmark.autonomy.logging.EventLogger
-import com.bitmark.autonomy.util.ext.gone
-import com.bitmark.autonomy.util.ext.hideKeyBoard
-import com.bitmark.autonomy.util.ext.showNoInternetConnection
-import com.bitmark.autonomy.util.ext.visible
-import com.bitmark.autonomy.util.modelview.AreaModelView
+import com.bitmark.autonomy.util.ext.*
+import com.google.android.flexbox.FlexDirection
+import com.google.android.flexbox.FlexWrap
+import com.google.android.flexbox.FlexboxLayoutManager
+import com.google.android.flexbox.JustifyContent
 import kotlinx.android.synthetic.main.activity_area_search.*
+import java.util.*
 import javax.inject.Inject
 
 
@@ -38,9 +40,9 @@ class AreaSearchActivity : BaseAppCompatActivity() {
 
     companion object {
 
-        private const val AREA = "area"
+        private const val PLACE = "place"
 
-        fun extractResultData(intent: Intent): AreaModelView = intent.getParcelableExtra(AREA)
+        fun extractResultData(intent: Intent) = intent.getParcelableExtra<PlaceAutoComplete>(PLACE)
 
     }
 
@@ -66,40 +68,62 @@ class AreaSearchActivity : BaseAppCompatActivity() {
 
     private var blocked = false
 
-    private var searchText = ""
+    private val placeAdapter = AreaAutoCompleteRecyclerViewAdapter()
 
-    private val adapter = AreaAutoCompleteRecyclerViewAdapter()
+    private val resourceAdapter = ResourceAdapter()
 
     override fun layoutRes(): Int = R.layout.activity_area_search
 
     override fun viewModel(): BaseViewModel? = viewModel
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        viewModel.listResources(Locale.getDefault().langCountry())
+    }
+
     override fun initComponents() {
         super.initComponents()
 
-        val layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
-        rvPlaces.layoutManager = layoutManager
+        val placeLayoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
+        rvPlaces.layoutManager = placeLayoutManager
         val itemDecoration = DividerItemDecoration(this, RecyclerView.VERTICAL)
         itemDecoration.setDrawable(getDrawable(R.drawable.bg_divider)!!)
         rvPlaces.addItemDecoration(itemDecoration)
-        rvPlaces.adapter = adapter
+        rvPlaces.adapter = placeAdapter
 
-        adapter.setItemClickListener(object :
+        val resourceLayoutManager = FlexboxLayoutManager(this)
+        resourceLayoutManager.flexDirection = FlexDirection.ROW
+        resourceLayoutManager.justifyContent = JustifyContent.FLEX_START
+        resourceLayoutManager.flexWrap = FlexWrap.WRAP
+        rvResources.layoutManager = resourceLayoutManager
+        rvResources.adapter = resourceAdapter
+
+        rvPlaces.gone()
+        rvResources.gone()
+
+        placeAdapter.setItemClickListener(object :
             AreaAutoCompleteRecyclerViewAdapter.ItemClickListener {
             override fun onItemClicked(item: AreaAutoCompleteRecyclerViewAdapter.Item) {
                 hideKeyBoard()
+                if (blocked) return
                 if (connectivityHandler.isConnected()) {
-                    if (blocked) return
-                    val execFunc = fun(item: AreaAutoCompleteRecyclerViewAdapter.Item) {
-                        locationService.execGeoCoding(item.id, { l ->
-                            blocked = false
-                            viewModel.addArea(item.primaryText, item.desc, l)
-                        }, {
-                            blocked = false
-                        })
+                    val place = item.place
+                    if (item.type == RESOURCE_PLACE) {
+                        finishActivityWithResult(place)
+                    } else {
+                        val execFunc = fun(place: PlaceAutoComplete) {
+                            locationService.execGeoCoding(place.placeId!!, { l ->
+                                blocked = false
+                                place.location = l
+                                finishActivityWithResult(place)
+                            }, {
+                                blocked = false
+                            })
+                        }
+                        execFunc(place)
+                        blocked = true
                     }
-                    execFunc(item)
-                    blocked = true
+
                 } else {
                     dialogController.showNoInternetConnection()
                 }
@@ -107,23 +131,33 @@ class AreaSearchActivity : BaseAppCompatActivity() {
             }
         })
 
+        resourceAdapter.setItemClickListener { item ->
+            if (blocked) return@setItemClickListener
+            blocked = true
+            edtName.setText(item.resource!!.name)
+            edtName.setSelection(edtName.text!!.length)
+            viewModel.listPlace(item.resource.id!!)
+        }
+
         edtName.doOnTextChanged { text, _, _, _ ->
             if (blocked) return@doOnTextChanged
             handler.removeCallbacksAndMessages(null)
-            searchText = text.toString()
+            val searchText = text.toString()
             if (searchText.isEmpty()) {
-                adapter.clear()
-                tvInstruction.gone()
+                placeAdapter.clear()
+                rvPlaces.gone()
+                rvResources.visible()
             } else {
                 handler.postDelayed({
                     locationService.search(searchText,
                         { places ->
                             if (places.isEmpty()) {
-                                adapter.clear()
-                                tvInstruction.gone()
+                                placeAdapter.clear()
                             } else {
-                                viewModel.listScore(places)
+                                placeAdapter.setAutocompletePlaces(places, searchText)
                             }
+                            rvPlaces.visible()
+                            rvResources.gone()
                         })
                 }, 500)
             }
@@ -135,6 +169,16 @@ class AreaSearchActivity : BaseAppCompatActivity() {
         }
     }
 
+    private fun finishActivityWithResult(place: PlaceAutoComplete) {
+        val intent = Intent().apply {
+            val bundle = Bundle().apply {
+                putParcelable(PLACE, place)
+            }
+            putExtras(bundle)
+        }
+        navigator.anim(BOTTOM_UP).finishActivityForResult(intent)
+    }
+
     override fun deinitComponents() {
         handler.removeCallbacksAndMessages(null)
         super.deinitComponents()
@@ -143,27 +187,20 @@ class AreaSearchActivity : BaseAppCompatActivity() {
     override fun observe() {
         super.observe()
 
-        viewModel.addAreaLiveData.asLiveData().observe(this, Observer { res ->
+        viewModel.listResourceLiveData.asLiveData().observe(this, Observer { res ->
             when {
                 res.isSuccess() -> {
                     progressBar.gone()
-                    val data = res.data()!!
-                    val bundle = Bundle().apply {
-                        putParcelable(AREA, data)
-                    }
-                    val intent = Intent().apply { putExtras(bundle) }
-                    navigator.anim(BOTTOM_UP).finishActivityForResult(intent, Activity.RESULT_OK)
+                    resourceAdapter.set(res.data()!!)
+                    rvResources.visible()
+                    placeAdapter.clear()
+                    rvPlaces.gone()
                     blocked = false
                 }
 
                 res.isError() -> {
+                    logger.logError(Event.SUGGESTED_RESOURCE_LISTING_ERROR, res.throwable())
                     progressBar.gone()
-                    logger.logError(Event.AREA_ADDING_ERROR, res.throwable())
-                    if (connectivityHandler.isConnected()) {
-                        dialogController.alert(R.string.error, R.string.could_not_add_area)
-                    } else {
-                        dialogController.showNoInternetConnection()
-                    }
                     blocked = false
                 }
 
@@ -174,16 +211,18 @@ class AreaSearchActivity : BaseAppCompatActivity() {
             }
         })
 
-        viewModel.listScoreLiveData.asLiveData().observe(this, Observer { res ->
+        viewModel.listPlaceLiveData.asLiveData().observe(this, Observer { res ->
             when {
                 res.isSuccess() -> {
                     progressBar.gone()
-                    tvInstruction.visible()
-                    adapter.set(res.data()!!, searchText)
+                    placeAdapter.setResourcePlaces(res.data()!!)
+                    rvResources.gone()
+                    rvPlaces.visible()
                     blocked = false
                 }
 
                 res.isError() -> {
+                    logger.logError(Event.AREA_AUTOCOMPLETE_ERROR, res.throwable())
                     progressBar.gone()
                     blocked = false
                 }

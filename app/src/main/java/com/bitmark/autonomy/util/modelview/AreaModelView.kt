@@ -30,22 +30,22 @@ data class AreaModelView(
     }
 }
 
-fun toColorRes(value: Int) = when {
-    value == 0 -> R.color.concord
-    value < 34 -> R.color.persian_red
-    value < 67 -> R.color.gold_tip
+fun Int.scoreToColorRes() = when {
+    this == 0 -> R.color.concord
+    this < 34 -> R.color.persian_red
+    this < 67 -> R.color.gold_tip
     else -> R.color.apple
 }
 
-fun toOpacityColorRes(value: Int) = when {
-    value == 0 -> R.color.concord_40
-    value < 34 -> R.color.persian_red_40
-    value < 67 -> R.color.gold_tip_40
+fun Int.scoreToOpacityColorRes() = when {
+    this == 0 -> R.color.concord_40
+    this < 34 -> R.color.persian_red_40
+    this < 67 -> R.color.gold_tip_40
     else -> R.color.apple_40
 }
 
-fun formatDelta(delta: Float): String {
-    val absDelta = abs(delta)
+fun Float.formatDelta(): String {
+    val absDelta = abs(this)
     return when {
         absDelta >= 1000f -> "%d%%".format(absDelta.roundToInt())
         absDelta >= 100f -> "%.01f%%".format(absDelta)

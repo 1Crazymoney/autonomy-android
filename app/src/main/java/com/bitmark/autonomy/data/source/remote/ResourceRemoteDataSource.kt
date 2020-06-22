@@ -60,4 +60,8 @@ class ResourceRemoteDataSource @Inject constructor(
             .map { res -> res["resources"] ?: error("invalid response") }
             .subscribeOn(Schedulers.io())
     }
+
+    fun listSuggestedResource(lang: String) = autonomyApi.listResource(true, lang).map { res ->
+        res["resources"] ?: error("invalid response")
+    }.subscribeOn(Schedulers.io())
 }

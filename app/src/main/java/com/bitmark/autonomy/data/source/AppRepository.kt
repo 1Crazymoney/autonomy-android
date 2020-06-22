@@ -35,4 +35,6 @@ class AppRepository(
 
     fun deleteAppData() =
         Completable.mergeArray(localDataSource.deleteCache(), localDataSource.deleteSharePref())
+
+    fun listArea(resourceId: String) = remoteDataSource.listArea(resourceId)
 }

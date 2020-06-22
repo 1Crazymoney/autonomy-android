@@ -28,5 +28,13 @@ data class AreaData(
 
     @Expose
     @SerializedName("score")
-    val score: Float?
+    val score: Float?,
+
+    @Expose
+    @SerializedName("distance")
+    val distance: Float?,
+
+    @Expose
+    @SerializedName("resource_score")
+    val resourceScore: Float?
 ) : Data

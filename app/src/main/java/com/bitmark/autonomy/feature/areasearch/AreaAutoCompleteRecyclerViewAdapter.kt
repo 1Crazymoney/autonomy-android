@@ -16,29 +16,48 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bitmark.autonomy.R
 import com.bitmark.autonomy.feature.location.PlaceAutoComplete
+import com.bitmark.autonomy.util.ext.invisible
+import com.bitmark.autonomy.util.ext.setTextColorRes
+import com.bitmark.autonomy.util.ext.setTextColorStateList
+import com.bitmark.autonomy.util.ext.visible
+import com.bitmark.autonomy.util.modelview.ratingScoreToColorRes
+import com.bitmark.autonomy.util.modelview.ratingToDrawableRes
 import kotlinx.android.synthetic.main.item_area_autocomplete.view.*
 import kotlin.math.roundToInt
 
 
 class AreaAutoCompleteRecyclerViewAdapter :
-    RecyclerView.Adapter<AreaAutoCompleteRecyclerViewAdapter.ViewHolder>() {
+    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+
+    companion object {
+        internal const val AUTOCOMPLETE_PLACE = 0x00
+        internal const val RESOURCE_PLACE = 0x01
+    }
 
     private val items = mutableListOf<Item>()
 
-    private var searchText = ""
+    private var searchText: String = ""
 
     private var listener: ItemClickListener? = null
 
-    fun set(places: List<PlaceAutoComplete>, searchText: String) {
+    fun setAutocompletePlaces(places: List<PlaceAutoComplete>, searchText: String) {
         this.searchText = searchText
         this.items.clear()
         this.items.addAll(places.map { p ->
             Item(
-                p.id,
-                p.primaryText,
-                p.secondaryText,
-                p.desc,
-                p.score
+                AUTOCOMPLETE_PLACE,
+                p
+            )
+        })
+        notifyDataSetChanged()
+    }
+
+    fun setResourcePlaces(places: List<PlaceAutoComplete>) {
+        this.items.clear()
+        this.items.addAll(places.map { p ->
+            Item(
+                RESOURCE_PLACE,
+                p
             )
         })
         notifyDataSetChanged()
@@ -53,30 +72,53 @@ class AreaAutoCompleteRecyclerViewAdapter :
         this.listener = listener
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(
-            LayoutInflater.from(parent.context).inflate(
-                R.layout.item_area_autocomplete,
-                parent,
-                false
-            ),
-            listener
-        )
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        return when (viewType) {
+            AUTOCOMPLETE_PLACE -> AutocompletePlaceVH(
+                LayoutInflater.from(parent.context).inflate(
+                    R.layout.item_area_autocomplete,
+                    parent,
+                    false
+                ),
+                listener
+            )
+            RESOURCE_PLACE -> ResourcePlaceVH(
+                LayoutInflater.from(parent.context).inflate(
+                    R.layout.item_area_autocomplete,
+                    parent,
+                    false
+                ),
+                listener
+            )
+            else -> error("invalid view type: $viewType")
+        }
     }
 
     override fun getItemCount(): Int = items.size
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(items[position], searchText)
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        if (holder is AutocompletePlaceVH) {
+            holder.bind(items[position], searchText)
+        } else if (holder is ResourcePlaceVH) {
+            holder.bind(items[position])
+        }
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        return items[position].type
     }
 
 
-    class ViewHolder(view: View, listener: ItemClickListener?) : RecyclerView.ViewHolder(view) {
+    class AutocompletePlaceVH(view: View, listener: ItemClickListener?) :
+        RecyclerView.ViewHolder(view) {
 
         private lateinit var item: Item
 
         init {
             with(itemView) {
+                rb.invisible()
+                tvScore.invisible()
+
                 layoutRoot.setOnClickListener {
                     listener?.onItemClicked(item)
                 }
@@ -85,9 +127,10 @@ class AreaAutoCompleteRecyclerViewAdapter :
 
         fun bind(item: Item, searchText: String) {
             this.item = item
+            val place = item.place
             with(itemView) {
-                val spannableString = SpannableString(item.primaryText)
-                val start = item.primaryText.indexOf(searchText, ignoreCase = true)
+                val spannableString = SpannableString(place.primaryText)
+                val start = place.primaryText!!.indexOf(searchText, ignoreCase = true)
                 if (start != -1) {
                     spannableString.setSpan(
                         ForegroundColorSpan(Color.WHITE),
@@ -97,21 +140,46 @@ class AreaAutoCompleteRecyclerViewAdapter :
                     )
                 }
                 tvName.text = spannableString
-                tvDesc.text = item.secondaryText
-                if (item.score == null) {
-                    ivScore.setImageResource(R.drawable.ic_circle_black)
-                    tvScore.text = "?"
+                tvDesc.text = place.secondaryText
+            }
+        }
+    }
+
+    class ResourcePlaceVH(view: View, listener: ItemClickListener?) :
+        RecyclerView.ViewHolder(view) {
+        private lateinit var item: Item
+
+        init {
+            with(itemView) {
+                rb.visible()
+                tvScore.visible()
+                tvName.setTextColorStateList(R.color.color_white_stateful)
+
+                layoutRoot.setOnClickListener {
+                    listener?.onItemClicked(item)
+                }
+            }
+        }
+
+        fun bind(item: Item) {
+            this.item = item
+            val place = item.place
+            with(itemView) {
+                tvName.text = if (place.distance != null) {
+                    String.format("%s (%.1f km)", place.alias, place.distance)
                 } else {
-                    val roundedScore = item.score.roundToInt()
-                    ivScore.setImageResource(
-                        when {
-                            roundedScore == 0 -> R.drawable.ic_circle_black
-                            roundedScore < 34 -> R.drawable.ic_circle_red_png
-                            roundedScore < 67 -> R.drawable.ic_circle_yellow_png
-                            else -> R.drawable.ic_circle_green_png
-                        }
-                    )
-                    tvScore.text = roundedScore.toString()
+                    place.alias
+                }
+                tvDesc.text = place.address
+
+                if (place.resourceScore == null) {
+                    tvScore.text = "--"
+                    tvScore.setTextColorRes(R.color.concord)
+                } else {
+                    tvScore.text = String.format("%.1f", place.resourceScore)
+                    rb.rating = place.resourceScore.roundToInt().toFloat()
+                    rb.setFilledDrawableRes(place.resourceScore.roundToInt().ratingToDrawableRes())
+                    tvScore.setTextColorRes(place.resourceScore.ratingScoreToColorRes())
                 }
             }
         }
@@ -122,10 +190,7 @@ class AreaAutoCompleteRecyclerViewAdapter :
     }
 
     data class Item(
-        val id: String,
-        val primaryText: String,
-        val secondaryText: String,
-        val desc: String,
-        val score: Float?
+        val type: Int,
+        val place: PlaceAutoComplete
     )
 }

@@ -55,9 +55,11 @@ class MainActivity : BaseAppCompatActivity() {
 
         private const val NOTIFICATION_BUNDLE = "notification_bundle"
 
-        private const val NOTIFICATION_ACTION_DELAY = 500L
+        private const val NAVIGATION_ACTION_DELAY = 500L
 
-        private const val SEARCH_REQUEST_CODE = 0x1A
+        private const val SEARCH_PLACE_REQUEST_CODE = 0x1A
+
+        private const val ADD_AREA_REQUEST_CODE = 0x2A
 
         fun getBundle(notificationBundle: Bundle? = null) =
             Bundle().apply {
@@ -227,7 +229,7 @@ class MainActivity : BaseAppCompatActivity() {
         when (val notificationId = notificationBundle.getInt("notification_id")) {
             NotificationId.RISK_LEVEL_CHANGED -> {
                 val areaId = notificationBundle.getString(NotificationPayloadType.POI_ID)
-                handler.postDelayed({ showArea(areaId) }, NOTIFICATION_ACTION_DELAY)
+                handler.postDelayed({ showArea(areaId) }, NAVIGATION_ACTION_DELAY)
                 return true
             }
             NotificationId.ACCOUNT_SYMPTOM_FOLLOW_UP, NotificationId.ACCOUNT_SYMPTOM_SPIKE -> {
@@ -264,8 +266,22 @@ class MainActivity : BaseAppCompatActivity() {
                     }
                 }
 
-                SEARCH_REQUEST_CODE -> {
-                    val area = AreaSearchActivity.extractResultData(data!!)
+                SEARCH_PLACE_REQUEST_CODE -> {
+                    val place =
+                        AreaSearchActivity.extractResultData(data!!) ?: error("data is null")
+                    val bundle = AutonomyProfileActivity.getBundle(placeData = place)
+                    handler.postDelayed({
+                        navigator.anim(RIGHT_LEFT).startActivityForResult(
+                            AutonomyProfileActivity::class.java,
+                            ADD_AREA_REQUEST_CODE,
+                            bundle
+                        )
+                    }, NAVIGATION_ACTION_DELAY)
+                }
+
+                ADD_AREA_REQUEST_CODE -> {
+                    val area =
+                        AutonomyProfileActivity.extractResultData(data!!) ?: error("data is null")
                     val existing = areaList.find { a -> a.location == area.location } != null
                     if (existing) return
                     areaList.add(area)
@@ -314,7 +330,7 @@ class MainActivity : BaseAppCompatActivity() {
 
         layoutAddArea.setSafetyOnclickListener {
             navigator.anim(BOTTOM_UP)
-                .startActivityForResult(AreaSearchActivity::class.java, SEARCH_REQUEST_CODE)
+                .startActivityForResult(AreaSearchActivity::class.java, SEARCH_PLACE_REQUEST_CODE)
         }
 
         ivMenu.setSafetyOnclickListener {

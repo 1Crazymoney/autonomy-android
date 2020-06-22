@@ -281,6 +281,9 @@
     <string name="sign_back_in">sign back in »</string>
     <string name="welcome_back_to_sign_in">Welcome back! To sign in, please enter your 13-word recovery key:</string>
     <string name="you_are_unable_to_sign_in">You are unable to sign in because you entered an incorrect recovery key. Please double check your recovery key and try again.</string>
+    <string name="or_tap_to_find_resource">Or tap to find a specific resource:</string>
+    <string name="monitor">Monitor</string>
+    <string name="neighborhood_score">Neighborhood Score</string>
 
     <!-- array -->
     <string-array name="symptoms">

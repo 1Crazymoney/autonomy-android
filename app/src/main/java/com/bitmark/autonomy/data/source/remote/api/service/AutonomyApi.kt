@@ -68,30 +68,33 @@ interface AutonomyApi {
     @GET("api/score")
     fun getHealthScore(): Single<Map<String, Float>>
 
-    @POST("api/points-of-interest")
+    @POST("https://d4f1ab4c-09a8-4d4f-923a-41a6f773e59e.mock.pstmn.io/api/accounts/me/pois")
     fun addArea(@Body request: AddAreaRequest): Single<AreaData>
 
-    @DELETE("api/points-of-interest/{id}")
-    fun deleteArea(@Path("id") id: String): Completable
+    @DELETE("https://d4f1ab4c-09a8-4d4f-923a-41a6f773e59e.mock.pstmn.io/api/accounts/me/pois/{poi_id}")
+    fun deleteArea(@Path("poi_id") id: String): Completable
 
-    @GET("api/points-of-interest")
-    fun listArea(): Single<List<AreaData>>
+    @GET("https://d4f1ab4c-09a8-4d4f-923a-41a6f773e59e.mock.pstmn.io/api/points-of-interest")
+    fun listArea(@Query("resource_id") resourceId: String? = null): Single<List<AreaData>>
 
-    @PUT("api/points-of-interest/order")
+    @GET("https://d4f1ab4c-09a8-4d4f-923a-41a6f773e59e.mock.pstmn.io/api/accounts/me/pois")
+    fun listMyArea(): Single<List<AreaData>>
+
+    @PATCH("https://d4f1ab4c-09a8-4d4f-923a-41a6f773e59e.mock.pstmn.io/api/accounts/me/pois/{poi_id}")
+    fun renameArea(@Path("poi_id") id: String, @Body body: RequestBody): Completable
+
+    @PUT("https://d4f1ab4c-09a8-4d4f-923a-41a6f773e59e.mock.pstmn.io/api/accounts/me/pois")
     fun reorderArea(@Body body: RequestBody): Completable
 
-    @GET("api/autonomy_profile/me")
-    fun getYourAutonomyProfile(): Single<AutonomyProfileData>
-
-    @GET("api/autonomy_profile/{id}")
+    @GET("https://d4f1ab4c-09a8-4d4f-923a-41a6f773e59e.mock.pstmn.io/api/autonomy_profile")
     fun getAutonomyProfile(
-        @Path("id") id: String, @Query("all_resources") allResources: Boolean, @Query(
-            "lang"
-        ) lang: String
+        @Query("poi_id") poiId: String?,
+        @Query("all_resources") allResources: Boolean?,
+        @Query("lang") lang: String?,
+        @Query("me") me: Boolean?,
+        @Query("lat") lat: Double?,
+        @Query("lng") lng: Double?
     ): Single<AutonomyProfileData>
-
-    @PATCH("api/points-of-interest/{id}")
-    fun renameArea(@Path("id") id: String, @Body body: RequestBody): Completable
 
     @GET("api/history/symptoms")
     fun listSymptomHistory(@Query("before") before: Long?, @Query("lang") lang: String, @Query("limit") limit: Int): Single<Map<String, List<SymptomHistoryData>>>
@@ -147,5 +150,8 @@ interface AutonomyApi {
         @Query("start") start: Long, @Query("end") end: Long,
         @Query("lang") lang: String, @Query("poi_id") poiId: String?
     ): Single<Map<String, List<ReportItemData>>>
+
+    @GET("https://d4f1ab4c-09a8-4d4f-923a-41a6f773e59e.mock.pstmn.io/api/resources")
+    fun listResource(@Query("suggestion") suggestion: Boolean, @Query("lang") lang: String): Single<Map<String, List<ResourceData>>>
 
 }

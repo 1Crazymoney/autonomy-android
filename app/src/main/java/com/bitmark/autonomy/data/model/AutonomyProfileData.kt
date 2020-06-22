@@ -29,6 +29,10 @@ data class AutonomyProfileData(
     val rating: Boolean?,
 
     @Expose
+    @SerializedName("owned")
+    val owned: Boolean?,
+
+    @Expose
     @SerializedName("location")
     val location: Location?,
 
@@ -57,61 +61,6 @@ data class AutonomyProfileData(
     val resources: List<ResourceRatingData>?
 
 ) : Data
-
-@Parcelize
-data class NeighborProfileDetailData(
-
-    @Expose
-    @SerializedName("confirm")
-    val confirmMetric: ConfirmMetricData,
-
-    @Expose
-    @SerializedName("behaviors")
-    val behaviorMetric: BehaviorMetricData,
-
-    @Expose
-    @SerializedName("symptoms")
-    val symptomMetric: SymptomMetricData
-) : Data, Parcelable
-
-@Parcelize
-data class ConfirmMetricData(
-
-    @Expose
-    @SerializedName("score")
-    val score: Float,
-
-    @Expose
-    @SerializedName("score_yesterday")
-    val scoreYesterday: Float
-
-) : Data, Parcelable
-
-@Parcelize
-data class BehaviorMetricData(
-
-    @Expose
-    @SerializedName("score")
-    val score: Float,
-
-    @Expose
-    @SerializedName("score_yesterday")
-    val scoreYesterday: Float
-
-) : Data, Parcelable
-
-@Parcelize
-data class SymptomMetricData(
-
-    @Expose
-    @SerializedName("score")
-    val score: Float,
-
-    @Expose
-    @SerializedName("score_yesterday")
-    val scoreYesterday: Float
-
-) : Data, Parcelable
 
 @Parcelize
 data class IndividualProfile(
@@ -148,6 +97,10 @@ data class NeighborProfile(
     val score: Float,
 
     @Expose
+    @SerializedName("score_delta")
+    val scoreDelta: Float,
+
+    @Expose
     @SerializedName("confirm")
     val confirm: Int,
 
@@ -169,10 +122,6 @@ data class NeighborProfile(
 
     @Expose
     @SerializedName("behavior_delta")
-    val behaviorsDelta: Float,
-
-    @Expose
-    @SerializedName("details")
-    val detail: NeighborProfileDetailData?
+    val behaviorsDelta: Float
 
 ) : Data, Parcelable

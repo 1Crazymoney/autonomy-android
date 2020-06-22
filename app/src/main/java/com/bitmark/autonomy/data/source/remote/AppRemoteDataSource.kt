@@ -49,4 +49,6 @@ class AppRemoteDataSource @Inject constructor(
         lang,
         poiId
     ).map { res -> res["report_items"] ?: error("invalid response") }.subscribeOn(Schedulers.io())
+
+    fun listArea(resourceId: String) = autonomyApi.listArea(resourceId).subscribeOn(Schedulers.io())
 }

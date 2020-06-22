@@ -14,6 +14,7 @@ import com.bitmark.autonomy.R
 import com.bitmark.autonomy.util.ext.removeWhen
 import com.bitmark.autonomy.util.ext.setSafetyOnclickListener
 import com.bitmark.autonomy.util.modelview.ResourceRatingModelView
+import com.bitmark.autonomy.util.modelview.ratingToDrawableRes
 import kotlinx.android.synthetic.main.item_resource_rating.view.*
 import kotlinx.android.synthetic.main.item_resource_rating_footer.view.*
 
@@ -112,7 +113,7 @@ class ResourceRatingAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             with(itemView) {
                 rb.setOnRatingChangeListener { _, rating, _ ->
                     item.data!!.score = rating
-                    val rbBg = getRatingBarBgRes(rating.toInt())
+                    val rbBg = rating.toInt().ratingToDrawableRes()
                     rb.setFilledDrawableRes(rbBg)
                 }
             }
@@ -123,16 +124,10 @@ class ResourceRatingAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             with(itemView) {
                 val data = item.data!!
                 tvName.text = data.resource.name
-                val rbBg = getRatingBarBgRes(data.score.toInt())
+                val rbBg = data.score.toInt().ratingToDrawableRes()
                 rb.setFilledDrawableRes(rbBg)
                 rb.rating = item.data.score
             }
-        }
-
-        private fun getRatingBarBgRes(rating: Int) = when {
-            rating < 3 -> R.drawable.bg_circle_red
-            rating < 4 -> R.drawable.bg_circle_yellow
-            else -> R.drawable.bg_circle_green
         }
     }
 

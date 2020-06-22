@@ -7,10 +7,12 @@
 package com.bitmark.autonomy.feature.autonomyprofile
 
 import androidx.lifecycle.Lifecycle
+import com.bitmark.autonomy.data.model.Location
 import com.bitmark.autonomy.data.source.UserRepository
 import com.bitmark.autonomy.feature.BaseViewModel
 import com.bitmark.autonomy.util.livedata.CompositeLiveData
 import com.bitmark.autonomy.util.livedata.RxLiveDataTransformer
+import com.bitmark.autonomy.util.modelview.AreaModelView
 import com.bitmark.autonomy.util.modelview.AutonomyProfileModelView
 
 
@@ -20,25 +22,41 @@ class AutonomyProfileViewModel(
     private val rxLiveDataTransformer: RxLiveDataTransformer
 ) : BaseViewModel(lifecycle) {
 
-    internal val getAreaProfileLiveData = CompositeLiveData<AutonomyProfileModelView>()
+    internal val getAutonomyProfileLiveData = CompositeLiveData<AutonomyProfileModelView>()
 
-    fun getYourAutonomyProfile() {
-        getAreaProfileLiveData.add(
+    internal val addAreaLiveData = CompositeLiveData<AreaModelView>()
+
+    fun getAutonomyProfile(
+        poiId: String? = null,
+        allResources: Boolean? = null,
+        lang: String? = null,
+        me: Boolean? = null,
+        lat: Double? = null,
+        lng: Double? = null
+    ) {
+        getAutonomyProfileLiveData.add(
             rxLiveDataTransformer.single(
-                userRepo.getYourAutonomyProfile().map { a -> AutonomyProfileModelView.newInstance(a) }
+                userRepo.getAutonomyProfile(
+                    poiId,
+                    allResources,
+                    lang,
+                    me,
+                    lat,
+                    lng
+                ).map { a -> AutonomyProfileModelView.newInstance(a) }
             )
         )
     }
 
-    fun getAutonomyProfile(id: String, allResources: Boolean = false, lang: String) {
-        getAreaProfileLiveData.add(
+    fun addArea(alias: String, address: String, location: Location) {
+        addAreaLiveData.add(
             rxLiveDataTransformer.single(
-                userRepo.getAutonomyProfile(
-                    id,
-                    allResources,
-                    lang
-                ).map { a -> AutonomyProfileModelView.newInstance(a) }
-            )
+                userRepo.addArea(
+                    alias,
+                    address,
+                    location.lat,
+                    location.lng
+                ).map { a -> AreaModelView(a.id, a.alias, a.location, a.score) })
         )
     }
 

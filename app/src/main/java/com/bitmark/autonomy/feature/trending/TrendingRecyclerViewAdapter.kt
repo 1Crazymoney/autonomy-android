@@ -18,7 +18,7 @@ import com.bitmark.autonomy.util.ext.visible
 import com.bitmark.autonomy.util.modelview.ReportItemModelView
 import com.bitmark.autonomy.util.modelview.formatDelta
 import com.bitmark.autonomy.util.modelview.isNotSupported
-import com.bitmark.autonomy.util.modelview.toColorRes
+import com.bitmark.autonomy.util.modelview.scoreToColorRes
 import kotlinx.android.synthetic.main.item_trending.view.*
 import kotlin.math.roundToInt
 
@@ -56,11 +56,11 @@ class TrendingRecyclerViewAdapter : RecyclerView.Adapter<TrendingRecyclerViewAda
                 tvName.text = item.name
 
                 if (!item.isNotSupported()) {
-                    tvDelta.text = formatDelta(item.changeRate!!)
+                    tvDelta.text = item.changeRate!!.formatDelta()
                     when (item.type) {
                         ReportType.SCORE.value -> {
                             val value = item.value!!.roundToInt()
-                            tvValue.setTextColorRes(toColorRes(value))
+                            tvValue.setTextColorRes(value.scoreToColorRes())
                             tvValue.text = value.toString()
                             val scoreDelta = item.changeRate
                             when {

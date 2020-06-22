@@ -36,7 +36,7 @@ class UserRemoteDataSource @Inject constructor(
     fun deleteArea(id: String) =
         autonomyApi.deleteArea(id).subscribeOn(Schedulers.io())
 
-    fun listArea() = autonomyApi.listArea().subscribeOn(Schedulers.io())
+    fun listArea() = autonomyApi.listMyArea().subscribeOn(Schedulers.io())
 
     fun reorderArea(ids: List<String>): Completable {
         val json = newGsonInstance().toJson(mapOf("order" to ids))
@@ -50,10 +50,15 @@ class UserRemoteDataSource @Inject constructor(
         return autonomyApi.renameArea(id, reqBody).subscribeOn(Schedulers.io())
     }
 
-    fun getYourAutonomyProfile() = autonomyApi.getYourAutonomyProfile().subscribeOn(Schedulers.io())
-
-    fun getAutonomyProfile(id: String, allResources: Boolean, lang: String) =
-        autonomyApi.getAutonomyProfile(id, allResources, lang).subscribeOn(Schedulers.io())
+    fun getAutonomyProfile(
+        poiId: String?,
+        allResources: Boolean?,
+        lang: String?,
+        me: Boolean?,
+        lat: Double?,
+        lng: Double?
+    ) = autonomyApi.getAutonomyProfile(poiId, allResources, lang, me, lat, lng)
+        .subscribeOn(Schedulers.io())
 
     fun listLocationHistory(beforeSec: Long?, limit: Int) =
         autonomyApi.listLocationHistory(beforeSec, limit).map { res ->

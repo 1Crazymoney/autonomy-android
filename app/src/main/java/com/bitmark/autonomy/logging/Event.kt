@@ -76,6 +76,8 @@ enum class Event(val value: String) {
 
     AREA_ADDING_ERROR("area_adding_error"),
 
+    AREA_AUTOCOMPLETE_ERROR("area_autocomplete_error"),
+
     FORMULA_GETTING_ERROR("formula_getting_error"),
 
     FORMULA_UPDATE_ERROR("formula_update_error"),
@@ -97,6 +99,8 @@ enum class Event(val value: String) {
     RESOURCE_AUTOCOMPLETE_LISTING_ERROR("resource_autocomplete_listing_error"),
 
     RESOURCE_LISTING_ERROR("resource_listing_error"),
+
+    SUGGESTED_RESOURCE_LISTING_ERROR("suggested_resource_listing_error"),
 
     RESOURCE_AUTOCOMPLETE_SEARCHING_ERROR("resource_autocomplete_searching_error"),
 

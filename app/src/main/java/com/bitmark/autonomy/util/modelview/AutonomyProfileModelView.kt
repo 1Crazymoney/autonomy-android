@@ -21,6 +21,8 @@ data class AutonomyProfileModelView(
 
     val rating: Boolean?,
 
+    val owned: Boolean?,
+
     val location: Location?,
 
     val hasMoreResources: Boolean?,
@@ -42,6 +44,7 @@ data class AutonomyProfileModelView(
             autonomyProfile.alias,
             autonomyProfile.address,
             autonomyProfile.rating,
+            autonomyProfile.owned,
             autonomyProfile.location,
             autonomyProfile.hasMoreResource,
             autonomyProfile.autonomyScore,

@@ -39,4 +39,6 @@ class ResourceRepository(
         newResourceNames: List<String>
     ) =
         remoteDataSource.addResources(poiId, existingResourceIds, newResourceNames)
+
+    fun listSuggestedResource(lang: String) = remoteDataSource.listSuggestedResource(lang)
 }

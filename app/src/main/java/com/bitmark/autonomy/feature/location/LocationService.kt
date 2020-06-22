@@ -269,10 +269,10 @@ class LocationService(private val context: Context, private val logger: EventLog
                     predictions.map { p ->
                         Tracer.DEBUG.log(TAG, "search place: ${p.description}")
                         PlaceAutoComplete(
-                            p.placeId,
-                            p.structuredFormatting.mainText,
-                            p.structuredFormatting.secondaryText ?: p.description,
-                            p.description
+                            placeId = p.placeId,
+                            primaryText = p.structuredFormatting.mainText,
+                            secondaryText = p.structuredFormatting.secondaryText ?: p.description,
+                            desc = p.description
                         )
                     }
                 handler.post { success(places) }

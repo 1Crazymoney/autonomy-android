@@ -29,8 +29,8 @@ import com.bitmark.autonomy.util.ext.screenWidth
 import com.bitmark.autonomy.util.ext.setTextColorRes
 import com.bitmark.autonomy.util.modelview.AreaModelView
 import com.bitmark.autonomy.util.modelview.DebugInfoModelView
-import com.bitmark.autonomy.util.modelview.toColorRes
-import com.bitmark.autonomy.util.modelview.toOpacityColorRes
+import com.bitmark.autonomy.util.modelview.scoreToColorRes
+import com.bitmark.autonomy.util.modelview.scoreToOpacityColorRes
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -216,8 +216,8 @@ class DebugModeActivity : BaseAppCompatActivity(), OnMapReadyCallback {
         }
         val latLng = LatLng(debugInfo.location.lat, debugInfo.location.lng)
         val roundedScore = debugInfo.metric.score.roundToInt()
-        val strokeColorRes = toColorRes(roundedScore)
-        val fillColorRes = toOpacityColorRes(roundedScore)
+        val strokeColorRes = roundedScore.scoreToColorRes()
+        val fillColorRes = roundedScore.scoreToOpacityColorRes()
         val circleOptions = CircleOptions()
             .center(latLng)
             .fillColor(getColor(fillColorRes))
