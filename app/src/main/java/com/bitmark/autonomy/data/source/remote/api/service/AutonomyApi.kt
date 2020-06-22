@@ -68,25 +68,25 @@ interface AutonomyApi {
     @GET("api/score")
     fun getHealthScore(): Single<Map<String, Float>>
 
-    @POST("https://d4f1ab4c-09a8-4d4f-923a-41a6f773e59e.mock.pstmn.io/api/accounts/me/pois")
+    @POST("api/accounts/me/pois")
     fun addArea(@Body request: AddAreaRequest): Single<AreaData>
 
-    @DELETE("https://d4f1ab4c-09a8-4d4f-923a-41a6f773e59e.mock.pstmn.io/api/accounts/me/pois/{poi_id}")
+    @DELETE("api/accounts/me/pois/{poi_id}")
     fun deleteArea(@Path("poi_id") id: String): Completable
 
-    @GET("https://d4f1ab4c-09a8-4d4f-923a-41a6f773e59e.mock.pstmn.io/api/points-of-interest")
+    @GET("api/points-of-interest")
     fun listArea(@Query("resource_id") resourceId: String? = null): Single<List<AreaData>>
 
-    @GET("https://d4f1ab4c-09a8-4d4f-923a-41a6f773e59e.mock.pstmn.io/api/accounts/me/pois")
+    @GET("api/accounts/me/pois")
     fun listMyArea(): Single<List<AreaData>>
 
-    @PATCH("https://d4f1ab4c-09a8-4d4f-923a-41a6f773e59e.mock.pstmn.io/api/accounts/me/pois/{poi_id}")
+    @PATCH("api/accounts/me/pois/{poi_id}")
     fun renameArea(@Path("poi_id") id: String, @Body body: RequestBody): Completable
 
-    @PUT("https://d4f1ab4c-09a8-4d4f-923a-41a6f773e59e.mock.pstmn.io/api/accounts/me/pois")
+    @PUT("api/accounts/me/pois")
     fun reorderArea(@Body body: RequestBody): Completable
 
-    @GET("https://d4f1ab4c-09a8-4d4f-923a-41a6f773e59e.mock.pstmn.io/api/autonomy_profile")
+    @GET("api/autonomy_profile")
     fun getAutonomyProfile(
         @Query("poi_id") poiId: String?,
         @Query("all_resources") allResources: Boolean?,
@@ -151,7 +151,7 @@ interface AutonomyApi {
         @Query("lang") lang: String, @Query("poi_id") poiId: String?
     ): Single<Map<String, List<ReportItemData>>>
 
-    @GET("https://d4f1ab4c-09a8-4d4f-923a-41a6f773e59e.mock.pstmn.io/api/resources")
+    @GET("api/resources")
     fun listResource(@Query("suggestion") suggestion: Boolean, @Query("lang") lang: String): Single<Map<String, List<ResourceData>>>
 
 }

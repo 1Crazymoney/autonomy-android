@@ -153,6 +153,8 @@ class AutonomyProfileActivity : BaseAppCompatActivity() {
         adapter.setActionListener(object : AutonomyProfileMetricAdapter.ActionListener {
 
             override fun onItemClick(item: AutonomyProfileMetricAdapter.Item) {
+                if (!isIndividual() && (!isAutonomyProfileReady() || autonomyProfile.id == null)) return
+
                 val type =
                     if (item.yourData?.symptoms != null || item.neighborData?.symptoms != null) {
                         ReportType.SYMPTOM.value
@@ -161,7 +163,8 @@ class AutonomyProfileActivity : BaseAppCompatActivity() {
                     } else if (item.neighborData?.confirm != null) {
                         ReportType.CASE.value
                     } else {
-                        error("invalid handling")
+                        // TODO throw error
+                        return
                     }
 
                 val bundle = if (isIndividual()) {
@@ -170,7 +173,7 @@ class AutonomyProfileActivity : BaseAppCompatActivity() {
                     TrendingContainerActivity.getBundle(type, scope)
                 } else {
                     val scope = ReportScope.POI.value
-                    TrendingContainerActivity.getBundle(type, scope, areaData!!.id)
+                    TrendingContainerActivity.getBundle(type, scope, autonomyProfile.id)
                 }
 
                 navigator.anim(RIGHT_LEFT)
@@ -178,6 +181,7 @@ class AutonomyProfileActivity : BaseAppCompatActivity() {
             }
 
             override fun onFooterClick(label: String) {
+                if (!isIndividual() && (!isAutonomyProfileReady() || autonomyProfile.id == null)) return
                 when (label) {
                     getString(R.string.more) -> {
                         when {
@@ -196,12 +200,12 @@ class AutonomyProfileActivity : BaseAppCompatActivity() {
                         }
                     }
                     getString(R.string.view_your_rating), getString(R.string.add_rating) -> {
-                        val bundle = ResourceRatingActivity.getBundle(areaData!!.id)
+                        val bundle = ResourceRatingActivity.getBundle(autonomyProfile.id!!)
                         navigator.anim(RIGHT_LEFT)
                             .startActivity(ResourceRatingActivity::class.java, bundle)
                     }
                     getString(R.string.add_resource) -> {
-                        val bundle = ResourceRatingActivity.getBundle(areaData!!.id, true)
+                        val bundle = ResourceRatingActivity.getBundle(autonomyProfile.id!!, true)
                         navigator.anim(RIGHT_LEFT)
                             .startActivity(ResourceRatingActivity::class.java, bundle)
                     }
@@ -232,7 +236,11 @@ class AutonomyProfileActivity : BaseAppCompatActivity() {
         }
 
         layoutMonitor.setSafetyOnclickListener {
-            viewModel.addArea(placeData!!.alias!!, placeData!!.address!!, placeData!!.location!!)
+            val alias =
+                if (placeData!!.alias != null) placeData!!.alias!! else placeData!!.primaryText!!
+            val address =
+                if (placeData!!.address != null) placeData!!.address!! else placeData!!.desc!!
+            viewModel.addArea(alias, address, placeData!!.location!!)
         }
 
     }
@@ -244,6 +252,7 @@ class AutonomyProfileActivity : BaseAppCompatActivity() {
     private fun hasAreaData() = areaData != null
 
     private fun handleScoreClicked() {
+        if (!isIndividual() && (!isAutonomyProfileReady() || autonomyProfile.id == null)) return
         val bundle = if (isIndividual()) {
             TrendingContainerActivity.getBundle(
                 ReportType.SCORE.value,
@@ -253,7 +262,7 @@ class AutonomyProfileActivity : BaseAppCompatActivity() {
             TrendingContainerActivity.getBundle(
                 ReportType.SCORE.value,
                 ReportScope.POI.value,
-                areaData!!.id
+                autonomyProfile.id
             )
         }
         navigator.anim(RIGHT_LEFT).startActivity(TrendingContainerActivity::class.java, bundle)
