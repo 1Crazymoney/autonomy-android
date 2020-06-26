@@ -147,8 +147,9 @@ interface AutonomyApi {
     @GET("api/report-items")
     fun listReportItem(
         @Query("scope") scope: String, @Query("type") type: String,
-        @Query("start") start: Long, @Query("end") end: Long,
-        @Query("lang") lang: String, @Query("poi_id") poiId: String?
+        @Query("start") start: String, @Query("end") end: String,
+        @Query("lang") lang: String, @Query("poi_id") poiId: String?,
+        @Query("granularity") granularity: String
     ): Single<Map<String, List<ReportItemData>>>
 
     @GET("api/resources")

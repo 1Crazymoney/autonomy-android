@@ -21,7 +21,11 @@ data class ReportItemData(
 
     @Expose
     @SerializedName("change_rate")
-    val changeRate: Float?
+    val changeRate: Float?,
+
+    @Expose
+    @SerializedName("distribution")
+    val distribution: Map<String, Int>
 ) : Data
 
 enum class ReportType(val value: String) {
@@ -30,4 +34,8 @@ enum class ReportType(val value: String) {
 
 enum class ReportScope(val value: String) {
     INDIVIDUAL("individual"), NEIGHBORHOOD("neighborhood"), POI("poi")
+}
+
+enum class Granularity(val value: String) {
+    DAY("day"), MONTH("month")
 }

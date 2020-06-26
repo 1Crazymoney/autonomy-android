@@ -19,7 +19,9 @@ class DateTimeUtil {
 
         val ISO8601_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSSSSS'Z'"
 
-        val ISO8601_SIMPLE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss'Z'"
+        val ISO8601_SIMPLE_FORMAT_1 = "yyyy-MM-dd'T'HH:mm:ss'Z'"
+
+        val ISO8601_SIMPLE_FORMAT_2 = "yyyy-MM-dd'T'HH:mm:ss"
 
         val DATE_TIME_FORMAT_1 = "yyyy MMM dd HH:mm:ss"
 
@@ -35,6 +37,12 @@ class DateTimeUtil {
 
         val DATE_FORMAT_6 = "yyyy"
 
+        val DATE_FORMAT_7 = "yyyy-MM-dd"
+
+        val DATE_FORMAT_8 = "yyyy-MM"
+
+        val DATE_FORMAT_9 = "EEEEE"
+
         val TIME_FORMAT_1 = "HH:mm"
 
         val TIME_FORMAT_2 = "hh:mm a"
@@ -48,6 +56,16 @@ class DateTimeUtil {
                 timezone.rawOffset + if (timezone.inDaylightTime(Date())) timezone.dstSavings else 0
             val gmtOffset = TimeUnit.HOURS.convert(offset.toLong(), TimeUnit.MILLISECONDS)
             return if (gmtOffset >= 0) "GMT+$gmtOffset" else "GMT$gmtOffset"
+        }
+
+        fun getTimeZoneOffset(timezoneId: String): String {
+            val calendar = GregorianCalendar()
+            calendar.timeZone = TimeZone.getTimeZone(timezoneId)
+            val timezone = calendar.timeZone
+            val offset =
+                timezone.rawOffset + if (timezone.inDaylightTime(Date())) timezone.dstSavings else 0
+            val gmtOffset = TimeUnit.HOURS.convert(offset.toLong(), TimeUnit.MILLISECONDS)
+            return if (gmtOffset >= 0) "+%02d:00".format(gmtOffset) else "%02d:00".format(gmtOffset)
         }
 
         fun stringToString(
@@ -89,10 +107,10 @@ class DateTimeUtil {
             date: String,
             format: String = ISO8601_FORMAT,
             timezone: String = "UTC"
-        ): Date? {
+        ): Date {
             val formatter = SimpleDateFormat(format, Locale.getDefault())
             formatter.timeZone = TimeZone.getTimeZone(timezone)
-            return formatter.parse(date)
+            return formatter.parse(date) ?: error("cannot parse date")
         }
 
         fun isToday(dateString: String, timezone: String = "UTC"): Boolean {
@@ -125,11 +143,13 @@ class DateTimeUtil {
             millis: Long,
             format: String,
             inputTimeZone: String = "UTC",
-            outputTimeZone: String = "UTC"
+            outputTimeZone: String = "UTC",
+            includeTimezoneOffset: Boolean = false
         ): String {
             val calendar = Calendar.getInstance(TimeZone.getTimeZone(inputTimeZone))
             calendar.timeInMillis = millis
-            return dateToString(calendar.time, format, outputTimeZone)
+            val result = dateToString(calendar.time, format, outputTimeZone)
+            return if (includeTimezoneOffset) result + getTimeZoneOffset(outputTimeZone) else result
         }
 
         fun getStartOfThisWeekMillis(timezone: String = "UTC") =
@@ -139,7 +159,7 @@ class DateTimeUtil {
             val calendar = Calendar.getInstance(TimeZone.getTimeZone(timezone))
             calendar.timeInMillis = thisWeekMillis
             calendar.add(Calendar.DAY_OF_YEAR, gap * 7)
-            calendar.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY)
+            calendar.set(Calendar.DAY_OF_WEEK, calendar.firstDayOfWeek)
             val startOfSunday = getStartOfDate(calendar)
             return startOfSunday.timeInMillis
         }
@@ -187,7 +207,7 @@ class DateTimeUtil {
         fun getEndOfWeekMillis(millis: Long, timezone: String = "UTC"): Long {
             val calendar = Calendar.getInstance(TimeZone.getTimeZone(timezone))
             calendar.timeInMillis = millis
-            calendar.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY)
+            calendar.set(Calendar.DAY_OF_WEEK, calendar.firstDayOfWeek)
             calendar.add(Calendar.WEEK_OF_YEAR, 1)
             calendar.add(Calendar.DAY_OF_YEAR, -1)
             return getEndOfDate(calendar).timeInMillis
@@ -229,12 +249,53 @@ class DateTimeUtil {
             return calendar.get(Calendar.MONTH)
         }
 
+        fun listDoM() = mutableListOf<Int>().apply {
+            val calendar = Calendar.getInstance()
+            val maxDoM = calendar.getActualMaximum(Calendar.DAY_OF_MONTH)
+            for (i in 1..maxDoM) {
+                add(i)
+            }
+        }.toList()
+
+        fun getDoM(
+            dateString: String,
+            format: String = ISO8601_FORMAT,
+            timezone: String = "UTC"
+        ): Int {
+            val date = stringToDate(dateString, format, timezone)
+            val c = Calendar.getInstance()
+            c.time = date
+            return c.get(Calendar.DAY_OF_MONTH)
+        }
+
+        fun getDoW(
+            dateString: String,
+            format: String = ISO8601_FORMAT,
+            timezone: String = "UTC"
+        ): Int {
+            val date = stringToDate(dateString, format, timezone)
+            val c = Calendar.getInstance()
+            c.time = date
+            return c.get(Calendar.DAY_OF_WEEK)
+        }
+
+        fun getMoY(
+            dateString: String,
+            format: String = ISO8601_FORMAT,
+            timezone: String = "UTC"
+        ): Int {
+            val date = stringToDate(dateString, format, timezone)
+            val c = Calendar.getInstance()
+            c.time = date
+            return c.get(Calendar.MONTH)
+        }
+
     }
 }
 
 fun DateTimeUtil.Companion.formatAgo(context: Context, dateString: String): String {
     val now = nowMillis()
-    val dateMillis = stringToDate(dateString)!!.time
+    val dateMillis = stringToDate(dateString).time
     val gap = now - dateMillis
     return when {
         gap > TimeUnit.DAYS.toMillis(1) -> {
@@ -277,11 +338,13 @@ fun DateTimeUtil.Companion.formatPeriod(
     calendar.timeInMillis = startedTimeMillis
     return when (period) {
         Period.WEEK -> {
-            val range = getDateRangeOfWeek(startedTimeMillis)
+            val firstDoW = calendar.time
+            calendar.add(Calendar.DAY_OF_WEEK, 6)
+            val lastDoW = calendar.time
             "%s %s-%s".format(
-                dateToString(range.first, DATE_FORMAT_4, timezone),
-                dateToString(range.first, DATE_FORMAT_3, timezone),
-                dateToString(range.second, DATE_FORMAT_3, timezone)
+                dateToString(firstDoW, DATE_FORMAT_4, timezone),
+                dateToString(firstDoW, DATE_FORMAT_3, timezone),
+                dateToString(lastDoW, DATE_FORMAT_3, timezone)
             )
         }
         Period.MONTH -> dateToString(calendar.time, DATE_FORMAT_5, timezone)

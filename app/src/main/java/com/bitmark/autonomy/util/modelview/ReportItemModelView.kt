@@ -16,16 +16,19 @@ data class ReportItemModelView(
 
     val changeRate: Float?,
 
+    val distribution: Map<String, Int>,
+
     val type: String,
 
-    val startedAt: Long
+    val startedAt: String
 ) : ModelView {
     companion object {
-        fun newInstance(reportItemData: ReportItemData, type: String, startedAt: Long) =
+        fun newInstance(reportItemData: ReportItemData, type: String, startedAt: String) =
             ReportItemModelView(
                 reportItemData.name,
                 reportItemData.value,
                 reportItemData.changeRate,
+                reportItemData.distribution,
                 type,
                 startedAt
             )

@@ -25,38 +25,43 @@ class TrendingViewModel(
     fun listReportItem(
         scope: String,
         type: String,
-        range: LongRange,
+        start: String,
+        end: String,
         poiId: String?,
-        lang: String
+        lang: String,
+        granularity: String
     ) {
         val execFunc = fun(
             scope: String,
             type: String,
-            range: LongRange,
+            start: String,
+            end: String,
             poiId: String?,
-            lang: String
+            lang: String,
+            granularity: String
         ) {
             listReportItemLiveData.add(
                 rxLiveDataTransformer.single(
                     appRepo.listReportItem(
                         scope,
                         type,
-                        range.first,
-                        range.last,
+                        start,
+                        end,
                         lang,
+                        granularity,
                         poiId
                     ).map { items ->
                         items.map { i ->
                             ReportItemModelView.newInstance(
                                 i,
                                 type,
-                                range.first
+                                start
                             )
                         }
                     }
                 )
             )
         }
-        execFunc(scope, type, range, poiId, lang)
+        execFunc(scope, type, start, end, poiId, lang, granularity)
     }
 }

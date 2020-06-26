@@ -59,4 +59,6 @@
     <color name="gold_tip_40">#40E7B416</color>
     <color name="persian_red">#CC3232</color>
     <color name="persian_red_40">#40CC3232</color>
+    <color name="trans">#00000000</color>
+
 </resources>

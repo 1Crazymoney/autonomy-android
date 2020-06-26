@@ -162,17 +162,22 @@ class AutonomyProfileActivity : BaseAppCompatActivity() {
                         ReportType.BEHAVIOR.value
                     } else if (item.neighborData?.confirm != null) {
                         ReportType.CASE.value
+                    } else if (item.neighborData?.score != null) {
+                        ReportType.SCORE.value
                     } else {
-                        // TODO throw error
-                        return
+                        error("unsupported type")
+                    }
+
+                val scope =
+                    when {
+                        item.yourData != null -> ReportScope.INDIVIDUAL.value
+                        item.neighborData != null -> ReportScope.NEIGHBORHOOD.value
+                        else -> ReportScope.POI.value
                     }
 
                 val bundle = if (isIndividual()) {
-                    val scope =
-                        if (item.yourData != null) ReportScope.INDIVIDUAL.value else ReportScope.NEIGHBORHOOD.value
                     TrendingContainerActivity.getBundle(type, scope)
                 } else {
-                    val scope = ReportScope.POI.value
                     TrendingContainerActivity.getBundle(type, scope, autonomyProfile.id)
                 }
 

@@ -284,6 +284,11 @@
     <string name="or_tap_to_find_resource">Or tap to find a specific resource:</string>
     <string name="monitor">Monitor</string>
     <string name="neighborhood_score">Neighborhood Score</string>
+    <string name="you_did_not_report_symptoms">You didn’t report any symptoms for this period or for the previous period.</string>
+    <string name="you_did_not_report_behaviors">You didn’t report any healthy behaviors for this period or for the previous period.</string>
+    <string name="times">Times</string>
+    <string name="change">Change</string>
+    <string name="days">Days</string>
 
     <!-- array -->
     <string-array name="symptoms">
@@ -294,6 +299,31 @@
         <item>shortness of breath</item>
         <item>difficulty breathing</item>
         <item>loss of sense of taste or smell</item>
+    </string-array>
+
+    <string-array name="day_of_week">
+        <item>S</item>
+        <item>M</item>
+        <item>T</item>
+        <item>W</item>
+        <item>T</item>
+        <item>F</item>
+        <item>S</item>
+    </string-array>
+
+    <string-array name="month_of_year">
+        <item>J</item>
+        <item>F</item>
+        <item>M</item>
+        <item>A</item>
+        <item>M</item>
+        <item>J</item>
+        <item>J</item>
+        <item>A</item>
+        <item>S</item>
+        <item>O</item>
+        <item>N</item>
+        <item>D</item>
     </string-array>
 
     <!--    string format-->

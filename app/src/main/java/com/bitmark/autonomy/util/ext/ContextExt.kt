@@ -24,14 +24,17 @@ fun Context.copyToClipboard(text: String) {
     clipboardManager.setPrimaryClip(clip)
 }
 
-fun Context.getResIdentifier(resName: String, classifier: String) = try {
+fun Context.getResIdentifier(resName: String, classifier: String) =
     resources.getIdentifier(resName, classifier, packageName)
-} catch (e: Throwable) {
-    null
-}
+
+fun Context.getDrawableIdentifier(drawableName: String) = getResIdentifier(drawableName, "drawable")
+
+fun Context.getColorIdentifier(colorName: String) = getResIdentifier(colorName, "color")
+
+fun Context.getColorInt(colorName: String) = getColor(getColorIdentifier(colorName))
 
 fun Context.getString(stringResName: String): String? {
-    val id = getResIdentifier(stringResName, "string") ?: return null
+    val id = getResIdentifier(stringResName, "string")
     return try {
         getString(id)
     } catch (e: Throwable) {

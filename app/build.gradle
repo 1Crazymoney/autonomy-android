@@ -252,6 +252,7 @@ dependencies {
     implementation 'com.android.support:customtabs:23.3.0'
     implementation 'com.yarolegovich:discrete-scrollview:1.4.9'
     implementation 'com.github.ome450901:SimpleRatingBar:1.5.0'
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
 
 
     // Geocoding

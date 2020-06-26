@@ -27,11 +27,12 @@ class AppRepository(
     fun listReportItem(
         scope: String,
         type: String,
-        start: Long,
-        end: Long,
+        start: String,
+        end: String,
         lang: String,
+        granularity: String,
         poiId: String? = null
-    ) = remoteDataSource.listReportItem(scope, type, start, end, lang, poiId)
+    ) = remoteDataSource.listReportItem(scope, type, start, end, lang, granularity, poiId)
 
     fun deleteAppData() =
         Completable.mergeArray(localDataSource.deleteCache(), localDataSource.deleteSharePref())

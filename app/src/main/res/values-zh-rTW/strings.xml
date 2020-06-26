@@ -283,6 +283,11 @@
     <string name="or_tap_to_find_resource">Or tap to find a specific resource:</string>
     <string name="monitor">Monitor</string>
     <string name="neighborhood_score">Neighborhood Score</string>
+    <string name="you_did_not_report_symptoms">You didn’t report any symptoms for this period or for the previous period.</string>
+    <string name="you_did_not_report_behaviors">You didn’t report any healthy behaviors for this period or for the previous period.</string>
+    <string name="times">Times</string>
+    <string name="change">Change</string>
+    <string name="days">Days</string>
 
     <!-- array -->
     <string-array name="symptoms">

@@ -11,14 +11,19 @@ import android.graphics.drawable.Drawable
 import androidx.recyclerview.widget.RecyclerView
 
 
-class DividerItemDecorator(private val drawable: Drawable) : RecyclerView.ItemDecoration() {
+class DividerItemDecorator(
+    private val drawable: Drawable,
+    private val topRemovedItemCount: Int,
+    private val bottomRemovedItemCount: Int
+) : RecyclerView.ItemDecoration() {
 
     override fun onDraw(c: Canvas, parent: RecyclerView, state: RecyclerView.State) {
         val dividerLeft = parent.paddingLeft
         val dividerRight = parent.width - parent.paddingRight
 
         val childCount = parent.childCount
-        for (i in 0..childCount - 2) {
+
+        for (i in topRemovedItemCount..childCount - 1 - bottomRemovedItemCount) {
             val child = parent.getChildAt(i)
 
             val params = child.layoutParams as RecyclerView.LayoutParams
