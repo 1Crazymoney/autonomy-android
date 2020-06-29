@@ -10,9 +10,9 @@ import com.bitmark.autonomy.util.ext.abbreviate
 import com.github.mikephil.charting.formatter.ValueFormatter
 
 
-class YValueFormatter : ValueFormatter() {
+class YValueFormatter(private val base: Int = 1) : ValueFormatter() {
 
     override fun getFormattedValue(value: Float): String {
-        return if (value == 0f) "" else value.toInt().abbreviate()
+        return if (value == 0f) "" else (value * base).toInt().abbreviate()
     }
 }

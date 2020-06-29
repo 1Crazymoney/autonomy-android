@@ -65,7 +65,7 @@ class TrendingFragment : BaseSupportFragment() {
 
         private const val POI_ID = "poi_id"
 
-        private const val DEFAULT_GRAPH_CHILD_COUNT = 2
+        private const val DEFAULT_GRAPH_CHILD_COUNT = 3
 
         fun newInstance(period: Int, type: String, scope: String, poiId: String? = null) =
             TrendingFragment().apply {
@@ -323,6 +323,7 @@ class TrendingFragment : BaseSupportFragment() {
                                 data.filter { it.value != null }.sumBy { it.value!!.toInt() } == 0
 
                             if (data.isEmpty()) {
+                                // no data
                                 tvNotice.visible()
                                 rv.gone()
                                 adapter.clear()
@@ -333,11 +334,13 @@ class TrendingFragment : BaseSupportFragment() {
                                     tvNotice.setText(R.string.you_did_not_report_behaviors)
                                 }
                             } else if (hasAllZero) {
+                                // data is all zero
                                 tvNotice.gone()
                                 rv.visible()
                                 makeEmptyChart()
                                 adapter.set(data)
                             } else {
+                                // has normal data
                                 tvNotice.gone()
                                 rv.visible()
                                 val timezone = DateTimeUtil.getDefaultTimezoneId()
@@ -418,17 +421,35 @@ class TrendingFragment : BaseSupportFragment() {
     ) {
         val barXValues = getBarXValues(context, period)
         val barData = buildBarChartData(reportItems, barXValues, period)
+        val chart: BarChart
         if (layoutGraph.childCount > DEFAULT_GRAPH_CHILD_COUNT) {
-            val chart = layoutGraph.getChildAt(DEFAULT_GRAPH_CHILD_COUNT) as BarChart
-            chart.data = barData
+            chart = layoutGraph.getChildAt(DEFAULT_GRAPH_CHILD_COUNT) as BarChart
+            chart.data = barData.first
             chart.invalidate()
             chart.animateY(200)
         } else {
-            val chartView = buildBarChart(barXValues)
-            chartView.data = barData
+            chart = buildBarChart(barXValues)
+            chart.data = barData.first
             val params = getGraphLayoutParams(context)
-            chartView.layoutParams = params
-            layoutGraph.addView(chartView)
+            chart.layoutParams = params
+            layoutGraph.addView(chart)
+        }
+
+        val base = barData.second
+        if (base == 1) {
+            layoutGraphBase.gone()
+        } else {
+            layoutGraphBase.visible()
+            tvGraphBase.text = getString(R.string.equal_format).format(
+                base, getString(
+                    when (type) {
+                        ReportType.SYMPTOM.value -> R.string.symptoms
+                        ReportType.BEHAVIOR.value -> R.string.behaviors
+                        else -> error("unsupported type: $type")
+                    }
+                )
+            )
+            chart.axisLeft.valueFormatter = YValueFormatter(base)
         }
     }
 
@@ -443,6 +464,7 @@ class TrendingFragment : BaseSupportFragment() {
         }
         chart.data = barData
         chart.invalidate()
+        layoutGraphBase.gone()
     }
 
     private fun getBarXValues(context: Context, period: Int) = when (period) {
@@ -501,34 +523,75 @@ class TrendingFragment : BaseSupportFragment() {
         reportItems: List<ReportItemModelView>,
         barXValues: List<String>,
         period: Int
-    ): BarData {
+    ): Pair<BarData, Int> {
+
+        // max value for each day/month
+        val maxValueFunc = fun(filteredDistributionMap: Map<String, MutableMap<String, Int>>): Int {
+            return filteredDistributionMap.maxBy { i1 ->
+                i1.value.map { i2 -> i2.value }.sum()
+            }!!.value.map { it.value }.sum()
+        }
+
         // map with key is date string and value is map of id and quantity
         val filteredDistributionMap = mutableMapOf<String, MutableMap<String, Int>>().apply {
             reportItems.forEach { item ->
                 for (e in item.distribution.entries) {
                     if (containsKey(e.key)) {
                         val v = this[e.key] ?: continue
-                        v[item.name] = e.value
+                        v[item.id] = e.value
                     } else {
-                        this[e.key] = mutableMapOf(item.name to e.value)
+                        this[e.key] = mutableMapOf(item.id to e.value)
                     }
                 }
             }
-        }.toMap()
+        }
+
+        var maxValue = maxValueFunc(filteredDistributionMap)
+
+        // calculate the base value for each chart stack
+        val base = when {
+            maxValue < 75 -> 1
+            maxValue < 375 -> 5
+            else -> 10
+        }
+
+        if (base != 1) {
+            // apply base for the filtered map
+            for (e1 in filteredDistributionMap) {
+                val k = e1.key
+                val v = mutableMapOf<String, Int>()
+                for (e2 in e1.value) {
+                    val shortenVal = e2.value / base
+                    if (shortenVal == 0) continue
+                    v[e2.key] = shortenVal
+                }
+                filteredDistributionMap[k] = v
+            }
+
+            // re-calculate maxValue
+            maxValue = maxValueFunc(filteredDistributionMap)
+        }
 
         val idArray =
             filteredDistributionMap.map { i1 -> i1.value.map { i2 -> i2.key } }.flatten().distinct()
 
         // calculate max value of each id
         val maxValueForId = mutableMapOf<String, Int>()
-        reportItems.filter { it.value != null && it.value > 0f }.forEach { i ->
-            maxValueForId[i.name] = i.value!!.toInt()
+        idArray.forEach { id ->
+            val max = filteredDistributionMap.maxWith(kotlin.Comparator { o1, o2 ->
+                val v1 = o1.value[id]
+                val v2 = o2.value[id]
+                when {
+                    v1 == null && v2 == null -> 0
+                    v1 == null && v2 != null -> -1
+                    v1 != null && v2 == null -> 1
+                    else -> v1!!.compareTo(v2!!)
+                }
+            })?.value?.get(id) ?: return@forEach
+            maxValueForId[id] = max
         }
 
         // calculate additional count for display value can be divide by 5
-        val maxValue = filteredDistributionMap.maxBy { i1 ->
-            i1.value.map { i2 -> i2.value }.sum()
-        }!!.value.map { it.value }.sum()
         var additionalCount = 0
         val mod = maxValue % 5
         if (mod != 0) {
@@ -581,6 +644,7 @@ class TrendingFragment : BaseSupportFragment() {
         var lastItemPos: Int
         idArray.forEachIndexed { index, id ->
             val maxVal = maxValueForId[id]!!
+            if (maxVal == 0) return@forEachIndexed
             lastItemPos = (0 until index).sumBy { i -> maxValueForId[idArray[i]]!! }
             valueRangeMap[id] = lastItemPos until lastItemPos + maxVal
             lastItemPos += maxVal
@@ -636,7 +700,7 @@ class TrendingFragment : BaseSupportFragment() {
         dataSet.barBorderWidth = 1f
         val barData = BarData(dataSet)
         barData.barWidth = 1f
-        return barData
+        return Pair(barData, base)
     }
 
     private fun buildBarChart(barXValues: List<String>) = BarChart(context).apply {

@@ -288,6 +288,8 @@
     <string name="times">Times</string>
     <string name="change">Change</string>
     <string name="days">Days</string>
+    <string name="sorry_there_are_not_any_places">Sorry, there aren’t currently any places in our system offering that resource. Be the first to add it for places you know!</string>
+    <string name="monitoring">Monitoring</string>
 
     <!-- array -->
     <string-array name="symptoms">
@@ -311,6 +313,7 @@
     <string name="tap_times_to_enable_debug_mode">再點擊 %1$d 次以啟動除錯模式</string>
     <string name="tap_time_to_enable_debug_mode">再點擊 %1$d 次以啟動除錯模式</string>
     <string name="word_of_format">第%1$d字，一共%2$d字</string>
+    <string name="equal_format">= %1$d %2$s</string>
 
 
     <string name="default_channel">預設頻道</string>

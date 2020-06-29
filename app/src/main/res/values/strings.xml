@@ -340,6 +340,7 @@
     <string name="tap_times_to_enable_debug_mode">Tap more %1$d times to enable Debug Mode</string>
     <string name="tap_time_to_enable_debug_mode">Tap more %1$d time to enable Debug Mode</string>
     <string name="word_of_format">Word %1$d of %2$d</string>
+    <string name="equal_format">= %1$d %2$s</string>
 
     <string name="default_channel">Default Channel</string>
     <string name="important_alert">Important Alert</string>

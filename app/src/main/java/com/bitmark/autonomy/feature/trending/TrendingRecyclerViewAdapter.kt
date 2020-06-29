@@ -89,18 +89,25 @@ class TrendingRecyclerViewAdapter(private val highlightEnable: Boolean = true) :
     fun getHighLightItems() =
         mapOf(*items.filter { i -> i.type == BODY && i.colorName != null && i.colorName != DEFAULT_COLOR }.map {
             Pair(
-                it.data!!.name,
+                it.data!!.id,
                 it.colorName!!
             )
         }.toTypedArray())
 
     fun clear() {
         this.items.clear()
+        clearColorHandler()
         notifyDataSetChanged()
+    }
+
+    private fun clearColorHandler() {
+        removedColorQueue.clear()
+        colorIndex = 0
     }
 
     fun set(items: List<ReportItemModelView>) {
         if (items.isEmpty()) return
+
         val header = when (val type = items[0].type) {
             ReportType.SYMPTOM.value -> Header(R.string.symptoms, R.string.days, R.string.change)
             ReportType.BEHAVIOR.value -> Header(
@@ -112,6 +119,7 @@ class TrendingRecyclerViewAdapter(private val highlightEnable: Boolean = true) :
         }
 
         this.items.clear()
+        clearColorHandler()
         this.items.add(Item(HEADER, header, null, null))
         this.items.addAll(items.map { i ->
             Item(BODY, null, if (i.value != null && i.value > 0f) DEFAULT_COLOR else null, i)

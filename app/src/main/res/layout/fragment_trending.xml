@@ -118,6 +118,39 @@
                     tools:text="@string/graph_coming_soon"
                     tools:visibility="visible" />
 
+                <LinearLayout
+                    android:id="@+id/layoutGraphBase"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginTop="@dimen/dp_12"
+                    android:layout_marginEnd="@dimen/dp_8"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:visibility="gone"
+                    tools:visibility="visible">
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:layout_width="@dimen/dp_25"
+                        android:layout_height="wrap_content"
+                        android:adjustViewBounds="true"
+                        app:srcCompat="@drawable/ic_line" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tvGraphBase"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/dp_4"
+                        android:fontFamily="@font/grotesk_light_font_family"
+                        android:includeFontPadding="false"
+                        android:textAllCaps="true"
+                        android:textColor="@color/silver_2"
+                        android:textSize="@dimen/sp_12"
+                        tools:text="= 10 Behaviors" />
+
+
+                </LinearLayout>
+
             </RelativeLayout>
 
             <androidx.appcompat.widget.AppCompatTextView

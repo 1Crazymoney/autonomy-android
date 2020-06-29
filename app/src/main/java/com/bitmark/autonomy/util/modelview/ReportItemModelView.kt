@@ -10,6 +10,9 @@ import com.bitmark.autonomy.data.model.ReportItemData
 
 
 data class ReportItemModelView(
+
+    val id: String,
+
     val name: String,
 
     val value: Float?,
@@ -25,6 +28,7 @@ data class ReportItemModelView(
     companion object {
         fun newInstance(reportItemData: ReportItemData, type: String, startedAt: String) =
             ReportItemModelView(
+                reportItemData.id,
                 reportItemData.name,
                 reportItemData.value,
                 reportItemData.changeRate,
