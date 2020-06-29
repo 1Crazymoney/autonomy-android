@@ -13,6 +13,7 @@ import com.bitmark.autonomy.util.livedata.CompositeLiveData
 import com.bitmark.autonomy.util.livedata.RxLiveDataTransformer
 import com.bitmark.cryptography.crypto.Sha3256
 import com.bitmark.cryptography.crypto.encoder.Hex
+import com.bitmark.cryptography.crypto.encoder.Hex.HEX
 import com.bitmark.cryptography.crypto.encoder.Raw
 import com.bitmark.sdk.features.Account
 import com.onesignal.OneSignal
@@ -109,7 +110,15 @@ class RiskLevelViewModel(
         return registerAccountStream
             .flatMapCompletable { accountNumber ->
                 val intercomId =
-                    "Autonomy_android_%s".format(Sha3256.hash(Raw.RAW.decode(accountNumber)))
+                    "Autonomy_android_%s".format(
+                        HEX.encode(
+                            Sha3256.hash(
+                                Raw.RAW.decode(
+                                    accountNumber
+                                )
+                            )
+                        )
+                    )
                 Completable.mergeArray(
                     registerIntercomStream(intercomId),
                     registerNotificationStream(accountNumber)

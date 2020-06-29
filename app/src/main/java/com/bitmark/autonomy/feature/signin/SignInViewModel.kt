@@ -90,7 +90,7 @@ class SignInViewModel(
         return syncAccountStream
             .flatMapCompletable { accountNumber ->
                 val intercomId =
-                    "Autonomy_android_%s".format(Sha3256.hash(RAW.decode(accountNumber)))
+                    "Autonomy_android_%s".format(HEX.encode(Sha3256.hash(RAW.decode(accountNumber))))
                 Completable.mergeArray(
                     registerIntercomStream(intercomId),
                     registerNotificationStream(accountNumber)
