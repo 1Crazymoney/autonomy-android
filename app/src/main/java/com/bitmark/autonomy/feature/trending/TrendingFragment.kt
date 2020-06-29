@@ -469,7 +469,7 @@ class TrendingFragment : BaseSupportFragment() {
 
     private fun getBarXValues(context: Context, period: Int) = when (period) {
         Period.WEEK -> context.resources.getStringArray(R.array.day_of_week).toList()
-        Period.MONTH -> DateTimeUtil.listDoM().map { if (it == 1 || it % 7 == 0) it.toString() else "" }
+        Period.MONTH -> DateTimeUtil.listDoM().map { if (it == 1 || it % 5 == 0) it.toString() else "" }
         Period.YEAR -> context.resources.getStringArray(R.array.month_of_year).toList()
         else -> error("unsupported period: $period")
     }
