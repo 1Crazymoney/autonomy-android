@@ -7,12 +7,10 @@
 package com.bitmark.autonomy.feature.autonomyprofile
 
 import androidx.lifecycle.Lifecycle
-import com.bitmark.autonomy.data.model.Location
 import com.bitmark.autonomy.data.source.UserRepository
 import com.bitmark.autonomy.feature.BaseViewModel
 import com.bitmark.autonomy.util.livedata.CompositeLiveData
 import com.bitmark.autonomy.util.livedata.RxLiveDataTransformer
-import com.bitmark.autonomy.util.modelview.AreaModelView
 import com.bitmark.autonomy.util.modelview.AutonomyProfileModelView
 
 
@@ -24,7 +22,9 @@ class AutonomyProfileViewModel(
 
     internal val getAutonomyProfileLiveData = CompositeLiveData<AutonomyProfileModelView>()
 
-    internal val addAreaLiveData = CompositeLiveData<AreaModelView>()
+    internal val addAreaLiveData = CompositeLiveData<Any>()
+
+    internal val removeAreaLiveData = CompositeLiveData<Any>()
 
     fun getAutonomyProfile(
         poiId: String? = null,
@@ -48,16 +48,16 @@ class AutonomyProfileViewModel(
         )
     }
 
-    fun addArea(alias: String, address: String, location: Location) {
+    fun addArea(poiId: String) {
         addAreaLiveData.add(
-            rxLiveDataTransformer.single(
-                userRepo.addArea(
-                    alias,
-                    address,
-                    location.lat,
-                    location.lng
-                ).map { a -> AreaModelView(a.id, a.alias, a.location, a.score) })
+            rxLiveDataTransformer.completable(
+                userRepo.addArea(poiId).ignoreElement()
+            )
         )
+    }
+
+    fun removeArea(poiId: String) {
+        removeAreaLiveData.add(rxLiveDataTransformer.completable(userRepo.deleteArea(poiId)))
     }
 
 }

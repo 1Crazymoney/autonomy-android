@@ -232,6 +232,7 @@
         tools:visibility="visible">
 
         <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvMonitor"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/domaine_sans"
@@ -241,6 +242,7 @@
             android:textSize="@dimen/sp_24" />
 
         <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/ivMonitor"
             android:layout_width="@dimen/dp_44"
             android:layout_height="@dimen/dp_44"
             android:layout_marginStart="@dimen/dp_12"

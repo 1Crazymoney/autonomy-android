@@ -310,58 +310,61 @@ class TrendingFragment : BaseSupportFragment() {
                 when {
                     res.isSuccess() -> {
                         progressBar.gone()
-                        val data = res.data()!!
-                        val hasAllZero =
-                            data.filter { it.value != null }.sumBy { it.value!!.toInt() } == 0
-                        if (data.isEmpty()) {
-                            tvNotice.visible()
-                            rv.gone()
-                            adapter.clear()
-                            makeEmptyChart()
-                            if (type == ReportType.SYMPTOM.value) {
-                                tvNotice.setText(R.string.you_did_not_report_symptoms)
-                            } else if (type == ReportType.BEHAVIOR.value) {
-                                tvNotice.setText(R.string.you_did_not_report_behaviors)
-                            }
-                        } else if (hasAllZero) {
-                            tvNotice.gone()
-                            rv.visible()
-                            makeEmptyChart()
-                            adapter.set(data)
-                        } else {
-                            tvNotice.gone()
-                            rv.visible()
-                            val timezone = DateTimeUtil.getDefaultTimezoneId()
-                            if (data.any { s ->
-                                    s.startedAt != DateTimeUtil.millisToString(
-                                        currentStartedAtSec * 1000,
-                                        DateTimeUtil.ISO8601_SIMPLE_FORMAT_2,
-                                        timezone,
-                                        timezone,
-                                        true
-                                    )
-                                }) return@Observer
-                            val isNotSupported = data.any { s -> s.isNotSupported() }
 
-                            when {
-                                isNotSupported -> {
+                        if (isTemporaryUnsupported()) {
+                            tvGraphNotice.setText(R.string.graph_coming_soon)
+                            tvGraphNotice.visible()
+                            tvGraphName.gone()
+                            adapter.clear()
+                        } else {
+
+                            val data = res.data()!!
+                            val hasAllZero =
+                                data.filter { it.value != null }.sumBy { it.value!!.toInt() } == 0
+
+                            if (data.isEmpty()) {
+                                tvNotice.visible()
+                                rv.gone()
+                                adapter.clear()
+                                makeEmptyChart()
+                                if (type == ReportType.SYMPTOM.value) {
+                                    tvNotice.setText(R.string.you_did_not_report_symptoms)
+                                } else if (type == ReportType.BEHAVIOR.value) {
+                                    tvNotice.setText(R.string.you_did_not_report_behaviors)
+                                }
+                            } else if (hasAllZero) {
+                                tvNotice.gone()
+                                rv.visible()
+                                makeEmptyChart()
+                                adapter.set(data)
+                            } else {
+                                tvNotice.gone()
+                                rv.visible()
+                                val timezone = DateTimeUtil.getDefaultTimezoneId()
+                                if (data.any { s ->
+                                        s.startedAt != DateTimeUtil.millisToString(
+                                            currentStartedAtSec * 1000,
+                                            DateTimeUtil.ISO8601_SIMPLE_FORMAT_2,
+                                            timezone,
+                                            timezone,
+                                            true
+                                        )
+                                    }) return@Observer
+                                val isNotSupported = data.any { s -> s.isNotSupported() }
+
+                                if (isNotSupported) {
                                     tvGraphNotice.setText(R.string.sorry_we_currently_dont_have_active_cases)
                                     tvGraphNotice.visible()
                                     tvGraphName.gone()
-                                }
-                                isTemporaryUnsupported() -> {
-                                    tvGraphNotice.setText(R.string.graph_coming_soon)
-                                    tvGraphNotice.visible()
-                                    tvGraphName.gone()
-                                }
-                                else -> {
+                                } else {
                                     tvGraphNotice.gone()
                                     tvGraphName.visible()
                                     tvGraphName.setText(if (type == ReportType.SYMPTOM.value) R.string.symptoms else R.string.behaviors)
                                     addChart(context!!, data, period)
                                 }
+
+                                adapter.set(data)
                             }
-                            adapter.set(data)
                         }
                     }
 

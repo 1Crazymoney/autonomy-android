@@ -7,19 +7,12 @@
 package com.bitmark.autonomy.feature.location
 
 import android.os.Parcelable
-import com.bitmark.autonomy.data.model.Location
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class PlaceAutoComplete(
-    val placeId: String? = null,
-    val poiId: String? = null,
-    val primaryText: String? = null,
-    val secondaryText: String? = null,
-    val desc: String? = null,
-    val alias: String? = null,
-    val address: String? = null,
-    val distance: Float? = null,
-    val resourceScore: Float? = null,
-    var location: Location? = null
+    val placeId: String,
+    val primaryText: String,
+    val secondaryText: String,
+    val desc: String
 ) : Parcelable

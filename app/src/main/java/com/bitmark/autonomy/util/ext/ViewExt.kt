@@ -10,7 +10,6 @@ import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.graphics.drawable.Drawable
 import android.os.Handler
-import android.util.TypedValue
 import android.view.View
 import android.view.animation.AccelerateInterpolator
 import android.view.animation.DecelerateInterpolator
@@ -139,13 +138,6 @@ fun WebView.evaluateVerificationJs(
 
 fun NestedScrollView.scrollToTop(smooth: Boolean = true) =
     if (smooth) smoothScrollTo(0, 0) else scrollTo(0, 0)
-
-fun TextView.setTextSize(sp: Int) {
-    val screenWidth = context.screenWidth
-    val density = context.resources.displayMetrics.density
-    val convertedSp = screenWidth * sp / (density * 360)
-    setTextSize(TypedValue.COMPLEX_UNIT_SP, convertedSp)
-}
 
 fun ImageView.setImageResource(resName: String) {
     val resId = context.resources.getIdentifier(resName, "drawable", context.packageName)

@@ -21,7 +21,7 @@ data class AutonomyProfileModelView(
 
     val rating: Boolean?,
 
-    val owned: Boolean?,
+    var owned: Boolean?,
 
     val location: Location?,
 

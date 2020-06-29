@@ -68,8 +68,8 @@ interface AutonomyApi {
     @GET("api/score")
     fun getHealthScore(): Single<Map<String, Float>>
 
-    @POST("api/accounts/me/pois")
-    fun addArea(@Body request: AddAreaRequest): Single<AreaData>
+    @POST("api/points-of-interest")
+    fun createArea(@Body request: AddAreaRequest): Single<AreaData>
 
     @DELETE("api/accounts/me/pois/{poi_id}")
     fun deleteArea(@Path("poi_id") id: String): Completable
@@ -85,6 +85,9 @@ interface AutonomyApi {
 
     @PUT("api/accounts/me/pois")
     fun reorderArea(@Body body: RequestBody): Completable
+
+    @POST("api/accounts/me/pois")
+    fun addArea(@Body body: RequestBody): Single<AreaData>
 
     @GET("api/autonomy_profile")
     fun getAutonomyProfile(

@@ -36,3 +36,10 @@ fun Float.ratingScoreToColorRes() = when {
     this <= 3.3f -> R.color.gold_tip
     else -> R.color.apple
 }
+
+fun Float.ratingScoreToStatefulColorRes() = when {
+    this == 0f -> R.color.color_white_stateful
+    this <= 1.6f -> R.color.color_persian_red_stateful
+    this <= 3.3f -> R.color.color_gold_tip_stateful
+    else -> R.color.color_apple_stateful
+}

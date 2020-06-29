@@ -14,8 +14,8 @@ class UserRepository(private val remoteDataSource: UserRemoteDataSource) : Repos
 
     fun getHealthScore() = remoteDataSource.getHealthScore()
 
-    fun addArea(alias: String, address: String, lat: Double, lng: Double) =
-        remoteDataSource.addArea(alias, address, lat, lng)
+    fun createArea(alias: String, address: String, lat: Double, lng: Double) =
+        remoteDataSource.createArea(alias, address, lat, lng)
 
     fun deleteArea(id: String) = remoteDataSource.deleteArea(id)
 
@@ -24,6 +24,8 @@ class UserRepository(private val remoteDataSource: UserRemoteDataSource) : Repos
     fun reorderArea(ids: List<String>) = remoteDataSource.reorderArea(ids)
 
     fun rename(id: String, name: String) = remoteDataSource.rename(id, name)
+
+    fun addArea(poiId: String) = remoteDataSource.addArea(poiId)
 
     fun getAutonomyProfile(
         poiId: String? = null,

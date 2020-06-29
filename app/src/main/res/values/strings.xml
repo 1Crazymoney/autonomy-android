@@ -289,6 +289,9 @@
     <string name="times">Times</string>
     <string name="change">Change</string>
     <string name="days">Days</string>
+    <string name="sorry_there_are_not_any_places">Sorry, there aren’t currently any places in our system offering that resource. Be the first to add it for places you know!</string>
+    <string name="monitoring">Monitoring</string>
+
 
     <!-- array -->
     <string-array name="symptoms">

@@ -10,8 +10,6 @@ object Constants {
 
     const val GOOGLE_PLAY_HOST = "play.google.com"
 
-    const val MAX_AREA = 10
-
     const val DATA_RIGHTS_URL = "https://bitmark.com/privacy"
 
     const val CORONA_DATA_URL = "https://coronadatascraper.com"

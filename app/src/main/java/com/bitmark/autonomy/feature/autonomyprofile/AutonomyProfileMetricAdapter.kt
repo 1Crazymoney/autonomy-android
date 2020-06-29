@@ -13,10 +13,11 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.recyclerview.widget.RecyclerView
 import com.bitmark.autonomy.R
+import com.bitmark.autonomy.data.model.ResourceData
 import com.bitmark.autonomy.util.ext.*
 import com.bitmark.autonomy.util.modelview.AutonomyProfileModelView
 import com.bitmark.autonomy.util.modelview.formatDelta
-import com.bitmark.autonomy.util.modelview.ratingScoreToColorRes
+import com.bitmark.autonomy.util.modelview.ratingScoreToStatefulColorRes
 import com.bitmark.autonomy.util.modelview.scoreToColorRes
 import kotlinx.android.synthetic.main.item_area_metric_body_1.view.*
 import kotlinx.android.synthetic.main.item_area_metric_body_2.view.*
@@ -30,13 +31,13 @@ import kotlin.math.roundToInt
 class AutonomyProfileMetricAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     companion object {
-        private const val HEADER = 0x00
-        private const val SUB_HEADER = 0x01
-        private const val BODY_YOU = 0x02
-        private const val BODY_NEIGHBOR = 0x03
-        private const val BODY_RESOURCE = 0x04
-        private const val FOOTER = 0x05
-        private const val GUIDANCE = 0x06
+        internal const val HEADER = 0x00
+        internal const val SUB_HEADER = 0x01
+        internal const val BODY_YOU = 0x02
+        internal const val BODY_NEIGHBOR = 0x03
+        internal const val BODY_RESOURCE = 0x04
+        internal const val FOOTER = 0x05
+        internal const val GUIDANCE = 0x06
     }
 
     private val items = mutableListOf<Item>()
@@ -110,7 +111,7 @@ class AutonomyProfileMetricAdapter : RecyclerView.Adapter<RecyclerView.ViewHolde
                     addAll(data.resources.map { res ->
                         Item(
                             BODY_RESOURCE,
-                            resourceData = ItemResource(res.resource.name, res.score, res.ratings)
+                            resourceData = ItemResource(res.resource, res.score, res.ratings)
                         )
                     })
 
@@ -125,7 +126,7 @@ class AutonomyProfileMetricAdapter : RecyclerView.Adapter<RecyclerView.ViewHolde
                         footerItems.add(
                             ItemFooter(
                                 R.drawable.ic_add_stateful,
-                                if (data.rating!!) R.string.view_your_rating else R.string.add_rating
+                                R.string.add_resource
                             )
                         )
                     }
@@ -138,7 +139,9 @@ class AutonomyProfileMetricAdapter : RecyclerView.Adapter<RecyclerView.ViewHolde
                 }
             }
 
-            // add neighbor section
+            // temporarily remove neighbor section
+
+            /*// add neighbor section
             val neighbor = data.neighborProfile
             add(Item(HEADER, R.string.neighborhood))
             add(
@@ -173,7 +176,7 @@ class AutonomyProfileMetricAdapter : RecyclerView.Adapter<RecyclerView.ViewHolde
                         behaviorsDelta = neighbor.behaviorsDelta
                     )
                 )
-            )
+            )*/
         }
 
         notifyDataSetChanged()
@@ -217,7 +220,8 @@ class AutonomyProfileMetricAdapter : RecyclerView.Adapter<RecyclerView.ViewHolde
                     R.layout.item_area_metric_body_1,
                     parent,
                     false
-                )
+                ),
+                actionListener
             )
             FOOTER -> FooterVH(
                 LayoutInflater.from(parent.context).inflate(
@@ -452,14 +456,26 @@ class AutonomyProfileMetricAdapter : RecyclerView.Adapter<RecyclerView.ViewHolde
 
     }
 
-    class BodyResourceVH(view: View) : RecyclerView.ViewHolder(view) {
+    class BodyResourceVH(view: View, actionListener: ActionListener?) :
+        RecyclerView.ViewHolder(view) {
+
+        private lateinit var item: Item
+
+        init {
+            with(itemView) {
+                layoutRootBody1.setSafetyOnclickListener {
+                    actionListener?.onItemClick(item)
+                }
+            }
+        }
 
         fun bind(item: Item) {
+            this.item = item
             val data = item.resourceData!!
             with(itemView) {
-                tvBody11.text = data.text
+                tvBody11.text = data.resource.name
                 tvBody12.text = if (data.score == 0f) "--" else String.format("%.1f", data.score)
-                tvBody12.setTextColorRes(data.score.ratingScoreToColorRes())
+                tvBody12.setTextColorStateList(data.score.ratingScoreToStatefulColorRes())
                 tvBody13.text = data.ratings.abbreviate()
             }
         }
@@ -541,7 +557,7 @@ class AutonomyProfileMetricAdapter : RecyclerView.Adapter<RecyclerView.ViewHolde
         val scoreDelta: Float? = null
     )
 
-    data class ItemResource(val text: String, val score: Float, val ratings: Int)
+    data class ItemResource(val resource: ResourceData, val score: Float, val ratings: Int)
 
     interface ActionListener {
         fun onFooterClick(label: String)

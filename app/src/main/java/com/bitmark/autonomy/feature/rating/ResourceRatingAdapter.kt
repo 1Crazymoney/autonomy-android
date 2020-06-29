@@ -65,6 +65,14 @@ class ResourceRatingAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         }
     }
 
+    fun markHighlight(id: String) {
+        val pos = items.indexOfFirst { i -> i.data != null && i.data.resource.id == id }
+        if (pos != -1) {
+            items[pos].highlight = true
+            notifyItemChanged(pos)
+        }
+    }
+
     fun isEmpty() = items.count { i -> i.type == BODY } == 0
 
     fun getResourceRatings() = items.filter { i -> i.type == BODY }.map { i -> i.data!! }
@@ -107,7 +115,7 @@ class ResourceRatingAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     class BodyVH(view: View) : RecyclerView.ViewHolder(view) {
 
-        private lateinit var item: Item
+        internal lateinit var item: Item
 
         init {
             with(itemView) {
@@ -127,6 +135,13 @@ class ResourceRatingAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                 val rbBg = data.score.toInt().ratingToDrawableRes()
                 rb.setFilledDrawableRes(rbBg)
                 rb.rating = item.data.score
+                if (item.highlight == true) {
+                    layoutRoot.setBackgroundResource(R.color.shark)
+                    rb.setEmptyDrawableRes(R.drawable.bg_circle_black)
+                } else {
+                    layoutRoot.setBackgroundResource(R.color.trans)
+                    rb.setEmptyDrawableRes(R.drawable.bg_circle_mine_shaft)
+                }
             }
         }
     }
@@ -145,7 +160,11 @@ class ResourceRatingAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         }
     }
 
-    data class Item(val type: Int, val data: ResourceRatingModelView? = null)
+    data class Item(
+        val type: Int,
+        val data: ResourceRatingModelView? = null,
+        var highlight: Boolean? = null
+    )
 
     interface ActionListener {
         fun onAddResourceClicked()

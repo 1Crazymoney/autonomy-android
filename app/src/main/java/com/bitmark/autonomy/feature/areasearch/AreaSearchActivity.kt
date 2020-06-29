@@ -6,9 +6,10 @@
  */
 package com.bitmark.autonomy.feature.areasearch
 
-import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
+import android.view.KeyEvent
+import android.view.inputmethod.EditorInfo
 import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -20,13 +21,16 @@ import com.bitmark.autonomy.feature.BaseViewModel
 import com.bitmark.autonomy.feature.DialogController
 import com.bitmark.autonomy.feature.Navigator
 import com.bitmark.autonomy.feature.Navigator.Companion.BOTTOM_UP
+import com.bitmark.autonomy.feature.Navigator.Companion.RIGHT_LEFT
 import com.bitmark.autonomy.feature.areasearch.AreaAutoCompleteRecyclerViewAdapter.Companion.RESOURCE_PLACE
+import com.bitmark.autonomy.feature.autonomyprofile.AutonomyProfileActivity
 import com.bitmark.autonomy.feature.connectivity.ConnectivityHandler
 import com.bitmark.autonomy.feature.location.LocationService
 import com.bitmark.autonomy.feature.location.PlaceAutoComplete
 import com.bitmark.autonomy.logging.Event
 import com.bitmark.autonomy.logging.EventLogger
 import com.bitmark.autonomy.util.ext.*
+import com.bitmark.autonomy.util.modelview.AreaModelView
 import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayoutManager
@@ -37,14 +41,6 @@ import javax.inject.Inject
 
 
 class AreaSearchActivity : BaseAppCompatActivity() {
-
-    companion object {
-
-        private const val PLACE = "place"
-
-        fun extractResultData(intent: Intent) = intent.getParcelableExtra<PlaceAutoComplete>(PLACE)
-
-    }
 
     @Inject
     internal lateinit var navigator: Navigator
@@ -107,20 +103,18 @@ class AreaSearchActivity : BaseAppCompatActivity() {
                 hideKeyBoard()
                 if (blocked) return
                 if (connectivityHandler.isConnected()) {
-                    val place = item.place
                     if (item.type == RESOURCE_PLACE) {
-                        finishActivityWithResult(place)
+                        navigateToProfile(item.area!!)
                     } else {
                         val execFunc = fun(place: PlaceAutoComplete) {
-                            locationService.execGeoCoding(place.placeId!!, { l ->
+                            locationService.execGeoCoding(place.placeId, { l ->
                                 blocked = false
-                                place.location = l
-                                finishActivityWithResult(place)
+                                viewModel.createArea(place.primaryText, place.desc, l.lat, l.lng)
                             }, {
                                 blocked = false
                             })
                         }
-                        execFunc(place)
+                        execFunc(item.place!!)
                         blocked = true
                     }
 
@@ -147,6 +141,7 @@ class AreaSearchActivity : BaseAppCompatActivity() {
                 placeAdapter.clear()
                 rvPlaces.gone()
                 rvResources.visible()
+                tvNotice.gone()
             } else {
                 handler.postDelayed({
                     locationService.search(searchText,
@@ -164,19 +159,22 @@ class AreaSearchActivity : BaseAppCompatActivity() {
 
         }
 
-        ivExit.setOnClickListener {
-            navigator.anim(BOTTOM_UP).finishActivity()
+        edtName.setOnEditorActionListener { _, actionId, event ->
+            if (actionId == EditorInfo.IME_ACTION_DONE || event.action == KeyEvent.ACTION_DOWN && event.keyCode == KeyEvent.KEYCODE_ENTER) {
+                navigator.anim(BOTTOM_UP).finishActivity()
+                true
+            }
+            false
+        }
+
+        ivClear.setOnClickListener {
+            edtName.setText("")
         }
     }
 
-    private fun finishActivityWithResult(place: PlaceAutoComplete) {
-        val intent = Intent().apply {
-            val bundle = Bundle().apply {
-                putParcelable(PLACE, place)
-            }
-            putExtras(bundle)
-        }
-        navigator.anim(BOTTOM_UP).finishActivityForResult(intent)
+    private fun navigateToProfile(area: AreaModelView) {
+        val bundle = AutonomyProfileActivity.getBundle(areaData = area)
+        navigator.anim(RIGHT_LEFT).startActivity(AutonomyProfileActivity::class.java, bundle)
     }
 
     override fun deinitComponents() {
@@ -215,15 +213,44 @@ class AreaSearchActivity : BaseAppCompatActivity() {
             when {
                 res.isSuccess() -> {
                     progressBar.gone()
-                    placeAdapter.setResourcePlaces(res.data()!!)
-                    rvResources.gone()
-                    rvPlaces.visible()
+                    val data = res.data()!!
+                    if (data.isEmpty()) {
+                        rvResources.gone()
+                        rvPlaces.gone()
+                        tvNotice.visible()
+                    } else {
+                        placeAdapter.setResourcePlaces(res.data()!!)
+                        rvResources.gone()
+                        rvPlaces.visible()
+                    }
                     blocked = false
                 }
 
                 res.isError() -> {
                     logger.logError(Event.AREA_AUTOCOMPLETE_ERROR, res.throwable())
                     progressBar.gone()
+                    blocked = false
+                }
+
+                res.isLoading() -> {
+                    blocked = true
+                    progressBar.visible()
+                }
+            }
+        })
+
+        viewModel.createAreaLiveData.asLiveData().observe(this, Observer { res ->
+            when {
+                res.isSuccess() -> {
+                    progressBar.gone()
+                    val data = res.data()!!
+                    navigateToProfile(data)
+                    blocked = false
+                }
+
+                res.isError() -> {
+                    progressBar.gone()
+                    logger.logError(Event.AREA_ADDING_ERROR, res.throwable())
                     blocked = false
                 }
 

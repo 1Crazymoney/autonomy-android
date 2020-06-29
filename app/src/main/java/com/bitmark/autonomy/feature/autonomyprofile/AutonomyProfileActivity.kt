@@ -6,7 +6,6 @@
  */
 package com.bitmark.autonomy.feature.autonomyprofile
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -20,7 +19,6 @@ import com.bitmark.autonomy.feature.DialogController
 import com.bitmark.autonomy.feature.Navigator
 import com.bitmark.autonomy.feature.Navigator.Companion.RIGHT_LEFT
 import com.bitmark.autonomy.feature.connectivity.ConnectivityHandler
-import com.bitmark.autonomy.feature.location.PlaceAutoComplete
 import com.bitmark.autonomy.feature.rating.ResourceRatingActivity
 import com.bitmark.autonomy.feature.trending.TrendingContainerActivity
 import com.bitmark.autonomy.logging.Event
@@ -41,18 +39,12 @@ class AutonomyProfileActivity : BaseAppCompatActivity() {
 
         private const val AREA_DATA = "area_data"
 
-        private const val PLACE_DATA = "place_data"
-
         private const val AUTONOMY_PROFILE = "area_profile"
 
-        fun getBundle(areaData: AreaModelView? = null, placeData: PlaceAutoComplete? = null) =
+        fun getBundle(areaData: AreaModelView? = null) =
             Bundle().apply {
                 if (areaData != null) putParcelable(AREA_DATA, areaData)
-                if (placeData != null) putParcelable(PLACE_DATA, placeData)
             }
-
-        fun extractResultData(intent: Intent?) =
-            intent?.getParcelableExtra<AreaModelView>(AREA_DATA)
     }
 
     @Inject
@@ -74,8 +66,6 @@ class AutonomyProfileActivity : BaseAppCompatActivity() {
 
     private var areaData: AreaModelView? = null
 
-    private var placeData: PlaceAutoComplete? = null
-
     private val adapter = AutonomyProfileMetricAdapter()
 
     private fun isAutonomyProfileReady() = ::autonomyProfile.isInitialized
@@ -89,9 +79,6 @@ class AutonomyProfileActivity : BaseAppCompatActivity() {
             if (savedInstanceState.containsKey(AREA_DATA)) {
                 areaData = savedInstanceState.getParcelable(AREA_DATA)
             }
-            if (savedInstanceState.containsKey(PLACE_DATA)) {
-                placeData = savedInstanceState.getParcelable(PLACE_DATA)
-            }
             if (savedInstanceState.containsKey(AUTONOMY_PROFILE)) {
                 autonomyProfile = savedInstanceState.getParcelable(AUTONOMY_PROFILE)!!
             }
@@ -102,26 +89,20 @@ class AutonomyProfileActivity : BaseAppCompatActivity() {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         if (hasAreaData()) outState.putParcelable(AREA_DATA, areaData)
-        if (hasPlaceData()) outState.putParcelable(PLACE_DATA, placeData)
         if (isAutonomyProfileReady()) outState.putParcelable(AUTONOMY_PROFILE, autonomyProfile)
     }
 
     override fun onResume() {
         super.onResume()
 
-        when {
-            isIndividual() -> viewModel.getAutonomyProfile(me = true)
-            hasPlaceData() -> viewModel.getAutonomyProfile(
-                lat = placeData!!.location!!.lat,
-                lng = placeData!!.location!!.lng,
+        if (isIndividual()) {
+            viewModel.getAutonomyProfile(me = true)
+        } else if (hasAreaData()) {
+            viewModel.getAutonomyProfile(
+                poiId = areaData!!.id,
                 lang = Locale.getDefault().langCountry(),
                 allResources = false
             )
-            hasAreaData() -> viewModel.getAutonomyProfile(
-                poiId = areaData!!.id,
-                lang = Locale.getDefault().langCountry()
-            )
-            else -> error("unexpected cases")
         }
     }
 
@@ -129,16 +110,11 @@ class AutonomyProfileActivity : BaseAppCompatActivity() {
         super.initComponents()
 
         areaData = intent?.extras?.getParcelable(AREA_DATA)
-        placeData = intent?.extras?.getParcelable(PLACE_DATA)
 
-        when {
-            isIndividual() -> tvAlias.setText(R.string.you)
-            hasAreaData() -> tvAlias.text = areaData!!.alias
-            hasPlaceData() -> tvAlias.text = if (placeData!!.primaryText != null) {
-                placeData!!.primaryText
-            } else {
-                placeData!!.alias
-            }
+        if (isIndividual()) {
+            tvAlias.setText(R.string.you)
+        } else if (hasAreaData()) {
+            tvAlias.text = areaData!!.alias
         }
 
         val layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
@@ -153,64 +129,58 @@ class AutonomyProfileActivity : BaseAppCompatActivity() {
         adapter.setActionListener(object : AutonomyProfileMetricAdapter.ActionListener {
 
             override fun onItemClick(item: AutonomyProfileMetricAdapter.Item) {
-                if (!isIndividual() && (!isAutonomyProfileReady() || autonomyProfile.id == null)) return
-
-                val type =
-                    if (item.yourData?.symptoms != null || item.neighborData?.symptoms != null) {
-                        ReportType.SYMPTOM.value
-                    } else if (item.yourData?.behaviors != null || item.neighborData?.behaviors != null) {
-                        ReportType.BEHAVIOR.value
-                    } else if (item.neighborData?.confirm != null) {
-                        ReportType.CASE.value
-                    } else if (item.neighborData?.score != null) {
-                        ReportType.SCORE.value
-                    } else {
-                        error("unsupported type")
-                    }
-
-                val scope =
-                    when {
-                        item.yourData != null -> ReportScope.INDIVIDUAL.value
-                        item.neighborData != null -> ReportScope.NEIGHBORHOOD.value
-                        else -> ReportScope.POI.value
-                    }
-
-                val bundle = if (isIndividual()) {
-                    TrendingContainerActivity.getBundle(type, scope)
+                if (item.type == AutonomyProfileMetricAdapter.BODY_RESOURCE) {
+                    val bundle = ResourceRatingActivity.getBundle(
+                        autonomyProfile.id!!,
+                        item.resourceData!!.resource.id
+                    )
+                    navigator.anim(RIGHT_LEFT)
+                        .startActivity(ResourceRatingActivity::class.java, bundle)
                 } else {
-                    TrendingContainerActivity.getBundle(type, scope, autonomyProfile.id)
-                }
+                    val type =
+                        if (item.yourData?.symptoms != null || item.neighborData?.symptoms != null) {
+                            ReportType.SYMPTOM.value
+                        } else if (item.yourData?.behaviors != null || item.neighborData?.behaviors != null) {
+                            ReportType.BEHAVIOR.value
+                        } else if (item.neighborData?.confirm != null) {
+                            ReportType.CASE.value
+                        } else if (item.neighborData?.score != null) {
+                            ReportType.SCORE.value
+                        } else {
+                            error("unsupported type")
+                        }
 
-                navigator.anim(RIGHT_LEFT)
-                    .startActivity(TrendingContainerActivity::class.java, bundle)
+                    val scope =
+                        when {
+                            item.yourData != null -> ReportScope.INDIVIDUAL.value
+                            item.neighborData != null -> ReportScope.NEIGHBORHOOD.value
+                            else -> ReportScope.POI.value
+                        }
+
+                    val bundle = if (isIndividual()) {
+                        TrendingContainerActivity.getBundle(type, scope)
+                    } else {
+                        TrendingContainerActivity.getBundle(type, scope, autonomyProfile.id)
+                    }
+
+                    navigator.anim(RIGHT_LEFT)
+                        .startActivity(TrendingContainerActivity::class.java, bundle)
+                }
             }
 
             override fun onFooterClick(label: String) {
                 if (!isIndividual() && (!isAutonomyProfileReady() || autonomyProfile.id == null)) return
                 when (label) {
                     getString(R.string.more) -> {
-                        when {
-                            hasPlaceData() -> viewModel.getAutonomyProfile(
-                                lat = placeData!!.location!!.lat,
-                                lng = placeData!!.location!!.lng,
-                                lang = Locale.getDefault().langCountry(),
-                                allResources = true
-                            )
-                            hasAreaData() -> viewModel.getAutonomyProfile(
-                                areaData!!.id,
-                                true,
-                                Locale.getDefault().langCountry()
-                            )
-                            else -> error("missing both area and place data")
-                        }
-                    }
-                    getString(R.string.view_your_rating), getString(R.string.add_rating) -> {
-                        val bundle = ResourceRatingActivity.getBundle(autonomyProfile.id!!)
-                        navigator.anim(RIGHT_LEFT)
-                            .startActivity(ResourceRatingActivity::class.java, bundle)
+                        viewModel.getAutonomyProfile(
+                            areaData!!.id,
+                            true,
+                            Locale.getDefault().langCountry()
+                        )
                     }
                     getString(R.string.add_resource) -> {
-                        val bundle = ResourceRatingActivity.getBundle(autonomyProfile.id!!, true)
+                        val bundle =
+                            ResourceRatingActivity.getBundle(autonomyProfile.id!!, null, true)
                         navigator.anim(RIGHT_LEFT)
                             .startActivity(ResourceRatingActivity::class.java, bundle)
                     }
@@ -241,18 +211,16 @@ class AutonomyProfileActivity : BaseAppCompatActivity() {
         }
 
         layoutMonitor.setSafetyOnclickListener {
-            val alias =
-                if (placeData!!.alias != null) placeData!!.alias!! else placeData!!.primaryText!!
-            val address =
-                if (placeData!!.address != null) placeData!!.address!! else placeData!!.desc!!
-            viewModel.addArea(alias, address, placeData!!.location!!)
+            if (autonomyProfile.owned!!) {
+                viewModel.removeArea(autonomyProfile.id!!)
+            } else {
+                viewModel.addArea(autonomyProfile.id!!)
+            }
         }
 
     }
 
-    private fun isIndividual() = areaData == null && placeData == null
-
-    private fun hasPlaceData() = placeData != null
+    private fun isIndividual() = areaData == null
 
     private fun hasAreaData() = areaData != null
 
@@ -300,14 +268,8 @@ class AutonomyProfileActivity : BaseAppCompatActivity() {
             when {
                 res.isSuccess() -> {
                     progressBar.gone()
-                    val data = res.data()!!
-                    val intent = Intent().apply {
-                        val bundle = Bundle().apply {
-                            putParcelable(AREA_DATA, data)
-                        }
-                        putExtras(bundle)
-                    }
-                    navigator.anim(RIGHT_LEFT).finishActivityForResult(intent)
+                    autonomyProfile.owned = true
+                    setMonitorState(true)
                 }
 
                 res.isError() -> {
@@ -315,6 +277,30 @@ class AutonomyProfileActivity : BaseAppCompatActivity() {
                     logger.logError(Event.AREA_ADDING_ERROR, res.throwable())
                     if (connectivityHandler.isConnected()) {
                         dialogController.alert(R.string.error, R.string.could_not_add_area)
+                    } else {
+                        dialogController.showNoInternetConnection()
+                    }
+                }
+
+                res.isLoading() -> {
+                    progressBar.visible()
+                }
+            }
+        })
+
+        viewModel.removeAreaLiveData.asLiveData().observe(this, Observer { res ->
+            when {
+                res.isSuccess() -> {
+                    progressBar.gone()
+                    autonomyProfile.owned = false
+                    setMonitorState(false)
+                }
+
+                res.isError() -> {
+                    progressBar.gone()
+                    logger.logError(Event.AREA_DELETE_ERROR, res.throwable())
+                    if (connectivityHandler.isConnected()) {
+                        dialogController.alert(R.string.error, R.string.could_not_delete_area)
                     } else {
                         dialogController.showNoInternetConnection()
                     }
@@ -354,20 +340,29 @@ class AutonomyProfileActivity : BaseAppCompatActivity() {
     private fun showData(profile: AutonomyProfileModelView) {
         if (isIndividual()) {
             layoutAddress.gone()
+            layoutMonitor.gone()
         } else {
             layoutAddress.visible()
             tvAddress.text = profile.address
-        }
-
-        if (profile.owned == false) {
             layoutMonitor.visible()
-        } else {
-            layoutMonitor.gone()
+            setMonitorState(profile.owned!!)
         }
 
         showScore(profile.autonomyScore.roundToInt(), profile.autonomyScoreDelta)
         adapter.set(profile)
 
+    }
+
+    private fun setMonitorState(monitored: Boolean) {
+        if (monitored) {
+            ivMonitor.setImageResource(R.drawable.ic_checked_stateful)
+            tvMonitor.setText(R.string.monitoring)
+            tvMonitor.textSize = 18f
+        } else {
+            ivMonitor.setImageResource(R.drawable.ic_add_stateful)
+            tvMonitor.setText(R.string.monitor)
+            tvMonitor.textSize = 24f
+        }
     }
 
     override fun onBackPressed() {

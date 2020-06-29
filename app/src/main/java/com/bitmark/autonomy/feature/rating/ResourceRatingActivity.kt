@@ -38,14 +38,20 @@ class ResourceRatingActivity : BaseAppCompatActivity() {
     companion object {
         private const val POI_ID = "poi_id"
 
+        private const val RESOURCE_ID = "resource_id"
+
         private const val GO_TO_SELECT_RESOURCE = "go_to_select_resource"
 
         private const val SELECT_RESOURCE_REQUEST_CODE = 0xAB
 
-        fun getBundle(poiId: String, goToAddResource: Boolean = false) = Bundle().apply {
-            putString(POI_ID, poiId)
-            putBoolean(GO_TO_SELECT_RESOURCE, goToAddResource)
-        }
+        fun getBundle(poiId: String, resourceId: String? = null, goToAddResource: Boolean = false) =
+            Bundle().apply {
+                putString(POI_ID, poiId)
+                putBoolean(GO_TO_SELECT_RESOURCE, goToAddResource)
+                if (resourceId != null) {
+                    putString(RESOURCE_ID, resourceId)
+                }
+            }
     }
 
     @Inject
@@ -73,6 +79,8 @@ class ResourceRatingActivity : BaseAppCompatActivity() {
 
     private lateinit var poiId: String
 
+    private var resourceId: String? = null
+
     override fun layoutRes(): Int = R.layout.activity_resource_rating
 
     override fun viewModel(): BaseViewModel? = viewModel
@@ -80,6 +88,7 @@ class ResourceRatingActivity : BaseAppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         poiId = intent?.extras?.getString(POI_ID) ?: error("missing poi_id")
+        resourceId = intent?.extras?.getString(RESOURCE_ID)
         viewModel.listResourceRating(poiId, Locale.getDefault().langCountry())
         directlyGoToSelectResource =
             intent?.extras?.getBoolean(GO_TO_SELECT_RESOURCE)
@@ -125,12 +134,17 @@ class ResourceRatingActivity : BaseAppCompatActivity() {
             when {
                 res.isSuccess() -> {
                     progressBar.gone()
+                    layoutSubmit.visible()
                     val data = res.data()!!
                     adapter.addToTop(data, true)
+                    if (resourceId != null) {
+                        adapter.markHighlight(resourceId!!)
+                    }
                 }
 
                 res.isError() -> {
                     progressBar.gone()
+                    layoutSubmit.gone()
                     logger.logError(Event.RESOURCE_RATING_LISTING_ERROR, res.throwable())
                 }
 

@@ -20,13 +20,27 @@ data class AreaModelView(
 
     var alias: String,
 
+    val address: String,
+
     val location: Location,
 
-    val score: Float?
+    val score: Float?,
+
+    val distance: Float?,
+
+    val resourceScore: Float?
 ) : ModelView, Parcelable {
     companion object {
         fun newInstance(area: AreaData) =
-            AreaModelView(area.id, area.alias, area.location, area.score)
+            AreaModelView(
+                area.id,
+                area.alias,
+                area.address,
+                area.location,
+                area.score,
+                area.distance,
+                area.resourceScore
+            )
     }
 }
 

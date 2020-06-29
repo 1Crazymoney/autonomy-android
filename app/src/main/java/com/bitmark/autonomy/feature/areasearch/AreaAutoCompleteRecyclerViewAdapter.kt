@@ -20,6 +20,7 @@ import com.bitmark.autonomy.util.ext.invisible
 import com.bitmark.autonomy.util.ext.setTextColorRes
 import com.bitmark.autonomy.util.ext.setTextColorStateList
 import com.bitmark.autonomy.util.ext.visible
+import com.bitmark.autonomy.util.modelview.AreaModelView
 import com.bitmark.autonomy.util.modelview.ratingScoreToColorRes
 import com.bitmark.autonomy.util.modelview.ratingToDrawableRes
 import kotlinx.android.synthetic.main.item_area_autocomplete.view.*
@@ -46,18 +47,20 @@ class AreaAutoCompleteRecyclerViewAdapter :
         this.items.addAll(places.map { p ->
             Item(
                 AUTOCOMPLETE_PLACE,
-                p
+                p,
+                null
             )
         })
         notifyDataSetChanged()
     }
 
-    fun setResourcePlaces(places: List<PlaceAutoComplete>) {
+    fun setResourcePlaces(areas: List<AreaModelView>) {
         this.items.clear()
-        this.items.addAll(places.map { p ->
+        this.items.addAll(areas.map { a ->
             Item(
                 RESOURCE_PLACE,
-                p
+                null,
+                a
             )
         })
         notifyDataSetChanged()
@@ -127,7 +130,7 @@ class AreaAutoCompleteRecyclerViewAdapter :
 
         fun bind(item: Item, searchText: String) {
             this.item = item
-            val place = item.place
+            val place = item.place!!
             with(itemView) {
                 val spannableString = SpannableString(place.primaryText)
                 val start = place.primaryText!!.indexOf(searchText, ignoreCase = true)
@@ -163,23 +166,23 @@ class AreaAutoCompleteRecyclerViewAdapter :
 
         fun bind(item: Item) {
             this.item = item
-            val place = item.place
+            val area = item.area!!
             with(itemView) {
-                tvName.text = if (place.distance != null) {
-                    String.format("%s (%.1f km)", place.alias, place.distance)
+                tvName.text = if (area.distance != null) {
+                    String.format("%s (%.1f km)", area.alias, area.distance)
                 } else {
-                    place.alias
+                    area.alias
                 }
-                tvDesc.text = place.address
+                tvDesc.text = area.address
 
-                if (place.resourceScore == null) {
+                if (area.resourceScore == null) {
                     tvScore.text = "--"
                     tvScore.setTextColorRes(R.color.concord)
                 } else {
-                    tvScore.text = String.format("%.1f", place.resourceScore)
-                    rb.rating = place.resourceScore.roundToInt().toFloat()
-                    rb.setFilledDrawableRes(place.resourceScore.roundToInt().ratingToDrawableRes())
-                    tvScore.setTextColorRes(place.resourceScore.ratingScoreToColorRes())
+                    tvScore.text = String.format("%.1f", area.resourceScore)
+                    rb.rating = area.resourceScore.roundToInt().toFloat()
+                    rb.setFilledDrawableRes(area.resourceScore.roundToInt().ratingToDrawableRes())
+                    tvScore.setTextColorRes(area.resourceScore.ratingScoreToColorRes())
                 }
             }
         }
@@ -191,6 +194,7 @@ class AreaAutoCompleteRecyclerViewAdapter :
 
     data class Item(
         val type: Int,
-        val place: PlaceAutoComplete
+        val place: PlaceAutoComplete?,
+        val area: AreaModelView?
     )
 }

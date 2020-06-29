@@ -38,7 +38,6 @@ import com.bitmark.autonomy.feature.splash.SplashActivity
 import com.bitmark.autonomy.feature.symptoms.SymptomReportActivity
 import com.bitmark.autonomy.logging.Event
 import com.bitmark.autonomy.logging.EventLogger
-import com.bitmark.autonomy.util.Constants.MAX_AREA
 import com.bitmark.autonomy.util.DateTimeUtil
 import com.bitmark.autonomy.util.ext.*
 import com.bitmark.autonomy.util.modelview.AreaModelView
@@ -56,10 +55,6 @@ class MainActivity : BaseAppCompatActivity() {
         private const val NOTIFICATION_BUNDLE = "notification_bundle"
 
         private const val NAVIGATION_ACTION_DELAY = 500L
-
-        private const val SEARCH_PLACE_REQUEST_CODE = 0x1A
-
-        private const val ADD_AREA_REQUEST_CODE = 0x2A
 
         fun getBundle(notificationBundle: Bundle? = null) =
             Bundle().apply {
@@ -146,7 +141,6 @@ class MainActivity : BaseAppCompatActivity() {
                 if (keyBoardShowing) return@detectKeyBoardState
                 adapter.clearEditing()
                 setEditingVisible(false)
-                setAddAreaVisible(adapter.itemCount < MAX_AREA)
             }, { !keyBoardShowing })
 
         }
@@ -265,29 +259,6 @@ class MainActivity : BaseAppCompatActivity() {
                         notificationHandled = handleNotification(notificationBundle)
                     }
                 }
-
-                SEARCH_PLACE_REQUEST_CODE -> {
-                    val place =
-                        AreaSearchActivity.extractResultData(data!!) ?: error("data is null")
-                    val bundle = AutonomyProfileActivity.getBundle(placeData = place)
-                    handler.postDelayed({
-                        navigator.anim(RIGHT_LEFT).startActivityForResult(
-                            AutonomyProfileActivity::class.java,
-                            ADD_AREA_REQUEST_CODE,
-                            bundle
-                        )
-                    }, NAVIGATION_ACTION_DELAY)
-                }
-
-                ADD_AREA_REQUEST_CODE -> {
-                    val area =
-                        AutonomyProfileActivity.extractResultData(data!!) ?: error("data is null")
-                    val existing = areaList.find { a -> a.location == area.location } != null
-                    if (existing) return
-                    areaList.add(area)
-                    adapter.add(area)
-                    setAddAreaVisible(adapter.itemCount < MAX_AREA)
-                }
             }
         }
     }
@@ -326,11 +297,9 @@ class MainActivity : BaseAppCompatActivity() {
         rvAreas.isNestedScrollingEnabled = false
         (rvAreas.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
         adapter.setActionListener(actionListener)
-        setAddAreaVisible(adapter.itemCount < MAX_AREA)
 
         layoutAddArea.setSafetyOnclickListener {
-            navigator.anim(BOTTOM_UP)
-                .startActivityForResult(AreaSearchActivity::class.java, SEARCH_PLACE_REQUEST_CODE)
+            navigator.anim(BOTTOM_UP).startActivity(AreaSearchActivity::class.java)
         }
 
         ivMenu.setSafetyOnclickListener {
@@ -366,7 +335,6 @@ class MainActivity : BaseAppCompatActivity() {
                     val id = res.data()!!
                     areaList.removeAll { a -> a.id == id }
                     adapter.remove(id)
-                    setAddAreaVisible(adapter.itemCount < MAX_AREA)
                 }
 
                 res.isError() -> {
@@ -446,7 +414,6 @@ class MainActivity : BaseAppCompatActivity() {
                     progressBar.gone()
                     areaList = res.data()!!.toMutableList()
                     adapter.set(areaList)
-                    setAddAreaVisible(adapter.itemCount < MAX_AREA)
                 }
 
                 res.isError() -> {
@@ -475,16 +442,6 @@ class MainActivity : BaseAppCompatActivity() {
                 }
             }
         })
-    }
-
-    fun setAddAreaVisible(visible: Boolean) {
-        if (visible) {
-            layoutBottom.visible()
-            layoutAddArea.visible()
-            tvEditing.gone()
-        } else {
-            layoutBottom.gone()
-        }
     }
 
     fun setEditingVisible(visible: Boolean) {

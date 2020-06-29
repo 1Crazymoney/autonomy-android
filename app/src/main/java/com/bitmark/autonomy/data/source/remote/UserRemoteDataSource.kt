@@ -7,6 +7,7 @@
 package com.bitmark.autonomy.data.source.remote
 
 import com.bitmark.autonomy.data.ext.newGsonInstance
+import com.bitmark.autonomy.data.model.AreaData
 import com.bitmark.autonomy.data.model.CoefficientData
 import com.bitmark.autonomy.data.model.Location
 import com.bitmark.autonomy.data.source.remote.api.middleware.RxErrorHandlingComposer
@@ -14,6 +15,7 @@ import com.bitmark.autonomy.data.source.remote.api.request.AddAreaRequest
 import com.bitmark.autonomy.data.source.remote.api.request.UpdateProfileFormulaRequest
 import com.bitmark.autonomy.data.source.remote.api.service.AutonomyApi
 import io.reactivex.Completable
+import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
@@ -29,8 +31,8 @@ class UserRemoteDataSource @Inject constructor(
         res["score"] ?: error("invalid response")
     }.subscribeOn(Schedulers.io())
 
-    fun addArea(alias: String, address: String, lat: Double, lng: Double) =
-        autonomyApi.addArea(AddAreaRequest(alias, address, Location(lat, lng)))
+    fun createArea(alias: String, address: String, lat: Double, lng: Double) =
+        autonomyApi.createArea(AddAreaRequest(alias, address, Location(lat, lng)))
             .subscribeOn(Schedulers.io())
 
     fun deleteArea(id: String) =
@@ -48,6 +50,12 @@ class UserRemoteDataSource @Inject constructor(
         val json = newGsonInstance().toJson(mapOf("alias" to name))
         val reqBody = json.toRequestBody("application/json".toMediaTypeOrNull())
         return autonomyApi.renameArea(id, reqBody).subscribeOn(Schedulers.io())
+    }
+
+    fun addArea(poiId: String): Single<AreaData> {
+        val json = newGsonInstance().toJson(mapOf("poi_id" to poiId))
+        val reqBody = json.toRequestBody("application/json".toMediaTypeOrNull())
+        return autonomyApi.addArea(reqBody).subscribeOn(Schedulers.io())
     }
 
     fun getAutonomyProfile(
