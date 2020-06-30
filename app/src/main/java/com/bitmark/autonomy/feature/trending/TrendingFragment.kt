@@ -316,10 +316,11 @@ class TrendingFragment : BaseSupportFragment() {
                             tvGraphNotice.setText(R.string.graph_coming_soon)
                             tvGraphNotice.visible()
                             tvGraphName.gone()
+                            vDivider3.visible()
                             rv.visible()
                             adapter.set(data)
                         } else {
-
+                            vDivider3.gone()
                             val hasAllZero =
                                 data.filter { it.value != null }.sumBy { it.value!!.toInt() } == 0
 
@@ -509,7 +510,7 @@ class TrendingFragment : BaseSupportFragment() {
         val entries =
             barXValues.mapIndexed { index, _ ->
                 val yVals = FloatArray(6) { 1f }
-                yVals[0] = 6 / 100f
+                yVals[0] = 0.025f
                 BarEntry(index.toFloat(), yVals)
             }
         val dataSet = BarDataSet(entries, "")
@@ -698,7 +699,7 @@ class TrendingFragment : BaseSupportFragment() {
         dataSet.setDrawValues(false)
         dataSet.colors = colors.toList()
         dataSet.barBorderColor = getColor(context!!, R.color.black)
-        dataSet.barBorderWidth = 1f
+        dataSet.barBorderWidth = 0.5f
         val barData = BarData(dataSet)
         barData.barWidth = 1f
         return Pair(barData, base)

@@ -108,7 +108,8 @@ class TrendingRecyclerViewAdapter(private val highlightEnable: Boolean = true) :
     fun set(items: List<ReportItemModelView>) {
         if (items.isEmpty()) return
 
-        val header = when (val type = items[0].type) {
+        val type = items[0].type
+        val header = when (type) {
             ReportType.SYMPTOM.value -> Header(R.string.symptoms, R.string.days, R.string.change)
             ReportType.BEHAVIOR.value -> Header(
                 R.string.healthy_behaviors,
@@ -123,7 +124,20 @@ class TrendingRecyclerViewAdapter(private val highlightEnable: Boolean = true) :
         clearColorHandler()
         this.items.add(Item(HEADER, header, null, null))
         this.items.addAll(items.map { i ->
-            Item(BODY, null, if (i.value != null && i.value > 0f) DEFAULT_COLOR else null, i)
+            Item(
+                BODY,
+                null,
+                if (i.value != null && i.value > 0f && type in listOf(
+                        ReportType.SYMPTOM.value,
+                        ReportType.BEHAVIOR.value
+                    )
+                ) {
+                    DEFAULT_COLOR
+                } else {
+                    null
+                },
+                i
+            )
         })
         notifyDataSetChanged()
     }
