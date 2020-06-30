@@ -142,7 +142,12 @@ interface AutonomyApi {
     fun updateResourceRatings(@Path("poi_id") poiId: String, @Body body: RequestBody): Completable
 
     @GET("api/points-of-interest/{poi_id}/resources")
-    fun listResource(@Path("poi_id") poiId: String, @Query("lang") lang: String, @Query("important") important: Boolean): Single<Map<String, List<ResourceData>>>
+    fun listResource(
+        @Path("poi_id") poiId: String,
+        @Query("lang") lang: String,
+        @Query("important") important: Boolean,
+        @Query("include_added") includeAdded: Boolean
+    ): Single<Map<String, List<ResourceData>>>
 
     @POST("api/points-of-interest/{poi_id}/resources")
     fun addResources(@Path("poi_id") poiId: String, @Body body: RequestBody): Single<Map<String, List<ResourceData>>>

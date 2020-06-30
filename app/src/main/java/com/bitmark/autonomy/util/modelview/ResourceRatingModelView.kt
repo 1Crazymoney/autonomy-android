@@ -37,6 +37,13 @@ fun Float.ratingScoreToColorRes() = when {
     else -> R.color.apple
 }
 
+fun Float.ratingScoreToDrawableRes() = when {
+    this == 0f -> R.drawable.bg_circle_black
+    this <= 1.6f -> R.drawable.bg_circle_red
+    this <= 3.3f -> R.drawable.bg_circle_yellow
+    else -> R.drawable.bg_circle_green
+}
+
 fun Float.ratingScoreToStatefulColorRes() = when {
     this == 0f -> R.color.color_white_stateful
     this <= 1.6f -> R.color.color_persian_red_stateful

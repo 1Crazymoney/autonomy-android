@@ -95,13 +95,20 @@ class AddResourceActivity : BaseAppCompatActivity() {
         }
 
         edtName.setOnEditorActionListener { _, actionId, _ ->
-            if (actionId == EditorInfo.IME_ACTION_DONE) {
+            if (!isResourceReady()) false
+            else if (actionId == EditorInfo.IME_ACTION_DONE) {
                 hideKeyBoard()
                 val name = edtName.text.toString().trim()
+                val i = resources.indexOfFirst { r -> r.name.equals(name, true) }
+                val resourceModelView = if (i != -1) {
+                    resources[i]
+                } else {
+                    ResourceModelView(null, name)
+                }
                 if (name.isEmpty()) {
                     false
                 } else {
-                    finishWithResult(ResourceModelView(null, name))
+                    finishWithResult(resourceModelView)
                     true
                 }
             } else false

@@ -26,9 +26,13 @@ class ResourceRepository(
     fun listImportantResource(poiId: String, lang: String) =
         remoteDataSource.listResource(poiId, lang, true)
 
-    fun listResource(poiId: String, lang: String) =
+    fun listResource(poiId: String, lang: String, includeAdded: Boolean) =
         Maybe.merge(
-            remoteDataSource.listResource(poiId, lang).flatMapMaybe { res ->
+            remoteDataSource.listResource(
+                poiId,
+                lang,
+                includeAdded = includeAdded
+            ).flatMapMaybe { res ->
                 localDataSource.saveResources(poiId, res).andThen(Maybe.just(res))
             }, localDataSource.listResource(poiId).onErrorComplete()
         )

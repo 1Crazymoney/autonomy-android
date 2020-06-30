@@ -31,7 +31,8 @@ class AddResourceViewModel(
             rxLiveDataTransformer.flowable(
                 resourceRepo.listResource(
                     poiId,
-                    lang
+                    lang,
+                    true
                 ).map { res -> res.map { r -> ResourceModelView.newInstance(r) } })
         )
     }

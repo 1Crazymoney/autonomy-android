@@ -22,7 +22,7 @@ import com.bitmark.autonomy.util.ext.setTextColorStateList
 import com.bitmark.autonomy.util.ext.visible
 import com.bitmark.autonomy.util.modelview.AreaModelView
 import com.bitmark.autonomy.util.modelview.ratingScoreToColorRes
-import com.bitmark.autonomy.util.modelview.ratingToDrawableRes
+import com.bitmark.autonomy.util.modelview.ratingScoreToDrawableRes
 import kotlinx.android.synthetic.main.item_area_autocomplete.view.*
 import kotlin.math.roundToInt
 
@@ -181,7 +181,7 @@ class AreaAutoCompleteRecyclerViewAdapter :
                 } else {
                     tvScore.text = String.format("%.1f", area.resourceScore)
                     rb.rating = area.resourceScore.roundToInt().toFloat()
-                    rb.setFilledDrawableRes(area.resourceScore.roundToInt().ratingToDrawableRes())
+                    rb.setFilledDrawableRes(area.resourceScore.ratingScoreToDrawableRes())
                     tvScore.setTextColorRes(area.resourceScore.ratingScoreToColorRes())
                 }
             }
