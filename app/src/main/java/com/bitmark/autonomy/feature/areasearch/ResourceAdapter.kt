@@ -15,7 +15,6 @@ import com.bitmark.autonomy.R
 import com.bitmark.autonomy.util.modelview.ResourceModelView
 import kotlinx.android.synthetic.main.item_resource_2.view.*
 import kotlinx.android.synthetic.main.item_simple_text_header.view.*
-import java.util.*
 
 
 class ResourceAdapter :
@@ -114,7 +113,7 @@ class ResourceAdapter :
         fun bind(item: Item) {
             this.item = item
             with(itemView) {
-                tvResource.text = item.resource!!.name.toLowerCase(Locale.getDefault())
+                tvResource.text = item.resource!!.name
             }
         }
     }

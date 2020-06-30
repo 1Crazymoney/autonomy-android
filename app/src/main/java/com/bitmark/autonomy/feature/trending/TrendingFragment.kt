@@ -310,15 +310,16 @@ class TrendingFragment : BaseSupportFragment() {
                 when {
                     res.isSuccess() -> {
                         progressBar.gone()
+                        val data = res.data()!!
 
                         if (isTemporaryUnsupported()) {
                             tvGraphNotice.setText(R.string.graph_coming_soon)
                             tvGraphNotice.visible()
                             tvGraphName.gone()
-                            adapter.clear()
+                            rv.visible()
+                            adapter.set(data)
                         } else {
 
-                            val data = res.data()!!
                             val hasAllZero =
                                 data.filter { it.value != null }.sumBy { it.value!!.toInt() } == 0
 
@@ -449,8 +450,8 @@ class TrendingFragment : BaseSupportFragment() {
                     }
                 )
             )
-            chart.axisLeft.valueFormatter = YValueFormatter(base)
         }
+        chart.axisLeft.valueFormatter = YValueFormatter(base)
     }
 
 
@@ -635,7 +636,7 @@ class TrendingFragment : BaseSupportFragment() {
 
             // keep space for top indicator to assign later
             for (i in additionalPos + 1 until totalValue) {
-                colors[i] = context!!.getColorInt("trans")
+                colors[i] = Color.TRANSPARENT
             }
         }
 

@@ -115,6 +115,7 @@ class TrendingRecyclerViewAdapter(private val highlightEnable: Boolean = true) :
                 R.string.times,
                 R.string.change
             )
+            ReportType.SCORE.value -> Header(R.string.empty, R.string.average, R.string.change)
             else -> error("unsupported type: $type")
         }
 

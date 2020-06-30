@@ -68,6 +68,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp_30"
         android:fontFamily="@font/grotesk_light_font_family"
+        android:gravity="center"
         android:paddingStart="@dimen/dp_16"
         android:paddingEnd="@dimen/dp_16"
         android:text="@string/sorry_there_are_not_any_places"

@@ -17,7 +17,6 @@ import com.bitmark.autonomy.util.modelview.ResourceModelView
 import kotlinx.android.synthetic.main.item_resource.view.*
 import kotlinx.android.synthetic.main.item_simple_text_footer.view.*
 import kotlinx.android.synthetic.main.item_simple_text_header.view.*
-import java.util.*
 
 
 class ResourceAdapter :
@@ -90,7 +89,11 @@ class ResourceAdapter :
     }
 
     fun isExisting(resource: ResourceModelView) =
-        items.indexOfFirst { i -> i.type == BODY && ((resource.id != null && i.resource?.id == resource.id) || (resource.id == null && i.resource?.name == resource.name)) } != -1
+        items.indexOfFirst { i ->
+            i.type == BODY
+                    && ((resource.id != null && i.resource?.id == resource.id)
+                    || (resource.id == null && i.resource?.name.equals(resource.name, true)))
+        } != -1
 
     fun setSelected(
         resource: ResourceModelView,
@@ -98,7 +101,12 @@ class ResourceAdapter :
         selectable: Boolean = true
     ) {
         val index =
-            items.indexOfFirst { i -> i.type == BODY && ((resource.id != null && i.resource?.id == resource.id) || (resource.id == null && i.resource?.name == resource.name)) }
+            items.indexOfFirst { i ->
+                i.type == BODY && ((resource.id != null && i.resource?.id == resource.id) || (resource.id == null && i.resource?.name.equals(
+                    resource.name,
+                    true
+                )))
+            }
         if (index != -1) {
             val item = items[index]
             item.selected = selected
@@ -191,7 +199,7 @@ class ResourceAdapter :
         fun bind(item: Item) {
             this.item = item
             with(itemView) {
-                tvResource.text = item.resource!!.name.toLowerCase(Locale.getDefault())
+                tvResource.text = item.resource!!.name
                 tvResource.isSelected = item.selected!!
                 tvResource.isClickable = item.selectable!!
             }
