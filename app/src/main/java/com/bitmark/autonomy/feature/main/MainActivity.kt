@@ -446,11 +446,11 @@ class MainActivity : BaseAppCompatActivity() {
 
     fun setEditingVisible(visible: Boolean) {
         if (visible) {
-            layoutBottom.visible()
             tvEditing.visible()
             layoutAddArea.gone()
         } else {
-            layoutBottom.gone()
+            layoutAddArea.visible()
+            tvEditing.gone()
         }
     }
 
