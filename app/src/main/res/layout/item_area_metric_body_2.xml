@@ -27,7 +27,7 @@
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tvBody22"
-        android:layout_width="@dimen/dp_60"
+        android:layout_width="@dimen/dp_72"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/dp_8"
         android:ellipsize="end"
