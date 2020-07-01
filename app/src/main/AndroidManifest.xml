@@ -176,7 +176,7 @@
 
         <meta-data
             android:name="io.sentry.dsn"
-            android:value="https://99b0fdab83fb432a92791b715267da15@sentry.io/5174225" />
+            android:value="https://99b0fdab83fb432a92791b715267da15@o142150.ingest.sentry.io/5174225" />
 
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
