@@ -329,7 +329,7 @@ class TrendingFragment : BaseSupportFragment() {
                                 tvNotice.visible()
                                 rv.gone()
                                 adapter.clear()
-                                makeEmptyChart()
+                                makeEmptyChart(context!!)
                                 if (type == ReportType.SYMPTOM.value) {
                                     tvNotice.setText(R.string.you_did_not_report_symptoms)
                                 } else if (type == ReportType.BEHAVIOR.value) {
@@ -339,7 +339,7 @@ class TrendingFragment : BaseSupportFragment() {
                                 // data is all zero
                                 tvNotice.gone()
                                 rv.visible()
-                                makeEmptyChart()
+                                makeEmptyChart(context!!)
                                 adapter.set(data)
                             } else {
                                 // has normal data
@@ -376,7 +376,7 @@ class TrendingFragment : BaseSupportFragment() {
                     res.isError() -> {
                         progressBar.gone()
                         adapter.clear()
-                        makeEmptyChart()
+                        makeEmptyChart(context!!)
                         logger.logError(Event.TRENDING_LOADING_ERROR, res.throwable())
                     }
 
@@ -456,16 +456,20 @@ class TrendingFragment : BaseSupportFragment() {
     }
 
 
-    private fun makeEmptyChart() {
-        val xValues = getBarXValues(context!!, period)
+    private fun makeEmptyChart(context: Context) {
+        val xValues = getBarXValues(context, period)
         val barData = buildEmptyBarChartData(xValues)
-        val chart = if (layoutGraph.childCount == DEFAULT_GRAPH_CHILD_COUNT) {
-            buildBarChart(xValues)
+        if (layoutGraph.childCount == DEFAULT_GRAPH_CHILD_COUNT) {
+            val chart = buildBarChart(xValues)
+            chart.data = barData
+            val params = getGraphLayoutParams(context)
+            chart.layoutParams = params
+            layoutGraph.addView(chart)
         } else {
-            layoutGraph.getChildAt(DEFAULT_GRAPH_CHILD_COUNT) as BarChart
+            val chart = layoutGraph.getChildAt(DEFAULT_GRAPH_CHILD_COUNT) as BarChart
+            chart.data = barData
+            chart.invalidate()
         }
-        chart.data = barData
-        chart.invalidate()
         layoutGraphBase.gone()
     }
 
