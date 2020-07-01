@@ -3,7 +3,7 @@
 Autonomy is a mobile app that helps citizens and institutions with COVID-19
 
 [![Made by](https://img.shields.io/badge/Made%20by-Bitmark%20Inc-lightgrey.svg)](https://bitmark.com)
-[![Build Status](https://travis-ci.org/bitmark-inc/autonomy-android.svg?branch=master)](https://travis-ci.org/bitmark-inc/spring-android)
+[![Build Status](https://travis-ci.org/bitmark-inc/autonomy-android.svg?branch=master)](https://travis-ci.org/github/bitmark-inc/autonomy-android)
 
 ## Getting Started
 

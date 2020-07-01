@@ -48,7 +48,7 @@ before_script:
   - echo -n >local.properties && echo "ndk.dir=$ANDROID_NDK_HOME"$'\n'"sdk.dir=$ANDROID_HOME" >local.properties
   - echo -n >key.properties && echo "api.key.bitmark=$BM_API_KEY"$'\n'"api.key.intercom=$INTERCOM_API_KEY"$'\n'"api.key.google=$GG_API_KEY" >key.properties
   - echo -n >app-center.properties && echo "api-key=$APP_CENTER_API_TOKEN" >app-center.properties
-  - echo -n >sentry.properties && echo "defaults.project=bitmark-fbm-android"$'\n'"defaults.org=bitmark-inc"$'\n'"auth.token=$SENTRY_AUTH_TOKEN" >sentry.properties
+  - echo -n >sentry.properties && echo "defaults.project=autonomy-android"$'\n'"defaults.org=bitmark-inc"$'\n'"auth.token=$SENTRY_AUTH_TOKEN" >sentry.properties
   - echo -n >app/src/main/resources/sentry.properties && echo "dsn=$SENTRY_DSN" >app/src/main/resources/sentry.properties
   - echo -n >keystores/release.properties && echo "key.alias=btmrktnm2020"$'\n'"key.store.password=$key.store.password"$'\n'"key.alias.password=$key.alias.password" >keystores/release.properties
 
